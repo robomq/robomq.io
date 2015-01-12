@@ -5,7 +5,7 @@ site_favicon: favicon.ico
 #docs_dir: <path to your local folder on local git where docs are>
 #site_dir: < path where mkdocs will generate HTML. keep it outside of the git directory>
 pages:
-- ['index.md', '', 'What is Robomq.io']
+- ['../index.md', '', 'What is Robomq.io']
 #- ['user-guide/setup.md', '', 'Initial Setup Using Robomq.io']
 - ['user-guide/gettingStarted.md', '', 'Getting Started']
 - ['user-guide/creatingNewApplication.md', '', 'Creating a New Application']
