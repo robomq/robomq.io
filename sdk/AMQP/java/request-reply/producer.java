@@ -50,21 +50,21 @@ public class Producer {
 		connection.close();
 	}
 	public static void main(String[] argv) {
-		Producer fibonacciRpc = null;
+		Producer usecase = null;
 		String response = null;
 		try {
-			fibonacciRpc = new Producer();
+			usecase = new Producer();
 			System.out.println('hello world');
-			response = fibonacciRpc.call('hello world');
+			response = usecase.call('hello world');
 			System.out.println(response);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {
-			if (fibonacciRpc!= null) {
+			if (usecase!= null) {
 				try {
-					fibonacciRpc.close();
+					usecase.close();
 				}
 					catch (Exception ignore) {}
 				}

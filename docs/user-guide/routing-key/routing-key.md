@@ -2,7 +2,7 @@
 
 Routing - Key based messaging is an extension of direct exchange allowing filtering of messages based on a producer’s routing key.  Messages published to the exchange will be routed to queues bound to that exchange with matching binding key.  All other messages will be filtered.  A consumer will define callback functions to process messages that are selectively received.
 
-![Diagram of Routing - Key based messaging](../../images/routing-key.png)
+![Diagram of Routing - Key based messaging](images/routing-key.png)
 
 ----------
 

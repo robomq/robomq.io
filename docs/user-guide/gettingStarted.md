@@ -73,7 +73,7 @@ The real time activities of your tenant can be monitored using the Management Co
 For longer horizon messaging traffic activity including visual graphs, robomq Messaging Dashboard should be used. 
 
 
-![Monitoring real time activity using robomq Management Console ](./images/vhostManagementUI_2.png)
+![Monitoring real time activity using robomq Management Console ](./images/vhostManagementUI.png)
 
 *Figure : Monitoring real time activity using robomq Management Console*
 

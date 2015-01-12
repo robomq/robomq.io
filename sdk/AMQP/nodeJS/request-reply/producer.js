@@ -23,7 +23,7 @@ connection.on('ready',function(){
 					console.log('Client: message has delivered');
 					return;
 				}
-		});	
+			});	
 		replyQueue.subscribe(function (message, headers, deliveryInfo, messageObject) {
 			console.log('Client: get reply message is \' %s \'', message.data);
 		});

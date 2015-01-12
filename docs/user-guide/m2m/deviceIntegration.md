@@ -80,7 +80,7 @@ For details about how to set up and run the sensors with raspberry pi, please go
 
 ###Light sensor
 
-![ Light sensor](./images/lightSensor.jpg)
+![ Light sensor](./images/LightSensor.jpg)
 
 [https://learn.adafruit.com/basic-resistor-sensor-reading-on-raspberry-pi/basic-photocell-reading](https://learn.adafruit.com/basic-resistor-sensor-reading-on-raspberry-pi/basic-photocell-reading "Light sensor")
 

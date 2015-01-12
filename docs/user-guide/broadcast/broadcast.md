@@ -2,7 +2,7 @@
 
 For broadcast messaging, a producer sends messages to fan-out exchange that are broadcast to all queues bound to that exchange.  As soon as a consumer subscribes to the queue, messages will be delivered to that consumer
 
-![Diagram of Broadcast messaging](../../images/broadcast.png)
+![Diagram of Broadcast messaging](images/broadcast.png)
 
 ----------
 
@@ -251,22 +251,13 @@ After initialized the exchange, producer should publishing the message to this e
 
 
 
-	connection.on('ready', function() {
-    	connection.exchange('test-exchange', options = {
-        type: "fanout",
-        autoDelete: false
-    	}, function(exchange) {
-        //while(true){
-        console.log("start send message");
-        //setting routing key as "test1"
-        exchange.publish('', "hello");
-        	//}
-    		})
-	});
-	
-Finally, after publishing all messages, producer should terminate the connection. 
+	connection.on('ready',function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			console.log('start send message');
+			exchange.publish('routingKey','hello world');
+		});
+	});	
 
-	connection.disconnect()
 
 ###Consumer
 First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server.  
@@ -277,21 +268,17 @@ Then consumer should initialize a queue and bind this queue to the exchange. It 
 Consumer could also define a callback function as one to one section mentioned. 
 Now, consumer could define consuming method and start consuming messages. 
 
-	connection.on('ready', function() {
-	connection.exchange('test-exchange', options = {
-	type: "fanout ",
-       autoDelete: false
-    }, function(exchange) {
-        var queue = connection.queue("my-queue", options = {}, function(queue) {
-            console.log("Declare one queue, name is " + queue.name);
-            queue.bind("test-exchange","");
-            queue.subscribe(function(msg) {
-                console.log("consumer received the message" + msg.data);
-            });
-        });
-    })
+	connection.on('ready', function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			var queue = connection.queue('QueueName', options={},function(queue){
+				console.log('Declare one queue, name is ' + queue.name);
+				queue.bind('exchangeName', '');
+				queue.subscribe(function (msg){
+					console.log('consumer received the message'+msg.data);
+				});
+			});
+		});
 	});
-
 
 Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
 

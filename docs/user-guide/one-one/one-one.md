@@ -2,7 +2,7 @@
 
 For one to one messaging, a producer sends messages to specified queue.  A consumer receives messages from that queue.  To ensure message is not lost, message acknowledgments can be sent back to producer to confirm a particular message has been received.
 
-![Diagram of One to One messaging](/docs/images/one-one.png)
+![Diagram of One to One messaging](images/one-one.png)
 
 ----------
 
@@ -293,12 +293,8 @@ Then producer should publish messages to the default exchange attached with rout
 			exchange.publish('routingKey', 'hello world');
 			print('message sent');
 		});
-	});
+	});	
 	
-After all messages are published, producer should terminate this connection.
-
-	connection.disconnect();
-
 
 ###Consumer
 Consumer should including following libraries. 

@@ -10,7 +10,7 @@ example: 'topic.*' can be : topic1, topic2, topic3 etc.
 <br>
 example: "#.topic" can be: topic, Ftopic, Secondtopic, 123topic etc.
 
-![Diagram of Routing - Filter based messaging](../../images/topic.png)
+![Diagram of Routing - Filter based messaging](images/topic.png)
 
 ----------
 
@@ -220,17 +220,11 @@ After that producer should initialize a topic-type exchange for delivering messa
 Now producer is ready to send messages to exchange.
 	
 	connection.on('ready',function(){
-	connection.exchange('test-exchange', options={type:"topic",
-		autoDelete:false}, function(exchange){
-		
-			console.log("start send message");
-			//setting routing key as "test1"
-			exchange.publish('test1',"hello");
-
-		
-	})
+		connection.exchange('exchangeName', options={type:'topic', autoDelete:false}, function(exchange){
+			console.log('start send message');
+			exchange.publish('1routingKey','hello world');
+		});
 	});
-
 
 
 
@@ -239,9 +233,7 @@ First, Consumer should initialize the connection and start a new channel.
 
 Then consumer should initialize an topic-type exchange as producer did. 
 
-<pre>
- channel.exchangeDeclare("exchangeName", "topic");
-</pre>
+	channel.exchangeDeclare("exchangeName", "topic");
 
 Initialize a queue for customer listening to. After that, Consumer should define a routing policy for binding queues to exchanges.
 string bindingKey = "#.key"
@@ -251,13 +243,13 @@ Binding the queue and exchange with the filter policy.
 
 
 
-	var queue = connection.queue("my-queue3", options={},function(queue){
-					console.log("Declare one queue, name is " + queue.name);
-					queue.bind("test-exchange", '*.test3');
-					queue.subscribe(function (msg){
-							console.log("the message is "+msg.data);
-						});
-				});
+	var queue = connection.queue('queueName', options={},function(queue){
+		console.log('Declare one queue, name is ' + queue.name);
+		queue.bind('exchangeName', '*.routingKey');
+		queue.subscribe(function (msg){
+			console.log('the message is '+msg.data);
+		});
+	});
 
 
  After that, starting consuming the messages.
