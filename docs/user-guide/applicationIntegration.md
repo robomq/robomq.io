@@ -37,8 +37,7 @@ Message queues allow building applications using variety of Message delivery pat
 
 5. **Work Queues** - round robin delivery of messages to multiple worker processes
 
-
-TODO: add link to the example documentation for these use cases
+SDK containing example code for these use cases can be found at [robomq SDK](https://github.com/robomq/robomq.io/tree/master/sdk)
 
 ##Guaranteed Delivery
 Message Queue based integration hub ensures guaranteed delivery of the message and critical information. Unlike synchronous point to point communication where recipient needs to available and be on-line, Message Queues deliver message when the recipient is available.

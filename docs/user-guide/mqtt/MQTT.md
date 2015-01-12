@@ -1,5 +1,3 @@
-> TODO: put MQTT after STOMP.
-
 # Introduction
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding MQTT.  
@@ -35,9 +33,8 @@ We will provide examples in five languages, including Python, Node.js, PHP, Java
 
 In the examples, MQTT producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular topic through MQTT broker. MQTT consumer will subscribe the same topic and print the topic and payload as it receives messages.
 
-The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository]() on GitHub.  
+The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository](https://github.com/robomq/robomq.io) on GitHub.  
 
-> TODO: When use case repo is ready, insert its link above. 
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 

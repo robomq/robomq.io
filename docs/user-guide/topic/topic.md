@@ -10,7 +10,7 @@ example: 'topic.*' can be : topic1, topic2, topic3 etc.
 <br>
 example: "#.topic" can be: topic, Ftopic, Secondtopic, 123topic etc.
 
-![Diagram of Routing - Filter based messaging](../images/topic.png)
+![Diagram of Routing - Filter based messaging](../../images/topic.png)
 
 ----------
 
@@ -121,35 +121,28 @@ First, producer should initialize a new connection to [robomq.io](http://www.rob
 
 After that producer should initialize a topic-type exchange for delivering messages. 
 
-	channel.exchangeDeclare("exchangeName", "topic");
-
+	channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
+	
 Now producer is ready to send messages to exchange.
 
+	channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes());
 	
-	channel.basicPublish("exchangeName","routingKey", null, "message");
-	
-
-
 ###Consumer:
 First, Consumer should initialize the connection and start a new channel. 
 
 Then consumer should initialize an topic-type exchange as producer did. 
 
-	channel.exchangeDeclare("exchangeName", "topic");
+	channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
 	
 Initialize a queue for customer listenting to: 
 
 	channel.queueDeclare("queueName", false, false, false, null);
 
-After that, Consumer should define a routing policy for binding queues to exchanges.
+After that, Consumer should define a routing policy for binding queues to exchanges.Binding the queue and exchange.
 
-	string bindingKey = "#.key"
-	# you can use any policy for binding key 
-
-Binding the queue and exchange
-
-	channel.queueBind("queueName", "exchangeName", bindingKey);</pre>
-
+	String bindingKey = 'routingKey';
+	channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
+	        
 After that, starting consuming the messages. 
 
 ###Putting it all together

@@ -1,5 +1,3 @@
-> TODO: put STOMP before MQTT.
-
 # Introduction
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding STOMP.  
@@ -81,9 +79,9 @@ We will provide examples of one-on-one scenario in five languages, including Pyt
 
 In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.
 
-The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository]() on GitHub. 
+The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository](https://github.com/robomq/robomq.io) on GitHub. 
 
-> TODO: When use case repo is ready, insert its link above. 
+
 
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 

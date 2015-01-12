@@ -2,7 +2,7 @@
 
 For broadcast messaging, a producer sends messages to fan-out exchange that are broadcast to all queues bound to that exchange.  As soon as a consumer subscribes to the queue, messages will be delivered to that consumer
 
-![Diagram of Broadcast messaging](../images/broadcast.png)
+![Diagram of Broadcast messaging](../../images/broadcast.png)
 
 ----------
 

@@ -52,11 +52,6 @@ Upon sign up, a administrative user and credential token is created for your vir
 *Figure : Login credential for robomq Management console*
 
 
-
-
-*TODO Note: using the administrative credential the administrator can create users with fixed passwords. These may be helpful for scenarios where these application user credentials are coded or written to the device software that are using robomq.io Message Queue service. 
-*
-
 ##Creating additional users and access grants
 
 Additional users can be created with specific passwords or token. Tokens are recommended for security and get be generated for the users using TOTP (Time-Based One-Time Password Algorithm). 
@@ -114,7 +109,7 @@ The following key messaging activity parameters are tracked in the dashboard:
 
 
 
-TODO The Messaging dashboard provides historical information for up to 15 days of the messaging activity on your tenant.
+The Messaging dashboard provides historical information for up to 15 days of the messaging activity on your tenant.
 
 
 

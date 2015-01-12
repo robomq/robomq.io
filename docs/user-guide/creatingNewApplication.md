@@ -107,75 +107,6 @@ Full listing of producer and consumer code..
                       no_ack=True)
 	channel.start_consuming()
 
-##STOMP client
-Now we are going to build our first STOMP application.
-
-###Prerequisite
-The Python library we use for this example can be found at <https://pypi.python.org/pypi/stompest/>. Its GitHub repository is at <https://github.com/nikipore/stompest>.  
-It supports STOMP version 1.0, 1.1 and 1.2.  
-
-You can install it through `sudo pip install stompest`.  
-The full documentation of this library is at <http://nikipore.github.io/stompest/>.
-
-###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-> In STOMP, username is called login and password is called passcode. 
-
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
-
-After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section in *STOMP* chapter elaborates it. 
-
-	client.send("/queue/test", "test message")
-
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
-
-	client.disconnect()
-
-###Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
-
-Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
-
-	subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
-	
-	while True:
-		frame = client.receiveFrame()
-		print "%s" % frame.body
-
-###Putting it together
-
-> Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
-
-**producer.py**
-	
-	import sys
-	from stompest.config import StompConfig
-	from stompest.sync import Stomp
-	
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
-	
-	client.send("/queue/test", "test message")
-	
-	client.disconnect()
-
-**consumer.py**
-	
-	import sys
-	from stompest.config import StompConfig
-	from stompest.protocol import StompSpec
-	from stompest.sync import Stomp
-	
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
-	
-	subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
-			
-	while True:
-		frame = client.receiveFrame()
-		print "%s" % frame.body
-
 ##MQTT client
 Now we are going to build our first MQTT application.
 
@@ -268,3 +199,74 @@ The callback functions should be preset before connecting to [robomq.io](http://
 	client.on_message = on_message
 	client.connect(hostname, 1883, keepalive=60, bind_address="")
 	client.loop_forever()
+
+
+##STOMP client
+Now we are going to build our first STOMP application.
+
+###Prerequisite
+The Python library we use for this example can be found at <https://pypi.python.org/pypi/stompest/>. Its GitHub repository is at <https://github.com/nikipore/stompest>.  
+It supports STOMP version 1.0, 1.1 and 1.2.  
+
+You can install it through `sudo pip install stompest`.  
+The full documentation of this library is at <http://nikipore.github.io/stompest/>.
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+> In STOMP, username is called login and password is called passcode. 
+
+	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+	client.connect(versions = ["1.2"], host = yourvhost)
+
+After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section in *STOMP* chapter elaborates it. 
+
+	client.send("/queue/test", "test message")
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
+
+	client.disconnect()
+
+###Consumer
+The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+
+Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
+
+	subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+	
+	while True:
+		frame = client.receiveFrame()
+		print "%s" % frame.body
+
+###Putting it together
+
+> Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
+
+**producer.py**
+	
+	import sys
+	from stompest.config import StompConfig
+	from stompest.sync import Stomp
+	
+	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+	client.connect(versions = ["1.2"], host = yourvhost)
+	
+	client.send("/queue/test", "test message")
+	
+	client.disconnect()
+
+**consumer.py**
+	
+	import sys
+	from stompest.config import StompConfig
+	from stompest.protocol import StompSpec
+	from stompest.sync import Stomp
+	
+	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+	client.connect(versions = ["1.2"], host = yourvhost)
+	
+	subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+			
+	while True:
+		frame = client.receiveFrame()
+		print "%s" % frame.body
+
