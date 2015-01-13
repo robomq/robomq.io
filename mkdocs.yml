@@ -3,7 +3,7 @@ site_url: rabomq.io/docs
 site_description: User documentation and SDK for robomq.io
 site_favicon: favicon.ico
 repo_url: https://github.com/robomq/robomq.io/
-docs_dir: docs
+docs_dir: .
 #site_dir: < path where mkdocs will generate HTML. keep it outside of the git directory>
 pages:
 - ['index.md', '', 'What is Robomq.io']
