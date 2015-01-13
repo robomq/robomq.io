@@ -19,7 +19,7 @@ The Raspberry Pi is a credit-card sized micro-computer that plugs into your TV a
 
 There may be some steps to do when you have all the devices and materials. For example you need to install a system into the micro-SD card which your raspberry pi will be boot from.
 
-For detailed instruction on how to setup a raspberry pi, please go to the official raspberry pi document page.
+For detailed instructions on how to setup a raspberry pi, please go to the official raspberry pi document page.
 
 [http://www.raspberrypi.org/documentation/](http://www.raspberrypi.org/documentation/ "Raspberry Pi Documentation")
 
