@@ -10,11 +10,11 @@
  
 var mqtt = require("mqtt");
 
-var server = "localhost";
+var server = "hostname";
 var port = "1883";
-var vhost = "/";
-var username = "guest";
-var password = "guest";
+var vhost = "yourvhost";
+var username = "username";
+var password = "password";
 var topic = "test";
 
 var client = mqtt.createClient(port, server, {username: vhost + ":" + username, password: password, keepalive: 10, clean: true, will: null});

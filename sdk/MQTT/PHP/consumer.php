@@ -12,11 +12,11 @@
 require(__DIR__."/spMQTT.class.php");
 //spMQTTDebug::Enable();
 
-$server = "localhost";
+$server = "hostname";
 $port = "1883";
-$vhost = "/";
-$username = "guest";
-$password = "guest";
+$vhost = "yourvhost";
+$username = "username";
+$password = "password";
 $topic = "test";
 
 $client = new spMQTT("tcp://".$server.":".$port, $clientid=null);	//clientid auto-assigned

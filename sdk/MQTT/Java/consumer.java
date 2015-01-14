@@ -19,12 +19,12 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 public class consumer {
 
 	private MqttClient client;
-	private String server = "localhost";
+	private String server = "hostname";
 	private String port = "1883";
 	private String broker = "tcp://" + server + ":" + port;
-	private String vhost = "/";
-	private String username = "guest";
-	private String password = "guest";
+	private String vhost = "yourvhost";
+	private String username = "username";
+	private String password = "password";
 	private String topic = "test";
 	private String clientId = MqttClient.generateClientId();
 	private MemoryPersistence persistence = new MemoryPersistence();

@@ -11,11 +11,11 @@
 import sys
 import paho.mqtt.client as mqtt
 
-server = "localhost"
+server = "hostname"
 port = 1883
-vhost = "/"
-username = "guest"
-password = "guest"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 topic = "test"
 
 try:

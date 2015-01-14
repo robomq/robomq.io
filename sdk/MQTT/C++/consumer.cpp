@@ -51,14 +51,14 @@ void my_log_callback(struct mosquitto *mosq, void *userdata, int level, const ch
 int main(int argc, char *argv[])
 {
 	//configuration
-	string hst = "localhost";
+	string hst = "hostname";
 	const char *host = hst.c_str();
 	int port = 1883;
-	string vhost = "/";
-	string usn = "guest";
+	string vhost = "yourvhost";
+	string usn = "username";
 	string vhusn = vhost + ":" + usn;
 	const char *username = vhusn.c_str();
-	string pwd = "guest";
+	string pwd = "passwrod";
 	const char *password = pwd.c_str();
 	string tpc = "test";
 	const char *topic = tpc.c_str();
