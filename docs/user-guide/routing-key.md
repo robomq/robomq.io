@@ -1,149 +1,147 @@
-# Routing - Filter Based
+# Routing - Key Based
 
-For filter based routing, a producer declares the topic exchange when publishing a message.  Messages sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key.
-Filter based routing provides a method to use filter policies on routing key for choosing the recipients of messages. <br>
-<b> * (star) can substitute for exactly one word.</b>
-<br>
-example: 'topic.*' can be : topic1, topic2, topic3 etc.
-<br>
-<b># (hash) can substitute for zero or more words.</b>
-<br>
-example: "#.topic" can be: topic, Ftopic, Secondtopic, 123topic etc.
+Routing - Key based messaging is an extension of direct exchange allowing filtering of messages based on a producer’s routing key.  Messages published to the exchange will be routed to queues bound to that exchange with matching binding key.  All other messages will be filtered.  A consumer will define callback functions to process messages that are selectively received.
 
-![Diagram of Routing - Filter based messaging](images/topic.png)
+![Diagram of Routing - Key based messaging](./images/routing-key.png)
 
 ----------
 
 ## Python
 
-###Producer: 
-First, producer should initialize a new connection to [robomq.io](http://www.robomq.io) server and create a new channel.
+###Producer
+First producer should initialize a connection to [robomq.io](http://www.robomq.io). 
 
-After that producer should initialize a topic-type exchange for delivering messages. 
+Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the routing keys. 
 
+	channel.exchange_declare(exchange='exchangeName', type='direct')
 
-	channel.exchange_declare(exchange='exchangeName',
-                         type='topic')
+Then producer should publish message to the exchange with specific routing key. 
 
-Now producer is ready to send messages to exchange.
+	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
 
+For this example, the routing key is 'routingKey'.  Only the queue binding to this exchange with same routing key, as 'routingKey', can received messages.
 
-	channel.basic_publish(exchange='exchangeName',
-                      routing_key=routing_key,
-                      body=message) 
+After finishing sending messages, producer should terminate the connection. 
 
+###Consumer
 
+For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
 
-###Consumer:
-First, Consumer should initialize the connection and start a new channel. 
+Then consumer will initializes the same exchange as producer did.
 
-Then consumer should initialize a topic-type exchange as producer did. 
+	channel.exchange_declare(exchange ='exchangeName', type='direct')
 
-	channel.exchange_declare(exchange='exchangeName', type='topic')
+Then consumer should declare a queue to listen and consume messages from.. 
 
+	channel.queue_declare(queue=queue_name,exclusive=True)
 
-Initialize a queue for customer listenting to: 
-
-	channel.queue_declare(queue='queueName', exclusive = True)
-
-After that, Consumer should define a routing policy for binding queues to exchanges.
+Then bind the queue to the exchange with a specific routing key. This key will be the identifier for this queue to receive messages from. 
 
 
-	String bindingKey = "routingKey";
-	# you can use any policy for binding key 
- 
+	severity = 'routingKey'	
+	channel.queue_bind(exchange='exchangeName', queue=queue_name, routing_key=severity)
 
-Binding the queue and exchange
-	
-	channel.queue_bind(exchange='exchangeName',
-                    queue=queue_name,
-                    routing_key=routing_key)
-	
 
-After that, starting consuming the messages and followed by your customize code.
-	
-	channel.basic_consume(callback,
-                      queue=queue_name,
-                      no_ack=True)
+After that, we can define own callback function for processing messages like what we did in previous chapter. 
+Then consumer is ready to work. 
 
+	channel.basic_consume(callback, queue=queue_name, no_ack=True)
 	channel.start_consuming()
-	
+
+Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
+
 ###Putting it all together
 
 **producer.py**
-	
+
+
 	import pika
 	import sys
 
 	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
 	channel = connection.channel()
 
-	channel.exchange_declare(exchange='exchangeName', type='topic')
+	channel.exchange_declare(exchange='exchangeName', type='direct')
 
-	routing_key ='routingKey'
-	message = 'hello world'
-	channel.basic_publish(exchange='exchangeName', routing_key=routing_key, body=message)
-	print 'Sent %r:%r' % (routing_key, message)
+	severity = 'routingKey'
+	message = 'Hello World!'
+	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
+	print 'Sent %r:%r' % (severity, message)
 	connection.close()
 
-**consumer.py**
+**Consumer.py**
 
 	import pika
+	import sys
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host='your host'))
+	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
 	channel = connection.channel()
 
-	channel.exchange_declare(exchange='exchangeName',
-                         type='topic')
+	channel.exchange_declare(exchange='exchangeName', type='direct')
 
 	queue_name = 'queueName'
 	channel.queue_declare(queue=queue_name,exclusive=True)
-	routing_key= 'routingKey'
-
+	severity = 'routingKey'
 	channel.queue_bind(exchange='exchangeName',
-                    queue=queue_name,
-                    routing_key=routing_key)
-
+					queue=queue_name,
+					routing_key=severity)
 	print 'Waiting for logs. To exit press CTRL+C'
 
 	def callback(ch, method, properties, body):
 		print '%r:%r' % (method.routing_key, body,)
 
-	channel.basic_consume(callback,
-                      queue=queue_name,
-                      no_ack=True)
+	channel.basic_consume(callback, queue=queue_name, no_ack=True)
 
 	channel.start_consuming()
 	
 ## Java
-###Producer: 
-First, producer should initialize a new connection to [robomq.io](http://www.robomq.io) server and create a new channel.
+###Producer
+First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
 
-After that producer should initialize a topic-type exchange for delivering messages. 
+Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
+	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
 	
-Now producer is ready to send messages to exchange.
+Then producer should publish message to the exchange with specific routing key. 
 
-	channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes());
+	channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
+        
+For this example, the routing key is **'routingKey'**. Only the queue binding to this exchange with matching name, can received this message. 
+
+After finishing sending messages, producer should terminate the connection. 
+
+###Consumer
+
+For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+
+Then consumer will initializes the same exchange as producer did.
+
+	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
+
+Then consumer should declare a queue to listen. 
+
+        String queueName = channel.queueDeclare().getQueue();
+
+
+Then binding the queue to the exchange with a specific routing key.  Messages published to this exchange with routing key matching **"routingKey"** will be received by consumer.  All other messages will be filtered.
+
+
+	String severity = 'routingKey';
+	channel.queueBind(queueName, EXCHANGE_NAME, severity);
+
+Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
 	
-###Consumer:
-First, Consumer should initialize the connection and start a new channel. 
+	QueueingConsumer consumer = new QueueingConsumer(channel);
+	channel.basicConsume(queueName, true, consumer);
 
-Then consumer should initialize an topic-type exchange as producer did. 
+	while (true) {
+		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+		String message = new String(delivery.getBody());
+		String routingKey = delivery.getEnvelope().getRoutingKey();
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
-	
-Initialize a queue for customer listenting to: 
+            System.out.println("Received '" + routingKey + "':'" + message + "'");
+        }
 
-	channel.queueDeclare("queueName", false, false, false, null);
-
-After that, Consumer should define a routing policy for binding queues to exchanges.Binding the queue and exchange.
-
-	String bindingKey = 'routingKey';
-	channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
-	        
-After that, starting consuming the messages. 
 
 ###Putting it all together
 
@@ -157,20 +155,21 @@ After that, starting consuming the messages.
 	public class Producer {
 		private static final String EXCHANGE_NAME = 'exchangeName';
 		public static void main(String[] argv)
-                  throws Exception {
-                  ConnectionFactory factory = new ConnectionFactory();
-                  factory.setHost('your host');
-                  Connection connection = factory.newConnection();
-                  Channel channel = connection.createChannel();
-                  channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
-                  String routingKey = 'routingKey';
-                  String message ='hello world';
-                  channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes());
-                  System.out.println('Sent '' + routingKey + '':'' + message + "'");
-                  connection.close();
+			throws java.io.IOException {
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost('your host');
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+		
+			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
+			String severity = 'routingKey';
+			String message = 'hello world';
+			channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
+			System.out.println("Sent '" + severity + "':'" + message + "'");
+			channel.close();
+			connection.close();
 		}
 	}
-
 **consumer.java**
 
 	import java.io.IOException;
@@ -179,81 +178,78 @@ After that, starting consuming the messages.
 	import com.rabbitmq.client.Channel;
 	import com.rabbitmq.client.QueueingConsumer;
 
+
 	public class Consumer {
-	 	private static final String EXCHANGE_NAME = 'exchangeName';
+		private static final String EXCHANGE_NAME = 'exchangeName';
 		public static void main(String[] argv)
-			throws Exception {
+                  throws java.io.IOException,
+                  java.lang.InterruptedException {
+                  ConnectionFactory factory = new ConnectionFactory();
+                  factory.setHost('your host');
+                  Connection connection = factory.newConnection();
+                  Channel channel = connection.createChannel();
+			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
+			String queueName = channel.queueDeclare().getQueue();
 
-	        ConnectionFactory factory = new ConnectionFactory();
-	        factory.setHost('your host');
-	        Connection connection = factory.newConnection();
-	        Channel channel = connection.createChannel();
+			String severity = 'routingKey';
+			channel.queueBind(queueName, EXCHANGE_NAME, severity);
 
-	        channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
-	        String queueName = channel.queueDeclare().getQueue();
+			System.out.println('Waiting for messages. To exit press CTRL+C');
 
-	        String bindingKey = 'routingKey';
-	        channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
-	        
+			QueueingConsumer consumer = new QueueingConsumer(channel);
+			channel.basicConsume(queueName, true, consumer);
 
-	        System.out.println('Waiting for messages. To exit press CTRL+C');
-
-	        QueueingConsumer consumer = new QueueingConsumer(channel);
-	        channel.basicConsume(queueName, true, consumer);
-
-	        while (true) {
-	            QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-	            String message = new String(delivery.getBody());
-	            String routingKey = delivery.getEnvelope().getRoutingKey();
-
-	            System.out.println("Received '" + routingKey + '":"' + message + "'");
-	        }
-	    }
+			while (true) {
+				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+				String message = new String(delivery.getBody());
+				String routingKey = delivery.getEnvelope().getRoutingKey();
+				System.out.println("Received '" + routingKey + "':'" + message + "'");
+			}
+		}
 	}
 
 ## Node.js
-###Producer: 
-First, producer should initialize a new connection to [robomq.io](http://www.robomq.io) server and create a new channel.
+###Producer
+First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
 
-After that producer should initialize a topic-type exchange for delivering messages. 
+Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
 
-Now producer is ready to send messages to exchange.
-	
-	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'topic', autoDelete:false}, function(exchange){
-			console.log('start send message');
-			exchange.publish('1routingKey','hello world');
-		});
-	});
+	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
 
+Then producer should publish message to the exchange with specific routing key. 
 
+	exchange.publish('routingKey','hello world');
+For this example, the routing key is 'routingKey'. Only the queue binding to this exchange and also has same routing key, as 'routingKey', can received this message. 
 
-###Consumer:
-First, Consumer should initialize the connection and start a new channel. 
+After finishing sending messages, producer should terminate the connection. 
 
-Then consumer should initialize an topic-type exchange as producer did. 
+###Consumer
 
-	channel.exchangeDeclare("exchangeName", "topic");
+For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
 
-Initialize a queue for customer listening to. After that, Consumer should define a routing policy for binding queues to exchanges.
-string bindingKey = "#.key"
-\# you can use any policy for binding key 
+Then consumer will initializes the same exchange as producer did.
 
-Binding the queue and exchange with the filter policy.
+	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
 
 
+Then consumer should declare a queue to listen. 
+
+Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. 
+
+After that, we can define own callback function for processing messages like what we did in previous chapter. 
+Then consumer is ready to work. 
+
+Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
 
 	var queue = connection.queue('queueName', options={},function(queue){
 		console.log('Declare one queue, name is ' + queue.name);
-		queue.bind('exchangeName', '*.routingKey');
+		queue.bind('exchangeName', 'routingKey');
 		queue.subscribe(function (msg){
-			console.log('the message is '+msg.data);
-		});
+			console.log('consumer received the message'+msg.data);
+		});	
 	});
 
 
- After that, starting consuming the messages.
- 
 ###Putting it all together
 
 **producer.js**
@@ -262,25 +258,25 @@ Binding the queue and exchange with the filter policy.
 	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
 	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'topic', autoDelete:false}, function(exchange){
+		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
 			console.log('start send message');
-			exchange.publish('1routingKey','hello world');
+			exchange.publish('routingKey','hello world');
 		});
 	});
-
+	
 **consumer.js**
 
 	var amqp = require('amqp');
 	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
 	connection.on('ready', function(){
-		connection.exchange('exchangeName', options={type:'topic', autoDelete:false}, function(exchange){
+		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
 			var queue = connection.queue('queueName', options={},function(queue){
 				console.log('Declare one queue, name is ' + queue.name);
-				queue.bind('exchangeName', '*.routingKey');
+				queue.bind('exchangeName', 'routingKey');
 				queue.subscribe(function (msg){
-					console.log('the message is '+msg.data);
-				});
+				console.log('consumer received the message'+msg.data);
+				});	
 			});
 		});
 	});
@@ -301,12 +297,11 @@ Download the client library package, and copy it into your working directory:
 
 Note that these examples provide a simple client implementation to get started but does not go into detailed description of all flags passed into the AMQP methods. 
 A complete reference to RabbitMQ's implementaton of version 0-9-1 of the AMQP specification can be found in this guide.
-[https://www.rabbitmq.com/amqp-0-9-1-reference.html](https://www.rabbitmq.com/amqp-0topic-exchange-9-1-reference.html)
+[https://www.rabbitmq.com/amqp-0-9-1-reference.html](https://www.rabbitmq.com/amqp-0-9-1-reference.html)
 
 
 ### Producer
-For filter based routing, the producer should publish messages to the **topic** type exchange. All messages sent with the routing key, **"mytopic.new"**, will be delivered to all the queues that are bound with a matching binding key. 
-Note that the routing key must be a list of words, delimited by dots. The words can be anything, but usually they specify some features connected to the message. A few valid routing key examples: **"log.warning"**, **"log.error"**. 
+For routing-Key based messaging, the producer should publish messages to the specified exchange allowing filtering of messages based on a producer’s routing key.  Based on that routing key, messages will be sent through the exchange and distributed to the right queue.  If not specified, that routing key is the queue name.
 
 	amqp_basic_properties_t props;
 	props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
@@ -314,8 +309,8 @@ Note that the routing key must be a list of words, delimited by dots. The words 
 	props.delivery_mode = 1; /* non-persistent delivery mode */
 	amqp_boolean_t mandatory = 0;
 	amqp_boolean_t immediate = 0;
-	char exchange_name[] = "topic-exchange";
-	char routing_key[] = "mytopic.new";
+	char exchange_name[] = "hello-exchange";
+	char routing_key[] = "routingKey";
 	int result;
 	
 	// Sending message
@@ -330,7 +325,7 @@ Note that the routing key must be a list of words, delimited by dots. The words 
 
 
 ### Consumer
-Then the consumer should create an exchange and subscribe to a queue.  This exchange will be defined similarly to the one-to-one example, however, the **topic** exchange type is specified below as **exchange_type**.
+Then the consumer should create a queue and subscribe to a queue. This queue will work similarly to the one-to-one example using the **direct** exchange type, however, only messages published to this exchange with routing key matching **"routingKey"** will be received by consumer.  All other messages will be filtered.
 
 	amqp_bytes_t queue;
 	amqp_channel_t channel = 1;
@@ -338,10 +333,10 @@ Then the consumer should create an exchange and subscribe to a queue.  This exch
 	amqp_boolean_t durable = 0;
 	amqp_boolean_t exclusive = 0;
 	amqp_boolean_t auto_delete = 1;
-	char exchange_name[] = "topic-exchange";
-	char exchange_type[] = "topic";
+	char exchange_name[] = "hello-exchange";
+	char exchange_type[] = "direct";
 	char queue_name[] = "hello-queue";
-	char binding_key[] = "mytopic.new";
+	char binding_key[] = "routingKey";
 	
 	// Declaring exchange
 	amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
@@ -358,7 +353,10 @@ Then the consumer should create an exchange and subscribe to a queue.  This exch
 			amqp_empty_table);
 
 
+Note that all the queues declared without specific binding key use the queue name as the default binding key.
+
 At this point, consumer should start consuming messages.
+
 
 ### How to build/run client
 Now we have two c files, one is producer.c, another is consumer.c. 
@@ -419,8 +417,8 @@ The full code below includes some basic AMQP error handling for consumer that is
 		props.delivery_mode = 1; /* non-persistent delivery mode */
 		amqp_boolean_t mandatory = 0;
 		amqp_boolean_t immediate = 0;
-		char exchange_name[] = "topic-exchange";
-		char routing_key[] = "mytopic.new";
+		char exchange_name[] = "hello-exchange";
+		char routing_key[] = "routingKey";
 		int result;
 	
 		conn = mqconnect();
@@ -491,9 +489,9 @@ The full code below includes some basic AMQP error handling for consumer that is
 		amqp_boolean_t exclusive = 0;
 		amqp_boolean_t auto_delete = 1;
 		char exchange_name[] = "hello-exchange";
-		char exchange_type[] = "topic";
+		char exchange_type[] = "direct";
 		char queue_name[] = "hello-queue";
-		char binding_key[] = "mytopic.new";
+		char binding_key[] = "routingKey";
 		amqp_rpc_reply_t reply;
 	
 		// Declaring exchange
@@ -570,13 +568,3 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		return 0;
 	}
-
-
-
-
-
-
-
-
-
-

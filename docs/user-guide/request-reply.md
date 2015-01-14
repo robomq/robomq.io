@@ -3,7 +3,7 @@
 This is a two-way message communication also using direct exchange but unlike the RPC pattern, the reply queue is bound to an exchange allowing more than one client to subscribe to and process the replies asynchronously.  In addition any service application can process a request from any client.
 In this situation, both producer and consumer are capable of publishing and consuming messages.
 
-![Diagram of Request - Reply messaging](images/request-reply.png)
+![Diagram of Request - Reply messaging](./images/request-reply.png)
 
 
 ## Python

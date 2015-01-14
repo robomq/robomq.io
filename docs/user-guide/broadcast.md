@@ -1,147 +1,172 @@
-# Routing - Key Based
+# Broadcast (Publish/Subscribe)
 
-Routing - Key based messaging is an extension of direct exchange allowing filtering of messages based on a producer’s routing key.  Messages published to the exchange will be routed to queues bound to that exchange with matching binding key.  All other messages will be filtered.  A consumer will define callback functions to process messages that are selectively received.
+For broadcast messaging, a producer sends messages to fan-out exchange that are broadcast to all queues bound to that exchange.  As soon as a consumer subscribes to the queue, messages will be delivered to that consumer
 
-![Diagram of Routing - Key based messaging](images/routing-key.png)
+![Diagram of Broadcast messaging](./images/broadcast.png)
 
 ----------
 
 ## Python
+If we have more than one consumer and they are listening to the different queues, they will all receive same messages sent by one producer. 
 
-###Producer
-First producer should initialize a connection to [robomq.io](http://www.robomq.io). 
+### Producer
+First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the routing keys. 
+	connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host='your port'))
 
-	channel.exchange_declare(exchange='exchangeName', type='direct')
 
-Then producer should publish message to the exchange with specific routing key. 
+Then producer should declare a **fanout** type exchange for delivering message. 
 
-	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
+	channel.exchange_declare(exchange='exchangeName',
+                         type='fanout')
 
-For this example, the routing key is 'routingKey'.  Only the queue binding to this exchange with same routing key, as 'routingKey', can received messages.
 
-After finishing sending messages, producer should terminate the connection. 
+Fanout type exchange will deliver all messages to all queues bound to it. 
+After initializing the exchange, producer should publish messages to this exchange. Since this is **fanout** type, producer should leave routing key empty. 
+
+	channel.basic_publish(exchange='exchangeName',
+                      routing_key='',
+                      body=message)
+
+Finally, after publishing all messages, producer should terminate the connection. 
+
+	connection.close()
+
 
 ###Consumer
+First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+After that, consumer should initialize an exchange exactly as producer did. (<b>type</b> and <b>name</b> should be exactly same)
 
-Then consumer will initializes the same exchange as producer did.
+	channel.exchange_declare(exchange='exchangeName',
+							type='fanout')
 
-	channel.exchange_declare(exchange ='exchangeName', type='direct')
 
-Then consumer should declare a queue to listen and consume messages from.. 
-
+Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages sent to this exchange.  With a **fanout** type exchange, more than one consumer or a consumer with any number of separate queues can bind to it and start consuming the same messages. 
+	
+	queue_name = 'queueName'
 	channel.queue_declare(queue=queue_name,exclusive=True)
-
-Then bind the queue to the exchange with a specific routing key. This key will be the identifier for this queue to receive messages from. 
-
-
-	severity = 'routingKey'	
-	channel.queue_bind(exchange='exchangeName', queue=queue_name, routing_key=severity)
+	channel.queue_bind(exchange='exchangeName',
+                   queue=queue_name)
 
 
-After that, we can define own callback function for processing messages like what we did in previous chapter. 
-Then consumer is ready to work. 
+Consumer could also define a callback function as one-to-one section explained. 
+At this point, consumer should start consuming messages.
 
-	channel.basic_consume(callback, queue=queue_name, no_ack=True)
+
+	channel.basic_consume(callback,
+                      queue=queue_name,
+                      no_ack=True)
 	channel.start_consuming()
 
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
 
 ###Putting it all together
 
 **producer.py**
 
-
 	import pika
 	import sys
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
+	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your port'))
 	channel = connection.channel()
 
-	channel.exchange_declare(exchange='exchangeName', type='direct')
+	channel.exchange_declare(exchange='exchangeName', type='fanout')
 
-	severity = 'routingKey'
-	message = 'Hello World!'
-	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
-	print 'Sent %r:%r' % (severity, message)
+	message = 'hello world'
+	channel.basic_publish(exchange='exchangeName', routing_key='', body=message)
+	print 'Sent %r' % (message,)
 	connection.close()
 
-**Consumer.py**
+
+**consumer.py**
 
 	import pika
-	import sys
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host='your host'))
 	channel = connection.channel()
 
-	channel.exchange_declare(exchange='exchangeName', type='direct')
+	channel.exchange_declare(exchange='exchangeName',
+                         type='fanout')
 
 	queue_name = 'queueName'
 	channel.queue_declare(queue=queue_name,exclusive=True)
-	severity = 'routingKey'
 	channel.queue_bind(exchange='exchangeName',
-					queue=queue_name,
-					routing_key=severity)
+                   queue=queue_name)
 	print 'Waiting for logs. To exit press CTRL+C'
 
 	def callback(ch, method, properties, body):
-		print '%r:%r' % (method.routing_key, body,)
+		print '%r' % (body,)
 
 	channel.basic_consume(callback, queue=queue_name, no_ack=True)
 
 	channel.start_consuming()
-	
+
 ## Java
-###Producer
-First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
+### Producer
+First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication.  
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
+	ConnectionFactory factory = new ConnectionFactory();
+	factory.setUsername(userName);
+	factory.setPassword(password);
+	factory.setVirtualHost(virtualHost);
+	factory.setHost(hostName);
+	factory.setPort(portNumber);
+	Connection conn = factory.newConnection();
+	Channel channel = connection.createChannel();
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-	
-Then producer should publish message to the exchange with specific routing key. 
 
-	channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
-        
-For this example, the routing key is **'routingKey'**. Only the queue binding to this exchange with matching name, can received this message. 
+Then producer should declare a **fanout** type exchange for delivering message. 
 
-After finishing sending messages, producer should terminate the connection. 
+	channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
+
+
+Fanout type exchange will deliver all messages to all queues bound to it. 
+After initializing the exchange, producer should publish messages to this exchange. Since this is **fanout** type, producer should leave routing key empty. 
+
+	channel.basicPublish(EXCHANGE_NAME, '', null, message.getBytes());
+
+Finally, after publishing all messages, producer should terminate the connection. 
+
+	channel.close();
+	connection.close();
+
 
 ###Consumer
+For broadcast consumer, first they should start a connection to the [robomq.io](http://www.robomq.io) server. 
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+After that, consumer should initializes an exchange same as producer did. (their <b>type</b> and <b>name</b> should be exactly same)
 
-Then consumer will initializes the same exchange as producer did.
-
-	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-
-Then consumer should declare a queue to listen. 
-
-        String queueName = channel.queueDeclare().getQueue();
+	channel.exchangeDeclare("exchangeName", "fanout");
 
 
-Then binding the queue to the exchange with a specific routing key.  Messages published to this exchange with routing key matching **"routingKey"** will be received by consumer.  All other messages will be filtered.
+Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
+
+	channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
+	String queueName = channel.queueDeclare().getQueue();
+	channel.queueBind(queueName, EXCHANGE_NAME, '');
 
 
-	String severity = 'routingKey';
-	channel.queueBind(queueName, EXCHANGE_NAME, severity);
+Consumer could also define a callback function as one to one section mentioned. 
+Now, consumer could define consuming method and start consuming messages. 
 
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
-	
+
 	QueueingConsumer consumer = new QueueingConsumer(channel);
 	channel.basicConsume(queueName, true, consumer);
+
+
+Then you can define a loop to handle the messages got received. Here we provide an example which use infinite loop to keep consuming message and print it out. 
+
 
 	while (true) {
 		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 		String message = new String(delivery.getBody());
-		String routingKey = delivery.getEnvelope().getRoutingKey();
+		System.out.println(" [x] Received '" + message + "'");
+	}
 
-            System.out.println("Received '" + routingKey + "':'" + message + "'");
-        }
 
+
+Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
 
 ###Putting it all together
 
@@ -151,25 +176,28 @@ Now all the messages with the same routing key as this queue's will get consumed
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
 	import com.rabbitmq.client.Channel;
-
+	
 	public class Producer {
-		private static final String EXCHANGE_NAME = 'exchangeName';
-		public static void main(String[] argv)
-			throws java.io.IOException {
+		private static final String EXCHANGE_NAME = 'excahngeName';
+		public static void main(String[] args)
+		throws java.io.IOException {
 			ConnectionFactory factory = new ConnectionFactory();
 			factory.setHost('your host');
 			Connection connection = factory.newConnection();
 			Channel channel = connection.createChannel();
-		
-			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-			String severity = 'routingKey';
+
+			channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
+       
 			String message = 'hello world';
-			channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
-			System.out.println("Sent '" + severity + "':'" + message + "'");
+
+			channel.basicPublish(EXCHANGE_NAME, '', null, message.getBytes());
+			System.out.println("Sent '" + message + "'");
+
 			channel.close();
 			connection.close();
 		}
 	}
+	
 **consumer.java**
 
 	import java.io.IOException;
@@ -178,21 +206,20 @@ Now all the messages with the same routing key as this queue's will get consumed
 	import com.rabbitmq.client.Channel;
 	import com.rabbitmq.client.QueueingConsumer;
 
-
 	public class Consumer {
 		private static final String EXCHANGE_NAME = 'exchangeName';
-		public static void main(String[] argv)
-                  throws java.io.IOException,
-                  java.lang.InterruptedException {
-                  ConnectionFactory factory = new ConnectionFactory();
-                  factory.setHost('your host');
-                  Connection connection = factory.newConnection();
-                  Channel channel = connection.createChannel();
-			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-			String queueName = channel.queueDeclare().getQueue();
 
-			String severity = 'routingKey';
-			channel.queueBind(queueName, EXCHANGE_NAME, severity);
+		public static void main(String[] argv)
+			throws java.io.IOException,java.lang.InterruptedException {
+    	
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost('your host');
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+
+			channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
+			String queueName = channel.queueDeclare().getQueue();
+			channel.queueBind(queueName, EXCHANGE_NAME, '');
 
 			System.out.println('Waiting for messages. To exit press CTRL+C');
 
@@ -202,85 +229,94 @@ Now all the messages with the same routing key as this queue's will get consumed
 			while (true) {
 				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 				String message = new String(delivery.getBody());
-				String routingKey = delivery.getEnvelope().getRoutingKey();
-				System.out.println("Received '" + routingKey + "':'" + message + "'");
+				System.out.println('Received '' + message + ''');
 			}
 		}
 	}
 
 ## Node.js
-###Producer
-First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
+### Producer
+First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
+	var connection = amqp.createConnection({ host: "your host", port: 5672,  
+	login:'username', password:'password', vhost:'vhost-name' });
+	
+Then producer should declare a **fanout** type exchange for delivering message.
 
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
+Then producer should subscribe an exchange for delivering message. The type of exchange should be fanout. Fanout type exchange will deliver all messages to all queues which binding to it. 
 
-Then producer should publish message to the exchange with specific routing key. 
+After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. Fanout type exchange will deliver all messages to all queues which binding to it. 
 
-	exchange.publish('routingKey','hello world');
-For this example, the routing key is 'routingKey'. Only the queue binding to this exchange and also has same routing key, as 'routingKey', can received this message. 
+After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. 
 
-After finishing sending messages, producer should terminate the connection. 
+
+
+	connection.on('ready',function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			console.log('start send message');
+			exchange.publish('routingKey','hello world');
+		});
+	});	
+
 
 ###Consumer
+First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server.  
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+After that, consumer should initializes an exchange same as producer did. 
+Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
 
-Then consumer will initializes the same exchange as producer did.
+Consumer could also define a callback function as one to one section mentioned. 
+Now, consumer could define consuming method and start consuming messages. 
 
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
-
-
-Then consumer should declare a queue to listen. 
-
-Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. 
-
-After that, we can define own callback function for processing messages like what we did in previous chapter. 
-Then consumer is ready to work. 
-
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
-
-	var queue = connection.queue('queueName', options={},function(queue){
-		console.log('Declare one queue, name is ' + queue.name);
-		queue.bind('exchangeName', 'routingKey');
-		queue.subscribe(function (msg){
-			console.log('consumer received the message'+msg.data);
-		});	
+	connection.on('ready', function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			var queue = connection.queue('QueueName', options={},function(queue){
+				console.log('Declare one queue, name is ' + queue.name);
+				queue.bind('exchangeName', '');
+				queue.subscribe(function (msg){
+					console.log('consumer received the message'+msg.data);
+				});
+			});
+		});
 	});
+
+Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
 
 
 ###Putting it all together
 
 **producer.js**
 
+
 	var amqp = require('amqp');
 	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
 	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
 			console.log('start send message');
 			exchange.publish('routingKey','hello world');
 		});
 	});
-	
+
+
 **consumer.js**
 
 	var amqp = require('amqp');
 	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
 	connection.on('ready', function(){
-		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
-			var queue = connection.queue('queueName', options={},function(queue){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			var queue = connection.queue('QueueName', options={},function(queue){
 				console.log('Declare one queue, name is ' + queue.name);
-				queue.bind('exchangeName', 'routingKey');
+				queue.bind('exchangeName', '');
 				queue.subscribe(function (msg){
-				console.log('consumer received the message'+msg.data);
-				});	
+					console.log('consumer received the message'+msg.data);
+				});
 			});
 		});
 	});
-	
+
+
 ## C
 ### Prerequisites
 
@@ -301,7 +337,7 @@ A complete reference to RabbitMQ's implementaton of version 0-9-1 of the AMQP sp
 
 
 ### Producer
-For routing-Key based messaging, the producer should publish messages to the specified exchange allowing filtering of messages based on a producer’s routing key.  Based on that routing key, messages will be sent through the exchange and distributed to the right queue.  If not specified, that routing key is the queue name.
+For broadcast messaging, the producer should publish messages to the the **fanout** type exchange that broadcasts all the messages it receives to all the queues bound to it.  Therefore, routing_key is not required in this example.
 
 	amqp_basic_properties_t props;
 	props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
@@ -309,8 +345,8 @@ For routing-Key based messaging, the producer should publish messages to the spe
 	props.delivery_mode = 1; /* non-persistent delivery mode */
 	amqp_boolean_t mandatory = 0;
 	amqp_boolean_t immediate = 0;
-	char exchange_name[] = "hello-exchange";
-	char routing_key[] = "routingKey";
+	char exchange_name[] = "fanout-exchange";
+	char routing_key[] = "";
 	int result;
 	
 	// Sending message
@@ -325,7 +361,7 @@ For routing-Key based messaging, the producer should publish messages to the spe
 
 
 ### Consumer
-Then the consumer should create a queue and subscribe to a queue. This queue will work similarly to the one-to-one example using the **direct** exchange type, however, only messages published to this exchange with routing key matching **"routingKey"** will be received by consumer.  All other messages will be filtered.
+Then the consumer should create an exchange and subscribe to a queue.  This exchange will be defined similarly to the one-to-one example, however, the **fanout** exchange type is specified below as **exchange_type** and binding_key is not required.
 
 	amqp_bytes_t queue;
 	amqp_channel_t channel = 1;
@@ -333,10 +369,10 @@ Then the consumer should create a queue and subscribe to a queue. This queue wil
 	amqp_boolean_t durable = 0;
 	amqp_boolean_t exclusive = 0;
 	amqp_boolean_t auto_delete = 1;
-	char exchange_name[] = "hello-exchange";
-	char exchange_type[] = "direct";
+	char exchange_name[] = "fanout-exchange";
+	char exchange_type[] = "fanout";
 	char queue_name[] = "hello-queue";
-	char binding_key[] = "routingKey";
+	char binding_key[] = "";
 	
 	// Declaring exchange
 	amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
@@ -352,11 +388,7 @@ Then the consumer should create a queue and subscribe to a queue. This queue wil
 	amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(binding_key),
 			amqp_empty_table);
 
-
-Note that all the queues declared without specific binding key use the queue name as the default binding key.
-
-At this point, consumer should start consuming messages.
-
+At this point, consumer should start consuming messages broadcast from the **fanout** exchange type.
 
 ### How to build/run client
 Now we have two c files, one is producer.c, another is consumer.c. 
@@ -417,8 +449,8 @@ The full code below includes some basic AMQP error handling for consumer that is
 		props.delivery_mode = 1; /* non-persistent delivery mode */
 		amqp_boolean_t mandatory = 0;
 		amqp_boolean_t immediate = 0;
-		char exchange_name[] = "hello-exchange";
-		char routing_key[] = "routingKey";
+		char exchange_name[] = "fanout-exchange";
+		char routing_key[] = "";
 		int result;
 	
 		conn = mqconnect();
@@ -488,10 +520,10 @@ The full code below includes some basic AMQP error handling for consumer that is
 		amqp_boolean_t durable = 0;
 		amqp_boolean_t exclusive = 0;
 		amqp_boolean_t auto_delete = 1;
-		char exchange_name[] = "hello-exchange";
-		char exchange_type[] = "direct";
+		char exchange_name[] = "fanout-exchange";
+		char exchange_type[] = "fanout";
 		char queue_name[] = "hello-queue";
-		char binding_key[] = "routingKey";
+		char binding_key[] = "";
 		amqp_rpc_reply_t reply;
 	
 		// Declaring exchange
@@ -568,3 +600,4 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		return 0;
 	}
+
