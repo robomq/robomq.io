@@ -35,7 +35,6 @@ In the examples, MQTT producer will first ask user for the quantity of messages,
 
 The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository](https://github.com/robomq/robomq.io) on GitHub.  
 
-
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 
 ## Python

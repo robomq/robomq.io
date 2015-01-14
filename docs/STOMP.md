@@ -21,7 +21,7 @@ The STOMP specification does not prescribe what kinds of destinations a broker m
 
 > See more explanation regarding this topic at <https://www.rabbitmq.com/stomp.html>
 
-Thus, with STOMP, you can easily implement messaging clients in one-on-one, broadcast, routing key, routing filter or request-reply scenario by just specifying different types of destination. In the rest of this section, we are going to explain how to switch among those scenarios with minimal change of code. Most times, it only needs to change one line.  
+Thus, with STOMP, you can easily implement messaging clients in one-on-one, broadcast, routing key, routing filter or request-reply scenario by just specifying different types of destination. In the rest of this section, we are going to discuss how to switch among those scenarios with minimal change of code. Most times, it only needs to change one line.  
 
 > To know more about the differences among those scenarios, read first paragraph of the previous five pages introducing AMQP implementation of those scenarios.  
 
@@ -49,7 +49,7 @@ The way direct exchange works is as bellow:
 1. A queue binds to the exchange with a routing key K;  
 2. When a new message with routing key R arrives at the direct exchange, the exchange routes it to the queue if K = R;
 
-In this case, each consumer will have its own queue. The queue names are auto-generated and they are bound to the direct exchange by their specific routing keys.  
+In this case, each consumer will have its own queue. The queue names are auto-generated and they are bound to the direct exchange by their particular routing keys.  
 
 **Routing filter**  
 
@@ -69,7 +69,7 @@ The scenarios you can implement with [robomq.io](http://www.robomq.io) STOMP ada
 
 For example, if you use destination type `/temp-queue/routingKey`, it will creates transient queues (auto-delete = true) bound to the direct exchange. It can be used to implement RPC (remote procedure call), a variant of request-reply scenario. In RPC scenario, requester creates a transient queue to listen for reply as it sends a request. The queue will be automatically deleted once it receives the reply.  
 
-You can also add your own exchanges and incorporate them in STOMP destination, such as `/exchange/user-added-exchange/routingKey`. It will create an auto-named queue bound to user-added-exchange by the routingKey. This feature significantly extends [robomq.io](http://www.robomq.io) STOMP adapter's capacity.  
+You can also add your own exchanges in your vhost and incorporate them in STOMP destination, such as `/exchange/user-added-exchange/routingKey`. It will create an auto-named queue bound to user-added-exchange by the routingKey. This feature significantly extends [robomq.io](http://www.robomq.io) STOMP adapter's capacity.  
 
 Although we have talked so much about how our STOMP message destinations are lightweight but powerful, there's still things it can't do. For example, if you want to bind one queue with a non-default exchange and let multiple consumers subscribe the queue, you would have to ask for help from the AMQP broker of [robomq.io](http://www.robomq.io).
 
@@ -80,8 +80,6 @@ We will provide examples of one-on-one scenario in five languages, including Pyt
 In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.
 
 The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository](https://github.com/robomq/robomq.io) on GitHub. 
-
-
 
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 
@@ -440,21 +438,10 @@ When you no longer need it, you can also unsubscribe a destination.
 ## Java
 
 ### Prerequisite
-The Java library we use for this example can be found at <http://www.germane-software.com/software/Java/Gozirra/>.  
+The Java library we use for this example can be found at <https://github.com/robomq/Gozirra>.  
 It supports STOMP version 1.0.  
-This library has one **limitation**. It doesn't allow you to specify the vhost. This issue can be fixed by merely 2-line modification, so we recommend you download the source code and fix it by yourself.
 
-Download the library source file at <http://www.germane-software.com/archives/gozirra-0.4.1.tar.gz> and uncompress it.   
-Open `gozirra-0.4.1/java/net/ser1/stomp/Client.java` and modify 2 lines:  
-1. line 46: add a vhost argument to the constructor of Client class, so it will be `public Client(String server, int port, String login, String pass, String vhost)`.  
-2. line 59: insert a new line `header.put( "host", vhost );`.  
-Compile the modified library:
-
-	javac gozirra-0.4.1/java/net/ser1/stomp/*.java
-	cd gozirra-0.4.1/java/
-	jar cf ../../gozirra.jar net/ser1/stomp/*.class
-
-Now with you own gozirra.jar, you should be able to specify the vhost in your client program.  
+You may clone the repository by `git clone https://github.com/robomq/Gozirra.git`.
 
 Import this library in your program	`import net.ser1.stomp.*;` and compile your source code along with gozirra.jar. For example,  
 
