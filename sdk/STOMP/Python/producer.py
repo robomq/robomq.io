@@ -12,11 +12,11 @@ import sys
 from stompest.config import StompConfig
 from stompest.sync import Stomp
 
-server = "localhost"
+server = "hostname"
 port = "61613"
-vhost = "/"
-login = "guest"
-passcode = "guest"
+vhost = "yourvhost"
+login = "username"
+passcode = "password"
 destination = "/queue/test"	#There're more options other than /queue/...
 
 try:

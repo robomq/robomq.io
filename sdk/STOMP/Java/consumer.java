@@ -13,12 +13,12 @@ import java.util.Map;
 
 class consumer {
 	private Client client;
-	private String server = "localhost";
+	private String server = "hostname";
 	private int port = 61613;
-	private String vhost = "/";
+	private String vhost = "yourvhost";
 	private String destination = "/queue/test";	//There're more options other than /queue/...
-	private String login = "guest";
-	private String passcode = "guest";
+	private String login = "username";
+	private String passcode = "password";
 
 	/**
 	 * This method connects client to the broker.

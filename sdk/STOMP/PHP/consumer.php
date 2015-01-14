@@ -9,11 +9,11 @@
  * robomq.io (http://www.robomq.io)
  */
 
-$server = "localhost";
+$server = "hostname";
 $port = "61613";
-$vhost = "/";
-$login = "guest";
-$passcode = "guest";
+$vhost = "yourvhost";
+$login = "username";
+$passcode = "password";
 $destination = "/queue/test";	//There're more options other than /queue/...
 
 try {

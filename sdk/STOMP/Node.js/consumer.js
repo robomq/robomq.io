@@ -10,11 +10,11 @@
 
 var Stomp = require("stompjs");
 
-var server = "localhost";
-var port = 61613;
-var login = "guest";
-var passcode = "guest";
-var vhost = "/";
+var server = "hostname";
+var port = 61613; //It takes either string or int argument
+var login = "username";
+var passcode = "password";
+var vhost = "yourvhost";
 var destination = "/queue/test";	//There're more options other than /queue/...
 
 var client = Stomp.overTCP(server, port, "v11.stomp");

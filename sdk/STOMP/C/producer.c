@@ -46,11 +46,11 @@ static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
  */
 int main(int argc, char *argv[]) 
 {
-	char* server = "localhost";
+	char* server = "hostname";
 	char* port = "61613";
-	char* login = "guest";
-	char* passcode = "guest";
-	char* vhost = "/";
+	char* login = "username";
+	char* passcode = "password";
+	char* vhost = "yourvhost";
 	//There're more options other than /queue/...
 	char* destination = "/queue/test";
 	int err;
