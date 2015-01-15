@@ -274,7 +274,7 @@ For MQTT, the only difference is the producer code. Modify the "producer.py" as 
 		msgJson["stationID"] = stationID
 		msgJson["coordinate"] = coordinate
 		try:
-			result = client.publish(topic, payload=json.dumps(msgJson, ensure_ascii=False), qos=1, retain=False)
+			result = client.publish(topic, payload=str(json.dumps(msgJson, ensure_ascii=False)), qos=1, retain=False)
 			if (result[0] == 4):
 				reconnect() #reconnect to broker
 		except:
@@ -317,7 +317,7 @@ For STOMP, no change is required to sensor programs, only modify your "producer.
 		msgJson["stationID"] = stationID
 		msgJson["coordinate"] = coordinate
 		try:
-			client.send("/topic/" + topic, json.dumps(msgJson, ensure_ascii=False))
+			client.send("/topic/" + topic, json.dumps(msgJson, ensure_ascii=False), {"content-type": "application/json"})
 		except:
 			print "Error: Failed to send message"
 			client = connect() #reconnect to broker
