@@ -7,9 +7,9 @@ You can send and receive messages using [robomq.io](http://www.robomq.io) platfo
 	 
 Each of the protocols can be used for variety of messaging integration patterns. MQTT and STOMP, being relatively light weight protocol, are ideal for small footprint devices. AMQP could be the protocol of choice for more capable applications and enterprise systems. 
 	
-##[AMQP use cases](https://github.com/robomq/robomq.io/tree/master/SDK/AMQP)
+##[AMQP use cases](https://github.com/robomq/robomq.io/tree/master/sdk/AMQP)
 
-Following use cases using AMQP protocols are documented with code on the [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/SDK/AMQP).  
+Following use cases using AMQP protocols are documented with code on the [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/AMQP).  
 
 1. One-on-one or direct messaging : point to point message transportation
 
@@ -22,11 +22,11 @@ Following use cases using AMQP protocols are documented with code on the [robomq
 5. request and reply : two way request reply communication
 
 
-##[MQTT use cases](https://github.com/robomq/robomq.io/tree/master/SDK/MQTT)
+##[MQTT use cases](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
 
 MQTT (Message Queues for Telemetry Transport) is lighter weight protocol for device specific use cases supporting pub-sub messaging pattern. MQTT code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
 
-##[STOMP use cases](https://github.com/robomq/robomq.io/tree/master/SDK/STOMP)
+##[STOMP use cases](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP)
 
 STOMP (Simple Text Oriented Messaging Protocol) is a HTTP like simple protocol and can be used for variety of use cases with very little programming. STOMP code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP)
 
