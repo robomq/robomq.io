@@ -50,7 +50,7 @@ Finally, import this library in your program.
 
 The full documentation of this library is at <https://pypi.python.org/pypi/paho-mqtt>.  
 
-This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <http://mosquitto.org>.  
+> This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <http://mosquitto.org>.  
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
