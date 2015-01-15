@@ -1,42 +1,39 @@
-#SDK & Example code
 
-#Support portocols
-Robomq.io provided 3 protocol for user to choose.  
 
-1. [AMQP](http://www.amqp.org/)
-2. [MQTT](http://mqtt.org/)
-3. [STOMP](https://stomp.github.io/)
+[robomq.io](http://www.robomq.io) has a rich library of examples code in multiple programming languages supporting AMQP, MQTT and STOMP protocols. The SDK includes example code for multiple Messaging Integration Patterns (MEPs).
+
+#Supported protocols
+You can send and receive messages using [robomq.io](http://www.robomq.io) platform from a choice of [AMQP](http://www.amqp.org/), [MQTT](http://mqtt.org/) and [STOMP](https://stomp.github.io/) protocols.
 	 
-All those protocol can be used in multiple scenario. 
-MQTT and STOMP are relatively light weight protocol for message transportation. Recommend for small devices. 
-AMQP can reach ideal target with strong network support and powerful processor.
- 
+Each of the protocols can be used for variety of messaging integration patterns. MQTT and STOMP, being relatively light weight protocol, are ideal for small footprint devices. AMQP could be the protocol of choice for more capable applications and enterprise systems. 
 	
-###[AMQP support scenarios ](https://github.com/robomq/robomq.io/tree/master/sdk/AMQP)
+##[AMQP use cases](https://github.com/robomq/robomq.io/tree/master/SDK/AMQP)
 
-1. one to one : point to point message transportation. 
-2. broadcast : sending message to all subscribed consumers,
-3. routing key based : sending message to the consumers which holding the matching routing key. 
-4. topic : sending messages to all consumer whose routing key can pass filter rules.
-5. request and reply : each messages sent will can get a reply from consumer. 
+Following use cases using AMQP protocols are documented with code on the [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/SDK/AMQP).  
+
+1. One-on-one or direct messaging : point to point message transportation
+
+2. Broadcast : sending messages to all subscribed consumers
+
+3. Key based routing : routing messages to consumer based on key based subscription 
+
+4. topic : Routing messages based on complex filter rules applied to routing keys 
+
+5. request and reply : two way request reply communication
 
 All [SDK](https://github.com/robomq/robomq.io) are created by SRB technologies team and hold on [github](https://github.com/robomq/robomq.io)<br>
 For all detail, refer [robomq.io](https://github.com/robomq/robomq.io)
 
-### [MQTT support scenarios](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
+##[MQTT use cases](https://github.com/robomq/robomq.io/tree/master/SDK/MQTT)
 
-MQTT is using the default amp.topic exchange as the only one for handle all the messages transportation. Make sure you using that exchange. This is light weight message protocol especially have good performance for M2M. Refer M2M section. 
+MQTT (Message Queues for Telemetry Transport) is lighter weight protocol for device specific use cases supporting pub-sub messaging pattern. MQTT code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
 
-###[STOMP support scenarios](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP)
+##[STOMP use cases](https://github.com/robomq/robomq.io/tree/master/SDK/STOMP)
 
-STOMP is an easy message protocol especial for light weight messages transport. Works Good on small devices, like Raspberry.
+STOMP (Simple Text Oriented Messaging Protocol) is a HTTP like simple protocol and can be used for variety of use cases with very little programming. STOMP code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP)
 
-##Support programming languages
+##Supported programming languages
 
-1. Java
-2. C++
-3. Python
-4. Node.js
-5. PHP
+[robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io) contains examples in Python, Java, C++, node.js and PHP. We continue to add examples in additional languages..
 
 
