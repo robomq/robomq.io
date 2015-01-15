@@ -1,6 +1,6 @@
 
 
-[robomq.io](http://www.robomq.io) has a rich library of examples code in multiple programming languages supporting AMQP, MQTT and STOMP protocols. The SDK includes example code for multiple Messaging Integration Patterns (MEPs).
+[robomq.io](http://www.robomq.io) has rich library of examples code in multiple programming languages supporting AMQP, MQTT and STOMP protocols. The [SDK](https://github.com/robomq/robomq.io) includes example code for multiple Messaging Integration Patterns (MEPs).
 
 #Supported protocols
 You can send and receive messages using [robomq.io](http://www.robomq.io) platform from a choice of [AMQP](http://www.amqp.org/), [MQTT](http://mqtt.org/) and [STOMP](https://stomp.github.io/) protocols.
@@ -17,12 +17,10 @@ Following use cases using AMQP protocols are documented with code on the [robomq
 
 3. Key based routing : routing messages to consumer based on key based subscription 
 
-4. topic : Routing messages based on complex filter rules applied to routing keys 
+4. topic : routing messages based on complex filter rules applied to routing keys 
 
 5. request and reply : two way request reply communication
 
-All [SDK](https://github.com/robomq/robomq.io) are created by SRB technologies team and hold on [github](https://github.com/robomq/robomq.io)<br>
-For all detail, refer [robomq.io](https://github.com/robomq/robomq.io)
 
 ##[MQTT use cases](https://github.com/robomq/robomq.io/tree/master/SDK/MQTT)
 
