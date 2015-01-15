@@ -1,6 +1,6 @@
 
 
-[robomq.io](http://www.robomq.io) has rich library of examples code in multiple programming languages supporting AMQP, MQTT and STOMP protocols. The [SDK](https://github.com/robomq/robomq.io) includes example code for multiple Messaging Integration Patterns (MEPs).
+[robomq.io](http://www.robomq.io) has rich library of examples code in multiple programming languages supporting AMQP, MQTT and STOMP protocols. The [SDK](https://github.com/robomq/robomq.io/tree/master/sdk) includes example code for multiple Messaging Integration Patterns (MEPs).
 
 #Supported protocols
 You can send and receive messages using [robomq.io](http://www.robomq.io) platform from a choice of [AMQP](http://www.amqp.org/), [MQTT](http://mqtt.org/) and [STOMP](https://stomp.github.io/) protocols.
@@ -32,6 +32,6 @@ STOMP (Simple Text Oriented Messaging Protocol) is a HTTP like simple protocol a
 
 ##Supported programming languages
 
-[robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io) contains examples in Python, Java, C++, node.js and PHP. We continue to add examples in additional languages..
+[robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io/tree/master/sdk) contains examples in Python, Java, C++, node.js and PHP. We continue to add examples in additional languages..
 
 
