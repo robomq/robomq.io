@@ -108,9 +108,8 @@ For sending messages, the main job is to create a producer method, then call thi
 
 First, launch your raspberry pi and create a file named "producer.py", then paste the following code into the file:
 
-
-	import sys, os, pika
-
+	import sys, os, json, pika
+	
 	stationID = "well1"
 	coordinate = [-89, 64]
 	server = "hostname"
@@ -118,10 +117,9 @@ First, launch your raspberry pi and create a file named "producer.py", then past
 	vhost = "waterSupply"
 	username = "username"
 	password = "password"
-	exchange = "amq.topic"
 	topic = "sensors"
 	parameters = pika.URLParameters("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost)
-
+	
 	def connect():
 		try:
 			connection = pika.BlockingConnection(parameters)
@@ -129,9 +127,9 @@ First, launch your raspberry pi and create a file named "producer.py", then past
 			return channel
 		except:
 			print "Error: Failed to connect broker"
-
+	
 	channel = connect() #connect to broker
-
+	
 	#publish message
 	def send(msgJson):
 		global channel
@@ -139,7 +137,7 @@ First, launch your raspberry pi and create a file named "producer.py", then past
 		msgJson["coordinate"] = coordinate
 		properties = pika.BasicProperties(content_type = "application/json", delivery_mode = 1)
 		try:
-			channel.basic_publish(exchange, topic, json.dumps(msgJson, ensure_ascii=False), properties)
+			channel.basic_publish("amq.topic", topic, json.dumps(msgJson, ensure_ascii=False), properties)
 		except:
 			print "Error: Failed to send message"
 			channel = connect() #reconnect to broker
@@ -239,73 +237,80 @@ In the above example we fulfilled message sending by creating a producer method 
 
 For MQTT, the only difference is the producer code. Modify the "producer.py" as follow:
 
-	
-	import sys, os
+	import sys, os, json
 	import paho.mqtt.client as mqtt
-
+	
 	stationID = "well1"
 	coordinate = [-89, 64]
 	server = "hostname"
-	port = "5672"
+	port = 1883
 	vhost = "waterSupply"
 	username = "username"
 	password = "password"
 	topic = "sensors"
-
+	
 	def connect():
 		try:
 			client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
 			client.username_pw_set(vhost + ":" + username, password)
 			client.connect(server, port, keepalive=60, bind_address="")
-			client.loop_start()
+			client.loop_start() #start network loop
 			return client
 		except:
 			print "Error: Failed to connect broker"
-
+	
+	def reconnect():
+		global client
+		if (client):
+			client.loop_stop() #stop the current loop before reconnecting
+			client.disconnect()
+		client = connect()
+	
 	client = connect() #connect to broker
-
+	
 	#publish message
 	def send(msgJson):
 		global client
 		msgJson["stationID"] = stationID
 		msgJson["coordinate"] = coordinate
 		try:
-			client.publish(topic, payload=json.dumps(msgJson, ensure_ascii=False), qos=1, retain=False)
+			result = client.publish(topic, payload=json.dumps(msgJson, ensure_ascii=False), qos=1, retain=False)
+			if (result[0] == 4):
+				reconnect() #reconnect to broker
 		except:
 			print "Error: Failed to send message"
-			channel = connect() #reconnect to broker
+			reconnect() #reconnect to broker
 
-Since the difference is limited in producer program, there is no need to modify the sensor programs.
+Since the difference is limited in the producer module, there is no need to modify the sensor programs.
 
 
 ##Messaging with STOMP
 
 For STOMP, no change is required to sensor programs, only modify your "producer.py" as follow:
 
-
-	import sys, os
+	import sys, os, json
 	from stompest.config import StompConfig
 	from stompest.sync import Stomp
-
+	
 	stationID = "well1"
 	coordinate = [-89, 64]
 	server = "hostname"
-	port = "5672"
+	port = "61613"
 	vhost = "waterSupply"
 	username = "username"
 	password = "password"
 	topic = "sensors"
-
+	
 	def connect():
 		try:
 			client = Stomp(StompConfig("tcp://" + server + ":" + port, login = username, passcode = password, version = "1.2"))
-			client.connect(versions = ["1.2"], host = vhost)
+			client.connect(host = vhost)
 			return client
 		except:
 			print "Error: Failed to connect broker"
-
+	
 	client = connect() #connect to broker
-
+	
 	#publish message
 	def send(msgJson):
 		global client
@@ -315,7 +320,6 @@ For STOMP, no change is required to sensor programs, only modify your "producer.
 			client.send("/topic/" + topic, json.dumps(msgJson, ensure_ascii=False))
 		except:
 			print "Error: Failed to send message"
-			channel = connect() #reconnect to broker
-
+			client = connect() #reconnect to broker
 
 As you can see, the "producer.py" code contains 2 methods. First is the "connect" method that is in charge of establishing connection to the [robomq.io](http://www.robomq.io) broker.  The other is the "send" method that publishes messages through [robomq.io](http://www.robomq.io) to any listening consumers.
