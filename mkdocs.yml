@@ -11,6 +11,7 @@ pages:
 - ['creatingNewApplication.md', '', 'Creating a New Application']
 - ['deviceIntegration.md', '', 'IoT and M2M Integration']
 - ['applicationIntegration.md', '', 'Application Integration']
+- ['SDK.md', '', 'SDK & example codes']
 - ['one-one.md', 'User Guide', 'One to One (Direct) Messaging']
 - ['broadcast.md', 'User Guide', 'Broadcast (Publish/Subscribe)']
 - ['routing-key.md', 'User Guide', 'Key based Message routing']
