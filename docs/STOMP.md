@@ -2,7 +2,7 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding STOMP.  
 
-[Robomq.io](http://www.robomq.io) supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker.  
+[robomq.io](http://www.robomq.io) supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker.  
 
 STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol. It is much simpler than AMQP and so more handy for message queue novices. STOMP provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers. We would recommend STOMP if you are implementing a simple message queuing application without very complex demands on combination of exchanges and queues.  
 > [Full documentation of STOMP](http://stomp.github.io/)
@@ -11,7 +11,7 @@ The STOMP specification does not prescribe what kinds of destinations a broker m
 
 # Message destinations
 
-[Robomq.io](http://www.robomq.io) gives its STOMP adapter the flexibility to support the destination types as bellow:
+[robomq.io](http://www.robomq.io) gives its STOMP adapter the flexibility to support the destination types as bellow:
 
 * /exchange -- SEND to arbitrary routing keys and SUBSCRIBE to arbitrary binding patterns; 
 * /queue -- SEND and SUBSCRIBE to queues managed by the STOMP gateway; 

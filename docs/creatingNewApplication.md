@@ -125,7 +125,7 @@ This library is built on the basis of a C++ library mosquitto. The documentation
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker and start looping then.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
 	client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")

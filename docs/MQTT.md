@@ -2,12 +2,12 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding MQTT.  
 
-[Robomq.io](http://www.robomq.io) supports MQTT 3.1 as an extension to the AMQP broker.
+[robomq.io](http://www.robomq.io) supports MQTT 3.1 as an extension to the AMQP broker.
 
 MQTT stands for Message Queue Telemetry Transport. It is a publish / subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimize network bandwidth and device resource requirements whilst also attempting to ensure reliability and some degree of assurance of delivery. These principles also turn out to make the protocol ideal of the emerging "machine-to-machine" (M2M) or "Internet of Things" (IoT) world of connected devices, and for mobile applications where bandwidth and battery power are at a premium. 
 > [Full documentation of MQTT](http://mqtt.org)
 
-[Robomq.io](http://www.robomq.io) builds MQTT adapter on top of AMQP exchanges and queues. Messages published to MQTT topics use a topic exchange (amq.topic by default) internally. Subscribers consume from queues bound to the topic exchange. This both enables interoperability with other protocols and makes it possible to use the Management GUI to inspect queue sizes, message rates, and so on.  
+[robomq.io](http://www.robomq.io) builds MQTT adapter on top of AMQP exchanges and queues. Messages published to MQTT topics use a topic exchange (amq.topic by default) internally. Subscribers consume from queues bound to the topic exchange. This both enables interoperability with other protocols and makes it possible to use the Management GUI to inspect queue sizes, message rates, and so on.  
 
 # Vhost specification
 
@@ -16,7 +16,7 @@ However, [robomq.io](http://www.robomq.io) broker supplemented this feature. You
 
 # Durability and Persistence
 
-[Robomq.io](http://www.robomq.io) MQTT adapter assumes two primary usage scenarios:
+[robomq.io](http://www.robomq.io) MQTT adapter assumes two primary usage scenarios:
 
 > QoS stands for quality of service in MQTT. 
 
@@ -54,7 +54,7 @@ The full documentation of this library is at <https://pypi.python.org/pypi/paho-
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
 	client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
@@ -179,7 +179,7 @@ The full documentation of this library is at <https://github.com/mqttjs/MQTT.js/
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 
 	var client = mqtt.createClient(port, server, {username: vhost + ":" + username, password: password, keepalive: 10, clean: true, will: null});
 
@@ -284,7 +284,7 @@ Optionally, to enable the built-in debug function of this library, add a line in
 	spMQTTDebug::Enable();
 
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 If you set `$clientid = null`, it will be randomly assigned a value.  
 `$client->connect()` returns a Boolean value indicating whether the connection is established.   
 
@@ -421,7 +421,7 @@ The full documentation of this library is at <http://www.eclipse.org/paho/files/
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 
 	private String broker = "tcp://" + server + ":" + port;
 
@@ -620,7 +620,7 @@ See the full documentation of this library at <http://mosquitto.org/documentatio
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[Robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Remember to `mosquitto_lib_init();` before creating the mosquitto instance.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
