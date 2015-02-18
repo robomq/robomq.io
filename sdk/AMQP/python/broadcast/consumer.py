@@ -1,27 +1,35 @@
-#File: consumer.py
-# Description: AMQP protocol. This is consumer code which can get message from exchange and consume them. Broadcast method.
+# File: consumer.py
+# Description: This is the AMQP consumer handles incoming
+#     communication from clients publishing messages to a broker server.
+#     Messages can be received over AMQP exchange types including one-to-one,
+#     from broadcast pattern, or selectively using specified binding key.
+#
 # Author: Stanley
 # robomq.io (http://www.robomq.io)
+
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
+server = "localhost"
+port = 5672
+vhost = "/" 
+username = "guest"
+password = "guest"
+exchangeName = "testEx"
+queueName = "testQ1"
+
+#callback funtion on receiving messages
+def onMessage(channel, method, properties, body):
+	print body
+
+#connect
+credentials = pika.PlainCredentials(username, password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
 channel = connection.channel()
 
-channel.exchange_declare(exchange='exchangeName',
-                         type='fanout')
-queue_name = 'queueName'
-channel.queue_declare(queue=queue_name,exclusive=True)
-channel.queue_bind(exchange='exchangeName',
-                   queue=queue_name)
-
-print 'Waiting for logs. To exit press CTRL+C'
-
-def callback(ch, method, properties, body):
-    print '%r' % (body)
-
-channel.basic_consume(callback,
-                      queue=queue_name,
-                      no_ack=True)
-
+#declare exchange and queue, bind them and consume messages
+#for fanout type exchange, routing key is useless
+channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
+channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
+channel.basic_consume(onMessage, queue = queueName, no_ack = True)
 channel.start_consuming()

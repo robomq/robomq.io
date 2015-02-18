@@ -1,17 +1,30 @@
 # File: producer.py
-# Description: AMQP protocol. This is consumer code which can get message from exchange and consume them. One-to-one method.
+# Description: This is the AMQP producer publishes outgoing AMQP
+#     communication to  clients consuming messages from a broker server.
+#     Messages can be sent over AMQP exchange types including one-to-one,
+#     from broadcast pattern, or selectively using specified routing key.
+#
 # Author: Stanley
 # robomq.io (http://www.robomq.io)
+
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
+server = "localhost"
+port = 5672
+vhost = "/"
+username = "guest"
+password = "guest"
+routingKey = "testQ"
+
+#connect
+credentials = pika.PlainCredentials(username, password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
 channel = connection.channel()
 
-channel.queue_declare(queue='queueName')
+#send message
+#assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+properties = pika.spec.BasicProperties(content_type = "text/plain")
+channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
 
-channel.basic_publish(exchange='',
-                      routing_key='queueName',
-                      body='Hello World!')
-print 'Sent 'Hello World!''
+#disconnect
 connection.close()

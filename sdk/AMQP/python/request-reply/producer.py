@@ -1,33 +1,52 @@
 # File: producer.py
-# Description: AMQP protocol. This is consumer code which can get message from exchange and consume them. Request-reply method.
+# Description: This is the AMQP producer publishes outgoing AMQP
+#     communication to  clients consuming messages from a broker server.
+#     Messages can be sent over AMQP exchange types including one-to-one,
+#     from broadcast pattern, or selectively using specified routing key.
+#
 # Author: Stanley
 # robomq.io (http://www.robomq.io)
+
 import pika
+import thread
 import uuid
+import time
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
+server = "localhost"
+port = 5672
+vhost = "/" 
+username = "guest"
+password = "guest"
+exchangeName = "testEx"
+repQueueName = "replyQ"
+reqRoutingKey = "request"
+repRoutingKey = "reply"
 
+#callback funtion on receiving reply messages
+def onMessage(channel, method, properties, body):
+	print body
+	channel.stop_consuming()
+
+#declare exchange and queue, bind them and consume messages
+def consume():
+	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+	channel.queue_declare(queue = repQueueName, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = repQueueName, routing_key = repRoutingKey)
+	channel.basic_consume(onMessage, queue = repQueueName, no_ack = True)
+	channel.start_consuming()
+
+#connect
+credentials = pika.PlainCredentials(username, password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
 channel = connection.channel()
-channel.exchange_declare(exchange='exchangeName', type='direct')
-channel.queue_declare(queue='replyQueue')
-channel.queue_bind(exchange='exchangeName', queue='replyQueue',routing_key='reply')
-routingKey = 'routingKey'
-message = 'hello world'
-corr_id = str(uuid.uuid4())
-self.channel.basic_publish(exchange='',
-	routing_key='routingKey',
-	properties=pika.BasicProperties(
-		reply_to = 'replyQueue',
-		correlation_id = corr_id,
-		),
-	body=str(n))
-print'message sent'
-def callback(ch, method, properties, body):
-    print body
 
-channel.basic_consume(callback,
-                      queue='reply',
-                      no_ack=True)
+thread.start_new_thread(consume, ())
+time.sleep(1)
 
-channel.start_consuming()
+#send message
+properties = pika.spec.BasicProperties(content_type = "text/plain", correlation_id = str(uuid.uuid4()), reply_to = repRoutingKey)
+channel.basic_publish(exchange = exchangeName, routing_key = reqRoutingKey, body = "Hello World!", properties = properties)
+time.sleep(1)
+
+#disconnect
+connection.close()
