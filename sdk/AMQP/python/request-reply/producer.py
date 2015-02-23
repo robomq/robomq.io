@@ -28,7 +28,7 @@ def onMessage(channel, method, properties, body):
 	channel.stop_consuming()
 
 #declare exchange and queue, bind them and consume messages
-def consume():
+def listen():
 	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
 	channel.queue_declare(queue = repQueueName, exclusive = True, auto_delete = True)
 	channel.queue_bind(exchange = exchangeName, queue = repQueueName, routing_key = repRoutingKey)
@@ -40,7 +40,7 @@ credentials = pika.PlainCredentials(username, password)
 connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
 channel = connection.channel()
 
-thread.start_new_thread(consume, ())
+thread.start_new_thread(listen, ())
 time.sleep(1)
 
 #send message
