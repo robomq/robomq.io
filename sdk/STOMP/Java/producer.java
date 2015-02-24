@@ -35,7 +35,7 @@ class producer {
 	}
 
 	/**
-	 * This method publishes a certain number of messages to the specified topic.
+	 * This method publishes a certain number of messages to the specified destination.
 	 * @ param n is the number of messages to publish.
 	 * @ exception on publish error.
 	 */

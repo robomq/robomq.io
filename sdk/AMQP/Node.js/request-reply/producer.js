@@ -1,32 +1,40 @@
 /**
 * File: producer.js
-* Description: AMQP protocol. This is consumer code which can get message from exchange and consume them. Request-reply method.
+* Description: This is the AMQP producer publishes outgoing AMQP
+*     communication to  clients consuming messages from a broker server.
+*     Messages can be sent over AMQP exchange types including one-to-one,
+*     from broadcast pattern, or selectively using specified routing key.
 *
 * Author: Stanley
 * robomq.io (http://www.robomq.io)
-*
 */
-var amqp = require('amqp');
+
+var amqp = require("amqp");
 var uuid = require('node-uuid').v4;
-var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
-connection.on('ready',function(){
-	connection.exchange('exchangeName',{type:'direct',
-		autoDelete:false, confirm:true}, function(exchange){
-			console.log('start send message');
-			replyQueue = connection.queue('Reply',{autoDelete:false});
-			replyQueue.bind('exchangeName','Reply');
-			var messageid = uuid();
-			console.log('message id is :'+ messageid);
-			exchange.publish('routingKey','hello world',{mandatory:true,contentType:'text/plain',replyTo:'Reply',correlationId:messageid},function(message) {
-				if (message == false){
-					console.log('Client: message has delivered');
-					return;
-				}
-			});	
-		replyQueue.subscribe(function (message, headers, deliveryInfo, messageObject) {
-			console.log('Client: get reply message is \' %s \'', message.data);
+var server = "localhost";
+var port = 5672;
+var vhost = "/";
+var username = "guest";
+var password = "guest";
+var exchangeName = "testEx";
+var repQueueName = "replyQ";
+var reqRoutingKey = "request";
+var repRoutingKey = "reply";
+
+var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
+connection.on("ready", function(){
+	connection.exchange(exchangeName, options = {type: "direct", autoDelete: true, confirm: true}, function(exchange){
+		var queue = connection.queue(repQueueName, options = {exclusive: true, autoDelete: true}, function(queue){
+			queue.bind(exchangeName, repRoutingKey, function(){
+				queue.subscribe(options = {ack: false}, function(message, headers, deliveryInfo, messageObject){
+					//callback funtion on receiving messages
+					console.log(message.data.toString());
+					connection.disconnect();
+					process.exit(0);
+				});
+				exchange.publish(reqRoutingKey, message = "Hello World!", options = {contentType: "text/plain", replyTo: repRoutingKey, correlationId: uuid()});
+			});
 		});
-	});
+	}); 
 });
-

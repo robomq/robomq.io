@@ -1,73 +1,105 @@
 /**
-* File: consumer.java
-* Description: AMQP protocol. This is producer code which can send message to exchange. Request-reply method.
+* File: producer.java
+* Description: This is the AMQP producer publishes outgoing AMQP
+*     communication to  clients consuming messages from a broker server.
+*     Messages can be sent over AMQP exchange types including one-to-one,
+*     from broadcast pattern, or selectively using specified routing key.
 *
 * Author: Stanley
 * robomq.io (http://www.robomq.io)
-*
 */
+
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.AMQP.BasicProperties;
-
 import java.util.UUID;
-public class Producer {
+
+public class producer {
+
 	private Connection connection;
 	private Channel channel;
-	private String requestQueueName = 'queueName';
-	private String replyQueueName;
-	private QueueingConsumer consumer;
-	public Producer() throws Exception {
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost('your host');
-		connection = factory.newConnection();
-		channel = connection.createChannel();
-		replyQueueName = channel.queueDeclare('replyQueueName', false, false, false, null).getQueue();
-		consumer = new QueueingConsumer(channel);
-		channel.basicConsume(replyQueueName, true, consumer);
-	}
-	public String call(String message) throws Exception {
-		String response = null;
-		String corrId = UUID.randomUUID().toString();
-		BasicProperties props = new BasicProperties
-		.Builder()
-		.correlationId(corrId)
-		.replyTo(replyQueueName)
-		.build();
-		channel.basicPublish('exchangeName', requestQueueName, props, message.getBytes());
-		while (true) {
-			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-			if (delivery.getProperties().getCorrelationId().equals(corrId)) {
-				response = new String(delivery.getBody(),'UTF-8');
-				break;
-			}
-		}
-		return response;
-	}
-	public void close() throws Exception {
-		connection.close();
-	}
-	public static void main(String[] argv) {
-		Producer usecase = null;
-		String response = null;
+	private static String server = "localhost";
+	private static int port = 5672;
+	private static String vhost = "/";
+	private static String username = "guest";
+	private static String password = "guest";
+	private String exchangeName = "testEx";
+	private String repQueueName = "replyQ";
+	private String reqRoutingKey = "request";
+	private String repRoutingKey = "reply";
+
+	/**
+	 * This method connects client to the broker.
+	 * @ exception on connection error.
+	 */
+	private void connect() {
 		try {
-			usecase = new Producer();
-			System.out.println('hello world');
-			response = usecase.call('hello world');
-			System.out.println(response);
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost(server);
+			factory.setPort(port);
+			factory.setVirtualHost(vhost);
+			factory.setUsername(username);
+			factory.setPassword(password);
+			connection = factory.newConnection();
+			channel = connection.createChannel();
+		} catch(Exception e) {
+			System.out.println("Error: Failed to initialize connection");
+			System.exit(-1);
+		}		
+	}
+
+	/**
+	 * This method publishes a hello-world message to a specific routing key.
+	 * @ exception on publish error.
+	 */
+	private void publish() {
+		try {
+			String message = "Hello World!";
+			channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
+			channel.queueDeclare(repQueueName, false, true, true, null);
+			channel.queueBind(repQueueName, exchangeName, repRoutingKey, null);
+			QueueingConsumer qc = new QueueingConsumer(channel);
+			channel.basicConsume(repQueueName, true, qc);
+
+			BasicProperties properties = new BasicProperties.Builder().
+					contentType("text/plain").
+					correlationId(UUID.randomUUID().toString()).
+					replyTo(repRoutingKey).
+					build();
+			channel.basicPublish(exchangeName, reqRoutingKey, properties, message.getBytes());
+
+			QueueingConsumer.Delivery delivery = qc.nextDelivery();
+			String replyMessage = new String(delivery.getBody());
+			System.out.println(replyMessage);
+		} catch(Exception e) {
+			System.out.println("Error: Failed to publish message");
+			System.exit(-1);			
+		}	
+	}
+
+	/**
+	 * This method disconnect client from the broker.
+	 * @ exception on disconnection error.
+	 */
+	private void disconnect() {
+		try {
+			channel.close();
+			connection.close();
+		} catch(Exception e) {
+			System.out.println("Error: Failed to disconnect");
+			System.exit(-1);			
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (usecase!= null) {
-				try {
-					usecase.close();
-				}
-					catch (Exception ignore) {}
-				}
-		}
+	}
+
+	/**
+	 * This is the main method which creates and runs producer instance.
+	*/
+	public static void main(String[] args) {
+		producer p = new producer();
+		p.connect();
+		p.publish();
+		p.disconnect();
 	}
 }

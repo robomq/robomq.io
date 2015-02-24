@@ -1,18 +1,30 @@
 /**
 * File: producer.js
-* Description: AMQP protocol. This is consumer code which can get message from exchange and consume them. Broadcast method.
+* Description: This is the AMQP producer publishes outgoing AMQP
+*     communication to  clients consuming messages from a broker server.
+*     Messages can be sent over AMQP exchange types including one-to-one,
+*     from broadcast pattern, or selectively using specified routing key.
 *
 * Author: Stanley
 * robomq.io (http://www.robomq.io)
-*
 */
-var amqp = require('amqp');
-var connection = amqp.createConnection({ host: 'your host', port: 'port' });
 
-connection.on('ready',function(){
-	connection.exchange('exchangeName', options={type:'fanout',
-		autoDelete:false}, function(exchange){
-		console.log('start send message');
-		exchange.publish('routingKey','hello world');
-	});
+var amqp = require("amqp");
+
+var server = "localhost";
+var port = 5672;
+var vhost = "/";
+var username = "guest";
+var password = "guest";
+var exchangeName = "testEx";
+
+var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
+connection.on("ready", function(){
+	connection.exchange(exchangeName, options = {type: "fanout", autoDelete: true, confirm: true}, function(exchange){
+		//for fanout type exchange, routing key is useless
+		exchange.publish("", message = "Hello World!", options = {contentType: "text/plain"}, function(){
+			connection.disconnect();
+			process.exit(0);
+		});
+	}); 
 });

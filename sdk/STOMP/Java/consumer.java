@@ -34,7 +34,7 @@ class consumer {
 	}
 
 	/**
-	 * This method sucscribes the topic.
+	 * This method sucscribes the destination.
 	 * @ exception on subscription error.
 	 */
 	private void subscribe() {
@@ -57,7 +57,7 @@ class consumer {
 	}
 
 	/**
-	 * This method unsucscribes the topic.
+	 * This method unsucscribes the destination.
 	 * @ exception on unsubscription error.
 	 */
 	private void unsubscribe() {

@@ -1,35 +1,86 @@
 /**
 * File: producer.java
-* Description: AMQP protocol. This is producer code which can send message to exchange. Topic method.
+* Description: This is the AMQP producer publishes outgoing AMQP
+*     communication to  clients consuming messages from a broker server.
+*     Messages can be sent over AMQP exchange types including one-to-one,
+*     from broadcast pattern, or selectively using specified routing key.
 *
 * Author: Stanley
 * robomq.io (http://www.robomq.io)
-*
 */
-import java.io.IOException;
+
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 
-public class Producer {
-	private static final String EXCHANGE_NAME = 'exchangeName';
+public class producer {
 
-    public static void main(String[] argv)
-                  throws Exception {
+	private Connection connection;
+	private Channel channel;
+	private static String server = "localhost";
+	private static int port = 5672;
+	private static String vhost = "/";
+	private static String username = "guest";
+	private static String password = "guest";
+	private static String exchangeName = "testEx";
+	private static String routingKey = "test.any";
 
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost('your host');
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+	/**
+	 * This method connects client to the broker.
+	 * @ exception on connection error.
+	 */
+	private void connect() {
+		try {
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost(server);
+			factory.setPort(port);
+			factory.setVirtualHost(vhost);
+			factory.setUsername(username);
+			factory.setPassword(password);
+			connection = factory.newConnection();
+			channel = connection.createChannel();
+		} catch(Exception e) {
+			System.out.println("Error: Failed to initialize connection");
+			System.exit(-1);
+		}		
+	}
 
-        channel.exchangeDeclare(EXCHANGE_NAME, 'topic');
+	/**
+	 * This method publishes a hello-world message to a specific topic.
+	 * @ exception on publish error.
+	 */
+	private void publish() {
+		try {
+			String message = "Hello World!";
+			channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+		} catch(Exception e) {
+			System.out.println("Error: Failed to publish message");
+			System.exit(-1);			
+		}	
+	}
 
-        String routingKey = 'routingKey';
-        String message ='hello world';
+	/**
+	 * This method disconnect client from the broker.
+	 * @ exception on disconnection error.
+	 */
+	private void disconnect() {
+		try {
+			channel.close();
+			connection.close();
+		} catch(Exception e) {
+			System.out.println("Error: Failed to disconnect");
+			System.exit(-1);			
+		}
+	}
 
-        channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes());
-        System.out.println('Sent '' + routingKey + '':'' + message + "'");
-
-        connection.close();
-    }
+	/**
+	 * This is the main method which creates and runs producer instance.
+	*/
+	public static void main(String[] args) {
+		producer p = new producer();
+		p.connect();
+		p.publish();
+		p.disconnect();
+	}
 }
