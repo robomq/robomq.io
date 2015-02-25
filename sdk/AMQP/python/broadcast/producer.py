@@ -23,7 +23,7 @@ channel = connection.channel()
 
 #send message
 #for fanout type exchange, routing key is useless
-properties = pika.spec.BasicProperties(content_type = "text/plain")
+properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
 channel.basic_publish(exchange = exchangeName, routing_key = "", body = "Hello World!", properties = properties)
 
 #disconnect

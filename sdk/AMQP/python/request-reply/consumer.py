@@ -22,7 +22,7 @@ reqRoutingKey = "request"
 #callback funtion on receiving request messages, reply to the reply_to header
 def onMessage(channel, method, properties, body):
 	print body
-	channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties=pika.BasicProperties(correlation_id = properties.correlation_id), body = "Reply to %s" % (body))
+	channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties=pika.BasicProperties(correlation_id = properties.correlation_id, content_type = "text/plain", delivery_mode = 1), body = "Reply to %s" % (body))
 	channel.basic_ack(delivery_tag = method.delivery_tag)
 
 while True:
@@ -36,7 +36,7 @@ while True:
 		channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
 		channel.queue_declare(queue = reqQueueName, exclusive = True, auto_delete = True)
 		channel.queue_bind(exchange = exchangeName, queue = reqQueueName, routing_key = reqRoutingKey)
-		channel.basic_consume(onMessage, queue = reqQueueName, no_ack = False)
+		channel.basic_consume(consumer_callback = onMessage, queue = reqQueueName, no_ack = False)
 		channel.start_consuming()
 	except Exception, e:
 		#reconnect on exception

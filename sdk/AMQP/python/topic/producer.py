@@ -23,7 +23,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, po
 channel = connection.channel()
 
 #send message
-properties = pika.spec.BasicProperties(content_type = "text/plain")
+properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
 channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
 
 #disconnect

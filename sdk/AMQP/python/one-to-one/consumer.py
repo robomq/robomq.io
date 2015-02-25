@@ -31,7 +31,7 @@ while True:
 		#declare queue and consume messages
 		#one-to-one messaging uses the default exchange, where queue name is the routing key
 		channel.queue_declare(queue = queueName, auto_delete = True)
-		channel.basic_consume(onMessage, queue = queueName, no_ack=True)
+		channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
 		channel.start_consuming()
 	except Exception, e:
 		#reconnect on exception
