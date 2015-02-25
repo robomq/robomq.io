@@ -12,11 +12,11 @@ import thread
 import uuid
 import time
 
-server = "localhost"
+server = "hostname"
 port = 5672
-vhost = "/" 
-username = "guest"
-password = "guest"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 exchangeName = "testEx"
 repQueueName = "replyQ"
 reqRoutingKey = "request"
@@ -27,7 +27,7 @@ def onMessage(channel, method, properties, body):
 	print body
 	channel.stop_consuming()
 
-#declare exchange and queue, bind them and consume messages
+#listen for reply messages
 def listen():
 	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
 	channel.queue_declare(queue = repQueueName, exclusive = True, auto_delete = True)
@@ -41,12 +41,12 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, po
 channel = connection.channel()
 
 thread.start_new_thread(listen, ())
-time.sleep(1)
+time.sleep(1) #give time for it to start consuming
 
 #send message
 properties = pika.spec.BasicProperties(content_type = "text/plain", correlation_id = str(uuid.uuid4()), reply_to = repRoutingKey)
 channel.basic_publish(exchange = exchangeName, routing_key = reqRoutingKey, body = "Hello World!", properties = properties)
-time.sleep(1)
+time.sleep(1) #give time for it to receive the reply
 
 #disconnect
 connection.close()

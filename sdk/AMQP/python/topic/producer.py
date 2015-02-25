@@ -9,11 +9,11 @@
 
 import pika
 
-server = "localhost"
+server = "hostname"
 port = 5672
-vhost = "/" 
-username = "guest"
-password = "guest"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 exchangeName = "testEx"
 routingKey = "test.any"
 

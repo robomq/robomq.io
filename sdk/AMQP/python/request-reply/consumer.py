@@ -8,30 +8,41 @@
 # robomq.io (http://www.robomq.io)
 
 import pika
+import time
 
-server = "localhost"
+server = "hostname"
 port = 5672
-vhost = "/" 
-username = "guest"
-password = "guest"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 exchangeName = "testEx"
 reqQueueName = "requestQ"
 reqRoutingKey = "request"
 
-#callback funtion on receiving request messages, reply by correlation_id
+#callback funtion on receiving request messages, reply to the reply_to header
 def onMessage(channel, method, properties, body):
 	print body
 	channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties=pika.BasicProperties(correlation_id = properties.correlation_id), body = "Reply to %s" % (body))
 	channel.basic_ack(delivery_tag = method.delivery_tag)
 
-#connect
-credentials = pika.PlainCredentials(username, password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
-channel = connection.channel()
+while True:
+	try:
+		#connect
+		credentials = pika.PlainCredentials(username, password)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		channel = connection.channel()
 
-#declare exchange and queue, bind them and consume messages
-channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
-channel.queue_declare(queue = reqQueueName, exclusive = True, auto_delete = True)
-channel.queue_bind(exchange = exchangeName, queue = reqQueueName, routing_key = reqRoutingKey)
-channel.basic_consume(onMessage, queue = reqQueueName, no_ack = False)
-channel.start_consuming()
+		#declare exchange and queue, bind them and consume messages
+		channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+		channel.queue_declare(queue = reqQueueName, exclusive = True, auto_delete = True)
+		channel.queue_bind(exchange = exchangeName, queue = reqQueueName, routing_key = reqRoutingKey)
+		channel.basic_consume(onMessage, queue = reqQueueName, no_ack = False)
+		channel.start_consuming()
+	except Exception, e:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e
+		try:
+			connection.close()
+		except:
+			pass
+		time.sleep(5)
