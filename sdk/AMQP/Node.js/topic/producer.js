@@ -20,9 +20,10 @@ var exchangeName = "testEx";
 var routingKey = "test.any";
 
 var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
+//node amqp library will automatically reconnect on exception
 connection.on("ready", function(){
 	connection.exchange(exchangeName, options = {type: "topic", autoDelete: true, confirm: true}, function(exchange){
-		exchange.publish(routingKey, message = "Hello World!", options = {contentType: "text/plain"}, function(){
+		exchange.publish(routingKey, message = "Hello World!", options = {contentType: "text/plain", deliveryMode: 1}, function(){
 			connection.disconnect();
 			process.exit(0);
 		});

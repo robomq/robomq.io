@@ -19,6 +19,7 @@ var password = "guest";
 var queueName = "testQ";
 
 var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
+//node amqp library will automatically reconnect on exception
 connection.on("ready", function(){
 	//one-to-one messaging uses the default exchange, where queue name is the routing key
 	var queue = connection.queue(queueName, options = {autoDelete: true}, function(queue){
