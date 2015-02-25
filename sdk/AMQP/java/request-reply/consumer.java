@@ -1,5 +1,5 @@
 /*
-* File: consumer.java
+* File: Consumer.java
 * Description: This is the AMQP consumer handles incoming
 *     communication from clients publishing messages to a broker server.
 *     Messages can be received over AMQP exchange types including one-to-one,
@@ -15,75 +15,68 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
-public class consumer {
+public class Consumer {
 
 	private Connection connection;
 	private Channel channel;
-	private static String server = "localhost";
+	private static String server = "hostname";
 	private static int port = 5672;
-	private static String vhost = "/";
-	private static String username = "guest";
-	private static String password = "guest";
+	private static String vhost = "yourvhost";
+	private static String username = "username";
+	private static String password = "password";
 	private String exchangeName = "testEx";
 	private String reqQueueName = "requestQ";
 	private String reqRoutingKey = "request";
 
-	/**
-	 * This method connects client to the broker.
-	 * @ exception on connection error.
-	 */
-	private void connect() {
-		try {
-			ConnectionFactory factory = new ConnectionFactory();
-			factory.setHost(server);
-			factory.setPort(port);
-			factory.setVirtualHost(vhost);
-			factory.setUsername(username);
-			factory.setPassword(password);
-			factory.setAutomaticRecoveryEnabled(true); //connection will recover automatically
-			connection = factory.newConnection();
-			channel = connection.createChannel();
-		} catch(Exception e) {
-			System.out.println("Error: Failed to initialize connection");
-			System.exit(-1);
-		}		
-	}
-
-	/**
-	 * This method declares exchange and queue, binds them and consumes messages.
-	 * @ exception on consuming error.
-	 */
 	private void consume() {
-		try {
-			channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
-			channel.queueDeclare(reqQueueName, false, true, true, null);
-			channel.queueBind(reqQueueName, exchangeName, reqRoutingKey, null);
-			QueueingConsumer qc = new QueueingConsumer(channel);
-			channel.basicConsume(reqQueueName, false, qc);
-			while (true) {
-				QueueingConsumer.Delivery delivery = qc.nextDelivery();
-				String message = new String(delivery.getBody());
-				System.out.println(message);
-				String replyMessage = "Reply to " + message;
-				BasicProperties properties = new BasicProperties.Builder().
-						contentType("text/plain").
-						correlationId(delivery.getProperties().getCorrelationId()).
-						build();
-				channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
-				channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+		while (true) {
+			try {
+				//connect
+				ConnectionFactory factory = new ConnectionFactory();
+				factory.setHost(server);
+				factory.setPort(port);
+				factory.setVirtualHost(vhost);
+				factory.setUsername(username);
+				factory.setPassword(password);
+				connection = factory.newConnection();
+				channel = connection.createChannel();
+			
+				//declare exchange and queue, bind them and consume messages
+				channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
+				channel.queueDeclare(reqQueueName, false, true, true, null);
+				channel.queueBind(reqQueueName, exchangeName, reqRoutingKey, null);
+				QueueingConsumer qc = new QueueingConsumer(channel);
+				channel.basicConsume(reqQueueName, false, qc);
+				while (true) {
+					QueueingConsumer.Delivery delivery = qc.nextDelivery();
+					String message = new String(delivery.getBody());
+					System.out.println(message);
+
+					//when receives messages, reply to the reply_to header
+					String replyMessage = "Reply to " + message;
+					BasicProperties properties = new BasicProperties.Builder().
+							contentType("text/plain").
+							deliveryMode(1).
+							correlationId(delivery.getProperties().getCorrelationId()).
+							build();
+					channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+				}
+			} catch(Exception e) {
+				//reconnect on exception
+				System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e);
+				try {
+					connection.close();
+				} catch (Exception e1) {}
+				try {
+					Thread.sleep(5000); 
+				} catch(Exception e2) {}
 			}
-		} catch(Exception e) {
-			System.out.println("Error: Failed to consume messages");
-			System.exit(-1);		
-		}	
+		}
 	}
 
-	/**
-	 * This is the main method which creates and runs consumer instance.
-	*/
 	public static void main(String[] args) {
-		consumer c = new consumer();
-		c.connect();
+		Consumer c = new Consumer();
 		c.consume();
 	}
 }

@@ -11,11 +11,11 @@
 
 var amqp = require("amqp");
 
-var server = "localhost";
+var server = "hostname";
 var port = 5672;
-var vhost = "/";
-var username = "guest";
-var password = "guest";
+var vhost = "yourvhost";
+var username = "username";
+var password = "password";
 var routingKey = "testQ";
 
 var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});

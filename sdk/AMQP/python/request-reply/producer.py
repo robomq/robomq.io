@@ -35,18 +35,21 @@ def listen():
 	channel.basic_consume(consumer_callback = onMessage, queue = repQueueName, no_ack = True)
 	channel.start_consuming()
 
-#connect
-credentials = pika.PlainCredentials(username, password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
-channel = connection.channel()
+try:
+	#connect
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
-thread.start_new_thread(listen, ())
-time.sleep(1) #give time for it to start consuming
+	thread.start_new_thread(listen, ())
+	time.sleep(1) #give time for it to start consuming
 
-#send message
-properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, correlation_id = str(uuid.uuid4()), reply_to = repRoutingKey)
-channel.basic_publish(exchange = exchangeName, routing_key = reqRoutingKey, body = "Hello World!", properties = properties)
-time.sleep(1) #give time for it to receive the reply
+	#send message
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, correlation_id = str(uuid.uuid4()), reply_to = repRoutingKey)
+	channel.basic_publish(exchange = exchangeName, routing_key = reqRoutingKey, body = "Hello World!", properties = properties)
+	time.sleep(1) #give time for it to receive the reply
 
-#disconnect
-connection.close()
+	#disconnect
+	connection.close()
+except Exception, e:
+	print e

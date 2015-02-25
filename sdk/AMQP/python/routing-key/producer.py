@@ -17,14 +17,17 @@ password = "password"
 exchangeName = "testEx"
 routingKey = "test"
 
-#connect
-credentials = pika.PlainCredentials(username, password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
-channel = connection.channel()
+try:
+	#connect
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
-#send message
-properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
-channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
+	#send message
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
 
-#disconnect
-connection.close()
+	#disconnect
+	connection.close()
+except Exception, e:
+	print e

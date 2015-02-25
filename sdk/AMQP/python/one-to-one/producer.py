@@ -16,15 +16,18 @@ username = "username"
 password = "password"
 routingKey = "testQ"
 
-#connect
-credentials = pika.PlainCredentials(username, password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
-channel = connection.channel()
+try:
+	#connect
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
-#send message
-#assigning blank string to exchange is to use the default exchange, where queue name is the routing key
-properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
-channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
+	#send message
+	#assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
 
-#disconnect
-connection.close()
+	#disconnect
+	connection.close()
+except Exception, e:
+	print e

@@ -12,11 +12,11 @@
 var amqp = require("amqp");
 var uuid = require('node-uuid').v4;
 
-var server = "localhost";
+var server = "hostname";
 var port = 5672;
-var vhost = "/";
-var username = "guest";
-var password = "guest";
+var vhost = "yourvhost";
+var username = "username";
+var password = "password";
 var exchangeName = "testEx";
 var repQueueName = "replyQ";
 var reqRoutingKey = "request";
