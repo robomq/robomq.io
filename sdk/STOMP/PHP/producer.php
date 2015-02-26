@@ -27,6 +27,7 @@ $msgNum = rtrim(fgets(STDIN), PHP_EOL);
 for ($i = 1; $i <= $msgNum; $i++) {
 	$message = "test msg ".$i;
 	$client->send($destination, $message);
+	sleep(1);
 }
 
 unset($client);

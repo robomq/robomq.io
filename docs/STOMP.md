@@ -454,6 +454,8 @@ Run the producer and consumer classes. For example,
 
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
+> Java8 is recommended for compiling with this library.
+
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 > In STOMP, username is called login and password is called passcode.

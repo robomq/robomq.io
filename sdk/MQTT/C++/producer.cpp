@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	const char *username = vhusn.c_str();
 	string pwd = "password";
 	const char *password = pwd.c_str();
-	string tpc = "test";
+	string tpc = "test/any";
 	const char *topic = tpc.c_str();
 	int keepalive = 60;
 	bool clean_session = true;
@@ -76,8 +76,8 @@ int main(int argc, char *argv[])
 			cout << "Error: Failed to publish message\n" << e.what() << endl;
 			return 1;
 		}
+		sleep(1);
 	}
-	sleep(msgNum * 0.02);	//to allow async publish have time to be delivered
 
 	//stop producer
 	mosquitto_loop_stop(mosq, true); 

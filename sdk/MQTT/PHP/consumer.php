@@ -17,7 +17,7 @@ $port = "1883";
 $vhost = "yourvhost";
 $username = "username";
 $password = "password";
-$topic = "test";
+$topic = "test/#";
 
 $client = new spMQTT("tcp://".$server.":".$port, $clientid=null);	//clientid auto-assigned
 $client->setAuth($vhost.":".$username, $password);

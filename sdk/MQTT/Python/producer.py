@@ -16,7 +16,7 @@ port = 1883
 vhost = "yourvhost"
 username = "username"
 password = "password"
-topic = "test"
+topic = "test/any"
 
 try:
 	client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")

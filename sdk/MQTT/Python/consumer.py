@@ -16,7 +16,7 @@ port = 1883
 vhost = "yourvhost"
 username = "username"
 password = "password"
-topic = "test"
+topic = "test/#"
 
 """
  * This method is the callback on connecting to broker.

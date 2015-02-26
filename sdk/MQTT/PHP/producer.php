@@ -17,7 +17,7 @@ $port = "1883";
 $vhost = "yourvhost";
 $username = "username";
 $password = "password";
-$topic = "test";
+$topic = "test/any";
 
 $client = new spMQTT("tcp://".$server.":".$port, $clientid=null);	//clientid auto-assigned
 $client->setAuth($vhost.":".$username, $password);
@@ -36,8 +36,8 @@ if ($client->connect()) {
 			echo "Error: Failed to send message".PHP_EOL;
 			exit(-1);
 		}
+		sleep(1);
 	}
-	sleep($msgNum / 1000);	//to allow all the messages get through
 	$client->disconnect();
 }
 else {

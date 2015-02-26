@@ -15,9 +15,9 @@ var port = "1883";
 var vhost = "yourvhost";
 var username = "username";
 var password = "password";
-var topic = "test";
+var topic = "test/#";
 
-var client = mqtt.createClient(port, server, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
+var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
 client.on("connect", function() {	//library handles connection errors
 	try {
 		client.subscribe(topic, {qos: 1, dup: false})	//chainable API

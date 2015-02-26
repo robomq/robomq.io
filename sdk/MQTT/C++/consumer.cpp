@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	const char *username = vhusn.c_str();
 	string pwd = "passwrod";
 	const char *password = pwd.c_str();
-	string tpc = "test";
+	string tpc = "test/#";
 	const char *topic = tpc.c_str();
 	int keepalive = 60;
 	bool clean_session = true;
