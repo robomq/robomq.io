@@ -16,21 +16,22 @@ $login = "username";
 $passcode = "password";
 $destination = "/queue/test";	//There're more options other than /queue/...
 
-try {
-	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));
-} catch(StompException $e) {
-	die("Error: Connection failed: ".$e->getMessage());
-}
+while (true) {
+	try {
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));
+	
+		$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
 
-$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
-
-while(true) {
-	if ($frame = $client->readFrame()) {
-		echo $frame->body.PHP_EOL;
-		$client->ack($frame);
+		while(true) {
+			if ($frame = $client->readFrame()) {
+				echo $frame->body.PHP_EOL;
+				$client->ack($frame);
+			}
+		}
+	} catch(StompException $e) {
+		echo "Exception handled, reconnecting...\nDetail:\n".$e->getMessage().PHP_EOL;
+		unset($client);
+		sleep(5);
 	}
 }
-
-//$client->unsubscribe($destination);
-//unset($client);
 ?>
