@@ -20,60 +20,25 @@ class Producer {
 	private String login = "username";
 	private String passcode = "password";
 
-
-	/**
-	 * This method connects client to the broker.
-	 * @ exception on connection error.
-	 */
-	private void connect() {
+	private void produce() {
 		try {
 			client = new Client(server, port, login, passcode, vhost);
-		} catch(Exception e) {
-			System.out.println("Error: Can't initialize connection");
-			System.exit(-1);
-		}		
-	}
-
-	/**
-	 * This method publishes a certain number of messages to the specified destination.
-	 * @ param n is the number of messages to publish.
-	 * @ exception on publish error.
-	 */
-	private void send(int n) {
-		for (int i = 0; i < n; i ++) {
-			try {
+			System.out.print("Quantity of test messages: ");
+			Scanner scanner = new Scanner(System.in);
+			int msgNum = scanner.nextInt();
+			for (int i = 0; i < msgNum; i ++) {
 				String message = "test msg " + Integer.toString(i + 1);
-				client.send(destination, message);
-			} catch(Exception e) {
-				System.out.println("Error: Can't send message");
-				System.exit(-1);			
-			}	
-		}
-	}
-
-	/**
-	 * This method disconnect client from the broker.
-	 * @ exception on disconnection error.
-	 */
-	private void disconnect() {
-		try {
+				client.send(destination, message, null);
+			}
 			client.disconnect();
 		} catch(Exception e) {
-			System.out.println("Error: Can't disconnect");
+			System.out.println(e);
 			System.exit(-1);			
 		}
 	}
 
-	/**
-	 * This is the main method which creates and runs producer instance.
-	*/
 	public static void main(String[] args) {
 		Producer p = new Producer();
-		p.connect();
-		System.out.print("Quantity of test messages: ");
-		Scanner scanner = new Scanner(System.in);
-		int msgNum = scanner.nextInt();
-		p.send(msgNum);
-		p.disconnect();
+		p.produce();
 	}
 }

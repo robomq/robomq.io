@@ -23,22 +23,13 @@ try:
 	client.username_pw_set(vhost + ":" + username, password)
 	client.connect(server, port, keepalive=60, bind_address="")	#connect
 	client.loop_start()	#start loop
-except:
-	print("Error: Failed to connect and start loop")
-	sys.exit(-1)
 
-msgNum = int(input("Quantity of test messages: "))
-for i in range(msgNum):
-	message = "test msg " + str(i + 1)
-	try:
+	msgNum = int(input("Quantity of test messages: "))
+	for i in range(msgNum):
+		message = "test msg " + str(i + 1)
 		client.publish(topic, payload=message, qos=1, retain=False)	#publish
-	except:
-		print("Error: Failed to publish message")
-		sys.exit(-1)		
 
-try:
 	client.loop_stop()	#stop loop
 	client.disconnect()
-except:
-	print("Error: Failed to stop loop and disconnect")
-	sys.exit(-1)
+except Exception, e:
+	print e

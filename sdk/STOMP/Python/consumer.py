@@ -9,6 +9,7 @@
 """
 
 import sys
+import time
 from stompest.config import StompConfig
 from stompest.protocol import StompSpec
 from stompest.sync import Stomp
@@ -20,27 +21,24 @@ login = "username"
 passcode = "password"
 destination = "/queue/test"	#There're more options other than /queue/...
 
-try:
-	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-	client.connect(versions = ["1.2"], host = vhost)	#CONNECT
-except:
-	print "Error: Can't initialize connection"
-	sys.exit()
-
-try:	
-	subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_CLIENT_INDIVIDUAL, StompSpec.ID_HEADER: '0'})	#SUBSCRIBE
-except:
-	print "Error: Can't subscribe queue"
-	sys.exit()
-		
 while True:
-	frame = client.receiveFrame()
 	try:
-		print "%s" % frame.body
-		client.ack(frame)	#ACK
-	except:
-		print "Error: Can't handle message received, NACKing"
-		client.nack(frame)	#NACK
-
-#client.unsubscribe(subscription)	#UNSUBSCRIBE
-#client.disconnect()	#DISCONNECT
+		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
+		client.connect(versions = ["1.2"], host = vhost)	#CONNECT
+		subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_CLIENT_INDIVIDUAL, StompSpec.ID_HEADER: '0'})	#SUBSCRIBE
+		while True:
+			frame = client.receiveFrame()
+			try:
+				print "%s" % frame.body
+				client.ack(frame)	#ACK
+			except:
+				print "Error: Can't handle message received, NACKing"
+				client.nack(frame)	#NACK
+	except Exception, e:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e
+		try:
+			client.disconnect()
+		except:
+			pass
+		time.sleep(5)

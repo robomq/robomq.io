@@ -9,6 +9,7 @@
 """
 
 import sys
+import time
 import paho.mqtt.client as mqtt
 
 server = "hostname"
@@ -36,16 +37,19 @@ def on_connect(client, userdata, rc):	#event on connecting
 def on_message(client, userdata, message):	#event on receiving message
 	print("Topic: " + message.topic + ", Message: " + message.payload)
 
-try:
-	client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
-	client.username_pw_set(vhost + ":" + username, password)
-	client.on_connect = on_connect
-	client.on_message = on_message
-	client.connect(server, port, keepalive=60, bind_address="")	#connect
-	client.loop_forever()	#loop forever
-except:
-	print("Error: Failed to connect and start loop")
-	sys.exit(-1)
-
-#client.unsubscribe(topic)
-#client.disconnect()
+while True:
+	try:
+		client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
+		client.username_pw_set(vhost + ":" + username, password)
+		client.on_connect = on_connect
+		client.on_message = on_message
+		client.connect(server, port, keepalive=60, bind_address="")	#connect
+		client.loop_forever()	#loop forever
+	except Exception, e:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e 
+		try:
+			client.disconnect()
+		except:
+			pass
+		time.sleep(5)

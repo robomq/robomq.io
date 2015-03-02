@@ -42,83 +42,40 @@ public class Consumer {
 		}
 
 		public void connectionLost(Throwable cause) {
-
+			System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", cause.getMessage());
+			consume(); //reconnect on exception
 		}
 
 		public void deliveryComplete(IMqttDeliveryToken token) {
-
 		}
 	}
 
-	/**
-	 * This method connects client to the broker.
-	 * @ exception on connection error.
-	 */
-	private void connect() {
-		try {
-			client = new MqttClient(broker, clientId, persistence);
-			MqttConnectOptions connOpts = new MqttConnectOptions();
-			connOpts.setUserName(vhost + ":" + username);
-			connOpts.setPassword(password.toCharArray());
-			connOpts.setKeepAliveInterval(60);
-			connOpts.setCleanSession(true);
-			client.connect(connOpts);
-		} catch(MqttException me) {
-			System.out.println("Error: "+me);
-			System.exit(-1);
+	private void consume() {
+		while (true) {
+			try {
+				client = new MqttClient(broker, clientId, persistence);
+				MqttConnectOptions connOpts = new MqttConnectOptions();
+				connOpts.setUserName(vhost + ":" + username);
+				connOpts.setPassword(password.toCharArray());
+				connOpts.setKeepAliveInterval(60);
+				connOpts.setCleanSession(true);
+				client.connect(connOpts);
+				onMessage callback = new onMessage();
+				client.setCallback(callback);
+				client.subscribe(topic, 1);	//qos=1
+				break;
+			} catch(MqttException me) {
+				//reconnect on exception
+				System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", me); 
+				try {
+					Thread.sleep(5000); 
+				} catch(Exception e) {}
+			}
 		}
 	}
 
-	/**
-	 * This method sucscribes the topic.
-	 * @ exception on subscription error.
-	 */
-	private void subscribe() {
-		try {
-			onMessage callback = new onMessage();
-			client.setCallback(callback);
-			client.subscribe(topic, 1);	//qos=1
-		} catch(MqttException me) {
-			System.out.println("Error: "+me);
-			System.exit(-1);		
-		}
-	}
-
-	/**
-	 * This method unsucscribes the topic.
-	 * @ exception on unsubscription error.
-	 */
-	private void unsubscribe() {
-		try {
-			client.unsubscribe(topic);
-		} catch(MqttException me) {
-			System.out.println("Error: "+me);
-			System.exit(-1);			
-		}
-	}
-
-	/**
-	 * This method disconnect client from the broker.
-	 * @ exception on disconnection error.
-	 */
-	private void disconnect() {
-		try {
-			client.disconnect();
-			System.exit(0);
-		} catch(MqttException me) {
-			System.out.println("Error: "+me);
-			System.exit(-1);			
-		}
-	}
-
-	/**
-	 * This is the main method which creates and runs consumer instance.
-	*/
 	public static void main(String[] args) {
 		Consumer c = new Consumer();
-		c.connect();
-		c.subscribe();
-		//c.unsubscribe();
-		//c.disconnect();
+		c.consume();
 	}
 }

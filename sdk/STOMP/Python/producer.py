@@ -22,17 +22,12 @@ destination = "/queue/test"	#There're more options other than /queue/...
 try:
 	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
 	client.connect(versions = ["1.2"], host = vhost)	#CONNECT
-except:
-	print "Error: Can't initialize connection"
-	sys.exit()
 
-msgNum = int(input("Quantity of test messages: "))
-for i in range(msgNum):	
-	try:
+	msgNum = int(input("Quantity of test messages: "))
+	for i in range(msgNum):	
 		message = "test msg " + str(i + 1)
-		client.send(destination, message)	#SEND		
-	except:
-		print "Error: Can't send message"
-		sys.exit()
+		client.send(destination, body = message, headers=None, receipt=None)	#SEND		
 
-client.disconnect()	#DISCONNECT
+	client.disconnect()	#DISCONNECT
+except Exception, e:
+	print e
