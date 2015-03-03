@@ -47,7 +47,7 @@ static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
 {
 	struct stomp_ctx_error *e = ctx;
 	dump_hdrs(e->hdrc, e->hdrs);
-	fprintf(stderr, "err: %s\n", (const char *)e->body);
+	fprintf(stderr, "Exception handled, reconnecting...\nDetail:\n%s\n", (const char *)e->body);
 
 	//disconnect for clean reconnecting later
 	struct stomp_hdr disconn_hdrs[] = {
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 				else {
 					subscription = err;	//if success, return sub token for unsubscribing later
 
-					err = stomp_run(session);	//necessary to really run the process, stop when stomp_disconnect() called
+					err = stomp_run(session);	//necessary to actually run the process, stop when stomp_disconnect() called
 					if (err) {
 						perror("stomp");
 						stomp_session_free(session);

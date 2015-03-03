@@ -10,43 +10,31 @@
 
 #include <stdio.h>
 #include <iostream>
-#include <unistd.h>
 #include <mosquitto.h>
 #include <exception>
 #include <stdlib.h>
+#include <unistd.h>
 
 using namespace std;
 
-/**
- * This method is the callback on writing log. 
- * @It is event-driven. You don't call it in your code.
- * @It prints the log information on console.
- * @There're other callback functions provided by this library.
- */
-void my_log_callback(struct mosquitto *mosq, void *userdata, int level, const char *str)
-{
-	cout << str << endl;
-}
+string hst = "hostname";
+const char *host = hst.c_str();
+int port = 1883;
+string vhost = "yourvhost";
+string usn = "username";
+string vhusn = vhost + ":" + usn;
+const char *username = vhusn.c_str();
+string pwd = "password";
+const char *password = pwd.c_str();
+string tpc = "test/any";
+const char *topic = tpc.c_str();
 
 /**
  * This is the main method which creates and runs producer instance.
  * @Looping is essential for this MQTT library to work.
  * @Exceptions on connection and publish error.
  */
-int main(int argc, char *argv[])
-{
-	//configuration
-	string hst = "hostname";
-	const char *host = hst.c_str();
-	int port = 1883;
-	string vhost = "yourvhost";
-	string usn = "username";
-	string vhusn = vhost + ":" + usn;
-	const char *username = vhusn.c_str();
-	string pwd = "password";
-	const char *password = pwd.c_str();
-	string tpc = "test/any";
-	const char *topic = tpc.c_str();
+int main(int argc, char *argv[]) {
 	int keepalive = 60;
 	bool clean_session = true;
 	struct mosquitto *mosq = NULL;
@@ -54,10 +42,9 @@ int main(int argc, char *argv[])
 	//create producer and connect to broker
 	mosquitto_lib_init();
 	mosq = mosquitto_new(NULL, clean_session, NULL);
-	mosquitto_username_pw_set(mosq,	username, password);	 
-	//mosquitto_log_callback_set(mosq, my_log_callback);
-	if(mosquitto_connect(mosq, host, port, keepalive)){
-		cout << "Error: Failed to connect" << endl;
+	mosquitto_username_pw_set(mosq,	username, password);
+	if(mosquitto_connect(mosq, host, port, keepalive)) {
+		printf("Error: Failed to connect\n");
 		return 1;
 	}
 	//usually start loop right after connecting
@@ -73,7 +60,7 @@ int main(int argc, char *argv[])
 		try {
 			mosquitto_publish(mosq, NULL, topic, 20, payload, 1, false);
 		} catch(exception& e) {
-			cout << "Error: Failed to publish message\n" << e.what() << endl;
+			printf("Error: Failed to publish message\n%s\n", e.what());
 			return 1;
 		}
 		sleep(1);
