@@ -11,7 +11,7 @@
 var Stomp = require("stompjs");
 
 var server = "hostname";
-var port = "61613"; //It takes either string or int argument
+var port = 61613; //It takes either string or int argument
 var login = "username";
 var passcode = "password";
 var vhost = "yourvhost";
@@ -21,24 +21,19 @@ var client = Stomp.overTCP(server, port, "v11.stomp");
 client.connect(login, passcode
 	, function() {
 		process.stdout.write("Quantity of test messages: ");
-		process.stdin.on('data', function (msgNum) {
-			try {
-				for(var i = 1; i <= msgNum; i++){	
-					var message = "test msg " + i;
-					client.send(destination, {}, message);
-				}
-			} catch(ex) {
-				console.log("Error: Can't send message");
-				process.exit();
+		process.stdin.on("data", function (msgNum) {
+			for(var i = 1; i <= msgNum; i++){	
+				var message = "test msg " + i;
+				client.send(destination, {}, message);
 			}
 			client.disconnect(function() {
-				process.exit();
+				process.exit(0);
 			});
 		});		
 	}
 	//callback function of connection failure
-	, function() {
-		console.log("Error: Can't initialize connection");
-		process.exit();
+	, function(ex) {
+		console.log(ex);
+		process.exit(-1);
 	}
 	, vhost);

@@ -18,14 +18,14 @@ var password = "password";
 var topic = "test/#";
 
 var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
-client.on("connect", function() {	//library handles connection errors
+client.on("connect", function() {	//this library automatically reconnect on errors
 	try {
 		client.subscribe(topic, {qos: 1, dup: false})	//chainable API
 		.on("message", function(topic, payload, packet) {	//event handling
 			console.log("Topic: " + topic + ", Message: " + payload);
 		});
 	} catch(ex) {
-		console.log("Error: Failed to subscribe and receive message");
+		console.log(ex);
 		process.exit(-1);
 	}
 });

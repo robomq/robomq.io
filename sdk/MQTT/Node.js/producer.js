@@ -18,7 +18,7 @@ var password = "password";
 var topic = "test/any";
 
 var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
-client.on("connect", function() {	//library handles connection errors
+client.on("connect", function() {	//this library automatically reconnect on errors
 	//ask user to input the number of test messages
 	process.stdout.write("Quantity of test messages: ");
 	process.stdin.on("data", function (msgNum) {
@@ -29,13 +29,13 @@ client.on("connect", function() {	//library handles connection errors
 				client.publish(topic, message, {qos: 1, retain: false});
 			}
 		} catch(ex) {
-			console.log("Error: Failed to send message");
+			console.log(ex);
 			process.exit(-1);
 		}
 		//shut down producer after messages sent
 		setTimeout(function() {
 			client.end();	//includes disconnect()
 			process.exit(0);
-		}, msgNum * 3);
+		}, msgNum);
 	});
 });

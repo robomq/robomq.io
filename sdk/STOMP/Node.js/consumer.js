@@ -9,6 +9,7 @@
  */
 
 var Stomp = require("stompjs");
+var domain = require("domain");
 
 var server = "hostname";
 var port = 61613; //It takes either string or int argument
@@ -17,12 +18,17 @@ var passcode = "password";
 var vhost = "yourvhost";
 var destination = "/queue/test";	//There're more options other than /queue/...
 
-var client = Stomp.overTCP(server, port, "v11.stomp");
-client.connect(login, passcode
-	, function() {
-		try {
+var client = null;
+var dom = domain.create();
+dom.on("error", consume);
+dom.run(consume);
+
+function consume() {
+	client = Stomp.overTCP(server, port, "v11.stomp");
+	client.connect(login, passcode
+		, function() {
 			//the callback for subscribe() function is actually the callback on message 
-	  		client.subscribe(destination, function(message) {
+			client.subscribe(destination, function(message) {
 				try {
 					console.log(message.body);
 					message.ack();
@@ -32,14 +38,11 @@ client.connect(login, passcode
 				}
 			},
 			{ack: "client"}); //if ack:"auto", no need to ack in code
-		} catch(ex) {
-			console.log("Error: Can't subscribe queue");
-			process.exit();
 		}
-	}
-	//callback function of connection failure
-	, function() {
-		console.log("Error: Can't initialize connection");
-		process.exit();
-	}
-	, vhost);
+		//callback function of connection failure
+		, function(ex) {
+			console.log("Exception handled, reconnecting...\nDetail:\n" + ex);
+			client.disconnect(function() {setTimeout(consume, 5000);});
+		}
+		, vhost);
+}
