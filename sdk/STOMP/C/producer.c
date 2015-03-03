@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
 	char* login = "username";
 	char* passcode = "password";
 	char* vhost = "yourvhost";
-	//There're more options other than /queue/...
-	char* destination = "/queue/test";
+	char* destination = "/queue/test"; //There're more options other than /queue/...
 	int err;
 	struct ctx client;
 	stomp_session_t *session;
@@ -92,10 +91,9 @@ int main(int argc, char *argv[])
 		sprintf(body, "test msg %d", i);
 		do {	//in case sending failed, keep retrying
 			err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
+			usleep(1);
 		} while(err);
 	}
-
-	sleep(msgNum/1000);	//to allow async publish have time to be delivered
 
 	struct stomp_hdr disconn_hdrs[] = {
 	};	//could use receipt to gracefully disconnect
