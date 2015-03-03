@@ -22,11 +22,11 @@ amqp_connection_state_t mqconnect() {
 
     amqp_connection_state_t conn = amqp_new_connection();
     amqp_socket_t *socket = NULL;
-    char hostname[] = "hostname"; // robomq.io hostname
-    int port = 5672; //default
-    char user[] = "username"; // robomq.io username
-    char password[] = "password"; // robomq.io password
-    char vhost[] = "vhost"; // robomq.io account vhost
+	char hostname[] = "localhost"; // robomq.io hostname
+	int port = 5672; //default
+	char user[] = "guest"; // robomq.io username
+	char password[] = "guest"; // robomq.io password
+	char vhost[] = "/"; // robomq.io account vhost
     amqp_channel_t channel = 1;
     int channel_max = 0;
     int frame_max = 131072;
@@ -58,8 +58,17 @@ int main(int argc, char const *const *argv)
     amqp_boolean_t mandatory = 0;
     amqp_boolean_t immediate = 0;
     char exchange_name[] = "hello-exchange";
-    char routing_key[] = "routingKey";
+    const char *routing_key;
+    char *msg_body = "Hello\n";
     int result;
+
+    if(argc < 2) {
+    	printf("Syntax error:\n"
+    			"Usage: mqsend <routing_key>\n");
+    	exit(-1);
+    }
+
+    routing_key = (char *)argv[1];
 
     conn = mqconnect();
 
@@ -71,7 +80,7 @@ int main(int argc, char const *const *argv)
             mandatory,
             immediate,
             &props,
-            amqp_cstring_bytes("Hello"));
+            amqp_cstring_bytes(msg_body));
 
     // Closing connection
     amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);

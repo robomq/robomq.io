@@ -2,14 +2,21 @@
 -include config.mk
 
 CFLAGS=-I. \
-	-I./librabbitmq
+	-Ilibrabbitmq
 
 DEFS = -DHAVE_CONFIG_H
 LDFLAGS = -L. -lrabbitmq -lrt
 
-all: mqlisten mqsend
+ifeq (,${type})
+	ERROR = $(error Please specify messaging type i.e. 'type=broadcast')
+endif
 
-librabbitmq.a: librabbitmq/amqp_api.o \
+DIR=${type}
+
+all: err mqlisten mqsend
+
+librabbitmq.a: \
+	librabbitmq/amqp_api.o \
 	librabbitmq/amqp_connection.o \
 	librabbitmq/amqp_consumer.o \
  	librabbitmq/amqp_framing.o \
@@ -46,7 +53,7 @@ librabbitmq/amqp_url.o: librabbitmq/amqp_url.c
 	$(CC) $(DEFS) -c $(CFLAGS) $< -o $@
 
 
-%.o: %.c
+%.o: $(DIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 mqlisten: consumer.o
@@ -55,13 +62,14 @@ mqlisten: consumer.o
 mqsend: producer.o
 	$(CC) $(DEFS) $< -o $@ $(LDFLAGS)
 
-consumer.o: consumer.c librabbitmq.a
+consumer.o: $(DIR)/consumer.c librabbitmq.a
 
-producer.o: producer.c librabbitmq.a
+producer.o: $(DIR)/producer.c librabbitmq.a
 
 clean:
 	rm -f producer.o consumer.o librabbitmq/*.o
 	rm -f librabbitmq.a
+	rm -f mqlisten mqsend
 
-.PHONY: all clean mqlisten mqsend
-
+.PHONY: all clean mqlisten mqsend one-to-one
+err: ; $(ERROR)

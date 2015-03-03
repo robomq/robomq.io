@@ -22,11 +22,11 @@ amqp_connection_state_t mqconnect() {
 
     amqp_connection_state_t conn = amqp_new_connection();
     amqp_socket_t *socket = NULL;
-    char hostname[] = "hostname"; // robomq.io hostname
-    int port = 5672; //default
-    char user[] = "username"; // robomq.io username
-    char password[] = "password"; // robomq.io password
-    char vhost[] = "vhost"; // robomq.io account vhost
+	char hostname[] = "localhost"; // robomq.io hostname
+	int port = 5672; //default
+	char user[] = "guest"; // robomq.io username
+	char password[] = "guest"; // robomq.io password
+	char vhost[] = "/"; // robomq.io account vhost
     amqp_channel_t channel = 1;
     int channel_max = 0;
     int frame_max = 131072;
@@ -112,6 +112,7 @@ int main(int argc, char const *const *argv)
     amqp_boolean_t exclusive = 0;
     char exchange_name[] = "hello-exchange";
     char routing_key[] = "request_key";
+    char *msg_body = "Hello\n";
     int result;
 
     conn = mqconnect();
@@ -125,7 +126,7 @@ int main(int argc, char const *const *argv)
             mandatory,
             immediate,
             &props,
-            amqp_cstring_bytes("Hello"));
+            amqp_cstring_bytes(msg_body));
 
     // Now wait for the reply message
     amqp_basic_consume(conn, channel, reply_queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);

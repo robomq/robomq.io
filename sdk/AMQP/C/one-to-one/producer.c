@@ -26,7 +26,7 @@ amqp_connection_state_t mqconnect() {
 	int port = 5672; //default
 	char user[] = "guest"; // robomq.io username
 	char password[] = "guest"; // robomq.io password
-	char vhost[] = "vhost"; // robomq.io account vhost
+	char vhost[] = "/"; // robomq.io account vhost
 	amqp_channel_t channel = 1;
 	int channel_max = 0;
 	int frame_max = 131072;
@@ -59,6 +59,7 @@ int main(int argc, char const *const *argv)
 	amqp_boolean_t immediate = 0;
 	char exchange_name[] = "hello-exchange";
 	char routing_key[] = "hola";
+	char *msg_body = "Hello\n";
 	int result;
 
 	conn = mqconnect();
@@ -71,7 +72,12 @@ int main(int argc, char const *const *argv)
 			mandatory,
 			immediate,
 			&props,
-			amqp_cstring_bytes("Hello"));
+			amqp_cstring_bytes(msg_body));
+
+	if (AMQP_RESPONSE_NONE != result) {
+		printf("Producer AMQP failure occurred, response code = %d\n",
+				result);
+	}
 
 	// Closing connection
 	amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
