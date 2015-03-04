@@ -29,6 +29,7 @@ class Producer {
 			for (int i = 0; i < msgNum; i ++) {
 				String message = "test msg " + Integer.toString(i + 1);
 				client.send(destination, message, null);
+				Thread.sleep(1000);
 			}
 			client.disconnect();
 		} catch(Exception e) {

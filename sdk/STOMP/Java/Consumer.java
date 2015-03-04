@@ -16,7 +16,7 @@ class Consumer {
 	private String server = "hostname";
 	private int port = 61613;
 	private String vhost = "yourvhost";
-	private String destination = "/queue/test";	//There're more options other than /queue/...
+	private String destination = "/queue/test"; //There're more options other than /queue/...
 	private String login = "username";
 	private String passcode = "password";
 
@@ -38,15 +38,21 @@ class Consumer {
 				client.addErrorListener(new Listener() {
 					public void message(Map header, String body) {
 						System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", body);
+						//after connected, disconnect on error
 						try {
 							client.disconnect();
 						} catch(Exception e) {}
-						consume(); //reconnect on exception
 					}
 				});
-				break;
+				while (true) {
+					//after connected, reconnect on connection lost
+					if (!client.isSockConnected()) {
+						break;
+					}
+					Thread.sleep(2000); //check interval must be short enough
+				}
 			} catch(Exception e) {
-				//reconnect on exception
+				//when initializing connection, reconnect on exception
 				System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e); 
 				try {
 					Thread.sleep(5000); 

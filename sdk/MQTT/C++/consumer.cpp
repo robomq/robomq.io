@@ -17,6 +17,8 @@
 
 using namespace std;
 
+//The library automatically reconnects to broker
+
 string hst = "hostname";
 const char *host = hst.c_str();
 int port = 1883;
