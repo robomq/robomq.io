@@ -16,15 +16,19 @@ vhost = "yourvhost"
 username = "username"
 password = "password"
 exchangeName = "testEx"
-reqQueueName = "requestQ"
-reqRoutingKey = "request"
+requestQueue = "requestQ"
+requestKey = "request"
 
 #callback funtion on receiving request messages, reply to the reply_to header
 def onMessage(channel, method, properties, body):
 	print body
-	replyProp = pika.BasicProperties(correlation_id = properties.correlation_id, content_type = "text/plain", delivery_mode = 1)
-	channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties = replyProp, body = "Reply to %s" % (body))
-	channel.basic_ack(delivery_tag = method.delivery_tag)
+	try:
+		replyProp = pika.BasicProperties(correlation_id = properties.correlation_id, content_type = "text/plain", delivery_mode = 1)
+		channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties = replyProp, body = "Reply to %s" % (body))
+		channel.basic_ack(delivery_tag = method.delivery_tag)
+	except:
+		channel.basic_nack(delivery_tag = method.delivery_tag)
+		
 
 while True:
 	try:
@@ -35,9 +39,9 @@ while True:
 
 		#declare exchange and queue, bind them and consume messages
 		channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
-		channel.queue_declare(queue = reqQueueName, exclusive = True, auto_delete = True)
-		channel.queue_bind(exchange = exchangeName, queue = reqQueueName, routing_key = reqRoutingKey)
-		channel.basic_consume(consumer_callback = onMessage, queue = reqQueueName, no_ack = False)
+		channel.queue_declare(queue = requestQueue, exclusive = True, auto_delete = True)
+		channel.queue_bind(exchange = exchangeName, queue = requestQueue, routing_key = requestKey)
+		channel.basic_consume(consumer_callback = onMessage, queue = requestQueue, no_ack = False)
 		channel.start_consuming()
 	except Exception, e:
 		#reconnect on exception

@@ -18,9 +18,9 @@ vhost = "yourvhost"
 username = "username"
 password = "password"
 exchangeName = "testEx"
-repQueueName = "replyQ"
-reqRoutingKey = "request"
-repRoutingKey = "reply"
+replyQueue = "replyQ"
+requestKey = "request"
+replyKey = "reply"
 
 #callback funtion on receiving reply messages
 def onMessage(channel, method, properties, body):
@@ -30,9 +30,9 @@ def onMessage(channel, method, properties, body):
 #listen for reply messages
 def listen():
 	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
-	channel.queue_declare(queue = repQueueName, exclusive = True, auto_delete = True)
-	channel.queue_bind(exchange = exchangeName, queue = repQueueName, routing_key = repRoutingKey)
-	channel.basic_consume(consumer_callback = onMessage, queue = repQueueName, no_ack = True)
+	channel.queue_declare(queue = replyQueue, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = replyQueue, routing_key = replyKey)
+	channel.basic_consume(consumer_callback = onMessage, queue = replyQueue, no_ack = True)
 	channel.start_consuming()
 
 try:
@@ -45,8 +45,8 @@ try:
 	time.sleep(1) #give time for it to start consuming
 
 	#send message
-	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, correlation_id = str(uuid.uuid4()), reply_to = repRoutingKey)
-	channel.basic_publish(exchange = exchangeName, routing_key = reqRoutingKey, body = "Hello World!", properties = properties)
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, correlation_id = str(uuid.uuid4()), reply_to = replyKey)
+	channel.basic_publish(exchange = exchangeName, routing_key = requestKey, body = "Hello World!", properties = properties)
 	time.sleep(1) #give time for it to receive the reply
 
 	#disconnect

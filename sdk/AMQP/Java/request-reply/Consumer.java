@@ -25,8 +25,8 @@ public class Consumer {
 	private static String username = "username";
 	private static String password = "password";
 	private String exchangeName = "testEx";
-	private String reqQueueName = "requestQ";
-	private String reqRoutingKey = "request";
+	private String requestQueue = "requestQ";
+	private String requestKey = "request";
 
 	private void consume() {
 		while (true) {
@@ -43,10 +43,10 @@ public class Consumer {
 			
 				//declare exchange and queue, bind them and consume messages
 				channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
-				channel.queueDeclare(reqQueueName, false, true, true, null);
-				channel.queueBind(reqQueueName, exchangeName, reqRoutingKey, null);
+				channel.queueDeclare(requestQueue, false, true, true, null);
+				channel.queueBind(requestQueue, exchangeName, requestKey, null);
 				QueueingConsumer qc = new QueueingConsumer(channel);
-				channel.basicConsume(reqQueueName, false, qc);
+				channel.basicConsume(requestQueue, false, qc);
 				while (true) {
 					QueueingConsumer.Delivery delivery = qc.nextDelivery();
 					String message = new String(delivery.getBody());
@@ -59,8 +59,12 @@ public class Consumer {
 							deliveryMode(1).
 							correlationId(delivery.getProperties().getCorrelationId()).
 							build();
-					channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					try {
+						channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
+						channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					} catch(Exception e) {
+						channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, true);	
+					}
 				}
 			} catch(Exception e) {
 				//reconnect on exception

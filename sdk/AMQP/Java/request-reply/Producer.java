@@ -26,9 +26,9 @@ public class Producer {
 	private static String username = "username";
 	private static String password = "password";
 	private String exchangeName = "testEx";
-	private String repQueueName = "replyQ";
-	private String reqRoutingKey = "request";
-	private String repRoutingKey = "reply";
+	private String replyQueue = "replyQ";
+	private String requestKey = "request";
+	private String replyKey = "reply";
 
 	private void produce() {
 		try {
@@ -45,19 +45,19 @@ public class Producer {
 			//listen for reply messages
 			String message = "Hello World!";
 			channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
-			channel.queueDeclare(repQueueName, false, true, true, null);
-			channel.queueBind(repQueueName, exchangeName, repRoutingKey, null);
+			channel.queueDeclare(replyQueue, false, true, true, null);
+			channel.queueBind(replyQueue, exchangeName, replyKey, null);
 			QueueingConsumer qc = new QueueingConsumer(channel);
-			channel.basicConsume(repQueueName, true, qc);
+			channel.basicConsume(replyQueue, true, qc);
 
 			//send message
 			BasicProperties properties = new BasicProperties.Builder().
 					contentType("text/plain").
 					deliveryMode(1).
 					correlationId(UUID.randomUUID().toString()).
-					replyTo(repRoutingKey).
+					replyTo(replyKey).
 					build();
-			channel.basicPublish(exchangeName, reqRoutingKey, properties, message.getBytes());
+			channel.basicPublish(exchangeName, requestKey, properties, message.getBytes());
 
 			//receive the reply message
 			QueueingConsumer.Delivery delivery = qc.nextDelivery();
