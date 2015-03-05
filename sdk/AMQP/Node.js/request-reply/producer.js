@@ -9,35 +9,39 @@
 * robomq.io (http://www.robomq.io)
 */
 
-var amqp = require("amqp");
+var amqp = require("amqplib");
 var uuid = require('node-uuid').v4;
 
 var server = "hostname";
 var port = 5672;
-var vhost = "yourvhost";
+var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 var username = "username";
 var password = "password";
 var exchangeName = "testEx";
-var repQueueName = "replyQ";
-var reqRoutingKey = "request";
-var repRoutingKey = "reply";
+var replyQueue = "replyQ";
+var requestKey = "request";
+var replyKey = "reply";
 
-var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
-//node amqp library will automatically reconnect on exception
-connection.on("ready", function(){
-	connection.exchange(exchangeName, options = {type: "direct", autoDelete: true, confirm: true}, function(exchange){
+producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer.then(function(conn) {
+	return conn.createChannel().then(function(ch) {
 		//listen for reply messages
-		var queue = connection.queue(repQueueName, options = {exclusive: true, autoDelete: true}, function(queue){
-			queue.bind(exchangeName, repRoutingKey, function(){
-				queue.subscribe(options = {ack: false}, function(message, headers, deliveryInfo, messageObject){
-					//callback funtion on receiving reply messages
-					console.log(message.data.toString());
-					connection.disconnect();
-					process.exit(0);
-				});
-				//publish the request
-				exchange.publish(reqRoutingKey, message = "Hello World!", options = {contentType: "text/plain", deliveryMode: 1, replyTo: repRoutingKey, correlationId: uuid()});
+		ch.assertQueue(replyQueue, {durable: false, autoDelete: true, exclusive: true});
+		ch.bindQueue(replyQueue, exchangeName, replyKey);
+		ch.consume(replyQueue, function(message) {
+			//callback funtion on receiving reply messages
+			console.log(message.content.toString());
+			conn.close();
+		}, {noAck: true});
+		//publish the request after 1 second
+		setTimeout(function() {
+			ch.publish(exchangeName, requestKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1, replyTo: replyKey, correlationId: uuid()}, function(err, ok) {
+				if (err != null) {
+					console.error("Error: failed to send message\n" + err);
+				}
 			});
-		});
-	}); 
-});
+		}, 1000);
+	});
+}).then(null, function(err) {
+	console.error(err);
+}); 

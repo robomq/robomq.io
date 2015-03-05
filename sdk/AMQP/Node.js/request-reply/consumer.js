@@ -9,31 +9,52 @@
 * robomq.io (http://www.robomq.io)
 */
 
-var amqp = require("amqp");
+var amqp = require("amqplib");
+var domain = require("domain");
 
 var server = "hostname";
 var port = 5672;
-var vhost = "yourvhost";
+var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 var username = "username";
 var password = "password";
 var exchangeName = "testEx";
-var reqQueueName = "requestQ";
-var reqRoutingKey = "request";
+var requestQueue = "requestQ";
+var requestKey = "request";
 
-var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
-//node amqp library will automatically reconnect on exception
-connection.on("ready", function(){
-	connection.exchange(exchangeName, options = {type: "direct", autoDelete: true, confirm: true}, function(exchange){
-		var queue = connection.queue(reqQueueName, options = {exclusive: true, autoDelete: true}, function(queue){
-			queue.bind(exchangeName, reqRoutingKey, function(){
-				queue.subscribe(options = {ack: true}, function(message, headers, deliveryInfo, messageObject){
-					//callback funtion on receiving request messages, reply to the reply_to header
-					console.log(message.data.toString());
-					exchange.publish(deliveryInfo.replyTo, "Reply to " + message.data.toString(), options = {contentType: "text/plain", deliveryMode: 1, correlationId: deliveryInfo.correlationId}, function(){
-						messageObject.acknowledge(false);
-					});
+var consumer = null;
+var dom = domain.create();
+dom.on("error", relisten);
+dom.run(listen);
+
+function listen() {
+	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	consumer.then(function(conn) {
+		return conn.createChannel().then(function(ch) {
+			ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
+			ch.assertQueue(requestQueue, {durable: false, autoDelete: true, exclusive: true});
+			ch.bindQueue(requestQueue, exchangeName, requestKey);
+			ch.consume(requestQueue, function(message) {
+				//callback funtion on receiving messages, reply to the reply_to header
+				console.log(message.content.toString());
+				ch.publish(exchangeName, message.properties.replyTo, new Buffer("Reply to " + message.content.toString()), options = {contentType: "text/plain", deliveryMode: 1, correlationId: message.properties.correlationId}, function(err, ok) {
+					if (err != null) {
+						ch.nack(message);
+					}
+					else {
+						ch.ack(message);
+					}
 				});
-			});
+			}, {noAck: false});
 		});
-	}); 
-});
+	}).then(null, function(err) {
+		console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+		setTimeout(listen, 5000);
+	});
+}
+
+function relisten() {
+	consumer.then(function(conn) {
+		conn.close();
+	});	
+	setTimeout(listen, 5000);
+}

@@ -9,28 +9,44 @@
 * robomq.io (http://www.robomq.io)
 */
 
-var amqp = require("amqp");
+var amqp = require("amqplib");
+var domain = require("domain");
 
 var server = "hostname";
 var port = 5672;
-var vhost = "yourvhost";
+var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 var username = "username";
 var password = "password";
 var exchangeName = "testEx";
 var queueName = "testQ1";
 var routingKey = "test";
 
-var connection = amqp.createConnection({host: server, port: port, vhost: vhost, login: username, password: password});
-//node amqp library will automatically reconnect on exception
-connection.on("ready", function(){
-	connection.exchange(exchangeName, options = {type: "direct", autoDelete: true, confirm: true}, function(exchange){
-		var queue = connection.queue(queueName, options = {exclusive: true, autoDelete: true}, function(queue){
-			queue.bind(exchangeName, routingKey, function(){
-				queue.subscribe(options = {ack: false}, function(message, headers, deliveryInfo, messageObject){
-					//callback funtion on receiving messages
-					console.log(message.data.toString());
-				});
-			});
+var consumer = null;
+var dom = domain.create();
+dom.on("error", relisten);
+dom.run(listen);
+
+function listen() {
+	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	consumer.then(function(conn) {
+		return conn.createChannel().then(function(ch) {
+			ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
+			ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+			ch.bindQueue(queueName, exchangeName, routingKey);
+			ch.consume(queueName, function(message) {
+				//callback funtion on receiving messages
+				console.log(message.content.toString());
+			}, {noAck: true});
 		});
-	}); 
-});
+	}).then(null, function(err) {
+		console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+		setTimeout(listen, 5000);
+	});
+}
+
+function relisten() {
+	consumer.then(function(conn) {
+		conn.close();
+	});	
+	setTimeout(listen, 5000);
+}
