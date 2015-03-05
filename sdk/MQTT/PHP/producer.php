@@ -8,9 +8,6 @@
  * Author: Eamin Zhang
  * robomq.io (http://www.robomq.io)
  */
- 
-require(__DIR__ . "/spMQTT.class.php");
-//spMQTTDebug::Enable();
 
 $server = "hostname";
 $port = "1883";
@@ -19,29 +16,21 @@ $username = "username";
 $password = "password";
 $topic = "test/any";
 
-$client = new spMQTT("tcp://".$server.":".$port, $clientid=null);	//clientid auto-assigned
-$client->setAuth($vhost.":".$username, $password);
-$client->setConnectClean(true);
-$client->setKeepalive(60);
+try {
+	$client = new Mosquitto\Client("2", true); //clientid auto-assigned, clean_session=true
+	$client->setCredentials($vhost.":".$username, $password);
+	$client->connect($server, $port, 60); //keepalive=60
 
-if ($client->connect()) {
 	echo "Quantity of test messages: ";
 	$msgNum = rtrim(fgets(STDIN), PHP_EOL);
 	for ($i = 1; $i <= $msgNum; $i++) {
-		//publish test messages to the topic
 		$message = "test msg ".$i;
-		try {
-			$client->publish($topic, $message, $dup=0, $qos=1, $retain=0, $msgid=null);	//msgid auto-assigned
-		} catch(Exception $ex) {
-			echo "Error: Failed to send message".PHP_EOL;
-			exit(-1);
-		}
+		$client->publish($topic, $message, 1, false); //publish test messages to the topic
+		$client->loop(); //frequently loop to to keep communications with broker
 		sleep(1);
 	}
 	$client->disconnect();
-}
-else {
-	echo "Error: Failed to connect".PHP_EOL;
-	exit(-1);
+} catch (Exception $e) {
+	echo $e;
 }
 ?>

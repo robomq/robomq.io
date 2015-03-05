@@ -9,8 +9,8 @@
  * robomq.io (http://www.robomq.io)
  */
 
-require(__DIR__."/spMQTT.class.php");
-//spMQTTDebug::Enable();
+$GLOBALS["client"] = $client;
+$GLOBALS["topic"] = $topic;
 
 $server = "hostname";
 $port = "1883";
@@ -19,32 +19,31 @@ $username = "username";
 $password = "password";
 $topic = "test/#";
 
-$client = new spMQTT("tcp://".$server.":".$port, $clientid=null);	//clientid auto-assigned
-$client->setAuth($vhost.":".$username, $password);
-$client->setConnectClean(true);
-$client->setKeepalive(60);
+function subscribe() {
+	$GLOBALS["client"]->subscribe($GLOBALS["topic"], 1); //qos=1
+}
 
 /**
  * This method is the callback on receiving messages.
  * @ It prints the message topic and payload on console.
  */
-function message_callback($client, $topic, $payload) {
-    printf("Topic: %s, Message: %s\n", $topic, $payload);
+function onMessage($message) {
+    printf("Topic: %s, Message: %s\n", $message->topic, $message->payload);
+//	var_dump($message);
 }
 
-if ($client->connect()) {
+while (true) {
 	try {
-		$topics[$topic] = 1;	//$topics['sepcific topic'] = qos of the subscription to that topic
-		$client->subscribe($topics);
-		//$client->unsubscribe(array_keys($topics));
-		$client->loop("message_callback");	//start looping with message_callback
-	} catch(Exception $ex) {
-		echo "Error: Failed to subscribe".PHP_EOL;	
-		exit(-1);
+		$client = new Mosquitto\Client("1", true); //clientid auto-assigned, clean_session=true
+		$client->setCredentials($vhost.":".$username, $password);
+		$client->onConnect("subscribe");
+		$client->onMessage("onMessage");
+		$client->connect($server, $port, 60); //keepalive=60
+		$client->loopForever(); //automatically reconnect when loopForever
+	} catch (Exception $e) {
+		//when initialize connection, reconnect on exception
+		echo "Exception handled, reconnecting...\nDetail:\n".$e."\n";
+		sleep(5);
 	}
-}
-else {
-	echo "Error: Failed to connect".PHP_EOL;
-	exit(-1);
 }
 ?>
