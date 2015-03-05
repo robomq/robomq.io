@@ -18,10 +18,8 @@ $destination = "/queue/test";	//There're more options other than /queue/...
 
 while (true) {
 	try {
-		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));
-	
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));	
 		$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
-
 		while(true) {
 			if ($frame = $client->readFrame()) {
 				echo $frame->body.PHP_EOL;

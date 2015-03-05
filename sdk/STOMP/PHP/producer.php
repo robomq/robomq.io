@@ -18,17 +18,15 @@ $destination = "/queue/test";	//There're more options other than /queue/...
 
 try {
 	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));
+	echo "Quantity of test messages: ";
+	$msgNum = rtrim(fgets(STDIN), PHP_EOL);
+	for ($i = 1; $i <= $msgNum; $i++) {
+		$message = "test msg ".$i;
+		$client->send($destination, $message, $headers = []);
+		sleep(1);
+	}
+	unset($client);
 } catch(StompException $e) {
-	die("Error: Connection failed: ".$e->getMessage());
+	die($e->getMessage());
 }
-
-echo "Quantity of test messages: ";
-$msgNum = rtrim(fgets(STDIN), PHP_EOL);
-for ($i = 1; $i <= $msgNum; $i++) {
-	$message = "test msg ".$i;
-	$client->send($destination, $message);
-	sleep(1);
-}
-
-unset($client);
 ?>

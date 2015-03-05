@@ -24,11 +24,7 @@ topic = "test/#"
  * @ It subscribes the target topic.
 """
 def on_connect(client, userdata, rc):	#event on connecting
-	try:
-		client.subscribe([(topic, 1)])	#subscribe
-	except:
-		print("Error: Failed to subscribe")
-		sys.exit(-1)
+	client.subscribe([(topic, 1)])	#subscribe
 
 """
  * This method is the callback on receiving messages.

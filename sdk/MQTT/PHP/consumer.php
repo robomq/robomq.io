@@ -29,12 +29,11 @@ function subscribe() {
  */
 function onMessage($message) {
     printf("Topic: %s, Message: %s\n", $message->topic, $message->payload);
-//	var_dump($message);
 }
 
 while (true) {
 	try {
-		$client = new Mosquitto\Client("1", true); //clientid auto-assigned, clean_session=true
+		$client = new Mosquitto\Client("0", true); //clientid="0", clean_session=true
 		$client->setCredentials($vhost.":".$username, $password);
 		$client->onConnect("subscribe");
 		$client->onMessage("onMessage");

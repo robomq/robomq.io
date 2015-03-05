@@ -17,10 +17,9 @@ $password = "password";
 $topic = "test/any";
 
 try {
-	$client = new Mosquitto\Client("2", true); //clientid auto-assigned, clean_session=true
+	$client = new Mosquitto\Client("1", true); //clientid="1", clean_session=true
 	$client->setCredentials($vhost.":".$username, $password);
 	$client->connect($server, $port, 60); //keepalive=60
-
 	echo "Quantity of test messages: ";
 	$msgNum = rtrim(fgets(STDIN), PHP_EOL);
 	for ($i = 1; $i <= $msgNum; $i++) {

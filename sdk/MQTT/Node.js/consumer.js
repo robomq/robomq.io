@@ -26,6 +26,5 @@ client.on("connect", function() {	//this library automatically reconnect on erro
 		});
 	} catch(ex) {
 		console.log(ex);
-		process.exit(-1);
 	}
 });

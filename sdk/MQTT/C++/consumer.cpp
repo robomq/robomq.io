@@ -37,7 +37,7 @@ const char *topic = tpc.c_str();
  * @It subscribes the specific topic.
  * @There're other callback functions provided by this library.
  */
-void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
+void onConnect(struct mosquitto *mosq, void *userdata, int result) {
 	if (!result) {
 		try {
 			mosquitto_subscribe(mosq, NULL, topic, 1); 
@@ -55,7 +55,7 @@ void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
  * @It prints the message topic and payload on console.
  * @There're other callback functions provided by this library.
  */
-void my_message_callback(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *message) {
+void onMessage(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *message) {
 	if(message->payloadlen) {
 		printf("Topic: %s, Message: %s\n", (char*)message->topic, (char*)message->payload);
 	} else {
@@ -76,8 +76,8 @@ int main(int argc, char *argv[]) {
 	mosquitto_lib_init();
 	mosq = mosquitto_new(NULL, clean_session, NULL);
 	mosquitto_username_pw_set(mosq,	username, password);	 
-	mosquitto_connect_callback_set(mosq, my_connect_callback);
-	mosquitto_message_callback_set(mosq, my_message_callback);
+	mosquitto_connect_callback_set(mosq, onConnect);
+	mosquitto_message_callback_set(mosq, onMessage);
 	mosquitto_connect(mosq, host, port, keepalive);
 	//looping is essential for consumer to work
 	while(!mosquitto_loop_forever(mosq, 0, 1)){

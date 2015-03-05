@@ -28,11 +28,7 @@ public class Producer {
 	private String clientId = MqttClient.generateClientId();
 	private MemoryPersistence persistence = new MemoryPersistence();
 
-	/**
-	 * This method connects client to the broker.
-	 * @ exception on connection error.
-	 */
-	private void connect() {
+	private void produce() {
 		try {
 			client = new MqttClient(broker, clientId, persistence);
 			MqttConnectOptions connOpts = new MqttConnectOptions();
@@ -41,56 +37,27 @@ public class Producer {
 			connOpts.setKeepAliveInterval(60);
 			connOpts.setCleanSession(true);
 			client.connect(connOpts);
-		} catch(MqttException me) {
-			System.out.println("Error: "+me);
-			System.exit(-1);
-		}
-	}
-
-	/**
-	 * This method publishes a certain number of messages to the specified topic.
-	 * @ param n is the number of messages to publish.
-	 * @ exception on publish error.
-	 */
-	private void publish(int n) {
-		for (int i = 0; i < n; i ++) {
-			MqttMessage message = new MqttMessage(("test msg " + Integer.toString(i + 1)).getBytes());
-			message.setQos(1);
-			message.setRetained(false);
-			try {
+			System.out.print("Quantity of test messages: ");
+			Scanner scanner = new Scanner(System.in);
+			int msgNum = scanner.nextInt();
+			for (int i = 0; i < msgNum; i ++) {
+				MqttMessage message = new MqttMessage(("test msg " + Integer.toString(i + 1)).getBytes());
+				message.setQos(1);
+				message.setRetained(false);
 				client.publish(topic, message);
-			} catch(MqttException me) {
-				System.out.println("Error: "+me);
-				System.exit(-1);
-			}	
-		}
-	}
-
-	/**
-	 * This method disconnect client from the broker.
-	 * @ exception on disconnection error.
-	 */
-	private void disconnect() {
-		try {
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {}
+			}
 			client.disconnect();
-			System.exit(0);
 		} catch(MqttException me) {
-			System.out.println("Error: "+me);
+			System.out.println(me);
 			System.exit(-1);			
 		}
 	}
 
-	/**
-	 * This is the main method which creates and runs producer instance.
-	*/
 	public static void main(String[] args) {
 		Producer p = new Producer();
-		p.connect();
-		//ask user to input number of test messages
-		System.out.print("Quantity of test messages: ");
-		Scanner scanner = new Scanner(System.in);
-		int msgNum = scanner.nextInt();
-		p.publish(msgNum);
-		p.disconnect();
+		p.produce();
 	}
 }

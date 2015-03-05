@@ -28,6 +28,7 @@ public class Consumer {
 	private String topic = "test/#";
 	private String clientId = MqttClient.generateClientId();
 	private MemoryPersistence persistence = new MemoryPersistence();
+	private boolean connected = false;
 
 	/**
 	 * This method is the overrided callback on receiving messages.
@@ -43,7 +44,7 @@ public class Consumer {
 
 		public void connectionLost(Throwable cause) {
 			System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", cause.getMessage());
-			consume(); //reconnect on exception
+			connected = false; //reconnect on exception
 		}
 
 		public void deliveryComplete(IMqttDeliveryToken token) {
@@ -63,7 +64,12 @@ public class Consumer {
 				onMessage callback = new onMessage();
 				client.setCallback(callback);
 				client.subscribe(topic, 1);	//qos=1
-				break;
+				connected = true;
+				while (connected) { //check connection status
+					try {
+						Thread.sleep(5000);
+					} catch (Exception e) {}
+				} 
 			} catch(MqttException me) {
 				//reconnect on exception
 				System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", me); 
