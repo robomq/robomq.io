@@ -14,7 +14,7 @@ With the free trial -
 
 3. except analytics and data driven alert platforms which is based on the content of your data
 
-4. Maximum five (5) concurrent connections to allow you to develop your applications
+4. Maximum ten(10) concurrent connections to allow you to develop your applications. 
 
 
 #Subscription plans
