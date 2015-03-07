@@ -21,6 +21,7 @@ var exchangeName = "testEx";
 var requestQueue = "requestQ";
 var requestKey = "request";
 
+//use domain module to handle reconnecting
 var consumer = null;
 var dom = domain.create();
 dom.on("error", relisten);

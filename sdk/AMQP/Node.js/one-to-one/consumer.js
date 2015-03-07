@@ -19,6 +19,7 @@ var username = "username";
 var password = "password";
 var queueName = "testQ";
 
+//use domain module to handle reconnecting
 var consumer = null;
 var dom = domain.create();
 dom.on("error", relisten);

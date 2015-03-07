@@ -18,6 +18,7 @@ var passcode = "password";
 var vhost = "yourvhost";
 var destination = "/queue/test";	//There're more options other than /queue/...
 
+//use domain module to handle reconnecting
 var client = null;
 var dom = domain.create();
 dom.on("error", consume);

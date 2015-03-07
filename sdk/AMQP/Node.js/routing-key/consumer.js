@@ -21,6 +21,7 @@ var exchangeName = "testEx";
 var queueName = "testQ1";
 var routingKey = "test";
 
+//use domain module to handle reconnecting
 var consumer = null;
 var dom = domain.create();
 dom.on("error", relisten);
