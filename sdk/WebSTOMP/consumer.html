@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>consumer</title>
+	</head>
+
+	<body onunload="close()">
+		<h3>Step 1:</h3>
+		<form name="connForm" action="JavaScript:connect()">
+			protocol:<br><input type="radio" name="protocol" value="http" checked>http
+					&nbsp;<input type="radio" name="protocol" value="https">https<br>
+			host:<br><input type="text" name="host" value="trial.robomq.io"><br>
+			port:<br><input type="text" name="port" value="15674"><br>
+			vhost:<br><input type="text" name="vhost" value=""><br>
+			username:<br><input type="text" name="username" value=""><br>
+			password:<br><input type="text" name="password" value=""><br><br>
+			<input type="submit" value="connect">
+		</form>
+
+		<br><h3>Step 2:</h3>
+		<form name="subForm" action="JavaScript:subscribe()">
+			destination:<br><input type="text" name="destination" value="/queue/test"><br><br>
+			<input type="submit" value="subscribe">
+		</form>
+		<br><h3 id="msgArea">Received:</h3><br>
+	</body>
+
+	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+	<script src="./stomp.js"></script> <!--download stomp.js from github and change src to its actual path-->
+
+	<script>
+		var client = null;
+		var subscription = null;
+
+		function connect() {
+			if (client != null && client.connected) {
+				client.disconnect();
+			}
+			var connInfo = document.forms["connForm"];
+			var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
+	    	client = Stomp.over(webSock);
+			client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
+			client.heartbeat.outgoing = 0;
+			client.heartbeat.incoming = 0;
+		}
+
+		function onConnect() {	
+			alert("Connected to broker!");
+		}
+
+		function subscribe() {
+			if (client == null || !client.connected) {
+				alert("Please connect first!");
+				return;
+			}
+			if (subscription != null) {
+				subscription.unsubscribe();
+			}
+			var subInfo = document.forms["subForm"];
+			subscription = client.subscribe(subInfo["destination"].value, onMessage, {ack: "auto"});
+			alert("Subscription ID: " + subscription["id"]);
+		}
+
+		function onMessage(message) {
+			var newMsg = document.createElement("div");
+			newMsg.appendChild(document.createTextNode("Destiantion: " + message.headers["destination"] + ", Message: " + message.body));
+			newMsg.appendChild(document.createElement("br"));
+			document.body.insertBefore(newMsg, document.getElementById("msgArea").nextSibling);
+		}
+
+		function onError(error) {
+			alert(error);
+			subscription = null;
+		}
+
+		function close() {
+			subscription.unsubscribe();
+			client.disconnect();
+		}
+	</script>
+</html>
