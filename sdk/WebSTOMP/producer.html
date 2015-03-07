@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--
+ * File: procuder.html
+ * Description: This is the WebSTOMP producer publishes messages
+ *     to a particular message destination through WebSTOMP broker.
+ *
+ * Author: Eamin Zhang
+ * robomq.io (http://www.robomq.io)
+-->
 <html>
 	<head>
 		<title>producer</title>
@@ -26,7 +34,9 @@
 	</body>
 
 	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
-	<script src="./stomp.js"></script> <!--download stomp.js from github and change src to its actual path-->
+	<script src="./stomp.js"></script>
+	<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
+	<!--change src to file's actual path; don't directly source this link-->
 
 	<script>
 		var client = null;
