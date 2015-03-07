@@ -57,13 +57,12 @@ public class Consumer {
 					BasicProperties properties = new BasicProperties.Builder().
 							contentType("text/plain").
 							deliveryMode(1).
-							correlationId(delivery.getProperties().getCorrelationId()).
 							build();
 					try {
 						channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
 						channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					} catch(Exception e) {
-						channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, true);	
+						channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);	
 					}
 				}
 			} catch(Exception e) {

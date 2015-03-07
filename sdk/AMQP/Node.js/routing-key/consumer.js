@@ -5,7 +5,7 @@
 *     Messages can be received over AMQP exchange types including one-to-one,
 *     from broadcast pattern, or selectively using specified binding key.
 *
-* Author: Stanley
+* Author: Eamin Zhang
 * robomq.io (http://www.robomq.io)
 */
 

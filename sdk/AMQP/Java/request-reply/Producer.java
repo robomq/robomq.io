@@ -14,7 +14,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import java.util.UUID;
 
 public class Producer {
 
@@ -44,17 +43,15 @@ public class Producer {
 
 			//listen for reply messages
 			String message = "Hello World!";
-			channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
 			channel.queueDeclare(replyQueue, false, true, true, null);
 			channel.queueBind(replyQueue, exchangeName, replyKey, null);
 			QueueingConsumer qc = new QueueingConsumer(channel);
 			channel.basicConsume(replyQueue, true, qc);
 
-			//send message
+			//send request message
 			BasicProperties properties = new BasicProperties.Builder().
 					contentType("text/plain").
 					deliveryMode(1).
-					correlationId(UUID.randomUUID().toString()).
 					replyTo(replyKey).
 					build();
 			channel.basicPublish(exchangeName, requestKey, properties, message.getBytes());

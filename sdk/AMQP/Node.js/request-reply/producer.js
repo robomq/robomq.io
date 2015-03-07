@@ -5,12 +5,11 @@
 *     Messages can be sent over AMQP exchange types including one-to-one,
 *     from broadcast pattern, or selectively using specified routing key.
 *
-* Author: Stanley
+* Author: Eamin Zhang
 * robomq.io (http://www.robomq.io)
 */
 
 var amqp = require("amqplib");
-var uuid = require('node-uuid').v4;
 
 var server = "hostname";
 var port = 5672;
@@ -31,11 +30,12 @@ producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + "
 		ch.consume(replyQueue, function(message) {
 			//callback funtion on receiving reply messages
 			console.log(message.content.toString());
+			//close connection once receives the reply
 			conn.close();
 		}, {noAck: true});
-		//publish the request after 1 second
+		//send the request message after 1 second
 		setTimeout(function() {
-			ch.publish(exchangeName, requestKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1, replyTo: replyKey, correlationId: uuid()}, function(err, ok) {
+			ch.publish(exchangeName, requestKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1, replyTo: replyKey}, function(err, ok) {
 				if (err != null) {
 					console.error("Error: failed to send message\n" + err);
 				}

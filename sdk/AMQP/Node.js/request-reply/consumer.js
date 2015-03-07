@@ -5,7 +5,7 @@
 *     Messages can be received over AMQP exchange types including one-to-one,
 *     from broadcast pattern, or selectively using specified binding key.
 *
-* Author: Stanley
+* Author: Eamin Zhang
 * robomq.io (http://www.robomq.io)
 */
 
@@ -36,7 +36,7 @@ function listen() {
 			ch.consume(requestQueue, function(message) {
 				//callback funtion on receiving messages, reply to the reply_to header
 				console.log(message.content.toString());
-				ch.publish(exchangeName, message.properties.replyTo, new Buffer("Reply to " + message.content.toString()), options = {contentType: "text/plain", deliveryMode: 1, correlationId: message.properties.correlationId}, function(err, ok) {
+				ch.publish(exchangeName, message.properties.replyTo, new Buffer("Reply to " + message.content.toString()), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
 					if (err != null) {
 						ch.nack(message);
 					}

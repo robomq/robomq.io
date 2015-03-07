@@ -23,7 +23,7 @@ requestKey = "request"
 def onMessage(channel, method, properties, body):
 	print body
 	try:
-		replyProp = pika.BasicProperties(correlation_id = properties.correlation_id, content_type = "text/plain", delivery_mode = 1)
+		replyProp = pika.BasicProperties(content_type = "text/plain", delivery_mode = 1)
 		channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties = replyProp, body = "Reply to %s" % (body))
 		channel.basic_ack(delivery_tag = method.delivery_tag)
 	except:

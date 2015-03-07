@@ -9,7 +9,6 @@
 
 import pika
 import thread
-import uuid
 import time
 
 server = "hostname"
@@ -25,11 +24,12 @@ replyKey = "reply"
 #callback funtion on receiving reply messages
 def onMessage(channel, method, properties, body):
 	print body
+	#close connection once receives the reply
 	channel.stop_consuming()
+	connection.close()
 
 #listen for reply messages
 def listen():
-	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
 	channel.queue_declare(queue = replyQueue, exclusive = True, auto_delete = True)
 	channel.queue_bind(exchange = exchangeName, queue = replyQueue, routing_key = replyKey)
 	channel.basic_consume(consumer_callback = onMessage, queue = replyQueue, no_ack = True)
@@ -44,12 +44,12 @@ try:
 	thread.start_new_thread(listen, ())
 	time.sleep(1) #give time for it to start consuming
 
-	#send message
-	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, correlation_id = str(uuid.uuid4()), reply_to = replyKey)
+	#send request message
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, reply_to = replyKey)
 	channel.basic_publish(exchange = exchangeName, routing_key = requestKey, body = "Hello World!", properties = properties)
-	time.sleep(1) #give time for it to receive the reply
 
-	#disconnect
-	connection.close()
+	#block until receives reply message
+	while connection.is_open:
+		pass
 except Exception, e:
 	print e
