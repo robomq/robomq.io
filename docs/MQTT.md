@@ -169,7 +169,7 @@ The callback functions should be preset before connecting to [robomq.io](http://
 ### Prerequisite
 The Node.js library we use for this example can be found at <https://github.com/adamvr/MQTT.js>.    
 
-You can install the library through `sudo npm -g install mqtt`.  
+You can install the library through `sudo npm install mqtt`.  
 
 Finally, require this library in your program.
 

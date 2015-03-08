@@ -18,15 +18,20 @@ $destination = "/queue/test";	//There're more options other than /queue/...
 
 while (true) {
 	try {
-		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost));	
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
 		$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
-		while(true) {
+		while (true) {
 			if ($frame = $client->readFrame()) {
-				echo $frame->body.PHP_EOL;
-				$client->ack($frame);
+				try {
+					echo $frame->body.PHP_EOL;
+					$client->ack($frame);
+				} catch (Exception $e) {
+					echo "Error: Can't handle message received, NACKing";
+					$client->nack($frame);
+				}
 			}
 		}
-	} catch(StompException $e) {
+	} catch (StompException $e) {
 		echo "Exception handled, reconnecting...\nDetail:\n".$e->getMessage().PHP_EOL;
 		unset($client);
 		sleep(5);

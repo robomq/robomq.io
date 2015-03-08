@@ -17,7 +17,7 @@ var passcode = "password";
 var vhost = "yourvhost";
 var destination = "/queue/test";	//There're more options other than /queue/...
 
-var client = Stomp.overTCP(server, port, "v11.stomp");
+var client = Stomp.overTCP(server, port);
 client.connect(login, passcode
 	, function() {
 		process.stdout.write("Quantity of test messages: ");

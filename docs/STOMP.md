@@ -209,7 +209,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 The Node.js library we use for this example can be found at <https://github.com/jmesnil/stomp-websocket>.  
 It supports STOMP version 1.0 and 1.1.  
 
-You can install the library through `sudo npm -g install stompjs`.  
+You can install the library through `sudo npm install stompjs`.  
 
 Finally, require this library in your program.  
 
@@ -330,7 +330,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 
 ### Prerequisite
 The PHP library we use for this example can be found at <http://php.net/manual/en/book.stomp.php>.  
-It supports STOMP version 1.0.  
+It supports STOMP version 1.0 and 1.1.  
 
 This library depends on OpenSSL, so first ensure that your have OpenSSL installed.  
 Download the library from <http://pecl.php.net/package/stomp> and uncompress the tarball, enter `stomp-x.x.x/` and install it by

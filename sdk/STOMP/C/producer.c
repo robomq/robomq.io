@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 		{"login", login},
 		{"passcode", passcode},
         {"vhost", vhost},
-		{"accept-version", "1.2"},
+		{"accept-version", "1.0,1.1,1.2"},
 		{"heart-beat", "1000,1000"},
 	};
 

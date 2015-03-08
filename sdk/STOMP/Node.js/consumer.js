@@ -25,7 +25,7 @@ dom.on("error", consume);
 dom.run(consume);
 
 function consume() {
-	client = Stomp.overTCP(server, port, "v11.stomp");
+	client = Stomp.overTCP(server, port);
 	client.connect(login, passcode
 		, function() {
 			//the callback for subscribe() function is actually the callback on message 
