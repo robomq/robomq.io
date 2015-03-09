@@ -7,49 +7,30 @@ For one to one messaging, a producer sends messages to specified queue.  A consu
 ----------
 
 ## Python
+
 ###Prerequisites
-**python client AMQP library**
-Using AMQP protocol for python programming language requires downloading and installing the following library.
+The Python library we use for this example can be found at <https://github.com/pika/pika>.  
 
-Installing pika 
+You can install it through `sudo pip install pika`.  
 
-	sudo pip install pika
+Finally, import this library in your program.
 
-- Ubuntu
+	import pika
 
-		sudo apt-get install python-pip git-core
-
-- On Debian
-
-		sudo apt-get install python-setuptools git-core
-		sudo easy_install pip
-
-- on Windows
-
-		easy_install pip
-		pip install pika
-
-
+The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
 
 ###Producer
-For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker. 
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-	connection = pika.BlockingConnection(pika.connectionParameters(host='your host'))
-	channel = 	connection.channel()
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
-Then producer should create a queue and publish messages to this queue. This queue will work as a mailbox where all messages published to it will be stored until they are consumed.
+Then producer can publish messages to the default exchange where queue name is the routing key. 
 
-	channel.queue_declare(queue='queueName')
-
-A queue declared without a specific routing key use their queue name as the default routing key.  
-
-Then producer should publish messages to the default exchange attached with routing key. That routing key is the queue name. Based on that routing key, messages will be distributed through the default exchange to the right queue. 
-
-	import pika 
-
-	channel.basic_publish(exchange='',
-					routing_key='queueName',
-					body='message')
+		#assigning blank string to exchange is to use the default exchange, 
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
 
 After all messages are published, producer should terminate this connection.
 

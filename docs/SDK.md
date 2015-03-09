@@ -15,7 +15,7 @@ Following use cases using AMQP protocols are documented with code on the [robomq
 
 3. Key based routing : routing messages to consumer based on key based subscription 
 
-4. Topic : routing messages based on complex filter rules applied to routing keys 
+4. Filter based routing (Topic) : routing messages based on complex filter rules applied to routing keys 
 
 5. Request and reply : two way request reply communication
 
@@ -30,6 +30,4 @@ STOMP (Simple Text Oriented Messaging Protocol) is a HTTP like simple protocol a
 
 ##Supported programming languages
 
-[robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io/tree/master/sdk) contains examples in Python, Java, C, C++, node.js and PHP. We continue to add examples in additional languages.  
-
-
+[robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io/tree/master/sdk) contains examples in Python, Node.js, PHP, Java, C and C++. We continue to add examples in additional languages.  

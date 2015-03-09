@@ -94,6 +94,7 @@ The example code provided bellow could be the short version, it might have omitt
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
+> Always run consumer first to create the exchange and queue for producer to send messages to.   
 
 ## Python
 

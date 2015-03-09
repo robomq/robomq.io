@@ -1,12 +1,8 @@
 #What is robomq.io?
 
-
 [robomq.io](http://www.robomq.io)  is a Message Queue as Service platform hosted on cloud and also available as an Enterprise hosting option. This Software as a Service platform is an integrated message queue hub, analytics engine, management console, dashboard and monitoring & alerts; all managed and hosted in a secure, reliable and redundant infrastructure.
 
-
-
 ![High level schematic diagram of robomq.io platform](./images/slides1.png)
-
 
 ##Key Features
 
@@ -26,7 +22,6 @@ Key features of [robomq.io](www.robomq.io)  platform are:
 
 7. **Support for multiple programming languages** - with the support built for standard protocols like MQTT, AMQP, STOMP and HTTP/REST libraries supporting these protocols by default support robomq.io
 
-
 ##Platform components
 
 The key components [robomq.io](www.robomq.io)  are:
@@ -40,6 +35,5 @@ The key components [robomq.io](www.robomq.io)  are:
 4. **Analytics and visualization platform** providing insights based on message content
 
 5. **Alerts and notification** based on configurable threshold from message content 
-
 
 [robomq.io](http://www.robomq.io)  platform is an expandable platform that allows addition of business specific application components which feed on the same stream of information, in parallel. robomq.io comes bundled with few application components like monitoring dashboard for messaging activity, data driven analytics and alerts. Similar applications can be added to expand the platform. For each application component, multiple processes or workers can be added be added to handle increased demand or load.

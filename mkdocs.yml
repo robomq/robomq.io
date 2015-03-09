@@ -4,7 +4,6 @@ site_description: User documentation and SDK for robomq.io
 site_favicon: favicon.ico
 repo_url: https://github.com/robomq/robomq.io/
 docs_dir: docs
-#site_dir: < path where mkdocs will generate HTML. keep it outside of the git directory>
 pages:
 - ['index.md', '', 'What is Robomq.io']
 - ['gettingStarted.md', '', 'Getting Started']
@@ -12,15 +11,14 @@ pages:
 - ['deviceIntegration.md', '', 'IoT and M2M Integration']
 - ['applicationIntegration.md', '', 'Application Integration']
 - ['SDK.md', '', 'SDK & example codes']
+- ['AMQP.md', 'User Guide', 'AMQP Introduction']
 - ['one-one.md', 'User Guide', 'One to One (Direct) Messaging']
 - ['broadcast.md', 'User Guide', 'Broadcast (Publish/Subscribe)']
 - ['routing-key.md', 'User Guide', 'Key based Message routing']
-- ['topic.md', 'User Guide', 'Filter based Message routing']
-- ['request-reply.md', 'User Guide', 'Request - Reply']
+- ['topic.md', 'User Guide', 'Filter based routing (Topic)']
+- ['request-reply.md', 'User Guide', 'Request and Reply']
 - ['MQTT.md', 'User Guide', 'MQTT']
 - ['STOMP.md', 'User Guide', 'STOMP']
 - ['WebSTOMP.md', 'User Guide', 'WebSTOMP']
 - ['about.md', '', 'About']
 theme: readthedocs
-
-
