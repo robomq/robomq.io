@@ -322,11 +322,17 @@ Binding between same pair of exchange and queue can be initialized more than one
 
 **C client AMQP library**
 
-RoboMQ is built on AMQP, an open, general-purpose protocol for messaging. There are a number of clients for AMQP in many different languages.  However, we'll choose a simple C-language AMQP client library written for use with v2.0+ of the RabbitMQ broker.
+robomq.io is built on AMQP, an open, general-purpose protocol for messaging. There are a number of clients for AMQP in many different languages.  However, we'll choose a simple C-language AMQP client library written for use with v2.0+ of the RabbitMQ broker.
 
 [https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq](https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq)
 
-Download the client library package, and copy it into your working directory:
+You can copy librabbitmq subfolder from whole repository download based from [https://github.com/alanxz/rabbitmq-c](https://github.com/alanxz/rabbitmq-c)
+
+Alternatively, thanks to Subversion support in GitHub, you can use svn export directly:
+
+	svn export https://github.com/alanxz/rabbitmq-c/trunk/librabbitmq
+
+Copy the librabbitmq package into your working directory:
 
 	cp librabbitmq ./
 
@@ -369,6 +375,7 @@ Then the consumer should create an exchange and subscribe to a queue.  This exch
 	amqp_boolean_t durable = 0;
 	amqp_boolean_t exclusive = 0;
 	amqp_boolean_t auto_delete = 1;
+	amqp_boolean_t internal = 0;
 	char exchange_name[] = "fanout-exchange";
 	char exchange_type[] = "fanout";
 	char queue_name[] = "hello-queue";
@@ -376,7 +383,7 @@ Then the consumer should create an exchange and subscribe to a queue.  This exch
 	
 	// Declaring exchange
 	amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
-			passive, durable, amqp_empty_table);
+			passive, durable, auto_delete, internal, amqp_empty_table);
 	
 	// Declaring queue
 	amqp_queue_declare_ok_t *r = amqp_queue_declare(conn, channel, amqp_cstring_bytes(queue_name),
@@ -398,7 +405,7 @@ Now we have two c files, one is producer.c, another is consumer.c.
 
 
 ### Putting it all together
-The full code below includes some basic AMQP error handling for consumer that is useful when declaring exchanges and queues.
+The full code below includes some basic AMQP error handling for consumer that is useful when declaring exchanges and queues.  In addition, main receiver loop attempts to reconnect upon network connection failure.
 
 **producer.c**
 
@@ -494,6 +501,7 @@ The full code below includes some basic AMQP error handling for consumer that is
 		char password[] = "password"; // robomq.io password
 		char vhost[] = "vhost"; // robomq.io account vhost
 		amqp_channel_t channel = 1;
+		amqp_rpc_reply_t reply;
 		int channel_max = 0;
 		int frame_max = 131072;
 		int heartbeat = 0;
@@ -504,40 +512,45 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		status = amqp_socket_open(socket, hostname, port);
 		if (status) {
-			printf("Error opening TCP socket, status = %d, exiting.", status);
+			printf("Error opening TCP socket, status = %d\n", status);
 		}
 	
-		amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
+		reply = amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
+		if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
+			fprintf(stderr, "%s: server connection reply code: %d\n",
+					"Error logging in", reply.reply_type);
+		}
+	
 		amqp_channel_open(conn, channel);
 	
 		return conn;
 	}
 	
-	amqp_bytes_t mqdeclare(amqp_connection_state_t conn) {
+	amqp_bytes_t mqdeclare(amqp_connection_state_t conn, const char *exchange_name, const char *queue_name) {
 		amqp_bytes_t queue;
 		amqp_channel_t channel = 1;
 		amqp_boolean_t passive = 0;
 		amqp_boolean_t durable = 0;
 		amqp_boolean_t exclusive = 0;
 		amqp_boolean_t auto_delete = 1;
-		char exchange_name[] = "fanout-exchange";
+		amqp_boolean_t internal = 0;
 		char exchange_type[] = "fanout";
-		char queue_name[] = "hello-queue";
 		char binding_key[] = "";
 		amqp_rpc_reply_t reply;
 	
 		// Declaring exchange
 		amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
-				passive, durable, amqp_empty_table);
+				passive, durable, auto_delete, internal, amqp_empty_table);
 	
 		reply = amqp_get_rpc_reply(conn);
 		if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
 			amqp_connection_close_t *m = (amqp_connection_close_t *) reply.reply.decoded;
-			fprintf(stderr, "%s: server connection error %d, message: %.*s\n",
-					"Error declaring exchange",
-					m->reply_code,
-					(int) m->reply_text.len, (char *) m->reply_text.bytes);
-			exit(1);
+			if(NULL != m) {
+				fprintf(stderr, "%s: server connection error %d, message: %.*s\n",
+						"Error declaring exchange",
+						m->reply_code,
+						(int) m->reply_text.len, (char *) m->reply_text.bytes);
+			}
 		}
 	
 		// Declaring queue
@@ -546,18 +559,16 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		reply = amqp_get_rpc_reply(conn);
 		if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
-			amqp_connection_close_t *m = (amqp_connection_close_t *) reply.reply.decoded;
-					fprintf(stderr, "%s: server connection error %d, message: %.*s\n",
-							"Error declaring queue",
-							m->reply_code,
-							(int) m->reply_text.len, (char *) m->reply_text.bytes);
-			exit(1);
+			fprintf(stderr, "%s: server connection reply code: %d\n",
+					"Error declaring queue", reply.reply_type);
 		}
-		queue = amqp_bytes_malloc_dup(r->queue);
+		else {
+			queue = amqp_bytes_malloc_dup(r->queue);
 	
-		// Binding to queue
-		amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(binding_key),
-				amqp_empty_table);
+			// Binding to queue
+			amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(binding_key),
+					amqp_empty_table);
+		}
 	
 		return queue;
 	}
@@ -570,10 +581,20 @@ The full code below includes some basic AMQP error handling for consumer that is
 		amqp_boolean_t no_local = 0;
 		amqp_boolean_t no_ack = 1;
 		amqp_boolean_t exclusive = 0;
-		amqp_frame_t frame;
+		char exchange_name[] = "fanout-exchange";
+		const char *queue_name;
+		int retry_time = 5; // retry time in seconds
+	
+		if(argc < 2) {
+			printf("Syntax error:\n"
+					"Usage: mqlisten <queue_name>\n");
+			exit(-1);
+		}
+	
+		queue_name = (char *)argv[1];
 	
 		conn = mqconnect();
-		queue = mqdeclare(conn);
+		queue = mqdeclare(conn, &exchange_name[0], &queue_name[0]);
 	
 		// Consuming the message
 		amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
@@ -585,8 +606,19 @@ The full code below includes some basic AMQP error handling for consumer that is
 			amqp_maybe_release_buffers(conn);
 			result = amqp_consume_message(conn, &envelope, NULL, 0);
 	
-			if (AMQP_RESPONSE_NORMAL == result.reply_type) {
+			if (AMQP_RESPONSE_NORMAL != result.reply_type) {
+				printf("Consumer AMQP failure occurred, response code = %d, retrying in %d seconds...\n",
+						result.reply_type, retry_time);
 	
+				conn = mqconnect();
+				amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(queue_name),
+						amqp_empty_table);
+	
+				queue = mqdeclare(conn, &exchange_name[0], &queue_name[0]);
+				amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
+				sleep(retry_time);
+			}
+			else {
 				printf("Received message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
 	
 				amqp_destroy_envelope(&envelope);
@@ -600,4 +632,3 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		return 0;
 	}
-

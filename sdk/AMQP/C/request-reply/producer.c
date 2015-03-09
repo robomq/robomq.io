@@ -54,6 +54,7 @@ amqp_bytes_t mqdeclare(amqp_connection_state_t conn) {
     amqp_boolean_t durable = 0;
     amqp_boolean_t exclusive = 0;
     amqp_boolean_t auto_delete = 1;
+    amqp_boolean_t internal = 0;
     char exchange_name[] = "hello-exchange";
     char exchange_type[] = "direct";
     char queue_name[] = "reply-queue";
@@ -62,7 +63,7 @@ amqp_bytes_t mqdeclare(amqp_connection_state_t conn) {
 
     // Declaring exchange
     amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
-            passive, durable, amqp_empty_table);
+            passive, durable, auto_delete, internal, amqp_empty_table);
 
     reply = amqp_get_rpc_reply(conn);
     if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
