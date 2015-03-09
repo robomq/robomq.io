@@ -59,7 +59,7 @@ i.e. In STOMP, if your destination in send function is `/topic/routingKey` or `/
 
 There are 2 wild cards available as bellow:  
 
-* * (star) can substitute for exactly one word.  
+* \* (star) can substitute for exactly one word.  
 * \# (hash) can substitute for zero or more words.   
 
 For instance, publish key `a.b.c` matches subscribe key `a.b.*` or `a.#`, but doesn't match `a.*`.  
