@@ -7,7 +7,7 @@ SockJS is a WebSockets poly-fill that provides a WebSocket-like JavaScript objec
 
 # WebSTOMP use cases
 
-##
+###
 
 We will provide example of WebSTOMP in JavaScript that is embedded in HTML.  
 
@@ -17,7 +17,7 @@ The example code provided bellow could be the short version, it might have omitt
 
 Follow the *Message destinations* section in STOMP chapter and you will be able to switch among all the scenarios by changing only the message destination. This could also be a tutorial tool for STOMP novices to familiarize themselves with STOMP and WebSTOMP.  
 
-## Prerequisite
+### Prerequisite
 The JavaScript library we use for this example is the same as we used for STOMP Node.js example. It can be found at <https://github.com/jmesnil/stomp-websocket>.  
 It supports STOMP version 1.0 and 1.1.  
 
@@ -27,7 +27,7 @@ Finally, source *stomp.js* and <http://cdn.sockjs.org/sockjs-0.3.min.js> in your
 
 The full documentation of this library is at <http://jmesnil.net/stomp-websocket/doc/>.
 
-## Producer
+### Producer
 Step 1 is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 In constructor of SockJS, protocol can be "http" or "https", they use different ports.  
 In `connect()` function, third parameter is callback function on connect, fourth is callback function on error.  
@@ -41,7 +41,7 @@ The second parameter is message headers. It's not used in this example.
 
 	client.send(destination, {}, message);
 
-## Consumer
+### Consumer
 Step 1 is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Step 2 is to subscribe the inputted destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the topic and payload of the message.  
@@ -57,7 +57,7 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 	subscription.unsubscribe();
 	client.disconnect();
 
-## Putting it together
+### Putting it together
 
 **producer.html**
 
