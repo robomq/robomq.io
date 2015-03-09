@@ -7,8 +7,6 @@ SockJS is a WebSockets poly-fill that provides a WebSocket-like JavaScript objec
 
 # WebSTOMP use case
 
-##
-
 We will provide example of WebSTOMP in JavaScript that is embedded in HTML.  
 
 In the example, WebSTOMP producer will first connect to [robomq.io](http://www.robomq.io) with inputted information from Web page, then publish inputted text to the inputted message destination. WebSTOMP consumer will also first connect then subscribe the inputted message destination and print the message topic and payload as it receives messages.  

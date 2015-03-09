@@ -13,11 +13,11 @@ Using AMQP protocol for python programming language requires downloading and ins
 
 Installing pika 
 
-	sudo pip install pika</pre>
+	sudo pip install pika
 
 - Ubuntu
 
-		sudo apt-get install python-pip git-core</pre>
+		sudo apt-get install python-pip git-core
 
 - On Debian
 
@@ -85,35 +85,70 @@ Then, consumer should receive messages and implement any desired processing on m
 	channel.start_consuming()
 
 ###Putting it all together
- **producer.py**
+
+**producer.py**
  
 	import pika
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host='your host'))
-	channel = connection.channel()
-
-	channel.queue_declare(queue='queueName')
-
-	channel.basic_publish(exchange='', routing_key='queueName', body='Hello World!')
-	print 'Sent 'Hello World!''
-	connection.close()
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	routingKey = "testQ"
+	
+	try:
+		#connect
+		credentials = pika.PlainCredentials(username, password)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		channel = connection.channel()
+	
+		#send message
+		#assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+		channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
+	
+		#disconnect
+		connection.close()
+	except Exception, e:
+		print e
 
 **consumer.py**
 
 	import pika
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
-	channel = connection.channel()
-
-	channel.queue_declare(queue='queueName')
-	print 'Waiting for messages. To exit press CTRL+C'
-
-	def callback(ch, method, properties, body):
-		print 'Received %r' % (body)
-
-	channel.basic_consume(callback, queue='queueName', no_ack=True)
-	channel.start_consuming() 
+	import time
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	queueName = "testQ"
+	
+	#callback funtion on receiving messages
+	def onMessage(channel, method, properties, body):
+		print body
+	
+	while True:
+		try:
+			#connect
+			credentials = pika.PlainCredentials(username, password)
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			channel = connection.channel()
+	
+			#declare queue and consume messages
+			#one-to-one messaging uses the default exchange, where queue name is the routing key
+			channel.queue_declare(queue = queueName, auto_delete = True)
+			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
+			channel.start_consuming()
+		except Exception, e:
+			#reconnect on exception
+			print "Exception handled, reconnecting...\nDetail:\n%s" % e
+			try:
+				connection.close()
+			except:
+				pass
+			time.sleep(5)
 
 ## Java
 ###Prerequisites

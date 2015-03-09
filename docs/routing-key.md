@@ -54,47 +54,73 @@ Now all the messages with the same routing key as this queue's will get consumed
 
 **producer.py**
 
+	import pika
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	routingKey = "test"
+	
+	try:
+		#connect
+		credentials = pika.PlainCredentials(username, password)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		channel = connection.channel()
+	
+		#send message
+		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+		channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
+	
+		#disconnect
+		connection.close()
+	except Exception, e:
+		print e
+
+**consumer.py**
 
 	import pika
-	import sys
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
-	channel = connection.channel()
-
-	channel.exchange_declare(exchange='exchangeName', type='direct')
-
-	severity = 'routingKey'
-	message = 'Hello World!'
-	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
-	print 'Sent %r:%r' % (severity, message)
-	connection.close()
-
-**Consumer.py**
-
-	import pika
-	import sys
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your host'))
-	channel = connection.channel()
-
-	channel.exchange_declare(exchange='exchangeName', type='direct')
-
-	queue_name = 'queueName'
-	channel.queue_declare(queue=queue_name,exclusive=True)
-	severity = 'routingKey'
-	channel.queue_bind(exchange='exchangeName',
-					queue=queue_name,
-					routing_key=severity)
-	print 'Waiting for logs. To exit press CTRL+C'
-
-	def callback(ch, method, properties, body):
-		print '%r:%r' % (method.routing_key, body,)
-
-	channel.basic_consume(callback, queue=queue_name, no_ack=True)
-
-	channel.start_consuming()
+	import time
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	queueName = "testQ1"
+	routingKey = "test"
+	
+	#callback funtion on receiving messages
+	def onMessage(channel, method, properties, body):
+		print body
+	
+	while True:
+		try:
+			#connect
+			credentials = pika.PlainCredentials(username, password)
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			channel = connection.channel()
+	
+			#declare exchange and queue, bind them and consume messages
+			channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+			channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
+			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+			channel.start_consuming()
+		except Exception, e:
+			#reconnect on exception
+			print "Exception handled, reconnecting...\nDetail:\n%s" % e
+			try:
+				connection.close()
+			except:
+				pass
+			time.sleep(5)
 	
 ## Java
+
 ###Producer
 First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
 

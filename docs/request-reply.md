@@ -78,64 +78,104 @@ Then consumer starts consuming messages.
 	channel.basic_consume(callback, queue="queueName")
 
 ###Putting it all together
+
 **producer.py**
  
 	import pika
-	import uuid
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
-
-	channel = connection.channel()
-	channel.exchange_declare(exchange='exchangeName', type='direct')
-	channel.queue_declare(queue='replyQueue')
-	channel.queue_bind(exchange='exchangeName', queue='replyQueue', routing_key='reply')
-	routingKey = 'routingKey'
-	message = 'hello world'
-
-	corr_id = str(uuid.uuid4())
-	self.channel.basic_publish(exchange='',
-					routing_key='routingKey',
-					properties=pika.BasicProperties(
-					reply_to = 'replyQueue',
-					correlation_id = corr_id,),
-					body=str(message))
-	print'message sent'
-	def callback(ch, method, properties, body):
+	import thread
+	import time
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	replyQueue = "replyQ"
+	requestKey = "request"
+	replyKey = "reply"
+	
+	#callback funtion on receiving reply messages
+	def onMessage(channel, method, properties, body):
 		print body
-
-	channel.basic_consume(callback,
-                      queue='reply',
-                      no_ack=True)
-
-	channel.start_consuming()
+		#close connection once receives the reply
+		channel.stop_consuming()
+		connection.close()
+	
+	#listen for reply messages
+	def listen():
+		channel.queue_declare(queue = replyQueue, exclusive = True, auto_delete = True)
+		channel.queue_bind(exchange = exchangeName, queue = replyQueue, routing_key = replyKey)
+		channel.basic_consume(consumer_callback = onMessage, queue = replyQueue, no_ack = True)
+		channel.start_consuming()
+	
+	try:
+		#connect
+		credentials = pika.PlainCredentials(username, password)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		channel = connection.channel()
+	
+		thread.start_new_thread(listen, ())
+		time.sleep(1) #give time for it to start consuming
+	
+		#send request message
+		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, reply_to = replyKey)
+		channel.basic_publish(exchange = exchangeName, routing_key = requestKey, body = "Hello World!", properties = properties)
+	
+		#block until receives reply message
+		while connection.is_open:
+			pass
+	except Exception, e:
+		print e
   
 **consumer.py**
 
 	import pika
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your host'))
-
-	channel = connection.channel()
-
-	channel.queue_declare(queue='queueName')
-	channel.exchange_declare(exchange='exchangeName',type='direct')
-	channel.queue_bind(exchange='exchangeName', queue='queueName', routing_key='routingKey')
-
-	def callback(ch, method, props, body):
-		ch.basic_publish(exchange='exchangeName',
-									routing_key='reply',
-									properties=pika.BasicProperties(correlation_id = props.correlation_id), 
-									body='reply')
-		ch.basic_ack(delivery_tag = method.delivery_tag)
-	channel.basic_consume(callback, queue='queueName')
-
-	print 'Awaiting requests'
-	channel.start_consuming()
+	import time
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	requestQueue = "requestQ"
+	requestKey = "request"
+	
+	#callback funtion on receiving request messages, reply to the reply_to header
+	def onMessage(channel, method, properties, body):
+		print body
+		try:
+			replyProp = pika.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+			channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties = replyProp, body = "Reply to %s" % (body))
+			channel.basic_ack(delivery_tag = method.delivery_tag)
+		except:
+			channel.basic_nack(delivery_tag = method.delivery_tag)
+			
+	
+	while True:
+		try:
+			#connect
+			credentials = pika.PlainCredentials(username, password)
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			channel = connection.channel()
+	
+			#declare exchange and queue, bind them and consume messages
+			channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+			channel.queue_declare(queue = requestQueue, exclusive = True, auto_delete = True)
+			channel.queue_bind(exchange = exchangeName, queue = requestQueue, routing_key = requestKey)
+			channel.basic_consume(consumer_callback = onMessage, queue = requestQueue, no_ack = False)
+			channel.start_consuming()
+		except Exception, e:
+			#reconnect on exception
+			print "Exception handled, reconnecting...\nDetail:\n%s" % e
+			try:
+				connection.close()
+			except:
+				pass
+			time.sleep(5)
 
 ## Java
-
 
 ###Producer
 In this producer, we should including extra package for generate random number. 

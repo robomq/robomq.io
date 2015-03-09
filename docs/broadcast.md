@@ -66,41 +66,69 @@ At this point, consumer should start consuming messages.
 **producer.py**
 
 	import pika
-	import sys
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters( host='your port'))
-	channel = connection.channel()
-
-	channel.exchange_declare(exchange='exchangeName', type='fanout')
-
-	message = 'hello world'
-	channel.basic_publish(exchange='exchangeName', routing_key='', body=message)
-	print 'Sent %r' % (message,)
-	connection.close()
-
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	
+	try:
+		#connect
+		credentials = pika.PlainCredentials(username, password)
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		channel = connection.channel()
+	
+		#send message
+		#for fanout type exchange, routing key is useless
+		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+		channel.basic_publish(exchange = exchangeName, routing_key = "", body = "Hello World!", properties = properties)
+	
+		#disconnect
+		connection.close()
+	except Exception, e:
+		print e
 
 **consumer.py**
 
 	import pika
-
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host='your host'))
-	channel = connection.channel()
-
-	channel.exchange_declare(exchange='exchangeName',
-                         type='fanout')
-
-	queue_name = 'queueName'
-	channel.queue_declare(queue=queue_name,exclusive=True)
-	channel.queue_bind(exchange='exchangeName',
-                   queue=queue_name)
-	print 'Waiting for logs. To exit press CTRL+C'
-
-	def callback(ch, method, properties, body):
-		print '%r' % (body,)
-
-	channel.basic_consume(callback, queue=queue_name, no_ack=True)
-
-	channel.start_consuming()
+	import time
+	
+	server = "hostname"
+	port = 5672
+	vhost = "yourvhost"
+	username = "username"
+	password = "password"
+	exchangeName = "testEx"
+	queueName = "testQ1"
+	
+	#callback funtion on receiving messages
+	def onMessage(channel, method, properties, body):
+		print body
+	
+	while True:
+		try:
+			#connect
+			credentials = pika.PlainCredentials(username, password)
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			channel = connection.channel()
+	
+			#declare exchange and queue, bind them and consume messages
+			#for fanout type exchange, routing key is useless
+			channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
+			channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
+			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+			channel.start_consuming()
+		except Exception, e:
+			#reconnect on exception
+			print "Exception handled, reconnecting...\nDetail:\n%s" % e
+			try:
+				connection.close()
+			except:
+				pass
+			time.sleep(5)
 
 ## Java
 ### Producer
