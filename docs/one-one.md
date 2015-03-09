@@ -239,60 +239,114 @@ After that, consumer should define the while loop for keep reading messages. Use
 <b>true</b> is a parameter which indicating that if consumer will automatic send acknowledge back. For this code, we are not setting reply handle mechanism on producer side, so we don't want consumer send auto reply back. That's why we mark this attribute value as True.
 
 ###Putting it all together
-**producer.java**
+
+**Producer.java**
 
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
 	import com.rabbitmq.client.Channel;
-
+	import com.rabbitmq.client.MessageProperties;
+	
 	public class Producer {
 	
-		private final static String QUEUE_NAME = 'queueName';
-		public static void main(String[] argv)
-			throws java.io.IOException {
-			ConnectionFactory factory = new ConnectionFactory();
-			factory.setHost('your host');
-    			Connection connection = factory.newConnection();
-    			Channel channel = connection.createChannel();
-    			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-    			String message = 'Hello World!';
-    			channel.basicPublish('', QUEUE_NAME, null, message.getBytes());
-    			System.out.println("Sent '" + message + "'");
-    			channel.close();
-    			connection.close();
+		private Connection connection;
+		private Channel channel;
+		private static String server = "hostname";
+		private static int port = 5672;
+		private static String vhost = "yourvhost";
+		private static String username = "username";
+		private static String password = "password";
+		private static String routingKey = "testQ";
+	
+		private void produce() {
+			try {
+				//connect
+				ConnectionFactory factory = new ConnectionFactory();
+				factory.setHost(server);
+				factory.setPort(port);
+				factory.setVirtualHost(vhost);
+				factory.setUsername(username);
+				factory.setPassword(password);
+				connection = factory.newConnection();
+				channel = connection.createChannel();
+	
+				//send message
+				String message = "Hello World!";
+				//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+				channel.basicPublish("", routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+	
+				//disconnect
+				channel.close();
+				connection.close();
+			} catch(Exception e) {
+				System.out.println(e);
+				System.exit(-1);			
+			}	
+		}
+	
+		public static void main(String[] args) {
+			Producer p = new Producer();
+			p.produce();
 		}
 	}
 
-
-**consumer.java**
+**Consumer.java**
 
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
 	import com.rabbitmq.client.Channel;
 	import com.rabbitmq.client.QueueingConsumer;
-
+	
 	public class Consumer {
-
-		private final static String QUEUE_NAME = 'queueName';
-
-		public static void main(String[] argv)
-			throws java.io.IOException,
-			java.lang.InterruptedException {
-
-			ConnectionFactory factory = new ConnectionFactory();
-			factory.setHost('your host');
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			System.out.println('Waiting for messages. To exit press CTRL+C');
-			QueueingConsumer consumer = new QueueingConsumer(channel);
-			channel.basicConsume(QUEUE_NAME, true, consumer);
-
+	
+		private Connection connection;
+		private Channel channel;
+		private static String server = "hostname";
+		private static int port = 5672;
+		private static String vhost = "yourvhost";
+		private static String username = "username";
+		private static String password = "password";
+		private static String queueName = "testQ";
+	
+		private void consume() {
 			while (true) {
-				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-				String message = new String(delivery.getBody());
-				System.out.println("Received '" + message + "'");
+				try {
+					//connect
+					ConnectionFactory factory = new ConnectionFactory();
+					factory.setHost(server);
+					factory.setPort(port);
+					factory.setVirtualHost(vhost);
+					factory.setUsername(username);
+					factory.setPassword(password);
+					connection = factory.newConnection();
+					channel = connection.createChannel();
+				
+					//declare queue and consume messages
+					//one-to-one messaging uses the default exchange, where queue name is the routing key
+					channel.queueDeclare(queueName, false, false, true, null);
+					QueueingConsumer qc = new QueueingConsumer(channel);
+					channel.basicConsume(queueName, true, qc);
+					while (true) {
+						QueueingConsumer.Delivery delivery = qc.nextDelivery();
+						String message = new String(delivery.getBody());
+						System.out.println(message);
+					}
+				} catch(Exception e) {
+					//reconnect on exception
+					System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e);
+					try {
+						connection.close();
+					} catch (Exception e1) {}
+					try {
+						Thread.sleep(5000); 
+					} catch(Exception e2) {}
+				}
 			}
+		}
+	
+		public static void main(String[] args) {
+			Consumer c = new Consumer();
+			c.consume();
 		}
 	}
 	
