@@ -18,7 +18,7 @@ var password = "password";
 var topic = "test/#";
 
 var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
-client.on("connect", function() {	//this library automatically reconnect on errors
+client.on("connect", function() {	//this library automatically reconnects on errors
 	try {
 		client.subscribe(topic, {qos: 1, dup: false})	//chainable API
 		.on("message", function(topic, payload, packet) {	//event handling

@@ -79,7 +79,9 @@ We will provide examples of one-on-one scenario in five languages, including Pyt
 
 In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.
 
-The example code provided bellow is the short version, it might have omitted some advanced details. For full version code, please go to our use case [repository](https://github.com/robomq/robomq.io) on GitHub. 
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io) on GitHub. 
+
+All examples have implemented automatic reconnecting, which is crucial in real production.
 
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 
@@ -445,12 +447,12 @@ You may clone the repository by `git clone https://github.com/robomq/Gozirra.git
 
 Import this library in your program	`import net.ser1.stomp.*;` and compile your source code along with gozirra.jar. For example,  
 
-	javac -cp ".:./gozirra.jar" producer.java consumer.java 
+	javac -cp ".:./gozirra.jar" Producer.java Consumer.java 
 
 Run the producer and consumer classes. For example,  
 
-	java -cp ".:./gozirra.jar" consumer
-	java -cp ".:./gozirra.jar" producer
+	java -cp ".:./gozirra.jar" Consumer
+	java -cp ".:./gozirra.jar" Producer
 
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
@@ -487,7 +489,7 @@ When you no longer need it, you can also unsubscribe a destination.
 
 ### Putting it together
 
-**producer.java**
+**Producer.java**
 
 	import net.ser1.stomp.*;
 	import java.util.Scanner;
@@ -543,7 +545,7 @@ When you no longer need it, you can also unsubscribe a destination.
 		}
 	}
 
-**consumer.java**
+**Consumer.java**
 	
 	import net.ser1.stomp.*;
 	import java.util.Map;

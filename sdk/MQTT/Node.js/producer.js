@@ -18,7 +18,7 @@ var password = "password";
 var topic = "test/any";
 
 var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
-client.on("connect", function() {	//this library automatically reconnect on errors
+client.on("connect", function() {	//this library automatically reconnects on errors
 	//ask user to input the number of test messages
 	process.stdout.write("Quantity of test messages: ");
 	process.stdin.on("data", function (msgNum) {
