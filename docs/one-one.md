@@ -362,7 +362,7 @@ For detailed installation steps, refer to [node.js](https://github.com/postwait/
 ###Producer
 Producer should including the following libraries.
 
-	var amqp = require('amqp');
+	var amqp = require('amqplib');
 
 
 For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker.  You can input the following information based on your account.
@@ -414,30 +414,71 @@ After that, consumer should setting consuming method.
 
 **producer.js**
 
-	var amqp = require('amqp');
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-	connection.on('ready',function(){
-		connection.exchange('', options={type:'direct', autoDelete:false}, function(exchange){
-			exchange.publish('routingKey', 'hello world');
-			print('message sent');
+	var amqp = require("amqplib");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var routingKey = "testQ";
+	
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		producer.then(function(conn) {
+		return conn.createConfirmChannel().then(function(ch) {
+			//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+			ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
+				if (err != null) {
+					console.error("Error: failed to send message\n" + err);
+				}
+				conn.close();
+			});
 		});
+	}).then(null, function(err) {
+		console.error(err);
 	});
 
 **consumer.js**
 
-	var amqp = require('amqp');
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-	connection.on('ready', function(){
-		var queue = connection.queue('queueName', options={},function(queue){
-			console.log('Declare one queue, name is ' + queue.name);
-			queue.bind('', 'routingKey');
-			queue.subscribe(function (msg){
-				console.log('the message is '+msg.data);
+	var amqp = require("amqplib");
+	var domain = require("domain");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var queueName = "testQ";
+	
+	//use domain module to handle reconnecting
+	var consumer = null;
+	var dom = domain.create();
+	dom.on("error", relisten);
+	dom.run(listen);
+	
+	function listen() {
+		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		consumer.then(function(conn) {
+			return conn.createChannel().then(function(ch) {
+				//one-to-one messaging uses the default exchange, where queue name is the routing key
+				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: false});
+				ch.consume(queueName, function(message) {
+					//callback funtion on receiving messages
+					console.log(message.content.toString());
+				}, {noAck: true});
 			});
+		}).then(null, function(err) {
+			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+			setTimeout(listen, 5000);
 		});
-	});
+	}
+	
+	function relisten() {
+		consumer.then(function(conn) {
+			conn.close();
+		});	
+		setTimeout(listen, 5000);
+	}
 	
 ## C
 ### Prerequisites
@@ -646,11 +687,11 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		amqp_connection_state_t conn = amqp_new_connection();
 		amqp_socket_t *socket = NULL;
-		char hostname[] = "hostname"; // robomq.io hostname
+		char hostname[] = "localhost"; // robomq.io hostname
 		int port = 5672; //default
-		char user[] = "username"; // robomq.io username
-		char password[] = "password"; // robomq.io password
-	    char vhost[] = "vhost"; // robomq.io account vhost
+		char user[] = "guest"; // robomq.io username
+		char password[] = "guest"; // robomq.io password
+		char vhost[] = "/"; // robomq.io account vhost
 		amqp_channel_t channel = 1;
 		int channel_max = 0;
 		int frame_max = 131072;
@@ -683,6 +724,7 @@ The full code below includes some basic AMQP error handling for consumer that is
 		amqp_boolean_t immediate = 0;
 		char exchange_name[] = "hello-exchange";
 		char routing_key[] = "hola";
+		char *msg_body = "Hello\n";
 		int result;
 	
 		conn = mqconnect();
@@ -695,16 +737,19 @@ The full code below includes some basic AMQP error handling for consumer that is
 				mandatory,
 				immediate,
 				&props,
-				amqp_cstring_bytes("Hello"));
+				amqp_cstring_bytes(msg_body));
+	
+		if (AMQP_RESPONSE_NONE != result) {
+			printf("Producer AMQP failure occurred, response code = %d\n",
+					result);
+		}
 	
 		// Closing connection
-		amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
 		amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
 		amqp_destroy_connection(conn);
 	
 		return 0;
 	}
-
 
 **consumer.c**
 
@@ -720,11 +765,11 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		amqp_connection_state_t conn = amqp_new_connection();
 		amqp_socket_t *socket = NULL;
-		char hostname[] = "hostname"; // robomq.io hostname
+		char hostname[] = "localhost"; // robomq.io hostname
 		int port = 5672; //default
-		char user[] = "username"; // robomq.io username
-		char password[] = "password"; // robomq.io password
-		char vhost[] = "vhost"; // robomq.io account vhost
+		char user[] = "guest"; // robomq.io username
+		char password[] = "guest"; // robomq.io password
+		char vhost[] = "/"; // robomq.io account vhost
 		amqp_channel_t channel = 1;
 		amqp_rpc_reply_t reply;
 		int channel_max = 0;
@@ -827,25 +872,22 @@ The full code below includes some basic AMQP error handling for consumer that is
 				printf("Consumer AMQP failure occurred, response code = %d, retrying in %d seconds...\n",
 						result.reply_type, retry_time);
 	
-				conn = mqconnect();
-				amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(queue_name),
-						amqp_empty_table);
+				// Closing current connection before reconnecting
+				amqp_connection_close(conn, AMQP_CONNECTION_FORCED);
+				amqp_destroy_connection(conn);
 	
+				// Reconnecting on exception
+				conn = mqconnect();
 				queue = mqdeclare(conn, &exchange_name[0], &queue_name[0]);
 				amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
 				sleep(retry_time);
 			}
 			else {
-				printf("Received message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+				printf("Received message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 	
 				amqp_destroy_envelope(&envelope);
 			}
 		}
-	
-		// Closing connection
-		amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
-		amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
-		amqp_destroy_connection(conn);
 	
 		return 0;
 	}

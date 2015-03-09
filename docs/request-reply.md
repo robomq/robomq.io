@@ -8,7 +8,6 @@ In this situation, both producer and consumer are capable of publishing and cons
 
 ## Python
 
-
 ###Producer
 
 For producer, it should initialize an exchange. This exchange can be any type. Or can leave it empty, it will use [robomq.io](http://www.robomq.io) default exchange
@@ -253,7 +252,8 @@ Then user can start consuming the message and sending reply back to the producer
 
 
 ###Putting it all together
-**producer.java**
+
+**Producer.java**
 
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
@@ -321,7 +321,7 @@ Then user can start consuming the message and sending reply back to the producer
 		}
 	}
  
-**consumer.java**
+**Consumer.java**
 
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;

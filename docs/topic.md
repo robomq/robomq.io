@@ -169,7 +169,7 @@ After that, starting consuming the messages.
 
 ###Putting it all together
 
-**producer.java**
+**Producer.java**
 
 	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;
@@ -193,7 +193,7 @@ After that, starting consuming the messages.
 		}
 	}
 
-**consumer.java**
+**Consumer.java**
 
 	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;

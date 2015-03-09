@@ -51,7 +51,7 @@ The way direct exchange works is as bellow:
 
 In this case, each consumer will have its own queue. The queue names are auto-generated and they are bound to the direct exchange by their particular routing keys.  
 
-**Topic**  
+**Routing filter (Topic)**  
 
 You can implement the topic scenario by providing a destination started by `/topic/` or `/exchange/amq.topic/`. The essential difference between normal routing key and topic is that consumer can subscribe a topic with wild cards inside. In AMQP protocol, a message sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key with or without wild cards.  
 

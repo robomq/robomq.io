@@ -171,7 +171,7 @@ Now all the messages with the same routing key as this queue's will get consumed
 
 ###Putting it all together
 
-**producer.java**
+**Producer.java**
 
 	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;
@@ -196,7 +196,8 @@ Now all the messages with the same routing key as this queue's will get consumed
 			connection.close();
 		}
 	}
-**consumer.java**
+
+**Consumer.java**
 
 	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;

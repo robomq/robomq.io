@@ -31,4 +31,4 @@ producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + "
 	});
 }).then(null, function(err) {
 	console.error(err);
-}); 
+});
