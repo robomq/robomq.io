@@ -134,16 +134,18 @@ int main(int argc, char const *const *argv)
 			printf("Consumer AMQP failure occurred, response code = %d, retrying in %d seconds...\n",
 					result.reply_type, retry_time);
 
-			conn = mqconnect();
-			amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(queue_name),
-					amqp_empty_table);
+			// Closing current connection before reconnecting
+			amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
+			amqp_destroy_connection(conn);
 
+			// Reconnecting on exception
+			conn = mqconnect();
 			queue = mqdeclare(conn, &exchange_name[0], &queue_name[0]);
 			amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
 			sleep(retry_time);
 		}
 		else {
-			printf("Received message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+			printf("Received message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 
 			// Now sending reply
 			amqp_basic_publish(conn,
@@ -158,11 +160,6 @@ int main(int argc, char const *const *argv)
 			amqp_destroy_envelope(&envelope);
 		}
 	}
-
-	// Closing connection
-	amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
-	amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
-	amqp_destroy_connection(conn);
 
 	return 0;
 }
