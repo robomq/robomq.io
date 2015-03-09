@@ -135,7 +135,7 @@ int main(int argc, char const *const *argv)
 					result.reply_type, retry_time);
 
 			// Closing current connection before reconnecting
-			amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
+			amqp_connection_close(conn, AMQP_CONNECTION_FORCED);
 			amqp_destroy_connection(conn);
 
 			// Reconnecting on exception

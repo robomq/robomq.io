@@ -141,14 +141,13 @@ int main(int argc, char const *const *argv)
 
         if (AMQP_RESPONSE_NORMAL == result.reply_type) {
 
-            printf("Received reply message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+            printf("Received reply message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 
             amqp_destroy_envelope(&envelope);
         }
     }
 
     // Closing connection
-    amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
     amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
     amqp_destroy_connection(conn);
 

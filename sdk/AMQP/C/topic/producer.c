@@ -75,7 +75,6 @@ int main(int argc, char const *const *argv)
             amqp_cstring_bytes(msg_body));
 
     // Closing connection
-    amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
     amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
     amqp_destroy_connection(conn);
 
