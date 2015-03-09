@@ -316,7 +316,9 @@ RoboMQ is built on AMQP, an open, general-purpose protocol for messaging. There 
 
 [https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq](https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq)
 
-You can copy librabbitmq subfolder from whole repository download based from [https://github.com/alanxz/rabbitmq-c](https://github.com/alanxz/rabbitmq-c)
+You can copy librabbitmq subfolder from latest release located here on GitHub:
+
+[https://github.com/alanxz/rabbitmq-c](https://github.com/alanxz/rabbitmq-c)
 
 Alternatively, thanks to Subversion support in GitHub, you can use svn export directly:
 
