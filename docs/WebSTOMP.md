@@ -5,9 +5,9 @@
 [robomq.io](http://www.robomq.io) supports WebSTOMP, which is a simple bridge exposing the STOMP protocol over emulated HTML5 WebSockets. The main intention of WebSTOMP is to make it possible to use [robomq.io](http://www.robomq.io) from web browsers. Therefore, [robomq.io](http://www.robomq.io) WebSTOMP adapter is rather simple. It just takes the STOMP protocol, as provided by [robomq.io](http://www.robomq.io) STOMP adapter and exposes it using a SockJS server.  
 SockJS is a WebSockets poly-fill that provides a WebSocket-like JavaScript object in any browser. It will therefore work in older browsers that don't have native WebSocket support, as well as in new browsers that are behind WebSocket-unfriendly proxies.  
 
-# WebSTOMP use cases
+# WebSTOMP use case
 
-###
+##
 
 We will provide example of WebSTOMP in JavaScript that is embedded in HTML.  
 
