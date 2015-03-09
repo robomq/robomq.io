@@ -19,6 +19,7 @@ pages:
 - ['request-reply.md', 'User Guide', 'Request - Reply']
 - ['MQTT.md', 'User Guide', 'MQTT']
 - ['STOMP.md', 'User Guide', 'STOMP']
+- ['WebSTOMP.md', 'User Guide', 'WebSTOMP']
 - ['about.md', '', 'About']
 theme: readthedocs
 

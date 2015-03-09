@@ -85,11 +85,11 @@ Although we have talked so much about how our STOMP message destinations are lig
 
 We will provide examples of one-to-one scenario in five languages, including Python, Node.js, PHP, Java and C.  
 
-In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.
+In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.  
+
+All examples have implemented automatic reconnecting, which is crucial in real production.  
 
 The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io) on GitHub. 
-
-All examples have implemented automatic reconnecting, which is crucial in real production.
 
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 

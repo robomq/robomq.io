@@ -216,7 +216,7 @@ In the callback function on connect, next step is to subscribe a topic, so that 
 
 When you no longer need it, you can also unsubscribe a topic.
 
-	client.unsubscribe(topic, [callback]);
+	client.unsubscribe(topic, callback);
 
 ### Putting it together
 
