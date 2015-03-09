@@ -94,6 +94,10 @@ The callback functions should be preset before connecting to [robomq.io](http://
 	client.on_connect = on_connect
 	client.on_message = on_message
 
+When you no longer need it, you can also unsubscribe a topic.
+
+	client.unsubscribe(topic)
+
 ### Putting it together
 
 **producer.py**
@@ -209,6 +213,11 @@ In the callback function on connect, next step is to subscribe a topic, so that 
 		console.log("Topic: " + topic + ", Message: " + payload);
 	});
 
+
+When you no longer need it, you can also unsubscribe a topic.
+
+	client.unsubscribe(topic, [callback]);
+
 ### Putting it together
 
 **producer.js**
@@ -322,6 +331,11 @@ Once it receives a message from the queue bound by the topic, it will trigger th
 The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker. Foe example,  
 
 	$client->onMessage("onMessage");
+
+
+When you no longer need it, you can also unsubscribe a topic.
+
+	client->unsubscribe(topic, qos);
 
 ### Putting it together
 
@@ -453,7 +467,12 @@ The second parameter of `subscribe()` function is QoS.
 
 	onMessage callback = new onMessage();
 	client.setCallback(callback);
-	client.subscribe(topic, 1)
+	client.subscribe(topic, 1);
+
+
+When you no longer need it, you can also unsubscribe a topic.
+
+	client.unsubscribe(topic);
 
 ### Putting it together
 
@@ -663,6 +682,11 @@ Then you need to set some callback functions. They play an significant role when
 Finally, you need to subscribe a topic, so that consumer knows where to listen to. Once it receives a message from the queue bound by the topic, it will call `onMessage()` function to print the topic and message payload.  
 
 	mosquitto_subscribe(mosq, NULL, topic, 1);
+
+
+When you no longer need it, you can also unsubscribe a topic.
+
+	mosquitto_unsubscribe(mosq, NULL, topic);
 
 ### Putting it together
 

@@ -29,7 +29,7 @@ while True:
 		while True:
 			frame = client.receiveFrame()
 			try:
-				print "%s" % frame.body
+				print frame.body
 				client.ack(frame)	#ACK
 			except:
 				print "Error: Can't handle message received, NACKing"

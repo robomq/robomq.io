@@ -73,14 +73,6 @@ int main(int argc, char *argv[])
 	stomp_session_t *session;
 
 	while (1) {
-		struct stomp_hdr conn_hdrs[] = {
-			{"login", login},
-			{"passcode", passcode},
-			{"vhost", vhost},
-			{"accept-version", "1.0,1.1,1.2"},
-			{"heart-beat", "1000,1000"},
-		};
-
 		session = stomp_session_new(&client);
 		if (!session) {
 			perror("stomp");
@@ -88,6 +80,14 @@ int main(int argc, char *argv[])
 		else {
 			stomp_callback_set(session, SCB_ERROR, _error);
 			stomp_callback_set(session, SCB_MESSAGE, _message);
+
+			struct stomp_hdr conn_hdrs[] = {
+				{"login", login},
+				{"passcode", passcode},
+				{"vhost", vhost},
+				{"accept-version", "1.0,1.1,1.2"},
+				{"heart-beat", "0,0"},
+			};
 
 			err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
 			if (err) {
