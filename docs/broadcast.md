@@ -130,7 +130,130 @@ At this point, consumer should start consuming messages.
 				pass
 			time.sleep(5)
 
+## Node.js
+### Producer
+First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
+
+	var connection = amqp.createConnection({ host: "your host", port: 5672,  
+	login:'username', password:'password', vhost:'vhost-name' });
+	
+Then producer should declare a **fanout** type exchange for delivering message.
+
+Then producer should subscribe an exchange for delivering message. The type of exchange should be fanout. Fanout type exchange will deliver all messages to all queues which binding to it. 
+
+After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. Fanout type exchange will deliver all messages to all queues which binding to it. 
+
+After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. 
+
+
+
+	connection.on('ready',function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			console.log('start send message');
+			exchange.publish('routingKey','hello world');
+		});
+	});	
+
+
+###Consumer
+First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server.  
+
+After that, consumer should initializes an exchange same as producer did. 
+Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
+
+Consumer could also define a callback function as one to one section mentioned. 
+Now, consumer could define consuming method and start consuming messages. 
+
+	connection.on('ready', function(){
+		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
+			var queue = connection.queue('QueueName', options={},function(queue){
+				console.log('Declare one queue, name is ' + queue.name);
+				queue.bind('exchangeName', '');
+				queue.subscribe(function (msg){
+					console.log('consumer received the message'+msg.data);
+				});
+			});
+		});
+	});
+
+Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
+
+
+###Putting it all together
+
+**producer.js**
+
+	var amqp = require("amqplib");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost";  //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var exchangeName = "testEx";
+	
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		producer.then(function(conn) {
+		return conn.createConfirmChannel().then(function(ch) {
+			//for fanout type exchange, routing key is useless
+			ch.publish(exchangeName, "", content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
+				if (err != null) {
+					console.error("Error: failed to send message\n" + err);
+				}
+				conn.close();
+			});
+		});
+	}).then(null, function(err) {
+		console.error(err);
+	});
+
+**consumer.js**
+
+	var amqp = require("amqplib");
+	var domain = require("domain");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var exchangeName = "testEx";
+	var queueName = "testQ1";
+	
+	//use domain module to handle reconnecting
+	var consumer = null;
+	var dom = domain.create();
+	dom.on("error", relisten);
+	dom.run(listen);
+	
+	function listen() {
+		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		consumer.then(function(conn) {
+			return conn.createChannel().then(function(ch) {
+				ch.assertExchange(exchangeName, "fanout", {durable: false, autoDelete: true});
+				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+				//for fanout type exchange, routing key is useless
+				ch.bindQueue(queueName, exchangeName, "");
+				ch.consume(queueName, function(message) {
+					//callback funtion on receiving messages
+					console.log(message.content.toString());
+				}, {noAck: true});
+			});
+		}).then(null, function(err) {
+			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+			setTimeout(listen, 5000);
+		});
+	}
+	
+	function relisten() {
+		consumer.then(function(conn) {
+			conn.close();
+		});	
+		setTimeout(listen, 5000);
+	}
+
 ## Java
+
 ### Producer
 First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication.  
 
@@ -309,128 +432,6 @@ Binding between same pair of exchange and queue can be initialized more than one
 			Consumer c = new Consumer();
 			c.consume();
 		}
-	}
-
-## Node.js
-### Producer
-First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
-
-	var connection = amqp.createConnection({ host: "your host", port: 5672,  
-	login:'username', password:'password', vhost:'vhost-name' });
-	
-Then producer should declare a **fanout** type exchange for delivering message.
-
-Then producer should subscribe an exchange for delivering message. The type of exchange should be fanout. Fanout type exchange will deliver all messages to all queues which binding to it. 
-
-After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. Fanout type exchange will deliver all messages to all queues which binding to it. 
-
-After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. 
-
-
-
-	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
-			console.log('start send message');
-			exchange.publish('routingKey','hello world');
-		});
-	});	
-
-
-###Consumer
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server.  
-
-After that, consumer should initializes an exchange same as producer did. 
-Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
-
-Consumer could also define a callback function as one to one section mentioned. 
-Now, consumer could define consuming method and start consuming messages. 
-
-	connection.on('ready', function(){
-		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
-			var queue = connection.queue('QueueName', options={},function(queue){
-				console.log('Declare one queue, name is ' + queue.name);
-				queue.bind('exchangeName', '');
-				queue.subscribe(function (msg){
-					console.log('consumer received the message'+msg.data);
-				});
-			});
-		});
-	});
-
-Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
-
-
-###Putting it all together
-
-**producer.js**
-
-	var amqp = require("amqplib");
-	
-	var server = "hostname";
-	var port = 5672;
-	var vhost = "yourvhost";  //for "/" vhost, use "%2f" instead
-	var username = "username";
-	var password = "password";
-	var exchangeName = "testEx";
-	
-	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
-		return conn.createConfirmChannel().then(function(ch) {
-			//for fanout type exchange, routing key is useless
-			ch.publish(exchangeName, "", content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
-				if (err != null) {
-					console.error("Error: failed to send message\n" + err);
-				}
-				conn.close();
-			});
-		});
-	}).then(null, function(err) {
-		console.error(err);
-	});
-
-**consumer.js**
-
-	var amqp = require("amqplib");
-	var domain = require("domain");
-	
-	var server = "hostname";
-	var port = 5672;
-	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
-	var username = "username";
-	var password = "password";
-	var exchangeName = "testEx";
-	var queueName = "testQ1";
-	
-	//use domain module to handle reconnecting
-	var consumer = null;
-	var dom = domain.create();
-	dom.on("error", relisten);
-	dom.run(listen);
-	
-	function listen() {
-		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		consumer.then(function(conn) {
-			return conn.createChannel().then(function(ch) {
-				ch.assertExchange(exchangeName, "fanout", {durable: false, autoDelete: true});
-				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
-				//for fanout type exchange, routing key is useless
-				ch.bindQueue(queueName, exchangeName, "");
-				ch.consume(queueName, function(message) {
-					//callback funtion on receiving messages
-					console.log(message.content.toString());
-				}, {noAck: true});
-			});
-		}).then(null, function(err) {
-			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
-			setTimeout(listen, 5000);
-		});
-	}
-	
-	function relisten() {
-		consumer.then(function(conn) {
-			conn.close();
-		});	
-		setTimeout(listen, 5000);
 	}
 
 ## C

@@ -150,7 +150,138 @@ Then, consumer should receive messages and implement any desired processing on m
 				pass
 			time.sleep(5)
 
+## Node.js
+
+###Prerequisites
+**node.js client AMQP library**
+For programming in node.js, we recommend using node-amqp library for implementing AMQP protocol.
+
+For detailed installation steps, refer to [node.js](https://github.com/postwait/node-amqp#connection-options-and-url).
+
+
+###Producer
+Producer should including the following libraries.
+
+	var amqp = require('amqplib');
+
+
+For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker.  You can input the following information based on your account.
+
+	var connection = amqp.createConnection({ host: "yourhost", port: 'port',  login:'username', password:'password', vhost:'vhost-name' });
+
+
+you can also use following url format to initialize you connection.
+
+	amqp[s]://[user:password@]hostname[:port][/vhost]
+
+
+Then producer should publish messages to the default exchange attached with routing key. That routing key is the queue name. Based on that routing key, messages will be distributed through the default exchange to the right queue
+
+	connection.on('ready',function(){
+		connection.exchange('', options={type:'direct', autoDelete:false}, function(exchange){
+			exchange.publish('routingKey', 'hello world');
+			print('message sent');
+		});
+	});	
+	
+
+###Consumer
+Consumer should including following libraries. 
+
+	var amqp = require('amqp');
+
+First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
+
+	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
+
+Then consumer should subscribe to a specific queue to listen and consume messages from.
+
+Then consumer should define the while loop for keep reading messages. User can keep consuming the messages in the queue. User can also add some situation for ending consumer's work.  
+After that, consumer should setting consuming method.
+
+
+	connection.on('ready', function(){
+		var queue = connection.queue('queueName', options={},function(queue){
+			console.log('Declare one queue, name is ' + queue.name);
+			queue.bind('', 'routingKey');
+			queue.subscribe(function (msg){
+				console.log('the message is '+msg.data);
+			});
+		});
+	});
+	
+###Putting it all together
+
+**producer.js**
+
+	var amqp = require("amqplib");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var routingKey = "testQ";
+	
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		producer.then(function(conn) {
+		return conn.createConfirmChannel().then(function(ch) {
+			//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+			ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
+				if (err != null) {
+					console.error("Error: failed to send message\n" + err);
+				}
+				conn.close();
+			});
+		});
+	}).then(null, function(err) {
+		console.error(err);
+	});
+
+**consumer.js**
+
+	var amqp = require("amqplib");
+	var domain = require("domain");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var queueName = "testQ";
+	
+	//use domain module to handle reconnecting
+	var consumer = null;
+	var dom = domain.create();
+	dom.on("error", relisten);
+	dom.run(listen);
+	
+	function listen() {
+		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		consumer.then(function(conn) {
+			return conn.createChannel().then(function(ch) {
+				//one-to-one messaging uses the default exchange, where queue name is the routing key
+				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: false});
+				ch.consume(queueName, function(message) {
+					//callback funtion on receiving messages
+					console.log(message.content.toString());
+				}, {noAck: true});
+			});
+		}).then(null, function(err) {
+			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+			setTimeout(listen, 5000);
+		});
+	}
+	
+	function relisten() {
+		consumer.then(function(conn) {
+			conn.close();
+		});	
+		setTimeout(listen, 5000);
+	}
+
 ## Java
+
 ###Prerequisites
 **java client AMQP library**
 Using AMQP protocol for java programming language requires downloading and installing the following library.
@@ -349,137 +480,7 @@ After that, consumer should define the while loop for keep reading messages. Use
 			c.consume();
 		}
 	}
-	
-## Node.js
 
-###Prerequisites
-**node.js client AMQP library**
-For programming in node.js, we recommend using node-amqp library for implementing AMQP protocol.
-
-For detailed installation steps, refer to [node.js](https://github.com/postwait/node-amqp#connection-options-and-url).
-
-
-###Producer
-Producer should including the following libraries.
-
-	var amqp = require('amqplib');
-
-
-For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker.  You can input the following information based on your account.
-
-	var connection = amqp.createConnection({ host: "yourhost", port: 'port',  login:'username', password:'password', vhost:'vhost-name' });
-
-
-you can also use following url format to initialize you connection.
-
-	amqp[s]://[user:password@]hostname[:port][/vhost]
-
-
-Then producer should publish messages to the default exchange attached with routing key. That routing key is the queue name. Based on that routing key, messages will be distributed through the default exchange to the right queue
-
-	connection.on('ready',function(){
-		connection.exchange('', options={type:'direct', autoDelete:false}, function(exchange){
-			exchange.publish('routingKey', 'hello world');
-			print('message sent');
-		});
-	});	
-	
-
-###Consumer
-Consumer should including following libraries. 
-
-	var amqp = require('amqp');
-
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
-
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-Then consumer should subscribe to a specific queue to listen and consume messages from.
-
-Then consumer should define the while loop for keep reading messages. User can keep consuming the messages in the queue. User can also add some situation for ending consumer's work.  
-After that, consumer should setting consuming method.
-
-
-	connection.on('ready', function(){
-		var queue = connection.queue('queueName', options={},function(queue){
-			console.log('Declare one queue, name is ' + queue.name);
-			queue.bind('', 'routingKey');
-			queue.subscribe(function (msg){
-				console.log('the message is '+msg.data);
-			});
-		});
-	});
-	
-###Putting it all together
-
-**producer.js**
-
-	var amqp = require("amqplib");
-	
-	var server = "hostname";
-	var port = 5672;
-	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
-	var username = "username";
-	var password = "password";
-	var routingKey = "testQ";
-	
-	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
-		return conn.createConfirmChannel().then(function(ch) {
-			//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
-			ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
-				if (err != null) {
-					console.error("Error: failed to send message\n" + err);
-				}
-				conn.close();
-			});
-		});
-	}).then(null, function(err) {
-		console.error(err);
-	});
-
-**consumer.js**
-
-	var amqp = require("amqplib");
-	var domain = require("domain");
-	
-	var server = "hostname";
-	var port = 5672;
-	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
-	var username = "username";
-	var password = "password";
-	var queueName = "testQ";
-	
-	//use domain module to handle reconnecting
-	var consumer = null;
-	var dom = domain.create();
-	dom.on("error", relisten);
-	dom.run(listen);
-	
-	function listen() {
-		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		consumer.then(function(conn) {
-			return conn.createChannel().then(function(ch) {
-				//one-to-one messaging uses the default exchange, where queue name is the routing key
-				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: false});
-				ch.consume(queueName, function(message) {
-					//callback funtion on receiving messages
-					console.log(message.content.toString());
-				}, {noAck: true});
-			});
-		}).then(null, function(err) {
-			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
-			setTimeout(listen, 5000);
-		});
-	}
-	
-	function relisten() {
-		consumer.then(function(conn) {
-			conn.close();
-		});	
-		setTimeout(listen, 5000);
-	}
-	
 ## C
 ### Prerequisites
 

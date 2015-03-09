@@ -119,6 +119,122 @@ Now all the messages with the same routing key as this queue's will get consumed
 				pass
 			time.sleep(5)
 	
+## Node.js
+
+###Producer
+First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
+
+Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
+
+	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
+
+Then producer should publish message to the exchange with specific routing key. 
+
+	exchange.publish('routingKey','hello world');
+For this example, the routing key is 'routingKey'. Only the queue binding to this exchange and also has same routing key, as 'routingKey', can received this message. 
+
+After finishing sending messages, producer should terminate the connection. 
+
+###Consumer
+
+For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+
+Then consumer will initializes the same exchange as producer did.
+
+	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
+
+
+Then consumer should declare a queue to listen. 
+
+Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. 
+
+After that, we can define own callback function for processing messages like what we did in previous chapter. 
+Then consumer is ready to work. 
+
+Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
+
+	var queue = connection.queue('queueName', options={},function(queue){
+		console.log('Declare one queue, name is ' + queue.name);
+		queue.bind('exchangeName', 'routingKey');
+		queue.subscribe(function (msg){
+			console.log('consumer received the message'+msg.data);
+		});	
+	});
+
+
+###Putting it all together
+
+**producer.js**
+
+	var amqp = require("amqplib");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var exchangeName = "testEx";
+	var routingKey = "test";
+	
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		producer.then(function(conn) {
+		return conn.createConfirmChannel().then(function(ch) {
+			ch.publish(exchangeName, routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
+				if (err != null) {
+					console.error("Error: failed to send message\n" + err);
+				}
+				conn.close();
+			});
+		});
+	}).then(null, function(err) {
+		console.error(err);
+	});
+	
+**consumer.js**
+
+	var amqp = require("amqplib");
+	var domain = require("domain");
+	
+	var server = "hostname";
+	var port = 5672;
+	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
+	var username = "username";
+	var password = "password";
+	var exchangeName = "testEx";
+	var queueName = "testQ1";
+	var routingKey = "test";
+	
+	//use domain module to handle reconnecting
+	var consumer = null;
+	var dom = domain.create();
+	dom.on("error", relisten);
+	dom.run(listen);
+	
+	function listen() {
+		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		consumer.then(function(conn) {
+			return conn.createChannel().then(function(ch) {
+				ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
+				ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+				ch.bindQueue(queueName, exchangeName, routingKey);
+				ch.consume(queueName, function(message) {
+					//callback funtion on receiving messages
+					console.log(message.content.toString());
+				}, {noAck: true});
+			});
+		}).then(null, function(err) {
+			console.error("Exception handled, reconnecting...\nDetail:\n" + err);
+			setTimeout(listen, 5000);
+		});
+	}
+	
+	function relisten() {
+		consumer.then(function(conn) {
+			conn.close();
+		});	
+		setTimeout(listen, 5000);
+	}
+
 ## Java
 
 ###Producer
@@ -173,140 +289,116 @@ Now all the messages with the same routing key as this queue's will get consumed
 
 **Producer.java**
 
-	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
 	import com.rabbitmq.client.Channel;
-
+	import com.rabbitmq.client.MessageProperties;
+	
 	public class Producer {
-		private static final String EXCHANGE_NAME = 'exchangeName';
-		public static void main(String[] argv)
-			throws java.io.IOException {
-			ConnectionFactory factory = new ConnectionFactory();
-			factory.setHost('your host');
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
-		
-			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-			String severity = 'routingKey';
-			String message = 'hello world';
-			channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
-			System.out.println("Sent '" + severity + "':'" + message + "'");
-			channel.close();
-			connection.close();
+	
+		private Connection connection;
+		private Channel channel;
+		private static String server = "hostname";
+		private static int port = 5672;
+		private static String vhost = "yourvhost";
+		private static String username = "username";
+		private static String password = "password";
+		private static String exchangeName = "testEx";
+		private static String routingKey = "test";
+	
+		private void produce() {
+			try {
+				//connect
+				ConnectionFactory factory = new ConnectionFactory();
+				factory.setHost(server);
+				factory.setPort(port);
+				factory.setVirtualHost(vhost);
+				factory.setUsername(username);
+				factory.setPassword(password);
+				connection = factory.newConnection();
+				channel = connection.createChannel();
+	
+				//send message
+				String message = "Hello World!";
+				channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+	
+				//disconnect
+				channel.close();
+				connection.close();
+			} catch(Exception e) {
+				System.out.println(e);
+				System.exit(-1);			
+			}	
+		}
+	
+		public static void main(String[] args) {
+			Producer p = new Producer();
+			p.produce();
 		}
 	}
 
 **Consumer.java**
 
-	import java.io.IOException;
 	import com.rabbitmq.client.ConnectionFactory;
 	import com.rabbitmq.client.Connection;
 	import com.rabbitmq.client.Channel;
 	import com.rabbitmq.client.QueueingConsumer;
-
-
+	
 	public class Consumer {
-		private static final String EXCHANGE_NAME = 'exchangeName';
-		public static void main(String[] argv)
-                  throws java.io.IOException,
-                  java.lang.InterruptedException {
-                  ConnectionFactory factory = new ConnectionFactory();
-                  factory.setHost('your host');
-                  Connection connection = factory.newConnection();
-                  Channel channel = connection.createChannel();
-			channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-			String queueName = channel.queueDeclare().getQueue();
-
-			String severity = 'routingKey';
-			channel.queueBind(queueName, EXCHANGE_NAME, severity);
-
-			System.out.println('Waiting for messages. To exit press CTRL+C');
-
-			QueueingConsumer consumer = new QueueingConsumer(channel);
-			channel.basicConsume(queueName, true, consumer);
-
+	
+		private Connection connection;
+		private Channel channel;
+		private static String server = "hostname";
+		private static int port = 5672;
+		private static String vhost = "yourvhost";
+		private static String username = "username";
+		private static String password = "password";
+		private static String exchangeName = "testEx";
+		private static String queueName = "testQ1";
+		private static String routingKey = "test";
+	
+		private void consume() {
 			while (true) {
-				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-				String message = new String(delivery.getBody());
-				String routingKey = delivery.getEnvelope().getRoutingKey();
-				System.out.println("Received '" + routingKey + "':'" + message + "'");
+				try {
+					//connect
+					ConnectionFactory factory = new ConnectionFactory();
+					factory.setHost(server);
+					factory.setPort(port);
+					factory.setVirtualHost(vhost);
+					factory.setUsername(username);
+					factory.setPassword(password);
+					connection = factory.newConnection();
+					channel = connection.createChannel();
+				
+					//declare exchange and queue, bind them and consume messages
+					channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
+					channel.queueDeclare(queueName, false, true, true, null);
+					channel.queueBind(queueName, exchangeName, routingKey, null);
+					QueueingConsumer qc = new QueueingConsumer(channel);
+					channel.basicConsume(queueName, true, qc);
+					while (true) {
+						QueueingConsumer.Delivery delivery = qc.nextDelivery();
+						String message = new String(delivery.getBody());
+						System.out.println(message);
+					}
+				} catch(Exception e) {
+					//reconnect on exception
+					System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e);
+					try {
+						connection.close();
+					} catch (Exception e1) {}
+					try {
+						Thread.sleep(5000); 
+					} catch(Exception e2) {}
+				}
 			}
 		}
-	}
-
-## Node.js
-###Producer
-First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
-
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
-
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
-
-Then producer should publish message to the exchange with specific routing key. 
-
-	exchange.publish('routingKey','hello world');
-For this example, the routing key is 'routingKey'. Only the queue binding to this exchange and also has same routing key, as 'routingKey', can received this message. 
-
-After finishing sending messages, producer should terminate the connection. 
-
-###Consumer
-
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
-
-Then consumer will initializes the same exchange as producer did.
-
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
-
-
-Then consumer should declare a queue to listen. 
-
-Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. 
-
-After that, we can define own callback function for processing messages like what we did in previous chapter. 
-Then consumer is ready to work. 
-
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
-
-	var queue = connection.queue('queueName', options={},function(queue){
-		console.log('Declare one queue, name is ' + queue.name);
-		queue.bind('exchangeName', 'routingKey');
-		queue.subscribe(function (msg){
-			console.log('consumer received the message'+msg.data);
-		});	
-	});
-
-
-###Putting it all together
-
-**producer.js**
-
-	var amqp = require('amqp');
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
-			console.log('start send message');
-			exchange.publish('routingKey','hello world');
-		});
-	});
 	
-**consumer.js**
-
-	var amqp = require('amqp');
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-	connection.on('ready', function(){
-		connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange){
-			var queue = connection.queue('queueName', options={},function(queue){
-				console.log('Declare one queue, name is ' + queue.name);
-				queue.bind('exchangeName', 'routingKey');
-				queue.subscribe(function (msg){
-				console.log('consumer received the message'+msg.data);
-				});	
-			});
-		});
-	});
+		public static void main(String[] args) {
+			Consumer c = new Consumer();
+			c.consume();
+		}
+	}
 	
 ## C
 ### Prerequisites
@@ -416,67 +508,74 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 	amqp_connection_state_t mqconnect() {
 	
-		amqp_connection_state_t conn = amqp_new_connection();
-		amqp_socket_t *socket = NULL;
-		char hostname[] = "hostname"; // robomq.io hostname
+	    amqp_connection_state_t conn = amqp_new_connection();
+	    amqp_socket_t *socket = NULL;
+		char hostname[] = "localhost"; // robomq.io hostname
 		int port = 5672; //default
-		char user[] = "username"; // robomq.io username
-		char password[] = "password"; // robomq.io password
-	    char vhost[] = "vhost"; // robomq.io account vhost
-		amqp_channel_t channel = 1;
-		int channel_max = 0;
-		int frame_max = 131072;
-		int heartbeat = 0;
-		int status = 0;
+		char user[] = "guest"; // robomq.io username
+		char password[] = "guest"; // robomq.io password
+		char vhost[] = "/"; // robomq.io account vhost
+	    amqp_channel_t channel = 1;
+	    int channel_max = 0;
+	    int frame_max = 131072;
+	    int heartbeat = 0;
+	    int status = 0;
 	
-		// Opening socket
-		socket = amqp_tcp_socket_new(conn);
+	    // Opening socket
+	    socket = amqp_tcp_socket_new(conn);
 	
-		status = amqp_socket_open(socket, hostname, port);
-		if (status) {
-			printf("Error opening TCP socket, status = %d, exiting.", status);
-		}
+	    status = amqp_socket_open(socket, hostname, port);
+	    if (status) {
+	        printf("Error opening TCP socket, status = %d, exiting.", status);
+	    }
 	
-		amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
-		amqp_channel_open(conn, channel);
+	    amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
+	    amqp_channel_open(conn, channel);
 	
-		return conn;
+	    return conn;
 	}
 	
 	int main(int argc, char const *const *argv)
 	{
-		amqp_connection_state_t conn;
-		amqp_channel_t channel = 1;
-		amqp_basic_properties_t props;
-		props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
-		props.content_type = amqp_cstring_bytes("text/plain");
-		props.delivery_mode = 1; /* non-persistent delivery mode */
-		amqp_boolean_t mandatory = 0;
-		amqp_boolean_t immediate = 0;
-		char exchange_name[] = "hello-exchange";
-		char routing_key[] = "routingKey";
-		int result;
+	    amqp_connection_state_t conn;
+	    amqp_channel_t channel = 1;
+	    amqp_basic_properties_t props;
+	    props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
+	    props.content_type = amqp_cstring_bytes("text/plain");
+	    props.delivery_mode = 1; /* non-persistent delivery mode */
+	    amqp_boolean_t mandatory = 0;
+	    amqp_boolean_t immediate = 0;
+	    char exchange_name[] = "hello-exchange";
+	    const char *routing_key;
+	    char *msg_body = "Hello\n";
+	    int result;
 	
-		conn = mqconnect();
+	    if(argc < 2) {
+	    	printf("Syntax error:\n"
+	    			"Usage: mqsend <routing_key>\n");
+	    	exit(-1);
+	    }
 	
-		// Sending message
-		result = amqp_basic_publish(conn,
-				channel,
-				amqp_cstring_bytes(exchange_name),
-				amqp_cstring_bytes(routing_key),
-				mandatory,
-				immediate,
-				&props,
-				amqp_cstring_bytes("Hello"));
+	    routing_key = (char *)argv[1];
 	
-		// Closing connection
-		amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
-		amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
-		amqp_destroy_connection(conn);
+	    conn = mqconnect();
 	
-		return 0;
+	    // Sending message
+	    result = amqp_basic_publish(conn,
+	            channel,
+	            amqp_cstring_bytes(exchange_name),
+	            amqp_cstring_bytes(routing_key),
+	            mandatory,
+	            immediate,
+	            &props,
+	            amqp_cstring_bytes(msg_body));
+	
+	    // Closing connection
+	    amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
+	    amqp_destroy_connection(conn);
+	
+	    return 0;
 	}
-
 
 **consumer.c**
 
@@ -492,11 +591,11 @@ The full code below includes some basic AMQP error handling for consumer that is
 	
 		amqp_connection_state_t conn = amqp_new_connection();
 		amqp_socket_t *socket = NULL;
-		char hostname[] = "hostname"; // robomq.io hostname
+		char hostname[] = "localhost"; // robomq.io hostname
 		int port = 5672; //default
-		char user[] = "username"; // robomq.io username
-		char password[] = "password"; // robomq.io password
-		char vhost[] = "vhost"; // robomq.io account vhost
+		char user[] = "guest"; // robomq.io username
+		char password[] = "guest"; // robomq.io password
+		char vhost[] = "/"; // robomq.io account vhost
 		amqp_channel_t channel = 1;
 		amqp_rpc_reply_t reply;
 		int channel_max = 0;
@@ -608,25 +707,22 @@ The full code below includes some basic AMQP error handling for consumer that is
 				printf("Consumer AMQP failure occurred, response code = %d, retrying in %d seconds...\n",
 						result.reply_type, retry_time);
 	
-				conn = mqconnect();
-				amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(queue_name),
-						amqp_empty_table);
+				// Closing current connection before reconnecting
+				amqp_connection_close(conn, AMQP_CONNECTION_FORCED);
+				amqp_destroy_connection(conn);
 	
+				// Reconnecting on exception
+				conn = mqconnect();
 				queue = mqdeclare(conn, &exchange_name[0], &queue_name[0], binding_key);
 				amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
 				sleep(retry_time);
 			}
 			else {
-				printf("Received message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+				printf("Received message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 	
 				amqp_destroy_envelope(&envelope);
 			}
 		}
-	
-		// Closing connection
-		amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
-		amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
-		amqp_destroy_connection(conn);
 	
 		return 0;
 	}
