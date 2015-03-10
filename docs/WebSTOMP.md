@@ -159,7 +159,7 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 		</body>
 	
 		<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
-		<script src="js/stomp.js"></script>
+		<script src="stomp.js"></script>
 		<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
 		<!--change src to file's actual path; don't directly source this link-->
 	
