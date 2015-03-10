@@ -217,6 +217,9 @@ The full documentation of this library is at <http://www.squaremobius.net/amqp.n
 ## PHP
 
 ### Prerequisite
+
+**PHP client AMQP library**
+
 The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
 
 It uses composer to install in a few steps.  
@@ -331,6 +334,9 @@ Finally, require this library in your program and use the classes.
 ## Java
 
 ###Prerequisites
+
+**Java client AMQP library**
+
 The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
 
 Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
