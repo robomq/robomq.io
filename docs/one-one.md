@@ -11,6 +11,9 @@ For one to one messaging, a producer sends messages to specified queue.  A consu
 ## Python
 
 ###Prerequisites
+
+**Python client AMQP library**
+
 The Python library we use for this example can be found at <https://github.com/pika/pika>.  
 
 You can install it through `sudo pip install pika`.  
@@ -128,6 +131,9 @@ When messages are received, a callback function will be invoked to print the mes
 ## Node.js
 
 ###Prerequisites
+
+**Node.js client AMQP library**
+
 The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
 
 You can install the library through `sudo npm install amqplib`.  
