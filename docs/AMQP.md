@@ -15,8 +15,7 @@ You can read the [full documentation of AMQP](http://www.amqp.org/) or go throug
 # AMQP use cases
 
 We will provide examples of five messaging scenarios, each in five languages, including Python, Node.js, PHP, Java and C or C++.  
-The five messaging scenarios includes one-to-one, broadcast, routing key, routing filter (topic) and request-reply. They are respectively elaborated in the beginning of each's chapter.  
-The one-to-one chapter also introduces the prerequisites of programming in all five languages, such as where to obtain the libraries, how to install and import them in your programs if needed.      
+The five messaging scenarios includes one-to-one, broadcast, routing key, routing filter (topic) and request-reply. They are respectively elaborated in the beginning of each's chapter.      
 
 In the examples, details vary among five scenarios, but the typical procedure is as following. AMQP producer will publish a "Hello World!" message through a exchange with a routing key through [robomq.io](http://www.robomq.io) broker. AMQP consumer will create exchange and queue, then bind them with the routing key and start consuming messages from the queue. It will print the message as it receives messages.  
 

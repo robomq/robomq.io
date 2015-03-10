@@ -1,3 +1,5 @@
+> Browse the chapter of AMQP Introduction first before testing the examples here.  
+
 #Request - Reply
 
 This is a two-way message communication also using direct exchange but unlike the RPC pattern, the reply queue is bound to an exchange allowing more than one client to subscribe to and process the replies asynchronously.  In addition any service application can process a request from any client.

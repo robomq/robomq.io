@@ -1,3 +1,5 @@
+> Browse the chapter of AMQP Introduction first before testing the examples here.  
+
 # One to One (Direct)
 
 For one to one messaging, a producer sends messages to specified queue.  A consumer receives messages from that queue.  To ensure message is not lost, message acknowledgments can be sent back to producer to confirm a particular message has been received.
