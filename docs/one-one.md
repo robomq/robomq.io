@@ -28,44 +28,36 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
 	channel = connection.channel()
 
-Then producer can publish messages to the default exchange where queue name is the routing key. 
-
-		#assigning blank string to exchange is to use the default exchange, 
+Then producer can publish messages to the default exchange where queue name itself is the routing key.  
+It will assign a blank string to exchange parameter in publish function to use the default exchange.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
 	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
 	channel.basic_publish(exchange = "", routing_key = routingKey, body = "Hello World!", properties = properties)
 
-After all messages are published, producer should terminate this connection.
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-	channel.close( )
-
+	connection.close()
 
 ###Consumer
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-	connection = pika.BlockingConnection(pika.connectionParameters(host='your host'))
-	channel = connection.channel()
+Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
+Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
 
+	channel.queue_declare(queue = queueName, auto_delete = True)
 
-Then consumer should subscribe to a specific queue to listen and consume messages from.
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The `start_consuming()` function will be blocking the process until `stop_consuming()` is invoked or exception happens.  
 
-	channel.queue_declare(queue='queueName')
-
-
-Then consumer should define the callback method.  When messages are received, this callback is invoked performing any desired processing on message contents.
-
-	def callback(ch, method, properties, body):
-		print 'Received %r' % (body)
-
-
-At this point, consumer should start consuming messages.
-
-	channel.basic_consume(callback, queue='queueName', no_ack=True)
-
-The **no_ack** parameter indicates whether consumer will automatically send acknowledgment back to broker. For this example, producer does not explicitly acknowledge received messages.  Therefore, we set **no_ack** attribute value as true.
-
-Then, consumer should receive messages and implement any desired processing on message contents.
-
+	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
 	channel.start_consuming()
+
+When messages are received, a callback function will be invoked to print the message content.  
+
+	def onMessage(channel, method, properties, body):
+		print body
 
 ###Putting it all together
 
@@ -136,62 +128,21 @@ Then, consumer should receive messages and implement any desired processing on m
 ## Node.js
 
 ###Prerequisites
-**node.js client AMQP library**
-For programming in node.js, we recommend using node-amqp library for implementing AMQP protocol.
+The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
 
-For detailed installation steps, refer to [node.js](https://github.com/postwait/node-amqp#connection-options-and-url).
+You can install the library through `sudo npm install amqplib`.  
 
+Finally, require this library in your program.
+
+	var amqp = require("amqplib");
+
+The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
 
 ###Producer
-Producer should including the following libraries.
-
-	var amqp = require('amqplib');
-
-
-For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker.  You can input the following information based on your account.
-
-	var connection = amqp.createConnection({ host: "yourhost", port: 'port',  login:'username', password:'password', vhost:'vhost-name' });
-
-
-you can also use following url format to initialize you connection.
-
-	amqp[s]://[user:password@]hostname[:port][/vhost]
-
-
-Then producer should publish messages to the default exchange attached with routing key. That routing key is the queue name. Based on that routing key, messages will be distributed through the default exchange to the right queue
-
-	connection.on('ready',function(){
-		connection.exchange('', options={type:'direct', autoDelete:false}, function(exchange){
-			exchange.publish('routingKey', 'hello world');
-			print('message sent');
-		});
-	});	
 	
 
 ###Consumer
-Consumer should including following libraries. 
 
-	var amqp = require('amqp');
-
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
-
-	var connection = amqp.createConnection({ host: 'your host', port: 'port' });
-
-Then consumer should subscribe to a specific queue to listen and consume messages from.
-
-Then consumer should define the while loop for keep reading messages. User can keep consuming the messages in the queue. User can also add some situation for ending consumer's work.  
-After that, consumer should setting consuming method.
-
-
-	connection.on('ready', function(){
-		var queue = connection.queue('queueName', options={},function(queue){
-			console.log('Declare one queue, name is ' + queue.name);
-			queue.bind('', 'routingKey');
-			queue.subscribe(function (msg){
-				console.log('the message is '+msg.data);
-			});
-		});
-	});
 	
 ###Putting it all together
 
@@ -263,18 +214,135 @@ After that, consumer should setting consuming method.
 		setTimeout(listen, 5000);
 	}
 
+## PHP
+
+### Prerequisite
+The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
+
+It uses composer to install in a few steps.  
+
+1. Add a `composer.json` file to your project:
+
+		{
+			"require": {
+				"videlalvaro/php-amqplib": "2.2.*"
+			}
+		}
+
+2. Download the latest composer in the same path:
+
+		curl -sS https://getcomposer.org/installer | php
+
+3. Install the library through composer:
+
+		./composer.phar install
+
+Finally, require this library in your program and use the classes.
+
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+
+### Producer
+
+
+### Consumer
+
+
+### Putting it together
+
+**producer.php**
+
+	<?php
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$routingKey = "testQ";
+	
+	try {
+		//connect
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$channel =  $connection->channel();	
+	
+		//send message
+		//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
+		$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+		$channel->basic_publish($message, $exchange = "", $routingKey);
+	
+		//disconnect
+		$connection->close();
+	} catch(Exception $e) {
+		echo $e.PHP_EOL;
+	}
+	?>
+
+**consumer.php**
+
+	<?php	
+	require_once __DIR__."/../vendor/autoload.php"; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$queueName = "testQ";
+	
+	//callback funtion on receiving messages
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
+	
+	while (true) {
+		try {
+			//connect
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$channel = $connection->channel();
+	
+			//declare queue and consume messages
+			//one-to-one messaging uses the default exchange, where queue name is the routing key
+			$channel->queue_declare($queueName, false, false, false, $auto_delete = true);
+			$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
+	
+			//start consuming
+			while(count($channel->callbacks)) {
+				$channel->wait();
+			}
+		} catch(Exception $e) {
+			//reconnect on exception
+			echo "Exception handled, reconnecting...\nDetail:\n".$e.PHP_EOL;
+			if ($connection != null) {
+				try {
+					$connection->close();
+				} catch (Exception $e1) {}
+			}
+			sleep(5);
+		}
+	}
+	?>
+
 ## Java
 
 ###Prerequisites
-**java client AMQP library**
-Using AMQP protocol for java programming language requires downloading and installing the following library.
+The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
 
-[client library package](www.rabbitmq.com/java-client.html)
-Unzip it into your working directory and grab the JAR files from the unzipped directory:
+Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
 
-	$ unzip rabbitmq-java-client-bin-\*.zip
-	$ cp rabbitmq-java-client-bin-\*/\*.jar ./
+	javac -cp ".:./rabbitmq-client.jar" Producer.java Consumer.java 
 
+Run the producer and consumer classes. For example,  
+
+	java -cp ".:./rabbitmq-client.jar" Consumer
+	java -cp ".:./rabbitmq-client.jar" Producer
+
+Of course, you can eventually compress your producer and consumer classes into jar files.
 
 ###Producer
 Producer should including the following libraries.

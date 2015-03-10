@@ -1,6 +1,6 @@
 > Browse the chapter of AMQP Introduction first before testing the examples here.  
 
-# Routing - Filter Based
+# Routing - Filter Based (Topic)
 
 For filter based routing, a producer declares the topic exchange when publishing a message.  Messages sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key.
 Filter based routing provides a method to use filter policies on routing key for choosing the recipients of messages. <br>

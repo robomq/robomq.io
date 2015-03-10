@@ -10,7 +10,7 @@
 * robomq.io (http://www.robomq.io)
 */
 
-require_once __DIR__."/../vendor/autoload.php";
+require_once __DIR__."/../vendor/autoload.php"; //directory of library folder
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
