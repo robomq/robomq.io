@@ -1,4 +1,4 @@
-> Browse the chapter of AMQP Introduction first before testing the examples here.  
+> Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
 #Request - Reply
 
@@ -237,7 +237,7 @@ Then user can start consuming the message and sending reply back to the producer
 	var replyKey = "reply";
 	
 	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
+	producer.then(function(conn) {
 		return conn.createChannel().then(function(ch) {
 			//listen for reply messages
 			ch.assertQueue(replyQueue, {durable: false, autoDelete: true, exclusive: true});
@@ -448,7 +448,6 @@ Then user can start consuming the message and sending reply back to the producer
 				System.out.println(replyMessage);
 	
 				//disconnect
-				channel.close();
 				connection.close();
 			} catch(Exception e) {
 				System.out.println(e);
@@ -601,7 +600,7 @@ Therefore, after publishing a message, the producer will simply wait on a separa
 
 		if (AMQP_RESPONSE_NORMAL == result.reply_type) {
 
-			printf("Received reply message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+			printf("Received reply message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 
 			amqp_destroy_envelope(&envelope);
 		}

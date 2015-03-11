@@ -1,4 +1,4 @@
-> Browse the chapter of AMQP Introduction first before testing the examples here.  
+> Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
 # One to One (Direct)
 
@@ -145,10 +145,43 @@ Finally, require this library in your program.
 The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
 
 ###Producer
-	
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+As shown in the code, this library provides chainable callback API in the form of `.then(callback)`.  
+> For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  
+
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer.then(function(conn) {
+		return conn.createConfirmChannel().then(successCallback);
+	}).then(null, failureCallback);
+
+Then producer can publish messages to the default exchange where queue name itself is the routing key.  
+It will assign a blank string to exchange parameter in publish function to use the default exchange.  
+Delivery mode = 1 means it's a non-persistent message.
+
+	ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1},  callback);
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	conn.close();
 
 ###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The difference is that consumer uses `conn.createChannel()` function, while producer uses `conn.createConfirmChannel()` because the latter one is only useful for publish confirm.  
 
+Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
+Durable means the queue will survive possible broker failover. It's false in this example.  
+Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it. It's false in this example.  
+
+	ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: false});
+
+Finally, consumer can consume messages from the queue.  
+The `noAck` option indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `noAck` is true, so producer does not explicitly acknowledge received messages.  
+The second parameter of `consume()` function is the callback on receiving messages. In this example, when messages are received, the callback function will be invoked to print the message content.  
+
+	ch.consume(queueName, function(message) {
+		console.log(message.content.toString());
+	}, {noAck: true});  
 	
 ###Putting it all together
 
@@ -164,7 +197,7 @@ The full documentation of this library is at <http://www.squaremobius.net/amqp.n
 	var routingKey = "testQ";
 	
 	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
+	producer.then(function(conn) {
 		return conn.createConfirmChannel().then(function(ch) {
 			//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
 			ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
@@ -252,11 +285,46 @@ Finally, require this library in your program and use the classes.
 	use PhpAmqpLib\Connection\AMQPConnection;
 	use PhpAmqpLib\Message\AMQPMessage;
 
-### Producer
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$channel =  $connection->channel();	
 
-### Consumer
+Then producer can publish messages to the default exchange where queue name itself is the routing key.  
+It will assign a blank string to exchange parameter in publish function to use the default exchange.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
+	$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+	$channel->basic_publish($message, $exchange = "", $routingKey);
 
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	$connection->close();
+
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+
+Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
+Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
+
+	$channel->queue_declare($queueName, false, false, false, $auto_delete = true);
+
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens.  
+
+	$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
+
+	while(count($channel->callbacks)) {
+		$channel->wait();
+	}
+
+When messages are received, a callback function will be invoked to print the message content.  
+
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
 
 ### Putting it together
 
@@ -357,80 +425,46 @@ Run the producer and consumer classes. For example,
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
 ###Producer
-Producer should including the following libraries.
-
-	import com.rabbitmq.client.ConnectionFactory;
-	import com.rabbitmq.client.Connection;
-	import com.rabbitmq.client.Channel;
-
-
-For one-to-one message communication, the producer should first initialize a connection to the [robomq.io](http://www.robomq.io) broker.  You can input the following information based on your account.
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
 	ConnectionFactory factory = new ConnectionFactory();
-	factory.setUsername(userName);
+	factory.setHost(server);
+	factory.setPort(port);
+	factory.setVirtualHost(vhost);
+	factory.setUsername(username);
 	factory.setPassword(password);
-	factory.setVirtualHost(virtualHost);
-	factory.setHost(hostName);
-	factory.setPort(portNumber);
-	Connection conn = factory.newConnection();
-	Channel channel = connection.createChannel();
+	connection = factory.newConnection();
+	channel = connection.createChannel();
 
+Then producer can publish messages to the default exchange where queue name itself is the routing key.  
+It will assign a blank string to exchange parameter in publish function to use the default exchange.  
+ 
+	String message = "Hello World!";
+	channel.basicPublish("", routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
 
-you can also can use following code to initialize you connection.
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-	factory.setUri("amqp://userName:password@hostName:portNumber/virtualHost");
-
-
-Then producer should create a queue and publish messages to this queue. This queue will work as a mailbox where all messages published to it will be stored until they are consumed.
-
-	channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
-A queue declared without a specific routing key use their queue name as the default routing key.  
-
-Then producer should publish messages to the default exchange attached with routing key. That routing key is the queue name. Based on that routing key, messages will be distributed through the default exchange to the right queue.  
-
-	String message = 'Hello World!';
-    	channel.basicPublish('', QUEUE_NAME, null, message.getBytes());
-
-After all messages are published, producer should terminate this connection.
-
-	channel.close( )
 	connection.close();
 
-
 ###Consumer
-Consumer should including following libraries. 
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-	import com.rabbitmq.client.ConnectionFactory;
-	import com.rabbitmq.client.Connection;
-	import com.rabbitmq.client.Channel;
-	import com.rabbitmq.client.QueueingConsumer;
+Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
+The fourth parameter auto-delete is true. That means after all consumers have finished consuming it, the queue will we deleted by broker.  
 
+	channel.queueDeclare(queueName, false, false, true, null);
 
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
+Finally, consumer can consume messages from the queue.  
+The second parameter of `basicConsume()` function no-ack indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, no-ack equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens. When messages are received, it will print the message content.  
 
-	ConnectionFactory factory = new ConnectionFactory();
-	factory.setUri("amqp://userName:password@hostName:portNumber/virtualHost");	
-	Connection connection = factory.newConnection();
-	Channel channel = connection.createChannel();
-
-Then Consumer should subscribe a queue to listen. (One same queue can be declare multiple times and there's will be only one shows in [robomq.io](http://www.robomq.io))
-
-	QueueingConsumer consumer = new QueueingConsumer(channel);
-
-
-Then consumer should setting consuming method.
-After that, consumer should define the while loop for keep reading messages. User can keep consuming the messages in the queue. User can also add some situation for ending consumer's work.  
-
-	channel.basicConsume(QUEUE_NAME, true, consumer);
+	QueueingConsumer qc = new QueueingConsumer(channel);
+	channel.basicConsume(queueName, true, qc);
 	while (true) {
-		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+		QueueingConsumer.Delivery delivery = qc.nextDelivery();
 		String message = new String(delivery.getBody());
-		System.out.println("Received '" + message + "'");
+		System.out.println(message);
 	}
-
-
-<b>true</b> is a parameter which indicating that if consumer will automatic send acknowledge back. For this code, we are not setting reply handle mechanism on producer side, so we don't want consumer send auto reply back. That's why we mark this attribute value as True.
 
 ###Putting it all together
 
@@ -470,7 +504,6 @@ After that, consumer should define the while loop for keep reading messages. Use
 				channel.basicPublish("", routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
 	
 				//disconnect
-				channel.close();
 				connection.close();
 			} catch(Exception e) {
 				System.out.println(e);
@@ -716,16 +749,10 @@ Then, consumer should receive messages and implement any desired processing on m
 	
 	if (AMQP_RESPONSE_NORMAL == result.reply_type) {
 	
-		printf("Received message size: %d\nbody: %s\n", envelope.message.body.len, envelope.message.body.bytes);
+		printf("Received message size: %d\nbody: %s\n", (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
 	
 		amqp_destroy_envelope(&envelope);
 	}
-
-Finally, after all messaged are consumed, consumer should terminate this connection.
-
-	amqp_channel_close(conn, channel, AMQP_REPLY_SUCCESS);
-	amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
-	amqp_destroy_connection(conn);
 
 ### How to build/run client
 Now we have two c files, one is producer.c, another is consumer.c. 

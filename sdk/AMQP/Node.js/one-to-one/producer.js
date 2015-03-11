@@ -19,7 +19,7 @@ var password = "password";
 var routingKey = "testQ";
 
 producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-	producer.then(function(conn) {
+producer.then(function(conn) {
 	return conn.createConfirmChannel().then(function(ch) {
 		//assigning blank string to exchange is to use the default exchange, where queue name is the routing key
 		ch.publish("", routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {

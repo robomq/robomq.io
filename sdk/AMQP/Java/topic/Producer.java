@@ -43,7 +43,6 @@ public class Producer {
 			channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
 
 			//disconnect
-			channel.close();
 			connection.close();
 		} catch(Exception e) {
 			System.out.println(e);

@@ -1,4 +1,4 @@
-> Browse the chapter of AMQP Introduction first before testing the examples here.  
+> Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
 # Broadcast (Publish/Subscribe)
 
@@ -195,7 +195,7 @@ Binding between same pair of exchange and queue can be initialized more than one
 	var exchangeName = "testEx";
 	
 	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
+	producer.then(function(conn) {
 		return conn.createConfirmChannel().then(function(ch) {
 			//for fanout type exchange, routing key is useless
 			ch.publish(exchangeName, "", content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
@@ -359,7 +359,6 @@ Binding between same pair of exchange and queue can be initialized more than one
 				channel.basicPublish(exchangeName, "", MessageProperties.TEXT_PLAIN, message.getBytes());
 	
 				//disconnect
-				channel.close();
 				connection.close();
 			} catch(Exception e) {
 				System.out.println(e);

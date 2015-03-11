@@ -1,4 +1,4 @@
-> Browse the chapter of AMQP Introduction first before testing the examples here.  
+> Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
 # Routing - Key Based
 
@@ -179,7 +179,7 @@ Now all the messages with the same routing key as this queue's will get consumed
 	var routingKey = "test";
 	
 	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-		producer.then(function(conn) {
+	producer.then(function(conn) {
 		return conn.createConfirmChannel().then(function(ch) {
 			ch.publish(exchangeName, routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
 				if (err != null) {
@@ -325,7 +325,6 @@ Now all the messages with the same routing key as this queue's will get consumed
 				channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
 	
 				//disconnect
-				channel.close();
 				connection.close();
 			} catch(Exception e) {
 				System.out.println(e);

@@ -22,7 +22,7 @@ var requestKey = "request";
 var replyKey = "reply";
 
 producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
-	producer.then(function(conn) {
+producer.then(function(conn) {
 	return conn.createChannel().then(function(ch) {
 		//listen for reply messages
 		ch.assertQueue(replyQueue, {durable: false, autoDelete: true, exclusive: true});

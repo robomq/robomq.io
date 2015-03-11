@@ -62,7 +62,6 @@ public class Producer {
 			System.out.println(replyMessage);
 
 			//disconnect
-			channel.close();
 			connection.close();
 		} catch(Exception e) {
 			System.out.println(e);
