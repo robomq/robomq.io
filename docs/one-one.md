@@ -46,7 +46,7 @@ At last, producer will disconnect with the [robomq.io](http://www.robomq.io) bro
 The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
 Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
-Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
+Auto-delete means after all consumers have finished consuming it, the queue will be deleted by broker.  
 
 	channel.queue_declare(queue = queueName, auto_delete = True)
 
@@ -170,7 +170,7 @@ The difference is that consumer uses `conn.createChannel()` function, while prod
 
 Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
 Durable means the queue will survive possible broker failover. It's false in this example.  
-Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
+Auto-delete means after all consumers have finished consuming it, the queue will be deleted by broker.  
 Exclusive means no other consumer can consume the queue when this one is consuming it. It's false in this example.  
 
 	ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: false});
@@ -306,7 +306,7 @@ At last, producer will disconnect with the [robomq.io](http://www.robomq.io) bro
 The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
 Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
-Auto-delete means after all consumers have finished consuming it, the queue will we deleted by broker.  
+Auto-delete means after all consumers have finished consuming it, the queue will be deleted by broker.  
 
 	$channel->queue_declare($queueName, false, false, false, $auto_delete = true);
 
@@ -450,7 +450,7 @@ At last, producer will disconnect with the [robomq.io](http://www.robomq.io) bro
 The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
 Then consumer will declare a queue. By default, the queue will be bound to the default exchange with the same binding key as its name.  
-The fourth parameter auto-delete is true. That means after all consumers have finished consuming it, the queue will we deleted by broker.  
+The fourth parameter auto-delete is true. That means after all consumers have finished consuming it, the queue will be deleted by broker.  
 
 	channel.queueDeclare(queueName, false, false, true, null);
 

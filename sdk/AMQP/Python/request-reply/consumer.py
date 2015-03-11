@@ -29,7 +29,6 @@ def onMessage(channel, method, properties, body):
 	except:
 		channel.basic_nack(delivery_tag = method.delivery_tag)
 		
-
 while True:
 	try:
 		#connect

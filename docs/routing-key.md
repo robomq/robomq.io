@@ -10,47 +10,59 @@ Routing - Key based messaging is an extension of direct exchange allowing filter
 
 ## Python
 
+###Prerequisites
+
+**Python client AMQP library**
+
+The Python library we use for this example can be found at <https://github.com/pika/pika>.  
+
+You can install it through `sudo pip install pika`.  
+
+Finally, import this library in your program.
+
+	import pika
+
+The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
+
 ###Producer
-First producer should initialize a connection to [robomq.io](http://www.robomq.io). 
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the routing keys. 
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
-	channel.exchange_declare(exchange='exchangeName', type='direct')
+Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
 
-Then producer should publish message to the exchange with specific routing key. 
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-	channel.basic_publish(exchange='exchangeName', routing_key=severity, body=message)
-
-For this example, the routing key is 'routingKey'.  Only the queue binding to this exchange with same routing key, as 'routingKey', can received messages.
-
-After finishing sending messages, producer should terminate the connection. 
+	connection.close()
 
 ###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
 
-Then consumer will initializes the same exchange as producer did.
+	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+	channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
 
-	channel.exchange_declare(exchange ='exchangeName', type='direct')
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The `start_consuming()` function will be blocking the process until `stop_consuming()` is invoked or exception happens.  
 
-Then consumer should declare a queue to listen and consume messages from.. 
-
-	channel.queue_declare(queue=queue_name,exclusive=True)
-
-Then bind the queue to the exchange with a specific routing key. This key will be the identifier for this queue to receive messages from. 
-
-
-	severity = 'routingKey'	
-	channel.queue_bind(exchange='exchangeName', queue=queue_name, routing_key=severity)
-
-
-After that, we can define own callback function for processing messages like what we did in previous chapter. 
-Then consumer is ready to work. 
-
-	channel.basic_consume(callback, queue=queue_name, no_ack=True)
+	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
 	channel.start_consuming()
 
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
+When messages are received, a callback function will be invoked to print the message content.  
+
+	def onMessage(channel, method, properties, body):
+		print body
 
 ###Putting it all together
 
@@ -123,46 +135,59 @@ Now all the messages with the same routing key as this queue's will get consumed
 	
 ## Node.js
 
+###Prerequisites
+
+**Node.js client AMQP library**
+
+The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
+
+You can install the library through `sudo npm install amqplib`.  
+
+Finally, require this library in your program.
+
+	var amqp = require("amqplib");
+
+The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
+
 ###Producer
-First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+As shown in the code, this library provides chainable callback API in the form of `.then(callback)`.  
+> For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer.then(function(conn) {
+		return conn.createConfirmChannel().then(successCallback);
+	}).then(null, failureCallback);
 
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
+Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
+Delivery mode = 1 means it's a non-persistent message.
 
-Then producer should publish message to the exchange with specific routing key. 
+	ch.publish(exchangeName, routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1},  callback);
 
-	exchange.publish('routingKey','hello world');
-For this example, the routing key is 'routingKey'. Only the queue binding to this exchange and also has same routing key, as 'routingKey', can received this message. 
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-After finishing sending messages, producer should terminate the connection. 
+	conn.close();
 
 ###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The difference is that consumer uses `conn.createChannel()` function, while producer uses `conn.createConfirmChannel()` because the latter one is only useful for publish confirm.  
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.  
+Durable means the exchange or queue will survive possible broker failover. It's false in this example.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
 
-Then consumer will initializes the same exchange as producer did.
+	ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
+	ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+	ch.bindQueue(queueName, exchangeName, routingKey);
 
-	connection.exchange('exchangeName', options={type:'direct', autoDelete:false}, function(exchange)
+Finally, consumer can consume messages from the queue.  
+The `noAck` option indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `noAck` is true, so producer does not explicitly acknowledge received messages.  
+The second parameter of `consume()` function is the callback on receiving messages. In this example, when messages are received, the callback function will be invoked to print the message content.  
 
-
-Then consumer should declare a queue to listen. 
-
-Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. 
-
-After that, we can define own callback function for processing messages like what we did in previous chapter. 
-Then consumer is ready to work. 
-
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
-
-	var queue = connection.queue('queueName', options={},function(queue){
-		console.log('Declare one queue, name is ' + queue.name);
-		queue.bind('exchangeName', 'routingKey');
-		queue.subscribe(function (msg){
-			console.log('consumer received the message'+msg.data);
-		});	
-	});
-
+	ch.consume(queueName, function(message) {
+		console.log(message.content.toString());
+	}, {noAck: true});  
 
 ###Putting it all together
 
@@ -237,55 +262,225 @@ Now all the messages with the same routing key as this queue's will get consumed
 		setTimeout(listen, 5000);
 	}
 
-## Java
+## PHP
+
+### Prerequisite
+
+**PHP client AMQP library**
+
+The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
+
+It uses composer to install in a few steps.  
+
+1. Add a `composer.json` file to your project:
+
+		{
+			"require": {
+				"videlalvaro/php-amqplib": "2.2.*"
+			}
+		}
+
+2. Download the latest composer in the same path:
+
+		curl -sS https://getcomposer.org/installer | php
+
+3. Install the library through composer:
+
+		./composer.phar install
+
+Finally, require this library in your program and use the classes.
+
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
 
 ###Producer
-First producer should initializes a connection to [robomq.io](http://www.robomq.io) like tutorial in before section. 
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-Then producer should initialize a direct-type exchange. This exchange will deliver the message to the queue based on the queues' routing keys. 
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$channel =  $connection->channel();	
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-	
-Then producer should publish message to the exchange with specific routing key. 
+Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
+	$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+	$channel->basic_publish($message, $exchangeName, $routingKey);
 
-	channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes());
-        
-For this example, the routing key is **'routingKey'**. Only the queue binding to this exchange with matching name, can received this message. 
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-After finishing sending messages, producer should terminate the connection. 
+	$connection->close();
 
 ###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-For consumer, it should initializes connection to [robomq.io](http://www.robomq.io) first.
+Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
 
-Then consumer will initializes the same exchange as producer did.
+	$channel->exchange_declare($exchangeName, $type = "direct", false, false, $auto_delete = true);
+	$channel->queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+	$channel->queue_bind($queueName, $exchangeName, $routingKey);
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens.  
 
-Then consumer should declare a queue to listen. 
+	$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
 
-        String queueName = channel.queueDeclare().getQueue();
+	while(count($channel->callbacks)) {
+		$channel->wait();
+	}
 
+When messages are received, a callback function will be invoked to print the message content.  
 
-Then binding the queue to the exchange with a specific routing key.  Messages published to this exchange with routing key matching **"routingKey"** will be received by consumer.  All other messages will be filtered.
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
 
+### Putting it together
 
-	String severity = 'routingKey';
-	channel.queueBind(queueName, EXCHANGE_NAME, severity);
+**producer.php**
 
-Now all the messages with the same routing key as this queue's will get consumed by this consumer.  
+	<?php
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
 	
-	QueueingConsumer consumer = new QueueingConsumer(channel);
-	channel.basicConsume(queueName, true, consumer);
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	$routingKey = "test";
+	
+	try {
+		//connect
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$channel =  $connection->channel();	
+	
+		//send message
+		$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+		$channel->basic_publish($message, $exchangeName, $routingKey);
+	
+		//disconnect
+		$connection->close();
+	} catch(Exception $e) {
+		echo $e.PHP_EOL;
+	}
+	?>
 
+**consumer.php**
+
+	<?php
+	require_once __DIR__."/../vendor/autoload.php"; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	$queueName = "testQ1";
+	$routingKey = "test";
+	
+	//callback funtion on receiving messages
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
+	
 	while (true) {
-		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+		try {
+			//connect
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$channel = $connection->channel();
+	
+			//declare exchange and queue, bind them and consume messages
+			$channel->exchange_declare($exchangeName, $type = "direct", false, false, $auto_delete = true);
+			$channel->queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+			$channel->queue_bind($queueName, $exchangeName, $routingKey);
+			$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
+	
+			//start consuming
+			while(count($channel->callbacks)) {
+				$channel->wait();
+			}
+		} catch(Exception $e) {
+			//reconnect on exception
+			echo "Exception handled, reconnecting...\nDetail:\n".$e.PHP_EOL;
+			if ($connection != null) {
+				try {
+					$connection->close();
+				} catch (Exception $e1) {}
+			}
+			sleep(5);
+		}
+	}
+	?>
+
+## Java
+
+###Prerequisites
+
+**Java client AMQP library**
+
+The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
+
+Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
+
+	javac -cp ".:./rabbitmq-client.jar" Producer.java Consumer.java 
+
+Run the producer and consumer classes. For example,  
+
+	java -cp ".:./rabbitmq-client.jar" Consumer
+	java -cp ".:./rabbitmq-client.jar" Producer
+
+Of course, you can eventually compress your producer and consumer classes into jar files.
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+
+	ConnectionFactory factory = new ConnectionFactory();
+	factory.setHost(server);
+	factory.setPort(port);
+	factory.setVirtualHost(vhost);
+	factory.setUsername(username);
+	factory.setPassword(password);
+	connection = factory.newConnection();
+	channel = connection.createChannel();
+
+Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
+ 
+	String message = "Hello World!";
+	channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	connection.close();
+
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+
+Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.  
+The fourth parameter of `exchangeDeclare()` and `queueDeclare()` are auto-delete. That means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+The third parameter of `queueDeclare()` is exclusive. That means no other consumer can consume the queue when this one is consuming it.   
+
+	channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
+	channel.queueDeclare(queueName, false, true, true, null);
+	channel.queueBind(queueName, exchangeName, routingKey, null);
+
+Finally, consumer can consume messages from the queue.  
+The second parameter of `basicConsume()` function no-ack indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, no-ack equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens. When messages are received, it will print the message content.  
+
+	QueueingConsumer qc = new QueueingConsumer(channel);
+	channel.basicConsume(queueName, true, qc);
+	while (true) {
+		QueueingConsumer.Delivery delivery = qc.nextDelivery();
 		String message = new String(delivery.getBody());
-		String routingKey = delivery.getEnvelope().getRoutingKey();
-
-            System.out.println("Received '" + routingKey + "':'" + message + "'");
-        }
-
+		System.out.println(message);
+	}
 
 ###Putting it all together
 

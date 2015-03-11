@@ -1,4 +1,5 @@
 > Browse the chapter of AMQP Introduction first if you're new to AMQP.  
+> Read the chapter of *Key based message routing* before reading this chapter.  
 
 #Request - Reply
 
@@ -7,76 +8,73 @@ In this situation, both producer and consumer are capable of publishing and cons
 
 ![Diagram of Request - Reply messaging](./images/request-reply.png)
 
+----------
 
 ## Python
 
+###Prerequisites
+
+**Python client AMQP library**
+
+The Python library we use for this example can be found at <https://github.com/pika/pika>.  
+
+You can install it through `sudo pip install pika`.  
+
+Finally, import this library in your program.
+
+	import pika
+
+The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
+
 ###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-For producer, it should initialize an exchange. This exchange can be any type. Or can leave it empty, it will use [robomq.io](http://www.robomq.io) default exchange
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
 
+Then producer will do what consumer does, listen on the replyQueue on its side.  
 
-	channel.exchange_declare(exchange="exchangeName", type ='direct')
+	channel.queue_declare(queue = replyQueue, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = replyQueue, routing_key = replyKey)
+	channel.basic_consume(consumer_callback = onMessage, queue = replyQueue, no_ack = True)
+	channel.start_consuming()
 
+After that producer can publish messages to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+ 
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1, reply_to = replyKey)
+	channel.basic_publish(exchange = exchangeName, routing_key = requestKey, body = "Hello World!", properties = properties)
 
-Now producer needs to setup a reply queue for waiting for all replies. 
+Once producer has received the reply, the callback function will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
+	def onMessage(channel, method, properties, body):
+		print body
+		channel.stop_consuming()
+		connection.close()
 
-	channel.queue_declare(queue="replyQueue")
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
+Then consumer will listen on its requestQueue.  
 
-Binding this queue to exchange. 
+	channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+	channel.queue_declare(queue = requestQueue, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = requestQueue, routing_key = requestKey)
+	channel.basic_consume(consumer_callback = onMessage, queue = requestQueue, no_ack = False)
+	channel.start_consuming()
 
+When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
+If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
-	channel.queue.bind(exchange="exchangeName", queue="replyQueue", routing_key = "reply")
-
-
-All the replies with routing key "reply" will get consumed by this producer. Since producer needs to matching each reply to message, we also need to add a correlation_id to each message. 
-
-Using uuid package to generate a random number for correlation_id. 
-
-
-
-	corr_id = str(uuid.uuid4())
-
-	def callback(ch, method, props, body):
-	if corr_id == props.corrlelaiton_id:
-		# acknowledgment for message received. 
-
-
-Producer should publish the messages to the exchange and wait for consuming the replies. 
-
-
-	channel.basic_publish(exchange='exchangeName',
-                      routing_key=routingKey,
-                      body=message)
-	channel.basic_consume(callback, no_ack=True,
-                                   queue="replyQueue")
-
-Producer will keep waiting for the reply back or killed by interrupted ctrl-C
-
-### Consumer 
-For consumer , it should consume the message like the old way. 
-
-	channel.queue_declare(queue='queueName')
-	channel.exchange_declare(exchange='exchangeName',type='direct')
-	channel.queue_bind(exchange='exchangeName',queue='queueName',routing_key='routingKey')
-
-
-
-After consumer got messages, it should send reply back to the producer. So the callback method for basic_consume function should including reply function. 
-
-
-	def callback(ch, method, props, body):
-		ch.basic_publish(exchange='exchangeName',
-                     routing_key='reply',
-                     properties=pika.BasicProperties(correlation_id = props.correlation_id),
-                     body='reply')
-		ch.basic_ack(delivery_tag = method.delivery_tag)
-
-
-Then consumer starts consuming messages. 
-
-	channel.basic_consume(callback, queue="queueName")
+	def onMessage(channel, method, properties, body):
+		print body
+		try:
+			replyProp = pika.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+			channel.basic_publish(exchange = exchangeName, routing_key = properties.reply_to, properties = replyProp, body = "Reply to %s" % (body))
+			channel.basic_ack(delivery_tag = method.delivery_tag)
+		except:
+			channel.basic_nack(delivery_tag = method.delivery_tag)
 
 ###Putting it all together
 
@@ -153,7 +151,6 @@ Then consumer starts consuming messages.
 		except:
 			channel.basic_nack(delivery_tag = method.delivery_tag)
 			
-	
 	while True:
 		try:
 			#connect
@@ -178,47 +175,64 @@ Then consumer starts consuming messages.
 
 ## Node.js
 
-###Producer 
-In this producer, we should including extra package for generate random number. 
+###Prerequisites
 
-	var uuid = require("node-uuid").v4;
-	
-For producer, it should initialize an exchange. This exchange can be any type. Or can leave it empty, it will use [robomq.io](http://www.robomq.io) default exchange
+**Node.js client AMQP library**
 
-	connection.exchange('test-exchange',{type:"direct",autoDelete:false, confirm:true}, function(exchange)
+The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
 
-Now producer needs to setup a reply queue for waiting for all replies. 
+You can install the library through `sudo npm install amqplib`.  
 
-	replyQueue = connection.queue("Reply",{autoDelete:false});
-	replyQueue.bind("test-exchange","Reply");
+Finally, require this library in your program.
 
-Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. If there's no specific binding, there queue will default binding to the default exchange generated by [robomq.io](http://www.robomq.io). We are going to use default exchange. 
+	var amqp = require("amqplib");
 
-All the replies with routing key "reply" will get consumed by this producer. Since producer needs to matching each reply to message, we also need to add a correlation_id to each message. 
+The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
 
-Using uuid package to generate a random number for correlation_id. And define all the properties need for reply. Then producer should publish the messages to the exchange and wait for consuming the replies. 
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-	var messageid = uuid();
-	console.log('message id is :'+ messageid);
-	exchange.publish('routingKey','hello world',{mandatory:true,contentType:'text/plain',replyTo:'Reply',correlationId:messageid},function(message) {
-		if (message == false){
-			console.log('Client: message has delivered');
-			return;
-		}
-	});	
-				
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer.then(function(conn) {
+		return conn.createConfirmChannel().then(successCallback);
+	}).then(null, failureCallback);
 
+Then producer will do what consumer does, listen on the replyQueue on its side.  
+Once producer has received the reply, it will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
-### Consumer
-For consumer , it should consume the message like the old way. 
+	ch.assertQueue(replyQueue, {durable: false, autoDelete: true, exclusive: true});
+	ch.bindQueue(replyQueue, exchangeName, replyKey);
+	ch.consume(replyQueue, function(message) {
+		console.log(message.content.toString());
+		conn.close();
+	}, {noAck: true});
 
-	queue.subscribe(function (message, headers, deliveryInfo, messageObject)
+After that producer can publish messages to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+ 
+	ch.publish(exchangeName, requestKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1, replyTo: replyKey}, callback);
 
-After consumer got messages, it should send reply back to the producer. So the callback method for basic_consume function should including reply function. 
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-Then user can start consuming the message and sending reply back to the producer. 
+Then consumer will listen on its requestQueue.  
+When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
+If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
-	var replyOption = {correlationId:deliveryInfo.correlationId};	exchange.publish("Reply","reply form consumer",replyOption);
+	ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
+	ch.assertQueue(requestQueue, {durable: false, autoDelete: true, exclusive: true});
+	ch.bindQueue(requestQueue, exchangeName, requestKey);
+	ch.consume(requestQueue, function(message) {
+		console.log(message.content.toString());
+		ch.publish(exchangeName, message.properties.replyTo, new Buffer("Reply to " + message.content.toString()), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
+			if (err != null) {
+				ch.nack(message);
+			}
+			else {
+				ch.ack(message);
+			}
+		});
+	}, {noAck: false});
 
 ###Putting it all together
 
@@ -314,82 +328,291 @@ Then user can start consuming the message and sending reply back to the producer
 		setTimeout(listen, 5000);
 	}
 
-## Java
+## PHP
 
-###Producer
-In this producer, we should including extra package for generate random number. 
+### Prerequisite
 
-	import java.util.UUID;
+**PHP client AMQP library**
 
-For producer, it should initialize an exchange. This exchange can be any type. Or can leave it empty, it will use [robomq.io](http://www.robomq.io) default exchange
+The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
 
-	channel.exchangeDeclare("exchangeName", "direct");
+It uses composer to install in a few steps.  
 
-Now producer needs to setup a reply queue for waiting for all replies. 
+1. Add a `composer.json` file to your project:
 
-	replyQueueName = channel.queueDeclare('replyQueueName', false, false, false, null).getQueue();
-
-
-Then binding the queue to the exchange with a specific routing key. This key will be the identifier for this queue getting messages form this exchange. If there' no specific binding, there queue will default binding to the default exchange generated by [robomq.io](http://www.robomq.io). We are going to use default exchange. 
-
-All the replies with routing key "reply" will get consumed by this producer. Since producer needs to matching each reply to message, we also need to add a correlation_id to each message. 
-
-Using uuid package to generate a random number for correlation_id. And define all the properties need for reply. Then producer should publish the messages to the exchange and wait for consuming the replies. 
-
-	public String call(String message) throws Exception {
-		String response = null;
-		String corrId = UUID.randomUUID().toString();
-		BasicProperties props = new BasicProperties
-		.Builder()
-		.correlationId(corrId)
-		.replyTo(replyQueueName)
-		.build();
-		channel.basicPublish('exchangeName', requestQueueName, props, message.getBytes());
-		while (true) {
-			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-			if (delivery.getProperties().getCorrelationId().equals(corrId)) {
-				response = new String(delivery.getBody(),'UTF-8');
-				break;
+		{
+			"require": {
+				"videlalvaro/php-amqplib": "2.2.*"
 			}
 		}
-		return response;
-	}
-Producer will keep waiting for the reply back or killed by interrupted ctrl-C
 
-### Consumer 
-For consumer , it should consume the message like the old way. 
+2. Download the latest composer in the same path:
 
-	channel.queueDeclare(RPC_QUEUE_NAME, false, false, false, null);
-	channel.exchangeDeclare(EXCHANGE_NAME, 'direct');
-	String severity = 'routingKey';
-	channel.queueBind(RPC_QUEUE_NAME, EXCHANGE_NAME, severity);
+		curl -sS https://getcomposer.org/installer | php
 
-After consumer got messages, it should send reply back to the producer. So the callback method for basic_consume function should including reply function. 
+3. Install the library through composer:
 
-Then user can start consuming the message and sending reply back to the producer. 
+		./composer.phar install
 
-	while (true) {
-		String response = null;
-		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-		BasicProperties props = delivery.getProperties();
-		BasicProperties replyProps = new BasicProperties
-			.Builder()
-			.correlationId(props.getCorrelationId())
-			.build();
+Finally, require this library in your program and use the classes.
+
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$channel =  $connection->channel();	
+
+Then producer will do what consumer does, listen on the replyQueue on its side.  
+
+	$channel->queue_declare($replyQueue, false, false, $exclusive = true, $auto_delete = true);
+	$channel->queue_bind($replyQueue, $exchangeName, $replyKey);
+	$consumerTag = $channel->basic_consume($replyQueue, "", false, $no_ack = true, false, false, $callback = $onMessage);
+
+After that producer can publish messages to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+ 
+	$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1, "reply_to" => $replyKey));
+	$channel->basic_publish($message, $exchangeName, $requestKey);
+
+Once producer has received the reply, the callback function will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+		$channel->basic_cancel($consumerTag);
+	};
+
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+
+Then consumer will listen on its requestQueue.  
+
+	$channel->exchange_declare($exchangeName, $type = "direct", false, false, $auto_delete = true);
+	$channel->queue_declare($requestQueue, false, false, $exclusive = true, $auto_delete = true);
+	$channel->queue_bind($requestQueue, $exchangeName, $requestKey);
+	$channel->basic_consume($requestQueue, "", false, $no_ack = false, false, false, $callback = $onMessage);
+
+When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
+If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
 		try {
-			String message = new String(delivery.getBody(),'UTF-8');
-			int n = Integer.parseInt(message);
-			System.out.println('received ' + message);
-			response = 'reply';
-		}catch (Exception e){
-			System.out.println(' [.] ' + e.toString());
-			response = 'reply';
-		}finally {
-			channel.basicPublish( EXCHANGE_NAME, 'reply', replyProps, response.getBytes('UTF-8'));
-			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+			$replyMessage = new AMQPMessage("Reply to ".$message->body, array("content_type" => "text/plain", "delivery_mode" => 1));
+			$channel->basic_publish($replyMessage, $exchangeName, $message->get("reply_to"));
+			$channel->basic_ack($message->delivery_info["delivery_tag"]);
+		} catch (Exception $e) {
+			$channel->basic_nack($message->delivery_info["delivery_tag"]);
+		}
+	};
+
+### Putting it together
+
+**producer.php**
+
+	<?php
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+	
+	$GLOBALS["channel"] = $channel;
+	$GLOBALS["consumerTag"] = $consumerTag;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	$replyQueue = "replyQ";
+	$requestKey = "request";
+	$replyKey = "reply";
+	
+	//callback funtion on receiving reply messages
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+		//stop consuming once receives the reply
+		$GLOBALS["channel"]->basic_cancel($GLOBALS["consumerTag"]);
+	};
+	
+	try {
+		//connect
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$channel =  $connection->channel();	
+	
+		//listen for reply messages
+		$channel->queue_declare($replyQueue, false, false, $exclusive = true, $auto_delete = true);
+		$channel->queue_bind($replyQueue, $exchangeName, $replyKey);
+		$consumerTag = $channel->basic_consume($replyQueue, "", false, $no_ack = true, false, false, $callback = $onMessage);
+	
+		//send request message
+		$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1, "reply_to" => $replyKey));
+		$channel->basic_publish($message, $exchangeName, $requestKey);
+	
+		//start consuming
+		while(count($channel->callbacks)) {
+			$channel->wait();
+		}
+	
+		//disconnect
+		$connection->close();
+	} catch(Exception $e) {
+		echo $e.PHP_EOL;
+	}
+	?>
+
+**consumer.php**
+
+	<?php
+	require_once __DIR__."/../vendor/autoload.php"; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+	
+	$GLOBALS["channel"] = $channel;
+	$GLOBALS["exchangeName"] = $exchangeName;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	$requestQueue = "requestQ";
+	$requestKey = "request";
+	
+	//callback funtion on receiving request messages, reply to the reply_to header
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+		try {
+			$replyMessage = new AMQPMessage("Reply to ".$message->body, array("content_type" => "text/plain", "delivery_mode" => 1));
+			$GLOBALS["channel"]->basic_publish($replyMessage, $GLOBALS["exchangeName"], $message->get("reply_to"));
+			$GLOBALS["channel"]->basic_ack($message->delivery_info["delivery_tag"]);
+		} catch (Exception $e) {
+			$GLOBALS["channel"]->basic_nack($message->delivery_info["delivery_tag"]);
+		}
+	};
+	
+	while (true) {
+		try {
+			//connect
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$channel = $connection->channel();
+	
+			//declare exchange and queue, bind them and consume messages
+			$channel->exchange_declare($exchangeName, $type = "direct", false, false, $auto_delete = true);
+			$channel->queue_declare($requestQueue, false, false, $exclusive = true, $auto_delete = true);
+			$channel->queue_bind($requestQueue, $exchangeName, $requestKey);
+			$channel->basic_consume($requestQueue, "", false, $no_ack = false, false, false, $callback = $onMessage);
+	
+			//start consuming
+			while(count($channel->callbacks)) {
+				$channel->wait();
+			}
+		} catch(Exception $e) {
+			//reconnect on exception
+			echo "Exception handled, reconnecting...\nDetail:\n".$e.PHP_EOL;
+			if ($connection != null) {
+				try {
+					$connection->close();
+				} catch (Exception $e1) {}
+			}
+			sleep(5);
 		}
 	}
+	?>
 
+## Java
+
+###Prerequisites
+
+**Java client AMQP library**
+
+The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
+
+Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
+
+	javac -cp ".:./rabbitmq-client.jar" Producer.java Consumer.java 
+
+Run the producer and consumer classes. For example,  
+
+	java -cp ".:./rabbitmq-client.jar" Consumer
+	java -cp ".:./rabbitmq-client.jar" Producer
+
+Of course, you can eventually compress your producer and consumer classes into jar files.
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+
+	ConnectionFactory factory = new ConnectionFactory();
+	factory.setHost(server);
+	factory.setPort(port);
+	factory.setVirtualHost(vhost);
+	factory.setUsername(username);
+	factory.setPassword(password);
+	connection = factory.newConnection();
+	channel = connection.createChannel();
+
+Then producer will do what consumer does, listen on the replyQueue on its side.  
+
+	String message = "Hello World!";
+	channel.queueDeclare(replyQueue, false, true, true, null);
+	channel.queueBind(replyQueue, exchangeName, replyKey, null);
+	QueueingConsumer qc = new QueueingConsumer(channel);
+	channel.basicConsume(replyQueue, true, qc);
+
+After that producer can publish messages to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+ 
+	BasicProperties properties = new BasicProperties.Builder().
+			contentType("text/plain").
+			deliveryMode(1).
+			replyTo(replyKey).
+			build();
+	channel.basicPublish(exchangeName, requestKey, properties, message.getBytes());
+
+Once producer has received the reply, the callback function will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	QueueingConsumer.Delivery delivery = qc.nextDelivery();
+	String replyMessage = new String(delivery.getBody());
+	System.out.println(replyMessage);
+
+	connection.close();
+
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+
+Then consumer will listen on its requestQueue.  
+
+	channel.exchangeDeclare(exchangeName, "direct", false, true, false, null);
+	channel.queueDeclare(requestQueue, false, true, true, null);
+	channel.queueBind(requestQueue, exchangeName, requestKey, null);
+	QueueingConsumer qc = new QueueingConsumer(channel);
+	channel.basicConsume(requestQueue, false, qc);
+
+When requests are received, it will print the message content and reply according to the reply-to property of request message.  
+If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+
+	while (true) {
+		QueueingConsumer.Delivery delivery = qc.nextDelivery();
+		String message = new String(delivery.getBody());
+		System.out.println(message);
+
+		//when receives messages, reply to the reply_to header
+		String replyMessage = "Reply to " + message;
+		BasicProperties properties = new BasicProperties.Builder().
+				contentType("text/plain").
+				deliveryMode(1).
+				build();
+		try {
+			channel.basicPublish(exchangeName, delivery.getProperties().getReplyTo(), properties, replyMessage.getBytes());
+			channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+		} catch(Exception e) {
+			channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);	
+		}
+	}
 
 ###Putting it all together
 

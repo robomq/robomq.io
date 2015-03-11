@@ -9,59 +9,60 @@ For broadcast messaging, a producer sends messages to fan-out exchange that are 
 ----------
 
 ## Python
-If we have more than one consumer and they are listening to the different queues, they will all receive same messages sent by one producer. 
 
-### Producer
-First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
+###Prerequisites
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='your port'))
+**Python client AMQP library**
 
+The Python library we use for this example can be found at <https://github.com/pika/pika>.  
 
-Then producer should declare a **fanout** type exchange for delivering message. 
+You can install it through `sudo pip install pika`.  
 
-	channel.exchange_declare(exchange='exchangeName',
-                         type='fanout')
+Finally, import this library in your program.
 
+	import pika
 
-Fanout type exchange will deliver all messages to all queues bound to it. 
-After initializing the exchange, producer should publish messages to this exchange. Since this is **fanout** type, producer should leave routing key empty. 
+The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
 
-	channel.basic_publish(exchange='exchangeName',
-                      routing_key='',
-                      body=message)
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-Finally, after publishing all messages, producer should terminate the connection. 
+	credentials = pika.PlainCredentials(username, password)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	channel = connection.channel()
+
+Then producer can publish messages to a fanout exchange where routing key is useless. It will assign a blank string to routing key in publish function.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = exchangeName, routing_key = "", body = "Hello World!", properties = properties)
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
 	connection.close()
 
-
 ###Consumer
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server. 
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-After that, consumer should initialize an exchange exactly as producer did. (<b>type</b> and <b>name</b> should be exactly same)
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
 
-	channel.exchange_declare(exchange='exchangeName',
-							type='fanout')
+	channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
+	channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+	channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
 
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The `start_consuming()` function will be blocking the process until `stop_consuming()` is invoked or exception happens.  
 
-Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages sent to this exchange.  With a **fanout** type exchange, more than one consumer or a consumer with any number of separate queues can bind to it and start consuming the same messages. 
-	
-	queue_name = 'queueName'
-	channel.queue_declare(queue=queue_name,exclusive=True)
-	channel.queue_bind(exchange='exchangeName',
-                   queue=queue_name)
-
-
-Consumer could also define a callback function as one-to-one section explained. 
-At this point, consumer should start consuming messages.
-
-
-	channel.basic_consume(callback,
-                      queue=queue_name,
-                      no_ack=True)
+	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
 	channel.start_consuming()
 
+When messages are received, a callback function will be invoked to print the message content.  
+
+	def onMessage(channel, method, properties, body):
+		print body
 
 ###Putting it all together
 
@@ -133,53 +134,60 @@ At this point, consumer should start consuming messages.
 			time.sleep(5)
 
 ## Node.js
-### Producer
-First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication. 
 
-	var connection = amqp.createConnection({ host: "your host", port: 5672,  
-	login:'username', password:'password', vhost:'vhost-name' });
-	
-Then producer should declare a **fanout** type exchange for delivering message.
+###Prerequisites
 
-Then producer should subscribe an exchange for delivering message. The type of exchange should be fanout. Fanout type exchange will deliver all messages to all queues which binding to it. 
+**Node.js client AMQP library**
 
-After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. Fanout type exchange will deliver all messages to all queues which binding to it. 
+The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
 
-After initialized the exchange, producer should publishing the message to this exchange. Since this is fanout-type exchange, producer should leave routing key empty. 
+You can install the library through `sudo npm install amqplib`.  
 
+Finally, require this library in your program.
 
+	var amqp = require("amqplib");
 
-	connection.on('ready',function(){
-		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
-			console.log('start send message');
-			exchange.publish('routingKey','hello world');
-		});
-	});	
+The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
 
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+As shown in the code, this library provides chainable callback API in the form of `.then(callback)`.  
+> For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  
+
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer.then(function(conn) {
+		return conn.createConfirmChannel().then(successCallback);
+	}).then(null, failureCallback);
+
+Then producer can publish messages to a fanout exchange where routing key is useless. It will assign a blank string to routing key in publish function.  
+Delivery mode = 1 means it's a non-persistent message.
+
+	ch.publish(exchangeName, "", content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1},  callback);
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	conn.close();
 
 ###Consumer
-First, consumer should initialize connection to the [robomq.io](http://www.robomq.io) server.  
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The difference is that consumer uses `conn.createChannel()` function, while producer uses `conn.createConfirmChannel()` because the latter one is only useful for publish confirm.  
 
-After that, consumer should initializes an exchange same as producer did. 
-Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
+Durable means the exchange or queue will survive possible broker failover. It's false in this example.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.   
 
-Consumer could also define a callback function as one to one section mentioned. 
-Now, consumer could define consuming method and start consuming messages. 
+	ch.assertExchange(exchangeName, "fanout", {durable: false, autoDelete: true});
+	ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+	ch.bindQueue(queueName, exchangeName, "");
 
-	connection.on('ready', function(){
-		connection.exchange('exchangeName', options={type:'fanout', autoDelete:false}, function(exchange){
-			var queue = connection.queue('QueueName', options={},function(queue){
-				console.log('Declare one queue, name is ' + queue.name);
-				queue.bind('exchangeName', '');
-				queue.subscribe(function (msg){
-					console.log('consumer received the message'+msg.data);
-				});
-			});
-		});
-	});
+Finally, consumer can consume messages from the queue.  
+The `noAck` option indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `noAck` is true, so producer does not explicitly acknowledge received messages.  
+The second parameter of `consume()` function is the callback on receiving messages. In this example, when messages are received, the callback function will be invoked to print the message content.  
 
-Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
-
+	ch.consume(queueName, function(message) {
+		console.log(message.content.toString());
+	}, {noAck: true});  
 
 ###Putting it all together
 
@@ -254,72 +262,225 @@ Binding between same pair of exchange and queue can be initialized more than one
 		setTimeout(listen, 5000);
 	}
 
-## Java
+## PHP
 
-### Producer
-First, producer should initialize the connection to the [robomq.io](http://www.robomq.io) server and initialize a channel for communication.  
+### Prerequisite
 
-	ConnectionFactory factory = new ConnectionFactory();
-	factory.setUsername(userName);
-	factory.setPassword(password);
-	factory.setVirtualHost(virtualHost);
-	factory.setHost(hostName);
-	factory.setPort(portNumber);
-	Connection conn = factory.newConnection();
-	Channel channel = connection.createChannel();
+**PHP client AMQP library**
 
+The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
 
-Then producer should declare a **fanout** type exchange for delivering message. 
+It uses composer to install in a few steps.  
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
+1. Add a `composer.json` file to your project:
 
+		{
+			"require": {
+				"videlalvaro/php-amqplib": "2.2.*"
+			}
+		}
 
-Fanout type exchange will deliver all messages to all queues bound to it. 
-After initializing the exchange, producer should publish messages to this exchange. Since this is **fanout** type, producer should leave routing key empty. 
+2. Download the latest composer in the same path:
 
-	channel.basicPublish(EXCHANGE_NAME, '', null, message.getBytes());
+		curl -sS https://getcomposer.org/installer | php
 
-Finally, after publishing all messages, producer should terminate the connection. 
+3. Install the library through composer:
 
-	channel.close();
-	connection.close();
+		./composer.phar install
 
+Finally, require this library in your program and use the classes.
+
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$channel =  $connection->channel();	
+
+Then producer can publish messages to a fanout exchange where routing key is useless. It will assign a blank string to routing key in publish function.  
+Delivery mode = 1 means it's a non-persistent message.
+ 
+	$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+	$channel->basic_publish($message, $exchangeName, $routing_key = "");
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	$connection->close();
 
 ###Consumer
-For broadcast consumer, first they should start a connection to the [robomq.io](http://www.robomq.io) server. 
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
 
-After that, consumer should initializes an exchange same as producer did. (their <b>type</b> and <b>name</b> should be exactly same)
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
 
-	channel.exchangeDeclare("exchangeName", "fanout");
+	$channel->exchange_declare($exchangeName, $type = "fanout", false, false, $auto_delete = true);
+	$channel->queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+	$channel->queue_bind($queueName, $exchangeName, $routing_key = "");
 
+Finally, consumer can consume messages from the queue.  
+The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens.  
 
-Then consumer should initialize a queue and bind this queue to the exchange. It will receive all the messages send to this exchange. 
+	$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
 
-	channel.exchangeDeclare(EXCHANGE_NAME, 'fanout');
-	String queueName = channel.queueDeclare().getQueue();
-	channel.queueBind(queueName, EXCHANGE_NAME, '');
-
-
-Consumer could also define a callback function as one to one section mentioned. 
-Now, consumer could define consuming method and start consuming messages. 
-
-
-	QueueingConsumer consumer = new QueueingConsumer(channel);
-	channel.basicConsume(queueName, true, consumer);
-
-
-Then you can define a loop to handle the messages got received. Here we provide an example which use infinite loop to keep consuming message and print it out. 
-
-
-	while (true) {
-		QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-		String message = new String(delivery.getBody());
-		System.out.println(" [x] Received '" + message + "'");
+	while(count($channel->callbacks)) {
+		$channel->wait();
 	}
 
+When messages are received, a callback function will be invoked to print the message content.  
 
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
 
-Binding between same pair of exchange and queue can be initialized more than one times. One queue can bind to more than one exchanges and one exchange can be bound with more than one queues. 
+### Putting it together
+
+**producer.php**
+
+	<?php
+	require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	use PhpAmqpLib\Message\AMQPMessage;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	
+	try {
+		//connect
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$channel =  $connection->channel();	
+	
+		//send message
+		//for fanout type exchange, routing key is useless
+		$message = new AMQPMessage("Hello World!", array("content_type" => "text/plain", "delivery_mode" => 1));
+		$channel->basic_publish($message, $exchangeName, $routing_key = "");
+	
+		//disconnect
+		$connection->close();
+	} catch(Exception $e) {
+		echo $e.PHP_EOL;
+	}
+	?>
+
+**consumer.php**
+
+	<?php
+	require_once __DIR__."/../vendor/autoload.php"; //directory of library folder
+	use PhpAmqpLib\Connection\AMQPConnection;
+	
+	$server = "hostname";
+	$port = 5672;
+	$vhost = "yourvhost";
+	$username = "username";
+	$password = "password";
+	$exchangeName = "testEx";
+	$queueName = "testQ1";
+	
+	//callback funtion on receiving messages
+	$onMessage = function ($message) {
+		echo $message->body.PHP_EOL;
+	};
+	
+	while (true) {
+		try {
+			//connect
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$channel = $connection->channel();
+	
+			//declare exchange and queue, bind them and consume messages
+			//for fanout type exchange, routing key is useless
+			$channel->exchange_declare($exchangeName, $type = "fanout", false, false, $auto_delete = true);
+			$channel->queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+			$channel->queue_bind($queueName, $exchangeName, $routing_key = "");
+			$channel->basic_consume($queueName, "", false, $no_ack = true, false, false, $callback = $onMessage);
+	
+			//start consuming
+			while(count($channel->callbacks)) {
+				$channel->wait();
+			}
+		} catch(Exception $e) {
+			//reconnect on exception
+			echo "Exception handled, reconnecting...\nDetail:\n".$e.PHP_EOL;
+			if ($connection != null) {
+				try {
+					$connection->close();
+				} catch (Exception $e1) {}
+			}
+			sleep(5);
+		}
+	}
+	?>
+
+## Java
+
+###Prerequisites
+
+**Java client AMQP library**
+
+The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
+
+Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
+
+	javac -cp ".:./rabbitmq-client.jar" Producer.java Consumer.java 
+
+Run the producer and consumer classes. For example,  
+
+	java -cp ".:./rabbitmq-client.jar" Consumer
+	java -cp ".:./rabbitmq-client.jar" Producer
+
+Of course, you can eventually compress your producer and consumer classes into jar files.
+
+###Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+
+	ConnectionFactory factory = new ConnectionFactory();
+	factory.setHost(server);
+	factory.setPort(port);
+	factory.setVirtualHost(vhost);
+	factory.setUsername(username);
+	factory.setPassword(password);
+	connection = factory.newConnection();
+	channel = connection.createChannel();
+
+Then producer can publish messages to a fanout exchange where routing key is useless. It will assign a blank string to routing key in publish function.  
+ 
+	String message = "Hello World!";
+	channel.basicPublish(exchangeName, "", MessageProperties.TEXT_PLAIN, message.getBytes());
+
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+	connection.close();
+
+###Consumer
+The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
+The fourth parameter of `exchangeDeclare()` and `queueDeclare()` are auto-delete. That means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+The third parameter of `queueDeclare()` is exclusive. That means no other consumer can consume the queue when this one is consuming it.  
+
+	channel.exchangeDeclare(exchangeName, "fanout", false, true, false, null);
+	channel.queueDeclare(queueName, false, true, true, null);
+	channel.queueBind(queueName, exchangeName, "", null);
+
+Finally, consumer can consume messages from the queue.  
+The second parameter of `basicConsume()` function no-ack indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, no-ack equals to true, so producer does not explicitly acknowledge received messages.  
+The while loop will be blocking the process and listening for messages until exception happens. When messages are received, it will print the message content.  
+
+	QueueingConsumer qc = new QueueingConsumer(channel);
+	channel.basicConsume(queueName, true, qc);
+	while (true) {
+		QueueingConsumer.Delivery delivery = qc.nextDelivery();
+		String message = new String(delivery.getBody());
+		System.out.println(message);
+	}
 
 ###Putting it all together
 
