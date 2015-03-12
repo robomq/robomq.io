@@ -50,13 +50,13 @@ Exclusive means no other consumer can consume the queue when this one is consumi
 
 	channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
 	channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
-	channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
+	channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = None)
 
 Finally, consumer can consume messages from the queue.  
 The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
 The `start_consuming()` function will be blocking the process until `stop_consuming()` is invoked or exception happens.  
 
-	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
+	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 	channel.start_consuming()
 
 When messages are received, a callback function will be invoked to print the message content.  
@@ -121,7 +121,7 @@ When messages are received, a callback function will be invoked to print the mes
 			#for fanout type exchange, routing key is useless
 			channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
 			channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
-			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
+			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = None)
 			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 			channel.start_consuming()
 		except Exception, e:

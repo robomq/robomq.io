@@ -33,7 +33,7 @@ while True:
 		#for fanout type exchange, routing key is useless
 		channel.exchange_declare(exchange = exchangeName, exchange_type = "fanout", auto_delete = True)
 		channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
-		channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key=None)
+		channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = None)
 		channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 		channel.start_consuming()
 	except Exception, e:

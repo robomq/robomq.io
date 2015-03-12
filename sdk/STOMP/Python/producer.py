@@ -8,7 +8,6 @@
  * robomq.io (http://www.robomq.io)
 """
 
-import sys
 import time
 from stompest.config import StompConfig
 from stompest.sync import Stomp

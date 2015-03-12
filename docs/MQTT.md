@@ -103,7 +103,6 @@ When you no longer need it, you can also unsubscribe a topic.
 
 **producer.py**
 
-	import sys
 	import time
 	import paho.mqtt.client as mqtt
 	
@@ -131,7 +130,6 @@ When you no longer need it, you can also unsubscribe a topic.
 
 **consumer.py**
 
-	import sys
 	import time
 	import paho.mqtt.client as mqtt
 	

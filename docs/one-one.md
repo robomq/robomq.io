@@ -54,7 +54,7 @@ Finally, consumer can consume messages from the queue.
 The `no_ack` parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, `no_ack` equals to true, so producer does not explicitly acknowledge received messages.  
 The `start_consuming()` function will be blocking the process until `stop_consuming()` is invoked or exception happens.  
 
-	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
+	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 	channel.start_consuming()
 
 When messages are received, a callback function will be invoked to print the message content.  
@@ -117,7 +117,7 @@ When messages are received, a callback function will be invoked to print the mes
 			#declare queue and consume messages
 			#one-to-one messaging uses the default exchange, where queue name is the routing key
 			channel.queue_declare(queue = queueName, auto_delete = True)
-			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack=True)
+			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 			channel.start_consuming()
 		except Exception, e:
 			#reconnect on exception

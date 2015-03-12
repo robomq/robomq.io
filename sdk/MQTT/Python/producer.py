@@ -8,7 +8,6 @@
  * robomq.io (http://www.robomq.io)
 """
 
-import sys
 import time
 import paho.mqtt.client as mqtt
 

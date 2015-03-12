@@ -149,7 +149,6 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 
 **producer.py**
 
-	import sys
 	import time
 	from stompest.config import StompConfig
 	from stompest.sync import Stomp
@@ -175,7 +174,6 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 
 **consumer.py**
 	
-	import sys
 	import time
 	from stompest.config import StompConfig
 	from stompest.protocol import StompSpec
