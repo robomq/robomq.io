@@ -8,20 +8,22 @@
 # robomq.io (http://www.robomq.io)
 
 import pika
+import ssl
 
 server = "hostname"
 port = 5671
 vhost = "yourvhost" 
 username = "username"
 password = "password"
-caCert = "http://www.tbs-x509.com/AddTrustExternalCARoot.crt"
+caCert = "./AddTrustExternalCARoot.crt"
 exchangeName = "testEx"
 routingKey = "test"
 
 try:
 	#connect
 	credentials = pika.PlainCredentials(username, password)
-	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl=True, ssl_options={"ca_certs": caCert})
+	sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
+	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
 	connection = pika.BlockingConnection(parameters)
 	channel = connection.channel()
 
