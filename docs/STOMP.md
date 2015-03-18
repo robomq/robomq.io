@@ -89,7 +89,7 @@ In the examples, STOMP producer will first ask user for the quantity of messages
 
 All examples have implemented automatic reconnecting, which is crucial in real production.  
 
-The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io) on GitHub. 
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP) on GitHub. 
 
 Follow the *Message destinations* section and you will be able to switch it to other scenario by changing only the destination argument.  
 

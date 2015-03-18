@@ -13,7 +13,7 @@ We will provide example of WebSTOMP in JavaScript that is embedded in HTML.
 
 In the example, WebSTOMP producer will first connect to [robomq.io](http://www.robomq.io) with inputted information from Web page, then publish inputted text to the inputted message destination. WebSTOMP consumer will also first connect then subscribe the inputted message destination and print the message topic and payload as it receives messages.  
 
-The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io) on GitHub.  
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io/tree/master/sdk/WebSTOMP) on GitHub.  
 
 Follow the *Message destinations* section in STOMP chapter and you will be able to switch among all the scenarios by changing only the message destination. This could also be a tutorial tool for STOMP novices to familiarize themselves with STOMP and WebSTOMP.  
 

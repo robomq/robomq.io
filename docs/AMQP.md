@@ -21,7 +21,7 @@ In the examples, details vary among five scenarios, but the typical procedure is
 
 All examples have implemented automatic reconnecting, which is crucial in real production.
 
-The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io) on GitHub.  
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io/tree/master/sdk/AMQP) on GitHub.  
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 > Always run consumer first to create the exchange and queue for producer to send messages to.   

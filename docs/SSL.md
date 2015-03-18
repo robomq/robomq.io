@@ -2,7 +2,9 @@
 
 > Before reading this chapter, we assume that you already know AMQP protocol. Knowing MQTT and STOMP would be great too. If not, please go through at least the *Key based message routing* section in User Guide.
 
-[robomq.io](http://www.robomq.io) has obtained certificate from a certificate authority (CA) and supports SSL (secure socket layer) connection for all available protocols, including AMQP, MQTT, STOMP and WebSTOMP. This chapter intends to introduce you the method to establish SSL connection between [robomq.io](http://www.robomq.io) broker and your client program, except for WebSTOMP.  
+[robomq.io](http://www.robomq.io) has obtained certificate from a certificate authority (CA) and supports SSL (secure socket layer) connection for all available protocols, including AMQP, MQTT, STOMP and WebSTOMP. The SSL ports of those four protocols are respectively AMQP: 5671, MQTT: 8883, STOMP: 61614, WebSTOMP: 15673.  
+
+This chapter intends to introduce you the method to establish SSL connection between [robomq.io](http://www.robomq.io) broker and your client program, except for WebSTOMP.  
 
 The certificate of our root CA can be downloaded at <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>. It is needed to verify the leaf certificate of [robomq.io](http://www.robomq.io) because the latter one was granted by the root CA through a chain of trust.  
 
@@ -20,13 +22,15 @@ The first example verifies [robomq.io](http://www.robomq.io) certificate, while 
 
 Please refer to the *Key based message routing* section in User Guide for library dependency, program logic, code comments and everything irrelevant with connecting itself.  
 
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io/tree/master/sdk/SSL) on GitHub. 
+
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 > Always run consumer first to create the exchange and queue for producer to send messages to.   
 
 ## Certificate verified
 
 ### Connect
-Compared to non-SSL connect method shown bellow,  
+Compared to non-SSL connect method recapped bellow,  
 
 	credentials = pika.PlainCredentials(username, password)
 	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
@@ -129,7 +133,7 @@ Compared to certificate-verified connect method above, certificate-not-verified 
 
 Even if the root CA certificate is provided, it will be ignored.  
 
-You may safely use this method to connect over SSL without verification because [robomq.io](http://www.robomq.io) is a trustworthy service provider. However, this way is generally not recommended for unknown services.  
+You can safely use this method to connect to [robomq.io](http://www.robomq.io) broker over SSL without verification because [robomq.io](http://www.robomq.io) is a trustworthy service provider. However, this way is generally not recommended for unknown services.  
 
 ### Putting it together
 
