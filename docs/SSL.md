@@ -14,7 +14,7 @@ An unfortunate fact is that not all message queue client libraries support SSL c
 
 # SSL use cases
 
-We will provide examples of AMQP SSL clients of key based message routing scenario in Python. They are variants of the Python example in *Key based message routing* section. The only deference is they connect over SSL, so we're going to focus on the connecting part of the code.  
+We will provide examples of AMQP SSL clients of key based message routing scenario in Python. They are variants of the Python example in *Key based message routing* section. The only difference is that they connect over SSL, so we're going to focus on the connecting part of the code.  
 
 The first example verifies [robomq.io](http://www.robomq.io) certificate, while the second one doesn't. You may choose to follow any of them according to your specific demands.  
 
