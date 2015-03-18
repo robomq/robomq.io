@@ -19,7 +19,6 @@ Following use cases using AMQP protocols are documented with code on the [robomq
 
 5. Request and reply : two way request reply communication
 
-
 ##[MQTT use cases](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
 
 MQTT (Message Queues for Telemetry Transport) is lighter weight protocol for device specific use cases supporting pub-sub messaging pattern. MQTT code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT)
@@ -28,6 +27,16 @@ MQTT (Message Queues for Telemetry Transport) is lighter weight protocol for dev
 
 STOMP (Simple Text Oriented Messaging Protocol) is a HTTP like simple protocol and can be used for variety of use cases with very little programming. STOMP code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/STOMP)
 
-##Supported programming languages
+##[Other use cases](https://github.com/robomq/robomq.io/tree/master/sdk)
+
+###[WebSTOMP](https://github.com/robomq/robomq.io/tree/master/sdk/WebSTOMP)
+
+WebSTOMP is a simple bridge exposing the STOMP protocol over emulated HTML5 WebSockets, which makes it possible to use [robomq.io](http://www.robomq.io) from web browsers. WebSTOMP code examples are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/WebSTOMP)
+
+###[SSL](https://github.com/robomq/robomq.io/tree/master/sdk/SSL)
+
+[robomq.io](http://www.robomq.io) has obtained certificate from certificate authority and supports SSL connection for all available protocols. SSL code examples  are on [robomq.io GitHub](https://github.com/robomq/robomq.io/tree/master/sdk/SSL)
+
+#Supported programming languages
 
 [robomq.io](http://www.robomq.io)  supports majority of the programming languages. For most programming languages, the client side libraries exists for AMPQ, MQTT and STOMP protocols. The [SDK on GitHub](https://github.com/robomq/robomq.io/tree/master/sdk) contains examples in Python, Node.js, PHP, Java, C and C++. We continue to add examples in additional languages.  

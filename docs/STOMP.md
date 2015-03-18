@@ -2,7 +2,7 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding STOMP.  
 
-[robomq.io](http://www.robomq.io) supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker.  
+[robomq.io](http://www.robomq.io) supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker. Its port is **61613**, SSL port is **61614**.  
 
 STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol. It is much simpler than AMQP and so more handy for message queue novices. STOMP provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers. We would recommend STOMP if you are implementing a simple message queuing application without very complex demands on combination of exchanges and queues.  
 > [Full documentation of STOMP](http://stomp.github.io/)
@@ -555,7 +555,7 @@ When you no longer need it, you can also unsubscribe a destination.
 					client = new Client(server, port, login, passcode, vhost);
 					client.subscribe(destination, new Listener() {
 						/**
-						 * This method is the overrided callback on receiving messages.
+						 * This method is the overridden callback on receiving messages.
 						 * @ It is event-driven. You don't call it in your code.
 						 * @ It prints the message body on console.
 						 * @ There're other callback functions provided by this library.

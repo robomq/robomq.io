@@ -1,6 +1,6 @@
 # Introduction
 
-[robomq.io](http://www.robomq.io) supports AMQP 0-9-1 as the main module of our broker.  
+[robomq.io](http://www.robomq.io) supports AMQP 0-9-1 as the main module of our broker. Its port is **5672**, SSL port is **5671**.    
 
 AMQP (Advanced Message Queuing Protocol) is a networking protocol that enables conforming client applications to communicate with conforming messaging middleware brokers. Messaging brokers receive messages from producers (applications that publish them, also known as publishers) and route them to consumers (applications that process them). Since AMQP is a network protocol, the producers, consumers and the broker can all reside on different machines.  
 The AMQP 0-9-1 Model has the following view of the world: messages are published to exchanges, which are often compared to post offices or mailboxes. Exchanges then distribute message copies to queues using rules called bindings. Then AMQP brokers either deliver messages to consumers subscribed to queues, or consumers fetch / pull messages from queues on demand. Queues, exchanges and bindings are collectively referred to as AMQP entities.  

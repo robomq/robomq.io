@@ -31,7 +31,7 @@ public class Consumer {
 	private boolean connected = false;
 
 	/**
-	 * This method is the overrided callback on receiving messages.
+	 * This method is the overridden callback on receiving messages.
 	 * @ It is event-driven. You don't call it in your code.
 	 * @ It prints the message topic and payload on console.
 	 * @ There're other callback functions provided by this library.

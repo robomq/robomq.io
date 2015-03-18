@@ -18,7 +18,6 @@ The applications developed using Message Queues are decouple by design. What it 
 
  - Try different message delivery topologies to achieve complex process orchestration and grow the system organically
 
-
     ***Note*** : *Refer to this excellent book on Integration Design patterns to learn and build complex messaging applications [Enterprise Integration Patterns](http://www.eaipatterns.com/eaipatterns.html)*  
 
 ##Scalable systems

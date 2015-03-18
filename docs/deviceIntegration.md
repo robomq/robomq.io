@@ -1,17 +1,16 @@
 #IoT and M2M Integration
 
-Device, sensors and systems connecting together are driving the next generation of applications creating the Internet of Things (IoT). [robomq.io](http://www.robomq.io) provides an open standard based platform to connect your devices and sensors to the back end applications, systems, processes and people to build the nest big thing. You can work with familiar protocols like MQTT ( MQ for Telemetry), AMQP (Advanced Message Queue Protocol) and STOMP ( Simple Text Oriented Messaging Protocol) while using robomq.
-
+Devices, sensors and systems connecting together are driving the next generation of applications creating the Internet of Things (IoT). [robomq.io](http://www.robomq.io) provides an open standard based platform to connect your devices and sensors to the back-end applications, systems, processes and people to build the nest big thing. You can work with message queue protocols like MQTT ( MQ for Telemetry), AMQP (Advanced Message Queue Protocol) and STOMP ( Simple Text Oriented Messaging Protocol) while using [robomq.io](http://www.robomq.io).
 
 The protocols supported by [robomq.io](http://www.robomq.io) can run on very small footprint devices using a choice among languages that are supported by device OS and profile.
 
-A common choice of devices include Raspberry Pi, Audrino, Beaglebone and mBed based platforms. The most basic requirement is the support for running one languages and network connectivity. You should however be cognizant of the device footprint when choosing the messaging protocol.
+Common choices of devices include Raspberry Pi, Audrino, Beaglebone and mBed based platforms. The most basic requirement is the support for running one languages and network connectivity. You should however be cognizant of the device footprint when choosing the message queue protocol.
 
 For the example case, we have chosen Raspberry Pi device running a small Linux kernel (a variant of Debian Linux) and Python programming language.
 
 ##Raspberry Pi as an example device
 
-The Raspberry Pi is a credit-card sized micro-computer that plugs into your TV and a keyboard. It is a capable little computer which can be used in electronics projects. In this guide you will be introduced how to use raspberry pi to acquire information from real-world via sensors and other electrical components, and then integrate raspberry pi into [robomq.io](http://www.robomq.io).
+The Raspberry Pi is a credit-card sized micro-computer that plugs into your TV and a keyboard. It is a capable little computer which can be used in electronics projects. In this guide you will be introduced how to use raspberry pi to acquire information from real-world via sensors and other electrical components, and then integrate raspberry pi into [robomq.io](http://www.robomq.io) as data producer.
 
 ![RaspberryPi](./images/raspberryPi.jpg)
 
@@ -24,7 +23,6 @@ For detailed instructions on how to setup a raspberry pi, please go to the offic
 [http://www.raspberrypi.org/documentation/](http://www.raspberrypi.org/documentation/ "Raspberry Pi Documentation")
 
 ###Prerequisite
-
 
 ###Raspberry Pi
 
@@ -42,35 +40,30 @@ A typical Android cellphone charger is good for raspberry pi.
 
 ###Monitor(optional)
 
-Raspberry Pi has an HDMI port for display. It may be easier and more comfortable for you to work with your raspberry pi directly on it's own system GUI. But if you do not, there is no problem because you can also use you laptop to ssh the raspberry and control it in the terminal. For tutorial how to ssh a raspberry you can refer to Adafruit Learning System:
+Raspberry Pi has an HDMI port for display. It may be easier and more comfortable for you to work with your raspberry pi directly on it's own system GUI. But if you do not, there is still no problem because you can also use you laptop to ssh the raspberry and control it in the terminal. For tutorial how to ssh a raspberry you can refer to Adafruit Learning System:
 
 [https://learn.adafruit.com/adafruits-raspberry-pi-lesson-6-using-ssh](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-6-using-ssh "raspberry pi ssh")
 
 ###Sensors:
 
-Raspberry pi is compatible with a lot of sensors. In our documentation we are going to show 3 sensors for demonstration: DHT11 humidity & temperature sensor, PIR motion sensor and light sensor. You can get these sensors from online shopping site(Amazon, ebay, etc).
+Raspberry pi is compatible with a lot of sensors. In our documentation we are going to show 3 sensors for demonstration: DHT11 humidity & temperature sensor, PIR motion sensor and light sensor. You can get these sensors from online shopping sites (Amazon, ebay, etc).
 
 ###Breadboard and jumper wires
 
 These are used to connect sensors to the raspberry pi. You can also get these from online shopping sites.
 
-
 ![components](./images/components.jpg)
-
 
 ###Python
 
 This is the language we recommend for raspberry pi-sensor programming. As it's handy, simple, and is supported by raspberry pi. Python 2.7.3 or above is preferred.
 
-
-
-
 ###Raspberry Pi and sensors
 
 ![Connected Sensors](./images/connectedSensors.jpg)
-With raspberry pi we can easily develop some sensor projects. In this part we are going to show 3 examples: PIR motion sensor, DHT11 humidity & temperature sensor, and light sensor. Before integrate these sensors into [robomq.io](http://www.robomq.io), we would try them locally on your raspberry. You can see how them work in your raspberry pi LXTerminal.
+With raspberry pi we can easily develop some sensor programs. In this part we are going to show 3 examples: PIR motion sensor, DHT11 humidity & temperature sensor, and light sensor. Before integrating these sensors into [robomq.io](http://www.robomq.io), we would try them locally on your raspberry. You can see how them work in your raspberry pi LXTerminal.  
 
-For details about how to set up and run the sensors with raspberry pi, please go to the **Adafruit Learning System**.
+For details about how to set up and run the sensors with raspberry pi, please go to the **Adafruit Learning System**.  
 
 ###DHT11 humidity & temperature sensor
 
@@ -90,17 +83,17 @@ For details about how to set up and run the sensors with raspberry pi, please go
 
 [https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview "PIR motion sensor")
 
-
-
 ##Integrate Raspberry Pi with robomq.io
 
-After you finished setting it up and testing it locally, you may start to think: Why would I do this? What can I do with this in real life? 
+After you have finished setting it up and testing it locally, you may start to think: Why would I do this? What can I do with this in real world? 
 
-Okay, let's talk about a scenario for this. You are a Device Integration Engineer working at [robomq.io](http://www.robomq.io). One day a customer contact you. He said he is an employee in a water & sewer utility company. They need a system to monitor their water wells. They need temperature, humidity, brightness, and intruder detection information to be detected as it happens and, for some, at a defined interval. And for the convenience of management and ability to take immediate actions, they need all the information sent to their control center.
+Okay, let's imagine a scenario. You are an employee in a water & sewer utility company. You need a system to monitor your water wells. You need temperature, humidity, luminance, and intruder detection real-time data to be read as it happens and, for some, at a defined interval. And for the convenience of management and ability to take immediate actions, you need all the data to be visible in your control center.
 
-As an smart engineer, you have already developed the information collecting functions, as discussed in sections above, by working with raspberry pi and sensors locally. What you need now is to write some code for sending the information acquired from the sensors via [robomq.io](http://www.robomq.io) to the water & sewer utility company's control center for monitoring, alerts, analytics and other business specific actions.
+As an smart engineer, you have already developed the sensor data collecting programs, as discussed in sections above, by working with raspberry pi and sensors locally. What you need now is to add some simple code to send the data read from the sensors via [robomq.io](http://www.robomq.io) broker to [robomq.io](http://www.robomq.io) dashboard application so that you can easily open the dashboard and view data charts.
 
-For sending messages, the main job is to create a producer method, then call this method in your raspberry pi & sensor programs. Follow the sections below to build this application. You will find it easy, handy and fun !!!
+For sending data, the main job is to create a producer module, then call its send method in your raspberry pi sensor programs. Follow the next section to build this application. You will find it easy, handy and fun !!!  
+
+> [robomq.io](http://www.robomq.io) has now enhanced and packaged the sensorProducer module introduced bellow. You may either directly use our package or build the module yourself following the next section. The Python pip package is available at <https://s3.amazonaws.com/public.robomq/packages/sensorProducer.tar.gz>. Read our blog at <http://robomq.blogspot.com/2015/02/build-intruder-detector-with-raspberry.html> for specific use guide.  
 
 ##Messaging with AMQP
 
@@ -143,13 +136,14 @@ First, launch your raspberry pi and create a file named "producer.py", then past
 			channel = connect() #reconnect to broker
 
 
-Above is the "producer.py" file that you are going to call in your raspberry pi-sensor codes to send those messages to [robomq.io](http://www.robomq.io).Now we are all set for the producer, after this we are going to do a little modification in the sensor codes.
+It will be the producer module that you are going to import in your raspberry pi-sensor codes to send messages to [robomq.io](http://www.robomq.io). As you can see, the producer module contains 2 methods. First is the `connect()` method that is in charge of establishing connection to the [robomq.io](http://www.robomq.io) broker. It will automatically reconnect on exception too. Another method is `send()` which publishes messages through [robomq.io](http://www.robomq.io) to worker consumers running on [robomq.io](http://www.robomq.io) server. (You always have the option to build your own worker consumers to handle messages sent by yourself).  
+In any of your sensor programs, just call `send()` function to send the data collection to [robomq.io](http://www.robomq.io) broker.  A message should be a JSON object containing key-value pairs. Now we are all set for the producer module, after this we are going add a few lines in the sensor programs.
 
-####Modify Sensor Programs
+####Edit Sensor Programs
 
-In this part we are going to combine the DHT11 sensor and the Light sensor into one program, just for clean purpose.
+In this part we are going to combine the DHT11 sensor and the Light sensor into one program, just for clean-wise.
 
-Revise your DHT11 sensor and Light sensor program as follow:
+Edit your DHT11 sensor and Light sensor program as bellow:
 
 
     import RPi.GPIO as gpio
@@ -196,7 +190,7 @@ Revise your DHT11 sensor and Light sensor program as follow:
     time.sleep(30) #interval
 
 
-And then revise your PIR motion sensor as follow:
+And then edit your PIR motion sensor as bellow:
 
 
     import RPi.GPIO as gpio
@@ -229,13 +223,13 @@ And then revise your PIR motion sensor as follow:
         gpio.remove_event_detect(mpin)
 
 
-Now you can see all the messages been sent via [robomq.io](http://www.robomq.io) to the dashboard.
+Now all your data will be sent via [robomq.io](http://www.robomq.io) broker to the our dashboard application. The only thing you need to accomplish is just open your dashboard in a Web browser.    
 
 ##Messaging with MQTT
 
-In the above example we fulfilled message sending by creating a producer method and call it in the sensor program. However there are more than one way we can build a producer as [robomq.io](http://www.robomq.io) supports multiple protocols. Now we are going to show you one more example how to send messages using the MQTT protocol followed by an example using STOMP.
+In the example above we implemented sending message by creating a producer module in AMQP protocol and call its `send()` function in the sensor program. However there are more than one way we can build a producer as [robomq.io](http://www.robomq.io) supports multiple protocols. Now we are going to show you one more example how to send messages using the MQTT protocol.
 
-For MQTT, the only difference is the producer code. Modify the "producer.py" as follow:
+You only need to change the producer module. Modify the "producer.py" as bellow:
 
 	import sys, os, json
 	import paho.mqtt.client as mqtt
@@ -283,10 +277,9 @@ For MQTT, the only difference is the producer code. Modify the "producer.py" as 
 
 Since the difference is limited in the producer module, there is no need to modify the sensor programs.
 
-
 ##Messaging with STOMP
 
-For STOMP, no change is required to sensor programs, only modify your "producer.py" as follow:
+For STOMP producer module, no change is required for sensor programs either, only change your "producer.py" as bellow:
 
 	import sys, os, json
 	from stompest.config import StompConfig
@@ -321,5 +314,3 @@ For STOMP, no change is required to sensor programs, only modify your "producer.
 		except:
 			print "Error: Failed to send message"
 			client = connect() #reconnect to broker
-
-As you can see, the "producer.py" code contains 2 methods. First is the "connect" method that is in charge of establishing connection to the [robomq.io](http://www.robomq.io) broker.  The other is the "send" method that publishes messages through [robomq.io](http://www.robomq.io) to any listening consumers.

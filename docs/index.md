@@ -16,11 +16,13 @@ Key features of [robomq.io](www.robomq.io)  platform are:
 
 4. **Reliable delivery** with options for persistant or durable messages
 
-5. **Monitoring, dashboards, analytics and alerts**
+5. **Monitoring, dashboards, analytics and alerts** - we keep developing new add-ons based on the expandability of the platform  
 
 6. **Multiple choices of protocols** for your devices and application - support for MQTT, AMQP, STOMP and HTTP/REST
 
 7. **Support for multiple programming languages** - with the support built for standard protocols like MQTT, AMQP, STOMP and HTTP/REST libraries supporting these protocols by default support robomq.io
+
+8. **Secure connection** - [robomq.io](http://www.robomq.io) has obtained certificate from certificate authority and supports SSL (secure socket layer) connection for all available protocols
 
 ##Platform components
 

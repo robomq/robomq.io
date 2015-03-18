@@ -15,7 +15,7 @@ port = 5671
 vhost = "yourvhost" 
 username = "username"
 password = "password"
-caCert = "./AddTrustExternalCARoot.crt"
+caCert = "./AddTrustExternalCARoot.crt" #change it to the actual path to CA certificate
 exchangeName = "testEx"
 routingKey = "test"
 

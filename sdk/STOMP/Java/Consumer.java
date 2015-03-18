@@ -26,7 +26,7 @@ class Consumer {
 				client = new Client(server, port, login, passcode, vhost);
 				client.subscribe(destination, new Listener() {
 					/**
-					 * This method is the overrided callback on receiving messages.
+					 * This method is the overridden callback on receiving messages.
 					 * @ It is event-driven. You don't call it in your code.
 					 * @ It prints the message body on console.
 					 * @ There're other callback functions provided by this library.

@@ -2,7 +2,7 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding MQTT.  
 
-[robomq.io](http://www.robomq.io) supports MQTT 3.1 as an extension to the AMQP broker.
+[robomq.io](http://www.robomq.io) supports MQTT 3.1 as an extension to the AMQP broker. Its port is **1883**, SSL port is **8883**.
 
 MQTT stands for Message Queue Telemetry Transport. It is a publish / subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimize network bandwidth and device resource requirements whilst also attempting to ensure reliability and some degree of assurance of delivery. These principles also turn out to make the protocol ideal of the emerging "machine-to-machine" (M2M) or "Internet of Things" (IoT) world of connected devices, and for mobile applications where bandwidth and battery power are at a premium. 
 > [Full documentation of MQTT](http://mqtt.org)
@@ -556,7 +556,7 @@ When you no longer need it, you can also unsubscribe a topic.
 		private boolean connected = false;
 	
 		/**
-		 * This method is the overrided callback on receiving messages.
+		 * This method is the overridden callback on receiving messages.
 		 * @ It is event-driven. You don't call it in your code.
 		 * @ It prints the message topic and payload on console.
 		 * @ There're other callback functions provided by this library.

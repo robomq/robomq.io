@@ -25,7 +25,7 @@ try:
 	msgNum = int(input("Quantity of test messages: "))
 	for i in range(msgNum):	
 		message = "test msg " + str(i + 1)
-		client.send(destination, body = message, headers=None, receipt=None)	#SEND
+		client.send(destination, body = message, headers = None, receipt = None)	#SEND
 		time.sleep(1)	
 	client.disconnect()	#DISCONNECT
 except Exception, e:

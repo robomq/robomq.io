@@ -34,11 +34,11 @@ def on_message(client, userdata, message):	#event on receiving message
 
 while True:
 	try:
-		client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
+		client = mqtt.Client(client_id = "", clean_session = True, userdata = None, protocol = "MQTTv31")
 		client.username_pw_set(vhost + ":" + username, password)
 		client.on_connect = on_connect
 		client.on_message = on_message
-		client.connect(server, port, keepalive=60, bind_address="")	#connect
+		client.connect(server, port, keepalive = 60, bind_address = "")	#connect
 		client.loop_forever()	#loop forever
 	except Exception, e:
 		#reconnect on exception

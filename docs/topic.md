@@ -67,7 +67,7 @@ The `start_consuming()` function will be blocking the process until `stop_consum
 	channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
 	channel.start_consuming()
 
-When messages are received, a callback function will be invoked to print the message content.  
+When messages are received, a callback function `onMessage()` will be invoked to print the message content.  
 
 	def onMessage(channel, method, properties, body):
 		print body
