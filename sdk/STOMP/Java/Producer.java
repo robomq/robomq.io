@@ -9,6 +9,7 @@
  */
 
 import net.ser1.stomp.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class Producer {
@@ -26,6 +27,8 @@ class Producer {
 			System.out.print("Quantity of test messages: ");
 			Scanner scanner = new Scanner(System.in);
 			int msgNum = scanner.nextInt();
+			HashMap headers = new HashMap();
+			headers.put("content-type", "text/plain");
 			for (int i = 0; i < msgNum; i ++) {
 				String message = "test msg " + Integer.toString(i + 1);
 				client.send(destination, message, null);

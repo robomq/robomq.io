@@ -10,7 +10,6 @@
 
 import time
 from stompest.config import StompConfig
-from stompest.protocol import StompSpec
 from stompest.sync import Stomp
 
 server = "hostname"
@@ -24,7 +23,7 @@ while True:
 	try:
 		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
 		client.connect(versions = ["1.2"], host = vhost)	#CONNECT
-		subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_CLIENT_INDIVIDUAL, StompSpec.ID_HEADER: '0'})	#SUBSCRIBE
+		subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
 		while True:
 			frame = client.receiveFrame()
 			try:

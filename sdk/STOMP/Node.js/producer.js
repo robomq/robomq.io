@@ -24,7 +24,7 @@ client.connect(login, passcode
 		process.stdin.on("data", function (msgNum) {
 			for(var i = 1; i <= msgNum; i++){	
 				var message = "test msg " + i;
-				client.send(destination, {}, message);
+				client.send(destination, {"content-type": "text/plain"}, message);
 			}
 			client.disconnect(function() {
 				process.exit(0);

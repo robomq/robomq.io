@@ -121,7 +121,7 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	client.send(destination, body = message, headers=None, receipt=None)
+	client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
@@ -131,10 +131,10 @@ At last, producer will disconnect with the [robomq.io](http://www.robomq.io) bro
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
-If you set `StompSpec.ACK_HEADER: StompSpec.ACK_AUTO`, you don't need `client.ack(frame)`.  
-The `StompSpec.ID_HEADER` must be different for multiple subscriptions because `client.receiveFrame()` receives messages from any subscription and client needs to distinguish them by subscription ID.  
+If you set `"ack": "auto"`, you don't need `client.ack(frame)`.  
+The `"id"` must be different for multiple subscriptions because `client.receiveFrame()` receives messages from any subscription and client needs to distinguish them by subscription ID.  
 
-	subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_CLIENT_INDIVIDUAL, StompSpec.ID_HEADER: '0'})
+	subscription = client.subscribe(destination, {"ack": "client", "id": "0"})
 	
 	while True:
 		frame = client.receiveFrame()
@@ -166,7 +166,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 		msgNum = int(input("Quantity of test messages: "))
 		for i in range(msgNum):	
 			message = "test msg " + str(i + 1)
-			client.send(destination, body = message, headers=None, receipt=None)	#SEND
+			client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)	#SEND
 			time.sleep(1)	
 		client.disconnect()	#DISCONNECT
 	except Exception, e:
@@ -176,7 +176,6 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 	
 	import time
 	from stompest.config import StompConfig
-	from stompest.protocol import StompSpec
 	from stompest.sync import Stomp
 	
 	server = "hostname"
@@ -190,7 +189,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 		try:
 			client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
 			client.connect(versions = ["1.2"], host = vhost)	#CONNECT
-			subscription = client.subscribe(destination, {StompSpec.ACK_HEADER: StompSpec.ACK_CLIENT_INDIVIDUAL, StompSpec.ID_HEADER: '0'})	#SUBSCRIBE
+			subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
 			while True:
 				frame = client.receiveFrame()
 				try:
@@ -231,7 +230,7 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it. 
 
-	client.send(destination, headers, message);
+	client.send(destination, {"content-type": "text/plain"}, message);
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
@@ -274,7 +273,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 			process.stdin.on("data", function (msgNum) {
 				for(var i = 1; i <= msgNum; i++){	
 					var message = "test msg " + i;
-					client.send(destination, {}, message);
+					client.send(destination, {"content-type": "text/plain"}, message);
 				}
 				client.disconnect(function() {
 					process.exit(0);
@@ -358,7 +357,7 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	$client->send($destination, $message, $headers = []);
+	$client->send($destination, $message, array("content-type" => "text/plain"));
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker. This library contains disconnect function in client class's destructor.  
 
@@ -401,7 +400,7 @@ When you no longer need it, you can also unsubscribe a destination.
 		$msgNum = rtrim(fgets(STDIN), PHP_EOL);
 		for ($i = 1; $i <= $msgNum; $i++) {
 			$message = "test msg ".$i;
-			$client->send($destination, $message, $headers = []);
+			$client->send($destination, $message, array("content-type" => "text/plain"));
 			sleep(1);
 		}
 		unset($client);
@@ -474,7 +473,9 @@ After that, producer can send messages to a particular destination.
 The third parameter of `send()` function is message headers.  
 In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	client.send(destination, message, null);
+	HashMap headers = new HashMap();
+	headers.put("content-type", "text/plain");
+	client.send(destination, message, headers);
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
@@ -500,6 +501,7 @@ When you no longer need it, you can also unsubscribe a destination.
 **Producer.java**
 
 	import net.ser1.stomp.*;
+	import java.util.HashMap;
 	import java.util.Scanner;
 	
 	class Producer {
@@ -517,6 +519,8 @@ When you no longer need it, you can also unsubscribe a destination.
 				System.out.print("Quantity of test messages: ");
 				Scanner scanner = new Scanner(System.in);
 				int msgNum = scanner.nextInt();
+				HashMap headers = new HashMap();
+				headers.put("content-type", "text/plain");
 				for (int i = 0; i < msgNum; i ++) {
 					String message = "test msg " + Integer.toString(i + 1);
 					client.send(destination, message, null);
