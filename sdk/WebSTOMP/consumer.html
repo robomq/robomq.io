@@ -18,14 +18,14 @@
 		<form name="connForm" action="JavaScript:connect()">
 			protocol:<br><input type="radio" name="protocol" value="http" checked>http
 					&nbsp;<input type="radio" name="protocol" value="https">https<br>
-			host:<br><input type="text" name="host" value="trial.robomq.io"><br>
+			host:<br><input type="text" name="host" value="localhost"><br>
 			port:<br><input type="text" name="port" value="15674"><br>
-			vhost:<br><input type="text" name="vhost" value=""><br>
-			username:<br><input type="text" name="username" value=""><br>
-			password:<br><input type="text" name="password" value=""><br><br>
+			vhost:<br><input type="text" name="vhost" value="/"><br>
+			username:<br><input type="text" name="username" value="admin"><br>
+			password:<br><input type="text" name="password" value="admin"><br><br>
 			<input type="submit" value="connect">
 		</form>
-
+		
 		<br><h3>Step 2:</h3>
 		<form name="subForm" action="JavaScript:subscribe()">
 			destination:<br><input type="text" name="destination" value="/queue/test"><br><br>
@@ -37,7 +37,7 @@
 	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 	<script src="stomp.js"></script>
 	<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
-	<!--change src to file's actual path; don't directly source this link-->
+	<!--change src to file's actual path; don't directly source this GitHub link-->
 
 	<script>
 		var client = null;

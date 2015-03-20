@@ -18,7 +18,7 @@ The example code provided bellow could be the short version, it might have omitt
 Follow the *Message destinations* section in STOMP chapter and you will be able to switch among all the scenarios by changing only the message destination. This could also be a tutorial tool for STOMP novices to familiarize themselves with STOMP and WebSTOMP.  
 
 ### Prerequisite
-The JavaScript library we use for this example is the same as we used for STOMP Node.js example. It can be found at <https://github.com/jmesnil/stomp-websocket>.  
+The JavaScript library we use for this example is the same as we use for STOMP Node.js example. It can be found at <https://github.com/jmesnil/stomp-websocket>.  
 It supports STOMP version 1.0 and 1.1.  
 
 Download *stomp.js* from <https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js> and place it in your project directory.  
@@ -91,7 +91,7 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 		<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 		<script src="stomp.js"></script>
 		<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
-		<!--change src to file's actual path; don't directly source this link-->
+		<!--change src to file's actual path; don't directly source this GitHub link-->
 	
 		<script>
 			var client = null;
@@ -163,7 +163,7 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 		<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 		<script src="stomp.js"></script>
 		<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
-		<!--change src to file's actual path; don't directly source this link-->
+		<!--change src to file's actual path; don't directly source this GitHub link-->
 	
 		<script>
 			var client = null;
