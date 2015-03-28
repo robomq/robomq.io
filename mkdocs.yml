@@ -11,7 +11,7 @@ pages:
 - ['deviceIntegration.md', '', 'IoT and M2M integration']
 - ['applicationIntegration.md', '', 'Application integration']
 - ['SDK.md', '', 'SDK & example codes']
-- ['AMQP.md', 'User Guide', 'AMQP introduction']
+- ['AMQP.md', 'User Guide', 'AMQP Introduction']
 - ['one-one.md', 'User Guide', 'One to one (direct) messaging']
 - ['broadcast.md', 'User Guide', 'Broadcast (publish/subscribe)']
 - ['routing-key.md', 'User Guide', 'Key based message routing']

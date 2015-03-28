@@ -1,5 +1,3 @@
-> Browse the chapter of AMQP Introduction first if you're new to AMQP.  
-
 # Routing - Filter Based (Topic)
 
 For filter based routing, a producer declares the topic exchange when publishing a message.  Messages sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key.
@@ -13,6 +11,8 @@ example: 'topic.*' can be : topic1, topic2, topic3 etc.
 example: "#.topic" can be: topic, Ftopic, Secondtopic, 123topic etc.
 
 ![Diagram of Routing - Filter based messaging](./images/topic.png)
+
+> Browse the chapter of AMQP Introduction first if you're new to AMQP.
 
 ----------
 
