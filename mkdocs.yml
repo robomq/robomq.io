@@ -21,5 +21,6 @@ pages:
 - ['STOMP.md', 'User Guide', 'STOMP']
 - ['WebSTOMP.md', 'User Guide', 'WebSTOMP']
 - ['SSL.md', 'User Guide', 'SSL']
+- ['Connectors.md', 'User Guide', 'Connectors']
 - ['about.md', '', 'About']
 theme: readthedocs
