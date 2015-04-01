@@ -57,15 +57,15 @@ This section introduces you to the DB Connector providing an API between your cl
 3. On the AMQP side, DBConnector will publish to a destination exchange and get messages from a source queue.   
 4. Each Select&Publish transaction consists of one AMQP message per database record (row).  
 5. Each Get&Insert transaction consists of one or multiple insert statements per AMQP message.  
-6. Database records can be translated to / from AMQP in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
+6. Database records can be translated to / from AMQP message in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
 7. If the destination exchange, source exchange & queue don't exist, DBConnector will create them with the default settings.  
 8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or select query returns 0 row.  
-9. Messages fail to process be "dead lettered". You can find them in the dead letter queue and deal with them as you want.  
+9. Messages fail to process be "dead lettered". You can find them in the dead letter queue and deal with them later.  
 10. DBConnector handles all possible exceptions to prevent your invoker process from being interrupted. It will print the error or warning and write log if you have enabled logging.   
 
 ###Prerequisite:
 
-1. Install python-pyodbc and the ODBC driver for selected database.
+1. Install python-pyodbc and the ODBC driver for chosen database.
 2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
 
 		python deadLetterQueue.py -?
@@ -79,9 +79,9 @@ The configuration file is written in JSON format. It consists of 3 major section
 	- query statement or template.
 - Broker section:
 	-  AMQP connection parameters and credentials,
-	-  exchange or queue as message source and destination.
+	-  message source and destination.
 - Format section:
-	-  message is delimited text or JSON array,
+	-  whether message is delimited text or JSON array,
 	-  if delimited, specify the delimiter. 
 
 ###Execution:
