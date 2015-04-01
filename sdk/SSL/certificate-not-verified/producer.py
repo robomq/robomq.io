@@ -2,7 +2,7 @@
 # Description: This is the AMQP SSL producer publishes outgoing AMQP
 #     communication to  clients consuming messages from a broker server.
 #     This example applies routing-key pattern out of 5 patterns.
-#     It needs to acquire the public CA certificate to verify certificate of robomq.io.
+#     It doesn't verify the certificate of robomq.io.
 #
 # Author: Eamin Zhang
 # robomq.io (http://www.robomq.io)

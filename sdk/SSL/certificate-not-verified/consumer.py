@@ -2,7 +2,7 @@
 # Description: This is the AMQP SSL consumer handles incoming
 #     communication from clients publishing messages to a broker server.
 #     This example applies routing-key pattern out of 5 patterns.
-#     It needs to acquire the public CA certificate to verify certificate of robomq.io.
+#     It doesn't verify the certificate of robomq.io.
 #
 # Author: Eamin Zhang
 # robomq.io (http://www.robomq.io)
