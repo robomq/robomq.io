@@ -241,7 +241,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	var amqp = require("amqplib");
 	
 	var server = "hostname";
-	var port = 5672;
+	var port = "5672";
 	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 	var username = "username";
 	var password = "password";
@@ -281,7 +281,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	var domain = require("domain");
 	
 	var server = "hostname";
-	var port = 5672;
+	var port = "5672";
 	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 	var username = "username";
 	var password = "password";

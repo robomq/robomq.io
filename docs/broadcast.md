@@ -196,7 +196,7 @@ The second parameter of `consume()` function is the callback on receiving messag
 	var amqp = require("amqplib");
 	
 	var server = "hostname";
-	var port = 5672;
+	var port = "5672";
 	var vhost = "yourvhost";  //for "/" vhost, use "%2f" instead
 	var username = "username";
 	var password = "password";
@@ -223,7 +223,7 @@ The second parameter of `consume()` function is the callback on receiving messag
 	var domain = require("domain");
 	
 	var server = "hostname";
-	var port = 5672;
+	var port = "5672";
 	var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 	var username = "username";
 	var password = "password";

@@ -12,7 +12,7 @@
 var amqp = require("amqplib");
 
 var server = "hostname";
-var port = 5672;
+var port = "5672";
 var vhost = "yourvhost"; //for "/" vhost, use "%2f" instead
 var username = "username";
 var password = "password";
