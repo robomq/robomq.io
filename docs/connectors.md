@@ -1,30 +1,34 @@
 # Salesforce Connector
 
-This section introduces you to the Salesforce Connector providing an API between your client applications/devices and Salesforce account.
+This section introduces you to the Salesforce Connector providing an interface between client devices/sensors and an customer's existing Salesforce workflow.  The connector utilizes the [robomq.io](http://www.robomq.io) to ensure the guaranteed and reliable delivery of case information.
 
-The Salesforce connector currently supports **Salesforce Case Create** requests with AMQP transactions processed through the [robomq.io](http://www.robomq.io) broker.  The incoming AMQP playload consists of attributes necessary to create and assign a case (i.e. subject, description, contact name, etc.).  NOTE- additional record types may be supported in the future.
+**Overview:**
 
-###Overview:
+A Salesforce customer may have one or more users/divisions within their organization.  Therefore, connector can be configured to create cases for more than one division or group within the organization based on the nature of the information or defect from the device or sensor.
 
-A Salesforce customer may have one or more users/divisions within their organization.  The connector is designed as a planned part of their business model, given they may wish to utilize an automated process to create/update case entries in Salesforce.
-
-The Salesforce connector makes it simple for client device/applications specified by customer to automatically create cases through robomq.io.  Case fields are auto-populated in Salesforce when a device issues an alarm, defect, etc. through the broker or AMQP destination queue.  The  connector/consumer instance receives case requests, identifies the source of the incoming message, maps to a destination Salesforce user, and create a case record that will be assigned to that user account according to attributes sent in payload. 
-
-The Connector is intended for installation/execution on the customer site/platform.  With multiple Salesforce tenants existing per organization, each is represented on the connector by a listening **"consumer"**  all listening over AMQP simultaneously for case request messages.
+The connector is designed to integrate seamlessly into the customer's existing management or diagnostics workflow in Salesforce.com allowing case creation to be automated.  This offers tremendous efficiency in reducing cost and valuable time without human intervention required to act upon and manually create each case.
 
 ![Diagram of Salesforce Connector](./images/SalesforceConnector.png)
 
-
-###Startup Authentication Process:
+**Startup Authentication Process:**
 
 Before the connector can start processing any case requests, an access token must be provided by the Salesforce authentication server.
 
 - The connector requests authorization on behalf on tenant providing username and password, then server verifies credentials and responds with access token.
 - The connector obtains the access token and submits with all subsequent requests.
+- If invalid user credentials are provided or other error prevents token from being issued, the user cannot authorize the connector to access Salesforce API in this flow.
 
+**Connector Operation:**
 
-###Configuration:
-The connector configuration is a JSON formatted file simply requiring definition of 2 sections, "tenant" and "divisions":
+- The Salesforce connector currently supports **Salesforce Case Create** requests.
+- Devices/sensors issue case requests messages over AMQP through the robomq.io broker.
+- The connector identifies the source of the incoming message, determines the destination Salesforce user/division, and creates a case record associated with their account.
+- The incoming AMQP playload consists of all elements necessary to create and assign a case (i.e. subject, description, contact name, etc.).
+- Mapping of the data elements from the device to the case attributes is configuration driven.
+
+**Configuration:**
+
+The connector configuration mapping is a JSON formatted file requiring definition of 2 sections, "tenant" and "divisions" as follows:
 
 - Tenant section:
 	- Salesforce client Id and secret for remote API access,
@@ -34,12 +38,22 @@ The connector configuration is a JSON formatted file simply requiring definition
 	-  Default case record attributes
 	-  AMQP exchange, queue, and/or routing key.
 
-###Execution:
-The connector is provided as an executable script compatible with Python 2.7 and above.  Starting it simply requires passing the pre-defined configuration file as an argument as shown in example below:
+**Prerequisite:**
+
+1.  Requires Python 2.7 and above.
+2.  Install [simple-salesforce](https://pypi.python.org/pypi/simple-salesforce) REST API client.
+2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
+
+		python deadLetterQueue.py -?
+
+**Execution:**
+
+The Connector is intended for installation/execution either on the customer's enterprise platform or hosted on a supported cloud platform.
+Starting it simply requires specifying the configuration mapping file as shown in example below:
 
 	python SFconnector.py -i config.json
 
-# DB Connector
+# Database Connector
  
 This section introduces you to the DB Connector providing an API between your client applications/devices and back-end database. 
 
@@ -48,29 +62,22 @@ This section introduces you to the DB Connector providing an API between your cl
 1. SQL Select & AMQP Publish
 2. AMQP Get & SQL Insert
 
-###Overview:
+**Overview:**
 
 ![Diagram of DB Connector](./images/DBConnector.png)
 
-1. DBConnector is easily installed, configured and run on client platform, so there's no privacy hazard to your database.   
+1. DBConnector is easily installed, configured, and executes on client's enterprise platform, so there is no risk of insecure access to database. 
 2. DBConnector is configured to use one logical database. All SQL Select and Insert transactions are supported within the database.  
 3. On the AMQP side, DBConnector will publish to a destination exchange and get messages from a source queue.   
-4. Each Select&Publish transaction consists of one AMQP message per database record (row).  
-5. Each Get&Insert transaction consists of one or multiple insert statements per AMQP message.  
-6. Database records can be translated to / from AMQP message in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
-7. If the destination exchange, source exchange & queue don't exist, DBConnector will create them with the default settings.  
-8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or select query returns 0 row.  
-9. Messages fail to process be "dead lettered". You can find them in the dead letter queue and deal with them later.  
+4. Each Select & Publish transaction consists of one AMQP message per database record (row).  
+5. Each Get & Insert transaction consists of one or multiple insert statements per AMQP message.  
+6. Database records can be translated to/from AMQP message in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
+7. If the destination exchange, source exchange & queue does not exist, DBConnector will create them using the default settings.  
+8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or select query returns 0 rows.  
+9. Messages that fail during processing (i.e. invalid content, database transaction failure, etc.) will be "dead lettered". You can find them in the dead letter queue and deal with them later.  
 10. DBConnector handles all possible exceptions to prevent your invoker process from being interrupted. It will print the error or warning and write log if you have enabled logging.   
 
-###Prerequisite:
-
-1. Install python-pyodbc and the ODBC driver for chosen database.
-2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
-
-		python deadLetterQueue.py -?
-
-###Configuration:
+**Configuration:**
 
 The configuration file is written in JSON format. It consists of 3 major sections, "database", "broker" and "format".
 
@@ -84,7 +91,15 @@ The configuration file is written in JSON format. It consists of 3 major section
 	-  whether message is delimited text or JSON array,
 	-  if delimited, specify the delimiter. 
 
-###Execution:
+**Prerequisite:**
+
+1. Requires Python 2.7 and above.
+2. Install python-pyodbc and the ODBC driver for chosen database.
+3. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
+
+		python deadLetterQueue.py -?
+
+**Execution:**
 
 After loading the configuration, two major methods you'll invoke are `DBToMQ()` and `MQToDB()`.  
 
@@ -99,9 +114,4 @@ Putting it together, a simple example program would be,
 	print "2. select & publish: %s" % str(DBConnector.DBToMQ())
 	print "3. get & insert: %s" % str(DBConnector.MQToDB())
 
-# REST Adapter
 
-This section introduces you to the REST adapter providing an API between your client applications and publishers/subscribers connected to your AMQP virtual host. 
-
-
-![Diagram of REST Connector](./images/RESTConnector.png)
