@@ -2,7 +2,7 @@
 
 > Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
-[robomq.io](http://www.robomq.io) innovatively provides REST interface over the AMQP broker. It's only accessible over HTTPS with port number **7378**.  
+[robomq.io](http://www.robomq.io) innovatively provides REST interface over the AMQP broker. It's only accessible over HTTPS.  
 
 Our REST interface facilitates using [robomq.io](http://www.robomq.io) from any REST clients. Therefore, it allows you send and receive messages without installing any message queue client library. Two most useful cases of our REST interface are  
 
@@ -22,21 +22,23 @@ URL format of REST request requires AMQP parameters to locate the message source
 
 **GET:**
 
-	https://{serverHost}/{vhost}/{exchangeName}/{queueName}/{routingkey}
+	https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
 
 **POST:**
 
-	https://{serverHost}/{vhost}/{exchangeName}/{routingkey}
+	https://{hostname}/rest/{vhost}/{exchangeName}/{routingkey}
 
 POST request also requires a `Content-Type` header as `application/json` and HTTP body as a JSON object. The body object contains the AMQP message content and properties, e.g. `'{"content": "Hello World!", "properties": {"contentType": "text/plain", "deliveryMode": 1}}'`. Note that `content` field is mandatory while `properties` is optional.  
 
 Moreover, each request needs to provide username and password in HTTP basic auth. The credentials must be authenticated to access your vhost.  
 
+In case the REST client you use requires the CA certificate to verify [robomq.io](http://www.robomq.io)'s certificate, download it from <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>
+
 ### Response
 
 **GET:**  
 
-If the GET request succeeds, the response will be either status code 200, message in HTTP body or status code 204 which indicates the target queue is empty. The HTTP body in 200 response is formatted in JSON, for example  
+If the GET request succeeds, the response will be either status code 200 and message in HTTP body, or status code 204 which indicates the target queue is empty. The HTTP body in 200 response is formatted in JSON, for example  
 
 	{
 		"fields":{
@@ -115,16 +117,16 @@ The optional `properties` field in HTTP body of GET response and POST request sh
 
 # REST use case
 
-We will provide example of REST using cURL, but you may use any tool or language to make REST calls.  
+We will provide example of REST client using cURL, but you may use any tool or language to make REST calls.  
 
 The only prerequisite is that you have cURL client installed. cURL comes with most Linux systems. For windows, you may need to download [curl.exe](http://curl.haxx.se/download.html) and place it into your system directory, e.g. `C:\Windows\System32\curl.exe`.  
 
 ### GET
 
-	curl -X GET -i https://{username}:{password}@{hostname}:7378/{yourvhost}/testEx/testQ/testKey
+	curl -X GET -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testQ/testKey
 
 ### POST
 
-	curl -X POST -i https://{username}:{password}@{hostname}:7378/{yourvhost}/testEx/testKey \
+	curl -X POST -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testKey \
 		-H "Content-Type: application/json" \
 		-d '{"content": "Hello", "properties": {"contentType": "text/plain", "deliveryMode": 1}}'
