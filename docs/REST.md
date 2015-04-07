@@ -28,7 +28,7 @@ URL format of REST request requires AMQP parameters to locate the message source
 
 	https://{hostname}/rest/{vhost}/{exchangeName}/{routingkey}
 
-POST request also requires a `Content-Type` header as `application/json` and HTTP body as a JSON object. The body object contains the AMQP message content and properties, e.g. `'{"content": "Hello", "properties": {"contentType": "text/plain", "deliveryMode": 1}}'`. Note that `content` field is mandatory while `properties` is optional.  
+POST request also requires a `Content-Type` header as `application/json` and HTTP body as a JSON object. The body object contains the AMQP message content and properties, e.g. `'{"content":"Hello","properties":{"contentType":"text/plain","deliveryMode":1}}'`. Note that `content` field is mandatory while `properties` is optional.  
 
 Moreover, each request needs to provide username and password in HTTP basic auth. The credentials must be authenticated to access your vhost.  
 
