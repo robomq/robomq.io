@@ -9,7 +9,7 @@ Our REST interface facilitates using [robomq.io](http://www.robomq.io) from any 
 1. Send and receive messages through simple REST client, such as cURL. Get rid of programming.  
 2. Send and receive messages from Web browser with a JavaScript REST client. No library installation is required.  
 
-# Usage:
+# Usage
 
 HTTP GET and POST methods are supported. Each transaction consists of one AMQP message per HTTP request-response.  
 
