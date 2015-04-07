@@ -59,21 +59,21 @@ This section introduces you to the DB Connector providing an API between your cl
 
 [robomq.io](http://www.robomq.io) has built a DBConnector module in Python. It consists of an interface between AMQP broker and backend database supporting these transactions:
 
-1. SQL Select & AMQP Publish
-2. AMQP Get & SQL Insert
+1. SQL Read & AMQP Publish
+2. AMQP Get & SQL Write
 
 **Overview:**
 
 ![Diagram of DB Connector](./images/DBConnector.png)
 
 1. DBConnector is easily installed, configured, and executes on client's enterprise platform, so there is no risk of insecure access to database. 
-2. DBConnector is configured to use one logical database. All SQL Select and Insert transactions are supported within the database.  
+2. DBConnector is configured to use one logical database. All SQL CRUD transactions are supported within the database.  
 3. On the AMQP side, DBConnector will publish to a destination exchange and get messages from a source queue.   
-4. Each Select & Publish transaction consists of one AMQP message per database record (row).  
-5. Each Get & Insert transaction consists of one or multiple insert statements per AMQP message.  
+4. Each Read & Publish transaction consists of one AMQP message per database record (row).  
+5. Each Get & Write transaction consists of one or multiple write statements (insert or update) per AMQP message.  
 6. Database records can be translated to/from AMQP message in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
-7. If the destination exchange, source exchange & queue does not exist, DBConnector will create them using the default settings.  
-8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or select query returns 0 rows.  
+7. If the destination exchange, source exchange & queue does not exist, DBConnector will create them with the default arguments.  
+8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or read query returns 0 rows.  
 9. Messages that fail during processing (i.e. invalid content, database transaction failure, etc.) will be "dead lettered". You can find them in the dead letter queue and deal with them later.  
 10. DBConnector handles all possible exceptions to prevent your invoker process from being interrupted. It will print the error or warning and write log if you have enabled logging.   
 
@@ -103,15 +103,15 @@ The configuration file is written in JSON format. It consists of 3 major section
 
 After loading the configuration, two major methods you'll invoke are `DBToMQ()` and `MQToDB()`.  
 
-1. `DBToMQ()` executes a select query in database and publish each row of the result as a message to the destination exchange.  
-2. `MQToDB()` gets a message from the source queue, from which extracts the values and insert one record or multiple records into the database.  
+1. `DBToMQ()` executes a read query in database and publish each row of the result as a message to the destination exchange.  
+2. `MQToDB()` gets a message from the source queue, from which extracts the values and write  (insert or update) one record or multiple records into the database.  
 
 Putting it together, a simple example program would be,    
 
 	import DBConnector
 
 	print "1. load config: %s" % str(DBConnector.loadConfig("DBConnector.config"))
-	print "2. select & publish: %s" % str(DBConnector.DBToMQ())
-	print "3. get & insert: %s" % str(DBConnector.MQToDB())
+	print "2. read & publish: %s" % str(DBConnector.DBToMQ())
+	print "3. get & write: %s" % str(DBConnector.MQToDB())
 
 
