@@ -16,29 +16,35 @@ port = 1883
 vhost = "yourvhost"
 username = "username"
 password = "password"
-topic = "test/any"
+topic = "test/#"
 
 """
  * This method is the callback on connecting to broker.
  * @ It subscribes the target topic.
 """
-def onConnect(client, userdata, rc):	#event on connecting
+def on_connect(client, userdata, rc):	#event on connecting
 	client.subscribe([(topic, 1)])	#subscribe
 
 """
  * This method is the callback on receiving messages.
  * @ It prints the message topic and payload on console.
 """
-def onMessage(client, userdata, message):	#event on receiving message
+def on_message(client, userdata, message):	#event on receiving message
 	print("Topic: " + message.topic + ", Message: " + message.payload)
 
-#paho library automatically reconnects on exception
-try:
-	client = mqtt.Client(client_id = "", clean_session = True, userdata = None, protocol = "MQTTv31")
-	client.username_pw_set(vhost + ":" + username, password)
-	client.on_connect = onConnect
-	client.on_message = onMessage
-	client.connect(server, port, keepalive = 60, bind_address = "")	#connect
-	client.loop_forever()	#loop forever
-except Exception, e:
-	print e
+while True:
+	try:
+		client = mqtt.Client(client_id = "", clean_session = True, userdata = None, protocol = "MQTTv31")
+		client.username_pw_set(vhost + ":" + username, password)
+		client.on_connect = on_connect
+		client.on_message = on_message
+		client.connect(server, port, keepalive = 60, bind_address = "")	#connect
+		client.loop_forever()	#loop forever
+	except Exception, e:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e 
+		try:
+			client.disconnect()
+		except:
+			pass
+		time.sleep(5)
