@@ -82,18 +82,18 @@ The same as producer, consumer needs to connect to [robomq.io](http://www.robomq
 The callback function of connecting is to subscribe a topic, so that consumer knows where to listen to.  
 The second argument in `subscribe()` function is QoS.  
 
-	def on_connect(client, userdata, rc):
+	def onConnect(client, userdata, rc):
 		client.subscribe([(topic, 1)])
 
-Once it receives a message from the queue bound by the topic, it will trigger the callback function `on_message()` to print the topic and message payload.  
+Once it receives a message from the queue bound by the topic, it will trigger the callback function `onMessage()` to print the topic and message payload.  
 
-	def on_message(client, userdata, message):
+	def onMessage(client, userdata, message):
 		print("Topic: " + message.topic + ", Message: " + message.payload)
 
 The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker.  
 
-	client.on_connect = on_connect
-	client.on_message = on_message
+	client.on_connect = onConnect
+	client.on_message = onMessage
 
 When you no longer need it, you can also unsubscribe a topic.
 
@@ -144,31 +144,27 @@ When you no longer need it, you can also unsubscribe a topic.
 	 * This method is the callback on connecting to broker.
 	 * @ It subscribes the target topic.
 	"""
-	def on_connect(client, userdata, rc):	#event on connecting
+	def onConnect(client, userdata, rc):	#event on connecting
 		client.subscribe([(topic, 1)])	#subscribe
 	
 	"""
 	 * This method is the callback on receiving messages.
 	 * @ It prints the message topic and payload on console.
 	"""
-	def on_message(client, userdata, message):	#event on receiving message
+	def onMessage(client, userdata, message):	#event on receiving message
 		print("Topic: " + message.topic + ", Message: " + message.payload)
 	
 	while True:
 		try:
 			client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
 			client.username_pw_set(vhost + ":" + username, password)
-			client.on_connect = on_connect
-			client.on_message = on_message
+			client.on_connect = onConnect
+			client.on_message = onMessage
 			client.connect(server, port, keepalive=60, bind_address="")	#connect
-			client.loop_forever()	#loop forever
+			client.loop_forever()	#automatically reconnect once loop forever
 		except Exception, e:
-			#reconnect on exception
+			#when initialize connection, reconnect on exception
 			print "Exception handled, reconnecting...\nDetail:\n%s" % e 
-			try:
-				client.disconnect()
-			except:
-				pass
 			time.sleep(5)
 
 ## Node.js
