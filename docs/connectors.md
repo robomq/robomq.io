@@ -1,6 +1,6 @@
 # Salesforce Connector
 
-This section introduces you to the Salesforce Connector providing an interface between client devices/sensors and an customer's existing Salesforce workflow.  The connector utilizes the [robomq.io](http://www.robomq.io) to ensure the guaranteed and reliable delivery of case information.
+This section introduces you to the Salesforce Connector providing an interface between client devices/sensors and an customer's existing Salesforce workflow.  The [connector](http://www.robomq.io/#thingsconnect) utilizes the [robomq.io](http://www.robomq.io) to ensure the guaranteed and reliable delivery of case information.
 
 **Overview:**
 

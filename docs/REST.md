@@ -2,7 +2,7 @@
 
 > Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
-[robomq.io](http://www.robomq.io) innovatively provides REST interface over the AMQP broker. It's only accessible over HTTPS.  
+[robomq.io](http://www.robomq.io) innovatively provides [REST interface](http://www.robomq.io/#thingsconnect) over the AMQP broker. It's only accessible over HTTPS.  
 
 Our REST interface facilitates using [robomq.io](http://www.robomq.io) from any REST clients. Therefore, it allows you send and receive messages without installing any message queue client library. Two most useful cases of our REST interface are  
 

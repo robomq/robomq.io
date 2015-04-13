@@ -18,7 +18,7 @@ With the free trial -
 
 #Subscription plans
 
-If you are ready to get started with a paid subscription, reach out to us on our website at [Contact us](http://robomq.io/#contact) and we will be happy to get you started and setup in couple of hours.
+If you are ready to get started with a [paid subscription](http://www.robomq.io/#price), reach out to us on our website at [Contact us](http://robomq.io/#contact) and we will be happy to get you started and setup in couple of hours.
 
 There are following subscription options available:
 
@@ -106,13 +106,13 @@ The Messaging dashboard provides historical information for up to 15 days of the
 
 ##Analytics and data driven alerts
 
-One of the core strength of the [robomq.io](http://www.robomq.io) platform is the expandability. Based on the expandability, we have provided a big data based analytics platform. This platforms consume the messages in parallel and provides analytics on it. This functionality is specific use case driven and the some customization is needed to generate required analytics.
+One of the core strength of the [robomq.io](http://www.robomq.io) platform is the expandability. Based on the expandability, we have provided a [big data based analytics platform](http://www.robomq.io/#devicetodashboard). This platforms consume the messages in parallel and provides analytics on it. This functionality is specific use case driven and the some customization is needed to generate required analytics.
 
 ![Analytics based on message content ](./images/vhostAnalytics.png)
 
 *Figure : Analytics based on message content*
 
-Another example of the expandable nature of the [robomq.io](http://www.robomq.io) platform is the data driven alerts. It consumes the messages and acts on the message content evaluating them against threshold configuration. When the message content hits these threshold values , a custom alert, email or a phone call can be made to react to this situation. This functionality is also use case specific and needs configuration.
+Another example of the expandable nature of the [robomq.io](http://www.robomq.io) platform is the [data driven alerts](http://www.robomq.io/#datadrivenalerts). It consumes the messages and acts on the message content evaluating them against threshold configuration. When the message content hits these threshold values , a custom alert, email or a phone call can be made to react to this situation. This functionality is also use case specific and needs configuration.
 
 ##Writing your first application 
 
