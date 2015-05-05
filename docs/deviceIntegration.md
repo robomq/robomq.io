@@ -93,7 +93,7 @@ As an smart engineer, you have already developed the sensor data collecting prog
 
 For sending data, the main job is to create a producer module, then call its send method in your raspberry pi sensor programs. Follow the next section to build this application. You will find it easy, handy and fun !!!  
 
-> [robomq.io](http://www.robomq.io) has now enhanced and packaged the sensorProducer module introduced bellow. You may either directly use our package or build the module yourself following the next section. The Python pip package is available at <https://s3.amazonaws.com/public.robomq/packages/sensorProducer.tar.gz>. Read our blog at <http://robomq.blogspot.com/2015/02/build-intruder-detector-with-raspberry.html> for specific use guide.  
+> [robomq.io](http://www.robomq.io) has now enhanced and packaged the sensorProducer module introduced bellow. You may either directly use our package or build the module yourself following the next section. The Python pip package is available at <https://s3.amazonaws.com/public.robomq/packages/sensorProducer.tar.gz>. Read our blog at <http://robomq.blogspot.com/2015/05/device-to-dashboard-real-time-analytics.html> for specific use guide.  
 
 ##Messaging with AMQP
 
