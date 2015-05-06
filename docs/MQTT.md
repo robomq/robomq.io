@@ -58,6 +58,7 @@ The full documentation of this library is at <https://pypi.python.org/pypi/paho-
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 [robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
 	client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
@@ -183,6 +184,7 @@ The full documentation of this library is at <https://github.com/mqttjs/MQTT.js/
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 [robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	var client = mqtt.connect("mqtt://" + server + ":" + port, {username: vhost + ":" + username, password: password, keepalive: 60, clean: true, will: null});
 
@@ -287,7 +289,7 @@ After installation, you don't need to explicitly require this library in your PH
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 [robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 In the constructor of client, first parameter is client ID, second is boolean flag for clean session.  
-The third parameter of connect function is keep alive time in seconds.
+The third parameter of connect function is keep alive time in seconds. Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
    
 	$client = new Mosquitto\Client("1", true);
 	$client->setCredentials($vhost.":".$username, $password);
@@ -424,6 +426,7 @@ The full documentation of this library is at <http://www.eclipse.org/paho/files/
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 [robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	private String broker = "tcp://" + server + ":" + port;
 	private String clientId = MqttClient.generateClientId();
@@ -630,7 +633,7 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 Remember to `mosquitto_lib_init();` before creating the mosquitto instance.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion. Using this library, you usually starts loop right after connecting.  
 The second parameter of `mosquitto_new()` function is boolean flag for clean session.  
-The fourth parameter of `mosquitto_connect()` function is keep alive time in seconds.  
+The fourth parameter of `mosquitto_connect()` function is keep alive time in seconds. Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	string vhusn = vhost + ":" + usn;
 	const char *username = vhusn.c_str();

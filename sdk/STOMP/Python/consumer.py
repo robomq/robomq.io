@@ -22,7 +22,7 @@ destination = "/queue/test"	#There're more options other than /queue/...
 while True:
 	try:
 		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-		client.connect(versions = ["1.2"], host = vhost)	#CONNECT
+		client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
 		subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
 		while True:
 			frame = client.receiveFrame()

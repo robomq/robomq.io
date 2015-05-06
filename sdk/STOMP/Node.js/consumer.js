@@ -26,6 +26,8 @@ dom.run(consume);
 
 function consume() {
 	client = Stomp.overTCP(server, port);
+	client.heartbeat.outgoing = 60000;
+	client.heartbeat.incoming = 0;
 	client.connect(login, passcode
 		, function() {
 			//the callback for subscribe() function is actually the callback on message 

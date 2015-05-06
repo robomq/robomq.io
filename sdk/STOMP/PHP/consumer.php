@@ -18,7 +18,7 @@ $destination = "/queue/test";	//There're more options other than /queue/...
 
 while (true) {
 	try {
-		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
 		$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
 		while (true) {
 			if ($frame = $client->readFrame()) {

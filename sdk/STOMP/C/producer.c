@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 		{"passcode", passcode},
         {"vhost", vhost},
 		{"accept-version", "1.0,1.1,1.2"},
-		{"heart-beat", "0,0"},
+		{"heart-beat", "60000,0"},
 	};
 
 	err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);

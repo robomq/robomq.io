@@ -17,7 +17,7 @@ $passcode = "password";
 $destination = "/queue/test";	//There're more options other than /queue/...
 
 try {
-	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
+	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
 	echo "Quantity of test messages: ";
 	$msgNum = rtrim(fgets(STDIN), PHP_EOL);
 	for ($i = 1; $i <= $msgNum; $i++) {

@@ -114,10 +114,13 @@ The full documentation of this library is at <http://nikipore.github.io/stompest
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-> In STOMP, username is called login and password is called passcode.
+> In STOMP, username is called login and password is called passcode.  
+
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
+> Notice that stompest library reverses the order of outgoing and incoming heartbeats.  
 
 	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-	client.connect(versions = ["1.2"], host = vhost)
+	client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
@@ -162,7 +165,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 	
 	try:
 		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-		client.connect(versions = ["1.2"], host = vhost)	#CONNECT
+		client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
 		msgNum = int(input("Quantity of test messages: "))
 		for i in range(msgNum):	
 			message = "test msg " + str(i + 1)
@@ -188,7 +191,7 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 	while True:
 		try:
 			client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-			client.connect(versions = ["1.2"], host = vhost)	#CONNECT
+			client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
 			subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
 			while True:
 				frame = client.receiveFrame()
@@ -223,9 +226,13 @@ The full documentation of this library is at <http://jmesnil.net/stomp-websocket
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker. 
-> In STOMP, username is called login and password is called passcode. 
+> In STOMP, username is called login and password is called passcode.  
+
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
 	var client = Stomp.overTCP(server, port);
+	client.heartbeat.outgoing = 60000;
+	client.heartbeat.incoming = 0;
 	client.connect(login, passcode, success_callback, fail_callback, vhost);
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it. 
@@ -267,6 +274,8 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 	var destination = "/queue/test";	//There're more options other than /queue/...
 	
 	var client = Stomp.overTCP(server, port);
+	client.heartbeat.outgoing = 60000;
+	client.heartbeat.incoming = 0;
 	client.connect(login, passcode
 		, function() {
 			process.stdout.write("Quantity of test messages: ");
@@ -307,6 +316,8 @@ When you no longer need it, you can also unsubscribe a destination with its uniq
 	
 	function consume() {
 		client = Stomp.overTCP(server, port);
+		client.heartbeat.outgoing = 60000;
+		client.heartbeat.incoming = 0;
 		client.connect(login, passcode
 			, function() {
 				//the callback for subscribe() function is actually the callback on message 
@@ -351,9 +362,11 @@ You may see more installation approaches at <http://php.net/manual/en/stomp.setu
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-> In STOMP, username is called login and password is called passcode.
+> In STOMP, username is called login and password is called passcode.  
 
-	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
+
+	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
@@ -395,7 +408,7 @@ When you no longer need it, you can also unsubscribe a destination.
 	$destination = "/queue/test";	//There're more options other than /queue/...
 	
 	try {
-		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
 		echo "Quantity of test messages: ";
 		$msgNum = rtrim(fgets(STDIN), PHP_EOL);
 		for ($i = 1; $i <= $msgNum; $i++) {
@@ -421,7 +434,7 @@ When you no longer need it, you can also unsubscribe a destination.
 	
 	while (true) {
 		try {
-			$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1"));
+			$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
 			$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
 			while (true) {
 				if ($frame = $client->readFrame()) {
@@ -465,7 +478,9 @@ Of course, you can eventually compress your producer and consumer classes into j
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-> In STOMP, username is called login and password is called passcode.
+> In STOMP, username is called login and password is called passcode.  
+
+The library will automatically set the outgoing heartbeat to 60000 milliseconds and disable the incoming heartbeat, i.e. set it to 0.  
 
 	client = new Client(server, port, login, passcode, vhost);
 
@@ -626,7 +641,9 @@ Include this library in your program, for example `#include "./stomp/stomp.h"` a
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 Using this library, you always construct the headers before sending a STOMP frame.  
->In STOMP, username is called login and password is called passcode.
+>In STOMP, username is called login and password is called passcode.  
+
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
 	struct ctx client;
 	stomp_session_t *session;
@@ -638,7 +655,7 @@ Using this library, you always construct the headers before sending a STOMP fram
 		{"passcode", passcode},
         {"vhost", vhost},
 		{"accept-version", "1.0,1.1,1.2"},
-		{"heart-beat", "0,0"},
+		{"heart-beat", "60000,0"},
 	};
 
 	err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
@@ -792,7 +809,7 @@ Because this consumer example never calls `stomp_disconnect()` function, so it w
 			{"passcode", passcode},
 	        {"vhost", vhost},
 			{"accept-version", "1.0,1.1,1.2"},
-			{"heart-beat", "0,0"},
+			{"heart-beat", "60000,0"},
 		};
 	
 		err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
@@ -921,7 +938,7 @@ Because this consumer example never calls `stomp_disconnect()` function, so it w
 					{"passcode", passcode},
 					{"vhost", vhost},
 					{"accept-version", "1.0,1.1,1.2"},
-					{"heart-beat", "0,0"},
+					{"heart-beat", "60000,0"},
 				};
 	
 				err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);

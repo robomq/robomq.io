@@ -18,6 +18,8 @@ var vhost = "yourvhost";
 var destination = "/queue/test";	//There're more options other than /queue/...
 
 var client = Stomp.overTCP(server, port);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
 client.connect(login, passcode
 	, function() {
 		process.stdout.write("Quantity of test messages: ");

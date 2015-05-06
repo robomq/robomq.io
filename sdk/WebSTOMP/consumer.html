@@ -49,10 +49,10 @@
 			}
 			var connInfo = document.forms["connForm"];
 			var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
-	    	client = Stomp.over(webSock);
-			client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
-			client.heartbeat.outgoing = 0;
+			client = Stomp.over(webSock);
+			client.heartbeat.outgoing = 60000;
 			client.heartbeat.incoming = 0;
+			client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
 		}
 
 		function onConnect() {	

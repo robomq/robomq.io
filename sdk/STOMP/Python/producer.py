@@ -21,7 +21,7 @@ destination = "/queue/test"	#There're more options other than /queue/...
 
 try:
 	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-	client.connect(versions = ["1.2"], host = vhost)	#CONNECT
+	client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
 	msgNum = int(input("Quantity of test messages: "))
 	for i in range(msgNum):	
 		message = "test msg " + str(i + 1)

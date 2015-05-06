@@ -31,9 +31,12 @@ The full documentation of this library is at <http://jmesnil.net/stomp-websocket
 Step 1 is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 In constructor of SockJS, protocol can be "http" or "https", they use different ports.  
 In `connect()` function, third parameter is callback function on connect, fourth is callback function on error.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
 	var webSock = new SockJS(protocol + "://" + host + ":" + port + "/stomp");
 	client = Stomp.over(webSock);
+	client.heartbeat.outgoing = 60000;
+	client.heartbeat.incoming = 0;
 	client.connect(username, password, onConnect, onError, vhost);
 
 Step 2 is to send inputted messages to the inputted destination.   
@@ -103,9 +106,9 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 				var connInfo = document.forms["connForm"];
 				var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
 		    	client = Stomp.over(webSock);
-				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
-				client.heartbeat.outgoing = 0;
+				client.heartbeat.outgoing = 60000;
 				client.heartbeat.incoming = 0;
+				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
 			}
 	
 			function onConnect() {	
@@ -176,9 +179,9 @@ When page unloads, consumer will unsubscribe the destination by its token and di
 				var connInfo = document.forms["connForm"];
 				var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
 		    	client = Stomp.over(webSock);
-				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
-				client.heartbeat.outgoing = 0;
+				client.heartbeat.outgoing = 60000;
 				client.heartbeat.incoming = 0;
+				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
 			}
 	
 			function onConnect() {	
