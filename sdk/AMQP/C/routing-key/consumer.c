@@ -31,7 +31,7 @@ amqp_connection_state_t mqconnect() {
 	amqp_rpc_reply_t reply;
 	int channel_max = 0;
 	int frame_max = 131072;
-	int heartbeat = 0;
+	int heartbeat = 60;
 	int status = 0;
 
 	// Opening socket
