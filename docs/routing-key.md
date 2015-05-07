@@ -300,7 +300,7 @@ Finally, require this library in your program and use the classes.
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
-	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 	$channel =  $connection->channel();	
 
 Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
@@ -359,7 +359,7 @@ When messages are received, a callback function will be invoked to print the mes
 	
 	try {
 		//connect
-		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 		$channel =  $connection->channel();	
 	
 		//send message
@@ -396,7 +396,7 @@ When messages are received, a callback function will be invoked to print the mes
 	while (true) {
 		try {
 			//connect
-			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 			$channel = $connection->channel();
 	
 			//declare exchange and queue, bind them and consume messages

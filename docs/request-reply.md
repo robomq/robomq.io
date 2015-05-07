@@ -366,7 +366,7 @@ Finally, require this library in your program and use the classes.
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
-	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 	$channel =  $connection->channel();	
 
 Then producer will do what consumer does, listen on the replyQueue on its side.  
@@ -443,7 +443,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	
 	try {
 		//connect
-		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 		$channel =  $connection->channel();	
 	
 		//listen for reply messages
@@ -501,7 +501,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	while (true) {
 		try {
 			//connect
-			$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+			$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 			$channel = $connection->channel();
 	
 			//declare exchange and queue, bind them and consume messages

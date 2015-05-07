@@ -28,7 +28,7 @@ $onMessage = function ($message) {
 while (true) {
 	try {
 		//connect
-		$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+		$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 		$channel = $connection->channel();
 
 		//declare queue and consume messages

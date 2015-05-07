@@ -23,7 +23,7 @@ $exchangeName = "testEx";
 
 try {
 	//connect
-	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
+	$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
 	$channel =  $connection->channel();	
 
 	//send message
