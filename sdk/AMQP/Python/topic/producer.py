@@ -20,7 +20,7 @@ routingKey = "test.any"
 try:
 	#connect
 	credentials = pika.PlainCredentials(username, password)
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 	channel = connection.channel()
 
 	#send message

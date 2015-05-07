@@ -28,9 +28,10 @@ The full documentation of this library is at <https://pika.readthedocs.org/en/0.
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	credentials = pika.PlainCredentials(username, password)
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 	channel = connection.channel()
 
 Then producer will do what consumer does, listen on the replyQueue on its side.  
@@ -111,7 +112,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	try:
 		#connect
 		credentials = pika.PlainCredentials(username, password)
-		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 		channel = connection.channel()
 	
 		thread.start_new_thread(listen, ())
@@ -155,7 +156,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 		try:
 			#connect
 			credentials = pika.PlainCredentials(username, password)
-			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 			channel = connection.channel()
 	
 			#declare exchange and queue, bind them and consume messages

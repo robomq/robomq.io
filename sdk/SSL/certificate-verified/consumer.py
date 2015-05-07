@@ -30,7 +30,7 @@ while True:
 		#connect
 		credentials = pika.PlainCredentials(username, password)
 		sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 		connection = pika.BlockingConnection(parameters)
 		channel = connection.channel()
 

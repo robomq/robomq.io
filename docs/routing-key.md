@@ -26,9 +26,10 @@ The full documentation of this library is at <https://pika.readthedocs.org/en/0.
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	credentials = pika.PlainCredentials(username, password)
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 	channel = connection.channel()
 
 Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  
@@ -81,7 +82,7 @@ When messages are received, a callback function `onMessage()` will be invoked to
 	try:
 		#connect
 		credentials = pika.PlainCredentials(username, password)
-		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+		connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 		channel = connection.channel()
 	
 		#send message
@@ -115,7 +116,7 @@ When messages are received, a callback function `onMessage()` will be invoked to
 		try:
 			#connect
 			credentials = pika.PlainCredentials(username, password)
-			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+			connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 			channel = connection.channel()
 	
 			#declare exchange and queue, bind them and consume messages

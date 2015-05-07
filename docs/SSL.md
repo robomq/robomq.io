@@ -33,13 +33,13 @@ The example code provided bellow could be the short version, it might have omitt
 Compared to non-SSL connect method recapped bellow,  
 
 	credentials = pika.PlainCredentials(username, password)
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials))
+	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
 
 SSL connect method adds two parameters. It sets `ssl = True` and passes SSL options. The `"cert_reqs": ssl.CERT_REQUIRED` in SSL options implies the client requires to verify server's certificate.  
 
 	credentials = pika.PlainCredentials(username, password)
 	sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 	connection = pika.BlockingConnection(parameters)
 
 If the root CA certificate file isn't provided or isn't the one downloaded at <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>, client will fail to verify [robomq.io](http://www.robomq.io) certificate thus fail to connect.  
@@ -64,7 +64,7 @@ If the root CA certificate file isn't provided or isn't the one downloaded at <h
 		#connect
 		credentials = pika.PlainCredentials(username, password)
 		sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 		connection = pika.BlockingConnection(parameters)
 		channel = connection.channel()
 	
@@ -102,7 +102,7 @@ If the root CA certificate file isn't provided or isn't the one downloaded at <h
 			#connect
 			credentials = pika.PlainCredentials(username, password)
 			sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 			connection = pika.BlockingConnection(parameters)
 			channel = connection.channel()
 	
@@ -128,7 +128,7 @@ Compared to certificate-verified connect method above, certificate-not-verified 
 
 		credentials = pika.PlainCredentials(username, password)
 		sslOptions = {"cert_reqs": ssl.CERT_NONE}
-		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 		connection = pika.BlockingConnection(parameters)
 
 Even if the root CA certificate is provided, it will be ignored.  
@@ -154,7 +154,7 @@ You can safely use this method to connect to [robomq.io](http://www.robomq.io) b
 		#connect
 		credentials = pika.PlainCredentials(username, password)
 		sslOptions = {"cert_reqs": ssl.CERT_NONE}
-		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 		connection = pika.BlockingConnection(parameters)
 		channel = connection.channel()
 	
@@ -191,7 +191,7 @@ You can safely use this method to connect to [robomq.io](http://www.robomq.io) b
 			#connect
 			credentials = pika.PlainCredentials(username, password)
 			sslOptions = {"cert_reqs": ssl.CERT_NONE}
-			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, ssl = True, ssl_options = sslOptions)
+			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
 			connection = pika.BlockingConnection(parameters)
 			channel = connection.channel()
 	
