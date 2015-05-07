@@ -624,6 +624,15 @@ Copy the librabbitmq package into your working directory:
 
 	cp librabbitmq ./
 
+Also copy all source files and Makefile from [robomq.io](http://www.robomq.io) SDK at <https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C> into the same directory.  
+
+Now your working directory should have the content as bellow:  
+*broadcast*  config.h  *librabbitmq*  Makefile  *one-to-one*  *request-reply*  *routing-key* *topic*
+
+Use the Makefile to compile under a Linux terminal.  
+
+* Run `make type={sub-directory}` to compile the producer and consumer under the sub-directory.  
+* Before compiling the next sub-directory, run `make clean` to clean up the compiled files.	 
 
 Note that these examples provide a simple client implementation to get started but does not go into detailed description of all flags passed into the AMQP methods. 
 A complete reference to RabbitMQ's implementaton of version 0-9-1 of the AMQP specification can be found in this guide.
@@ -685,13 +694,6 @@ Then the consumer should create an exchange and subscribe to a queue.  This exch
 
 At this point, consumer should start consuming messages broadcast from the **fanout** exchange type.
 
-### How to build/run client
-Now we have two c files, one is producer.c, another is consumer.c. 
-(1) Use the Makefile in sdk repository to compile under a Linux terminal. 
-(2) cd to the directory which containing client source code 
-(3) Run make all
-
-
 ### Putting it all together
 The full code below includes some basic AMQP error handling for consumer that is useful when declaring exchanges and queues.  In addition, main receiver loop attempts to reconnect upon network connection failure.
 
@@ -717,7 +719,7 @@ The full code below includes some basic AMQP error handling for consumer that is
 	    amqp_channel_t channel = 1;
 	    int channel_max = 0;
 	    int frame_max = 131072;
-	    int heartbeat = 0;
+	    int heartbeat = 60;
 	    int status = 0;
 	
 	    // Opening socket
@@ -791,7 +793,7 @@ The full code below includes some basic AMQP error handling for consumer that is
 		amqp_rpc_reply_t reply;
 		int channel_max = 0;
 		int frame_max = 131072;
-		int heartbeat = 0;
+		int heartbeat = 60;
 		int status = 0;
 	
 		// Opening socket
