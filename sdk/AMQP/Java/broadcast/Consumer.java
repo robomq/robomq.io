@@ -36,6 +36,7 @@ public class Consumer {
 				factory.setVirtualHost(vhost);
 				factory.setUsername(username);
 				factory.setPassword(password);
+				factory.setRequestedHeartbeat(60);
 				connection = factory.newConnection();
 				channel = connection.createChannel();
 			

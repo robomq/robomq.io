@@ -556,6 +556,7 @@ Set heartbeat to 60 seconds, so that client will confirm the connectivity with b
 	factory.setVirtualHost(vhost);
 	factory.setUsername(username);
 	factory.setPassword(password);
+	factory.setRequestedHeartbeat(60);
 	connection = factory.newConnection();
 	channel = connection.createChannel();
 
@@ -651,6 +652,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 				factory.setVirtualHost(vhost);
 				factory.setUsername(username);
 				factory.setPassword(password);
+				factory.setRequestedHeartbeat(60);
 				connection = factory.newConnection();
 				channel = connection.createChannel();
 	
@@ -719,6 +721,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 					factory.setVirtualHost(vhost);
 					factory.setUsername(username);
 					factory.setPassword(password);
+					factory.setRequestedHeartbeat(60);
 					connection = factory.newConnection();
 					channel = connection.createChannel();
 				
