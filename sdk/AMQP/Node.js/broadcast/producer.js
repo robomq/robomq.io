@@ -18,7 +18,7 @@ var username = "username";
 var password = "password";
 var exchangeName = "testEx";
 
-producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 producer.then(function(conn) {
 	return conn.createConfirmChannel().then(function(ch) {
 		//for fanout type exchange, routing key is useless

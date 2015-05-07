@@ -28,7 +28,7 @@ dom.on("error", relisten);
 dom.run(listen);
 
 function listen() {
-	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 	consumer.then(function(conn) {
 		return conn.createChannel().then(function(ch) {
 			ch.assertExchange(exchangeName, "topic", {durable: false, autoDelete: true});

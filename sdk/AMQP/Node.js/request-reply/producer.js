@@ -21,7 +21,7 @@ var replyQueue = "replyQ";
 var requestKey = "request";
 var replyKey = "reply";
 
-producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 producer.then(function(conn) {
 	return conn.createChannel().then(function(ch) {
 		//listen for reply messages

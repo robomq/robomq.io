@@ -26,7 +26,7 @@ dom.on("error", relisten);
 dom.run(listen);
 
 function listen() {
-	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 	consumer.then(function(conn) {
 		return conn.createChannel().then(function(ch) {
 			//one-to-one messaging uses the default exchange, where queue name is the routing key

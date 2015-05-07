@@ -192,8 +192,9 @@ The full documentation of this library is at <http://www.squaremobius.net/amqp.n
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
-	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 	producer.then(function(conn) {
 		return conn.createConfirmChannel().then(successCallback);
 	}).then(null, failureCallback);
@@ -251,7 +252,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	var requestKey = "request";
 	var replyKey = "reply";
 	
-	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+	producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 	producer.then(function(conn) {
 		return conn.createChannel().then(function(ch) {
 			//listen for reply messages
@@ -297,7 +298,7 @@ If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re
 	dom.run(listen);
 	
 	function listen() {
-		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+		consumer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 		consumer.then(function(conn) {
 			return conn.createChannel().then(function(ch) {
 				ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
@@ -363,6 +364,7 @@ Finally, require this library in your program and use the classes.
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	$connection = new AMQPConnection($server, $port, $username, $password, $vhost);
 	$channel =  $connection->channel();	
@@ -546,6 +548,7 @@ Of course, you can eventually compress your producer and consumer classes into j
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 	ConnectionFactory factory = new ConnectionFactory();
 	factory.setHost(server);

@@ -18,7 +18,7 @@ var username = "username";
 var password = "password";
 var routingKey = "testQ";
 
-producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 producer.then(function(conn) {
 	return conn.createConfirmChannel().then(function(ch) {
 		//assigning blank string to exchange is to use the default exchange, where queue name is the routing key

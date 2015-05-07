@@ -19,7 +19,7 @@ var password = "password";
 var exchangeName = "testEx";
 var routingKey = "test";
 
-producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost);
+producer = amqp.connect("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost + "?heartbeat=60");
 producer.then(function(conn) {
 	return conn.createConfirmChannel().then(function(ch) {
 		ch.publish(exchangeName, routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1}, function(err, ok) {
