@@ -38,4 +38,4 @@ The key components [robomq.io](www.robomq.io)  are:
 
 5. **Alerts and notification** based on configurable threshold from message content 
 
-[robomq.io](http://www.robomq.io)  platform is an expandable platform that allows addition of business specific application components which feed on the same stream of information, in parallel. robomq.io comes bundled with few application components like monitoring dashboard for messaging activity, data driven analytics and alerts. Similar applications can be added to expand the platform. For each application component, multiple processes or workers can be added be added to handle increased demand or load.
+[robomq.io](http://www.robomq.io)  platform is an expandable platform that allows addition of business specific application components which feed on the same stream of information, in parallel. robomq.io comes bundled with few application components like monitoring dashboard for messaging activity, data driven analytics and alerts. Similar applications can be added to expand the platform. For each application component, multiple processes or workers can be added be added to handle increased demand or load.  

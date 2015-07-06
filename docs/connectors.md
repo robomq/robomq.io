@@ -59,8 +59,8 @@ This section introduces you to the DB Connector providing an API between your cl
 
 [robomq.io](http://www.robomq.io) has built a DBConnector module in Python. It consists of an interface between AMQP broker and backend database supporting these transactions:
 
-1. SQL Read & AMQP Publish
-2. AMQP Get & SQL Write
+1. SQL Read & AMQP Publish  
+2. AMQP Get & SQL Write  
 3. AMQP Subscribe & SQL Write
 
 **Overview:**
