@@ -61,6 +61,7 @@ This section introduces you to the DB Connector providing an API between your cl
 
 1. SQL Read & AMQP Publish
 2. AMQP Get & SQL Write
+3. AMQP Subscribe & SQL Write
 
 **Overview:**
 
@@ -71,7 +72,7 @@ This section introduces you to the DB Connector providing an API between your cl
 3. On the AMQP side, DBConnector will publish to a destination exchange and get messages from a source queue.   
 4. Each Read & Publish transaction consists of one AMQP message per database record (row).  
 5. Each Get & Write transaction consists of one or multiple write statements (insert or update) per AMQP message.  
-6. Database records can be translated to/from AMQP message in either delimited text or JSON array. You can specify any delimiter if use delimited text.  
+6. Database records can be translated to/from AMQP message in either delimited text or JSON / XML format. You can specify any delimiter if using delimited text.  
 7. If the destination exchange, source exchange & queue does not exist, DBConnector will create them with the default arguments.  
 8. All the methods of DBConnector returns True, False or None, which respectively indicates success, failure or empty result. Empty result happens when the source queue is empty or read query returns 0 rows.  
 9. Messages that fail during processing (i.e. invalid content, database transaction failure, etc.) will be "dead lettered". You can find them in the dead letter queue and deal with them later.  
@@ -85,33 +86,32 @@ The configuration file is written in JSON format. It consists of 3 major section
 	- access information of the database,
 	- query statement or template.
 - Broker section:
-	-  AMQP connection parameters and credentials,
-	-  message source and destination.
+	-  AMQP connection parameters and credentials,  
+	-  message source and destination.  
 - Format section:
-	-  whether message is delimited text or JSON array,
+	-  whether message is delimited text, JSON or XML,
 	-  if delimited, specify the delimiter. 
 
 **Prerequisite:**
 
-1. Requires Python 2.7 and above.
-2. Install python-pyodbc and the ODBC driver for chosen database.
-3. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
-
-		python deadLetterQueue.py -?
+1. Requires Python 2.7 and above.  
+2. Install pypyodbc library.  
+3. Install ODBC driver for the chosen database.
 
 **Execution:**
 
-After loading the configuration, two major methods you'll invoke are `DBToMQ()` and `MQToDB()`.  
+After that, three major methods you'll invoke are `selectNSend()`, `receiveNInsert()` and `subscribeNInsert()`.  
 
-1. `DBToMQ()` executes a read query in database and publish each row of the result as a message to the destination exchange.  
-2. `MQToDB()` gets a message from the source queue, from which extracts the values and write  (insert or update) one record or multiple records into the database.  
+1. `selectNSend()` executes a read query in database and publish each row of the result as a message to the destination exchange.  
+2. `receiveNInsert()` gets a message from the source queue, from which extracts the values and write one record or multiple records into the database.  
+3. `subscribeNInsert()` follows the same work flow as `receiveNInsert()`, except for it listens on a queue and keeps consuming messages as they come in.   
 
-Putting it together, a simple example program would be,    
+Putting it together, the whole example script for `subscribeNInsert()` would be,    
 
-	import DBConnector
-
-	print "1. load config: %s" % str(DBConnector.loadConfig("DBConnector.config"))
-	print "2. read & publish: %s" % str(DBConnector.DBToMQ())
-	print "3. get & write: %s" % str(DBConnector.MQToDB())
-
-
+	import os
+	from thingsConnect.sql import DBConnector
+	
+	print "1. load config from DBConnector.config"
+	dbc = DBConnector(os.path.dirname(os.path.realpath(__file__)) + "/DBConnector.config")
+	print "2. subscribe & insert, started listening"
+	dbc.subscribeNInsert()
