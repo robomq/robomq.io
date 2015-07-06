@@ -95,7 +95,7 @@ The configuration file is written in JSON format. It consists of 3 major section
 **Prerequisite:**
 
 1. Requires Python 2.7 and above.  
-2. Install pypyodbc library.  
+2. Install pypyodbc module.  
 3. Install ODBC driver for the chosen database.
 
 **Execution:**
