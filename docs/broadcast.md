@@ -24,6 +24,8 @@ Finally, import this library in your program.
 
 The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
 
+> pika library is not thread safe. Do not use a connection or channel across threads.
+
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
