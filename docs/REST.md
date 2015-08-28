@@ -4,82 +4,86 @@
 
 [robomq.io](http://www.robomq.io) innovatively provides [REST interface](http://www.robomq.io/#thingsconnect) over the AMQP broker. It's only accessible over HTTPS.  
 
-Our REST interface facilitates using [robomq.io](http://www.robomq.io) from any REST clients. Therefore, it allows you send and receive messages without installing any message queue client library. Two most useful cases of our REST interface are  
+Our REST interface facilitates using [robomq.io](http://www.robomq.io) from any HTTP client. Therefore, it allows you send and receive messages without installing a message queue client library, writing and running a client program. Some common scenarios of interacting with our REST interface are  
 
-1. Send and receive messages through simple REST client, such as cURL. Get rid of programming.  
-2. Send and receive messages from Web browser with a JavaScript REST client. No library installation is required.  
+1. Integrate any devices or applications with [robomq.io](http://www.robomq.io) message queue system by making HTTP calls from them.  
+2. Send and receive messages through simple HTTP client for easy testing, such as cURL. Get rid of programming.  
+3. Send and receive messages from Web browser with a JavaScript HTTP client. No library installation is required.  
 
 # Usage
 
 HTTP GET and POST methods are supported. Each transaction consists of one AMQP message per HTTP request-response.  
 
-1. GET method gets a message from particular queue, which is bound to an exchange with a routing key.  
-2. POST method published a message to particular exchange with a routing key. 
+1. GET method gets a message from a particular queue, which is bound to an exchange with a routing key.  
+2. POST method publishes a message to a particular exchange with a routing key, and finally delivers it to a queue. 
 
 ### Request
 
-URL format of REST request requires AMQP parameters to locate the message source or destination.  
+**URL:**  
 
-**GET:**
+URL format of HTTP request requires AMQP parameters to locate the message source or destination.  
 
 	https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
 
+**Authentication:**  
+
+There are 2 authentication mechanisms that the REST interface will accept. They are secret token header and HTTP basic auth. You need to apply one of them. If you apply both, the basic auth will be ignored.  
+  
+1. Secret Token Header: set a HTTP header in request as the credential. You will need to provide [robomq.io](http://www.robomq.io) the header name and value for us to add it into server records.  
+2. HTTP Basic Auth: submit your [robomq.io](http://www.robomq.io) username:password via HTTP basic auth.  
+
+**Certificate:**
+
+In case the HTTP client you use requires the CA certificate to verify [robomq.io](http://www.robomq.io)'s certificate, download it from <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>
+
+**GET:**
+
+GET method requires no additional HTTP header or body in the request.  
+
 **POST:**
 
-	https://{hostname}/rest/{vhost}/{exchangeName}/{routingkey}
+You can optionally set a `X-AMQP-Properties` HTTP header in POST request. It will be an object containing key-value pairs of any available AMQP message properties. For example,  
 
-POST request also requires a `Content-Type` header as `application/json` and HTTP body as a JSON object. The body object contains the AMQP message content and properties, e.g. `'{"content":"Hello","properties":{"contentType":"text/plain","deliveryMode":1}}'`. Note that `content` field is mandatory while `properties` is optional.  
+	X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}
 
-Moreover, each request needs to provide username and password in HTTP basic auth. The credentials must be authenticated to access your vhost.  
+Find more details on AMQP message properties in the _Properties_ section.  
 
-In case the REST client you use requires the CA certificate to verify [robomq.io](http://www.robomq.io)'s certificate, download it from <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>
+The HTTP request body will be sent as the AMQP message body. Make sure the `Content-Type` header matches the actual MIME type of the body.    
 
 ### Response
 
 **GET:**  
 
-If the GET request succeeds, the response will be either status code 200 and message in HTTP body, or status code 204 which indicates the target queue is empty. The HTTP body in 200 response is formatted in JSON, for example  
+If the GET request succeeds, the response will be either status code 200 and the message that is fetched, or status code 204 which indicates the target queue is currently empty.  
+The HTTP body in 200 response is the AMQP message body and there are 2 HTTP headers `X-AMQP-Envelop` and `X-AMQP-Properties`, respectively containing the envelop and properties of the AMQP message, for example  
 
-	{
-		"fields":{
-			"deliveryTag":1,
-			"redelivered":false,
-			"exchange":"testEx",
-			"routingKey":"testKey",
-			"messageCount":0
-		},
-		"properties":
-		{
-			"contentType":"text/plain",
-			"headers":{},
-			"deliveryMode":1
-		},
-		"content":"Hello"
-	}
+HTTP Headers:  
 
-If any of the exchange, queue or binding doesn't exist, server will create it with the default arguments: 
+	X-AMQP-Envelop: {"deliveryTag":1,"redelivered":false,"exchange":"testEx","routingKey":"testKey","messageCount":0}
+	X-AMQP-Properties: {"contentType":"text/plain","headers":{},"deliveryMode":2,"correlationId":"0053b20e-a462-435d-8697-cd43fc22c4c7","messageId":"0053b20e-a462-435d-8697-cd43fc22c4c7"}
+
+HTTP Body: 
+
+	Hello World
+
+All errors will be responded with status code and error description in HTTP body.  
+
+**POST:**  
+
+The response for POST request is either 200 OK or error status code and description in HTTP body.  
+
+**Missing resources:**
+
+For both GET and POST methods, if any of the exchange, queue or binding doesn't exist, server will create it with the following default arguments:  
 
 * type (exchange): topic
 * durable (exchange & queue): true
 * auto-delete (exchange & queue): false
 * internal (exchange): false
 
-All errors will be responded with status code and error details in HTTP body.  
-
-**POST:**  
-
-The response for POST request is either 200 OK or error status code and details in HTTP body.  
-
-If the exchange doesn't exist, server will create it with the default arguments: 
-
-* type: topic
-* durable: true
-* auto-delete: false
-* internal: false
-
 ### Properties
 
-The optional `properties` field in HTTP body of GET response and POST request should be a JSON object. All available attributes are listed bellow,  
+The `X-AMQP-Properties` HTTP header in the response of GET and POST request should be a JSON object. All available properties are listed bellow.  
 
 * `mandatory` (boolean): if true, the message will be returned if it is not routed to a queue (i.e., if there are no bindings that match its routing key).
 
@@ -117,16 +121,33 @@ The optional `properties` field in HTTP body of GET response and POST request sh
 
 # REST use case
 
-We will provide example of REST client using cURL, but you may use any tool or language to make REST calls.  
+We will provide complete examples of HTTP call to our REST interface using cURL, but you may use any other tool or language to make the calls.  
 
 The only prerequisite is that you have cURL client installed. cURL comes with most Linux systems. For windows, you may need to download [curl.exe](http://curl.haxx.se/download.html) and place it into your system directory, e.g. `C:\Windows\System32\curl.exe`.  
 
 ### GET
 
+**Secret Token:**  
+
+	curl -X GET -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+		-H 'X-Secret-Token: {token}'
+
+**Basic Auth:**  
+
 	curl -X GET -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testQ/testKey
 
 ### POST
 
-	curl -X POST -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testKey \
-		-H "Content-Type: application/json" \
-		-d '{"content": "Hello", "properties": {"contentType": "text/plain", "deliveryMode": 1}}'
+**Secret Token:**  
+
+	curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+		-H 'X-Secret-Token: {token}' \
+		-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
+		-d 'Hello World'
+
+**Basic Auth:**  
+
+	curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+		-u {username}:{password} \
+		-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
+		-d 'Hello World'
