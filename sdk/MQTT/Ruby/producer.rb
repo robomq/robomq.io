@@ -1,3 +1,11 @@
+# File: procuder.rb
+# Description: This is the MQTT producer publishes a certain number
+#     of test messages to a particular topic through MQTT broker.
+#     It will first ask user for the quantity of messages.
+
+# Author: Wesley Zhang
+# robomq.io (http://www.robomq.io)
+
 require "mqtt"
 
 server = "hostname"
@@ -10,6 +18,7 @@ topic = "test/any"
 print "Quantity of test messages: "
 qty = gets.to_i
 
+# create connection
 begin
   client = MQTT::Client.connect(
     remote_host: server,
@@ -21,6 +30,7 @@ rescue MQTT::ProtocolException => e
   exit!
 end
 
+# publish messages
 (1..qty).each do |counter|
   begin
     msg = "test message #{counter}"
