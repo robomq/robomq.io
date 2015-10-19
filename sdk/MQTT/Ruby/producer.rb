@@ -8,11 +8,12 @@
 
 require "mqtt"
 
-server = "10.211.55.3"
+# connection options
+server = "hostname"
 port = 1883
-vhost = "customer1"
-username = "customer1"
-password = "customer1"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 topic = "test/any"
 
 print "Quantity of test messages: "

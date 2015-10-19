@@ -9,11 +9,11 @@
 require "mqtt"
 
 # connection options
-server = "10.211.55.3"
+server = "hostname"
 port = 1883
-vhost = "customer1"
-username = "customer1"
-password = "customer1"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 topic = "test/any"
 
 # event on receiving message
