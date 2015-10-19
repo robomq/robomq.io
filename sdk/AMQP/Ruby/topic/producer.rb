@@ -9,26 +9,26 @@
 
 require "bunny"
 
-server = "localhost"
+server = "hostname"
 port = 5672
-vhost = "/" 
-username = "guest"
-password = "guest"
+vhost = "yourvhost"
+username = "username"
+password = "password"
 exchangeName = "testEx"
 routingKey = "test.any"
 
 begin
-	#connect
-	connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
-	connection.start
-	channel = connection.create_channel
+  #connect
+  connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+  connection.start
+  channel = connection.create_channel
 
-	#send message
-	exchange = channel.topic(exchangeName, :auto_delete => true)
-	exchange.publish("Hello World!", :routing_key => routingKey, :content_type => "text/plain", :delivery_mode => 1)
+  #send message
+  exchange = channel.topic(exchangeName, :auto_delete => true)
+  exchange.publish("Hello World!", :routing_key => routingKey, :content_type => "text/plain", :delivery_mode => 1)
 
-	#disconnect
-	connection.close
+  #disconnect
+  connection.close
 rescue Exception => e
-	puts e
+  puts e
 end
