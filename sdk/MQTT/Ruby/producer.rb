@@ -8,36 +8,37 @@
 
 require "mqtt"
 
-server = "hostname"
+server = "10.211.55.3"
 port = 1883
-vhost = "yourvhost"
-username = "username"
-password = "password"
+vhost = "customer1"
+username = "customer1"
+password = "customer1"
 topic = "test/any"
 
 print "Quantity of test messages: "
-qty = gets.to_i
+msgNum = gets.to_i
 
 # create connection
 begin
   client = MQTT::Client.connect(
-    remote_host: server,
-    remote_port: port,
-    username: "#{vhost}:#{username}",
-    password: password)
-rescue MQTT::ProtocolException => e
-  puts "Failed to connect to broker, detail:\n\t #{e.message}"
-  exit!
-end
+      :host => server,
+      :port => port,
+      :username => "#{vhost}:#{username}",
+      :password => password,
+      :version => "3.1.0",
+      :keep_alive => 60,
+      :clean_session => true,
+      :client_id => "",
+      :will_qos => 1,
+      :will_retain => false
+  )
 
-# publish messages
-(1..qty).each do |counter|
-  begin
-    msg = "test message #{counter}"
+  # publish messages
+  (1..msgNum).each do |counter|
+    msg = "test msg  #{counter}"
     client.publish(topic, msg)
-    puts "=> Published:\n\t #{msg}"
-  rescue => e
-    puts "failed to publish message, detail: " + e.message
     sleep 1
   end
+
+  client.disconnect(true)
 end

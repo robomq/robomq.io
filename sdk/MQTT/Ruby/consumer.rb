@@ -8,29 +8,38 @@
 
 require "mqtt"
 
-server = "hostname"
-port = 1883
-vhost = "yourvhost"
-username = "username"
-password = "password"
-topic = "test/any"
-
 # connection options
-conn_opts = {
-  remote_host: server,
-  remote_port: port,
-  username: "#{vhost}:#{username}",
-  password: password
-}
+server = "10.211.55.3"
+port = 1883
+vhost = "customer1"
+username = "customer1"
+password = "customer1"
+topic = "test/any"
 
 # event on receiving message
 def onMessage(topic, message)
-  puts "get one message from topic \"#{topic}\", message body:\n\t#{message}"
+  puts "Topic: #{topic}, Message: #{message}"
 end
 
 # create connection and keep getting messages
-MQTT::Client.connect(conn_opts) do |client|
-  client.get(topic) do |topic, message|
-    onMessage(topic, message)
+loop do
+  begin
+    MQTT::Client.connect(
+      :host => server,
+      :port => port,
+      :username => "#{vhost}:#{username}",
+      :password => password,
+      :version => "3.1.0",
+      :keep_alive => 60,
+      :clean_session => true,
+      :client_id => "",
+      ) do |client|
+          client.get(topic) do |topic, message|
+            onMessage(topic, message)
+          end
+        end
+  rescue MQTT::ProtocolException => pe
+    puts "Exception handled, reconnecting...\nDetail:\n#{pe.message}"
+    sleep 5
   end
 end
