@@ -41,5 +41,5 @@ begin
     sleep 1
   end
 
-  client.disconnect(true)
+  client.disconnect
 end
