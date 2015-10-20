@@ -10,12 +10,12 @@
 require 'stomp'
 
 # connection options
-server = "hostname"
+server = "10.211.55.3"
 port = "61613"
-vhost = "yourvhost"
-login = "username"
-passcode = "password"
-destination = "/queue/test"
+vhost = "customer1"
+login = "customer1"
+passcode = "customer1"
+destination = "/queue/test1"
 
 print "Quantity of test messages: "
 msgNum = gets.to_i
