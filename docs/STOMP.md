@@ -556,64 +556,66 @@ When you no longer need it, you can also unsubscribe a destination.
 
 **Consumer.java**
 	
-	import net.ser1.stomp.*;
-	import java.util.Map;
-	
-	class Consumer {
-		private Client client;
-		private String server = "hostname";
-		private int port = 61613;
-		private String vhost = "yourvhost";
-		private String destination = "/queue/test"; //There're more options other than /queue/...
-		private String login = "username";
-		private String passcode = "password";
-	
-		private void consume() {
-			while (true) {
-				try {
-					client = new Client(server, port, login, passcode, vhost);
-					client.subscribe(destination, new Listener() {
-						/**
-						 * This method is the overridden callback on receiving messages.
-						 * @ It is event-driven. You don't call it in your code.
-						 * @ It prints the message body on console.
-						 * @ There're other callback functions provided by this library.
-						 */
-						public void message(Map headers, String body) {
-							System.out.println(body);
-						}
-		  			});
-					client.addErrorListener(new Listener() {
-						public void message(Map header, String body) {
-							System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", body);
-							//after connected, disconnect on error
-							try {
-								client.disconnect();
-							} catch(Exception e) {}
-						}
-					});
-					while (true) {
-						//after connected, reconnect on connection lost
-						if (!client.isSockConnected()) {
-							break;
-						}
-						Thread.sleep(2000); //check interval must be short enough
+```java
+import net.ser1.stomp.*;
+import java.util.Map;
+
+class Consumer {
+	private Client client;
+	private String server = "hostname";
+	private int port = 61613;
+	private String vhost = "yourvhost";
+	private String destination = "/queue/test"; //There're more options other than /queue/...
+	private String login = "username";
+	private String passcode = "password";
+
+	private void consume() {
+		while (true) {
+			try {
+				client = new Client(server, port, login, passcode, vhost);
+				client.subscribe(destination, new Listener() {
+					/**
+					 * This method is the overridden callback on receiving messages.
+					 * @ It is event-driven. You don't call it in your code.
+					 * @ It prints the message body on console.
+					 * @ There're other callback functions provided by this library.
+					 */
+					public void message(Map headers, String body) {
+						System.out.println(body);
 					}
-				} catch(Exception e) {
-					//when initializing connection, reconnect on exception
-					System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e); 
-					try {
-						Thread.sleep(5000); 
-					} catch(Exception es) {}
+	  			});
+				client.addErrorListener(new Listener() {
+					public void message(Map header, String body) {
+						System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", body);
+						//after connected, disconnect on error
+						try {
+							client.disconnect();
+						} catch(Exception e) {}
+					}
+				});
+				while (true) {
+					//after connected, reconnect on connection lost
+					if (!client.isSockConnected()) {
+						break;
+					}
+					Thread.sleep(2000); //check interval must be short enough
 				}
-			}	
-		}
-	
-		public static void main(String[] args) {
-			Consumer c = new Consumer();
-			c.consume();
-		}
+			} catch(Exception e) {
+				//when initializing connection, reconnect on exception
+				System.out.printf("Exception handled, reconnecting...\nDetail:\n%s\n", e); 
+				try {
+					Thread.sleep(5000); 
+				} catch(Exception es) {}
+			}
+		}	
 	}
+
+	public static void main(String[] args) {
+		Consumer c = new Consumer();
+		c.consume();
+	}
+}
+```
 
 ## C
 
