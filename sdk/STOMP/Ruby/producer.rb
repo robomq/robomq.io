@@ -29,15 +29,15 @@ hash = { :hosts => [
 
 begin
   # connect
-  client = Stomp::Client.new(hash)
+  connection = Stomp::Connection.new(hash)
 
   # send messages
   (1..msgNum).each do |counter|
     message = "test msg  #{counter}"
-    client.publish(destination, message, headers = {"content-type": "text/plain"})
+    connection.publish(destination, message, headers = {"content-type": "text/plain"})
     # sleep 1
   end
 
   # disconnect
-  client.close
+  connection.disconnect
 end
