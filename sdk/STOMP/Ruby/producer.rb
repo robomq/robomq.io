@@ -24,7 +24,7 @@ msgNum = gets.to_i
 hash = { :hosts => [
   {:login => login, :passcode => passcode, :host => server, :port => port},
   ],
-  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type": "text/plain"}
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0"}
 }
 
 begin
@@ -34,7 +34,7 @@ begin
   # send messages
   (1..msgNum).each do |counter|
     message = "test msg  #{counter}"
-    client.publish(destination, message)
+    client.publish(destination, message, headers = {"content-type": "text/plain"})
     # sleep 1
   end
 
