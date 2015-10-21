@@ -106,9 +106,11 @@ You can install it through `sudo pip install stompest`.
 
 Finally, import this library in your program.
 
-	from stompest.config import StompConfig
-	from stompest.protocol import StompSpec
-	from stompest.sync import Stomp
+```python
+from stompest.config import StompConfig
+from stompest.protocol import StompSpec
+from stompest.sync import Stomp
+```
 
 The full documentation of this library is at <http://nikipore.github.io/stompest/>.
 
@@ -119,16 +121,22 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 > Notice that stompest library reverses the order of outgoing and incoming heartbeats.  
 
-	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-	client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))
+```python
+client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
+client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))
+```
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)
+```python
+client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)
+```
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	client.disconnect()
+```python
+client.disconnect()
+```
 
 ### Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
@@ -137,78 +145,86 @@ Next step is to subscribe a destination, so that consumer knows where to listen 
 If you set `"ack": "auto"`, you don't need `client.ack(frame)`.  
 The `"id"` must be different for multiple subscriptions because `client.receiveFrame()` receives messages from any subscription and client needs to distinguish them by subscription ID.  
 
-	subscription = client.subscribe(destination, {"ack": "client", "id": "0"})
+```python
+subscription = client.subscribe(destination, {"ack": "client", "id": "0"})
 	
-	while True:
-		frame = client.receiveFrame()
-		print frame.body
-		client.ack(frame)
+while True:
+	frame = client.receiveFrame()
+	print frame.body
+	client.ack(frame)
+```
 
 When you no longer need it, you can also unsubscribe a destination with its unique token.
 
-	client.unsubscribe(subscription)
+```python
+client.unsubscribe(subscription)
+```
 
 ### Putting it together
 
 **producer.py**
 
-	import time
-	from stompest.config import StompConfig
-	from stompest.sync import Stomp
+```python
+import time
+from stompest.config import StompConfig
+from stompest.sync import Stomp
 	
-	server = "hostname"
-	port = "61613"
-	vhost = "yourvhost"
-	login = "username"
-	passcode = "password"
-	destination = "/queue/test"	#There're more options other than /queue/...
+server = "hostname"
+port = "61613"
+vhost = "yourvhost"
+login = "username"
+passcode = "password"
+destination = "/queue/test"	#There're more options other than /queue/...
 	
-	try:
-		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-		client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
-		msgNum = int(input("Quantity of test messages: "))
-		for i in range(msgNum):	
-			message = "test msg " + str(i + 1)
-			client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)	#SEND
-			time.sleep(1)	
-		client.disconnect()	#DISCONNECT
-	except Exception, e:
-		print e
+try:
+	client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
+	client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
+	msgNum = int(input("Quantity of test messages: "))
+	for i in range(msgNum):	
+		message = "test msg " + str(i + 1)
+		client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)	#SEND
+		time.sleep(1)	
+	client.disconnect()	#DISCONNECT
+except Exception, e:
+	print e
+```
 
 **consumer.py**
 	
-	import time
-	from stompest.config import StompConfig
-	from stompest.sync import Stomp
+```python
+import time
+from stompest.config import StompConfig
+from stompest.sync import Stomp
 	
-	server = "hostname"
-	port = "61613"
-	vhost = "yourvhost"
-	login = "username"
-	passcode = "password"
-	destination = "/queue/test"	#There're more options other than /queue/...
+server = "hostname"
+port = "61613"
+vhost = "yourvhost"
+login = "username"
+passcode = "password"
+destination = "/queue/test"	#There're more options other than /queue/...
 	
-	while True:
-		try:
-			client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
-			client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
-			subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
-			while True:
-				frame = client.receiveFrame()
-				try:
-					print frame.body
-					client.ack(frame)	#ACK
-				except:
-					print "Error: Can't handle message received, NACKing"
-					client.nack(frame)	#NACK
-		except Exception, e:
-			#reconnect on exception
-			print "Exception handled, reconnecting...\nDetail:\n%s" % e
+while True:
+	try:
+		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = login, passcode = passcode, version = "1.2"))
+		client.connect(versions = ["1.2"], host = vhost, heartBeats = (0, 60000))	#CONNECT
+		subscription = client.subscribe(destination, {"ack": "client", "id": "0"})	#SUBSCRIBE
+		while True:
+			frame = client.receiveFrame()
 			try:
-				client.disconnect()
+				print frame.body
+				client.ack(frame)	#ACK
 			except:
-				pass
-			time.sleep(5)
+				print "Error: Can't handle message received, NACKing"
+				client.nack(frame)	#NACK
+	except Exception, e:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e
+		try:
+			client.disconnect()
+		except:
+			pass
+		time.sleep(5)
+```
 
 ## Node.js
 
@@ -220,8 +236,9 @@ You can install the library through `sudo npm install stompjs`.
 
 Finally, require this library in your program.  
 
-	var Stomp = require("stompjs");
-
+```javascript
+var Stomp = require("stompjs");
+```
 The full documentation of this library is at <http://jmesnil.net/stomp-websocket/doc/>.
 
 ### Producer
@@ -230,18 +247,24 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
-	var client = Stomp.overTCP(server, port);
-	client.heartbeat.outgoing = 60000;
-	client.heartbeat.incoming = 0;
-	client.connect(login, passcode, success_callback, fail_callback, vhost);
+```javascript
+var client = Stomp.overTCP(server, port);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(login, passcode, success_callback, fail_callback, vhost);
+```
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it. 
 
-	client.send(destination, {"content-type": "text/plain"}, message);
+```javascript
+client.send(destination, {"content-type": "text/plain"}, message);
+```
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	client.disconnect(callback);
+```javascript
+client.disconnect(callback);
+```
 
 ### Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
@@ -249,96 +272,104 @@ The first step is the same as producer, consumer needs to connect to [robomq.io]
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the message body.  
 If you set `ack: "auto"`, you don't need `message.ack();`.
 
-	client.subscribe(destination, function(message) {
-		console.log(message.body);
-		message.ack();
-	},
-	{ack: "client"});
+```javascript
+client.subscribe(destination, function(message) {
+	console.log(message.body);
+	message.ack();
+},
+{ack: "client"});
+```
 
 When you no longer need it, you can also unsubscribe a destination with its unique token. If so, you need to save the token when you subscribe.  
 
+```javascript
 	var subscription = client.subscribe(...);
 	subscription.unsubscribe();
+```
 
 ### Putting it together
 
 **producer.js**
 
-	var Stomp = require("stompjs");
+```javascript
+var Stomp = require("stompjs");
 	
-	var server = "hostname";
-	var port = 61613; //It takes either string or int argument
-	var login = "username";
-	var passcode = "password";
-	var vhost = "yourvhost";
-	var destination = "/queue/test";	//There're more options other than /queue/...
+var server = "hostname";
+var port = 61613; //It takes either string or int argument
+var login = "username";
+var passcode = "password";
+var vhost = "yourvhost";
+var destination = "/queue/test";	//There're more options other than /queue/...
 	
-	var client = Stomp.overTCP(server, port);
+var client = Stomp.overTCP(server, port);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(login, passcode
+	, function() {
+		process.stdout.write("Quantity of test messages: ");
+		process.stdin.on("data", function (msgNum) {
+			for(var i = 1; i <= msgNum; i++){	
+				var message = "test msg " + i;
+				client.send(destination, {"content-type": "text/plain"}, message);
+			}
+			client.disconnect(function() {
+				process.exit(0);
+			});
+		});		
+	}
+	//callback function of connection failure
+	, function(ex) {
+		console.log(ex);
+		process.exit(-1);
+	}
+	, vhost);
+```
+
+**consumer.js**
+
+```javascript
+var Stomp = require("stompjs");
+var domain = require("domain");
+	
+var server = "hostname";
+var port = 61613; //It takes either string or int argument
+var login = "username";
+var passcode = "password";
+var vhost = "yourvhost";
+var destination = "/queue/test";	//There're more options other than /queue/...
+	
+//use domain module to handle reconnecting
+var client = null;
+var dom = domain.create();
+dom.on("error", consume);
+dom.run(consume);
+	
+function consume() {
+	client = Stomp.overTCP(server, port);
 	client.heartbeat.outgoing = 60000;
 	client.heartbeat.incoming = 0;
 	client.connect(login, passcode
 		, function() {
-			process.stdout.write("Quantity of test messages: ");
-			process.stdin.on("data", function (msgNum) {
-				for(var i = 1; i <= msgNum; i++){	
-					var message = "test msg " + i;
-					client.send(destination, {"content-type": "text/plain"}, message);
+			//the callback for subscribe() function is actually the callback on message 
+			client.subscribe(destination, function(message) {
+				try {
+					console.log(message.body);
+					message.ack();
+				} catch(ex) {
+					console.log("Error: Can't handle message received, NACKing");
+					message.nack();
 				}
-				client.disconnect(function() {
-					process.exit(0);
-				});
-			});		
+			},
+			{ack: "client"}); //if ack:"auto", no need to ack in code
 		}
 		//callback function of connection failure
 		, function(ex) {
-			console.log(ex);
-			process.exit(-1);
+			console.log("Exception handled, reconnecting...\nDetail:\n" + ex);
+			client.disconnect(function() {setTimeout(consume, 5000);});
 		}
 		, vhost);
-
-**consumer.js**
-
-	var Stomp = require("stompjs");
-	var domain = require("domain");
-	
-	var server = "hostname";
-	var port = 61613; //It takes either string or int argument
-	var login = "username";
-	var passcode = "password";
-	var vhost = "yourvhost";
-	var destination = "/queue/test";	//There're more options other than /queue/...
-	
-	//use domain module to handle reconnecting
-	var client = null;
-	var dom = domain.create();
-	dom.on("error", consume);
-	dom.run(consume);
-	
-	function consume() {
-		client = Stomp.overTCP(server, port);
-		client.heartbeat.outgoing = 60000;
-		client.heartbeat.incoming = 0;
-		client.connect(login, passcode
-			, function() {
-				//the callback for subscribe() function is actually the callback on message 
-				client.subscribe(destination, function(message) {
-					try {
-						console.log(message.body);
-						message.ack();
-					} catch(ex) {
-						console.log("Error: Can't handle message received, NACKing");
-						message.nack();
-					}
-				},
-				{ack: "client"}); //if ack:"auto", no need to ack in code
-			}
-			//callback function of connection failure
-			, function(ex) {
-				console.log("Exception handled, reconnecting...\nDetail:\n" + ex);
-				client.disconnect(function() {setTimeout(consume, 5000);});
-			}
-			, vhost);
-	}
+}
+```
 
 ## PHP
 
@@ -349,10 +380,12 @@ It supports STOMP version 1.0 and 1.1.
 This library depends on OpenSSL, if you want to use STOMP over SSL. In that case, first ensure that your have OpenSSL installed.  
 Download the library from <http://pecl.php.net/package/stomp> and uncompress the tarball, enter `stomp-x.x.x/` and install it by
 
+```bash
 	phpize
 	./configure
 	make
 	sudo make install
+```
 
 Now you should see `stomp.so` in your php shared library directory, e.g `/usr/lib/php5/20121212/`. Finally, edit your `php.ini`. In *Dynamic Extensions* section, add one line `extension=stomp.so`.
 
@@ -366,15 +399,20 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
-	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
+```php
+$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
+```
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	$client->send($destination, $message, array("content-type" => "text/plain"));
-
+```php
+$client->send($destination, $message, array("content-type" => "text/plain"));
+```
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker. This library contains disconnect function in client class's destructor.  
 
-	unset($client);
+```php
+unset($client);
+```
 
 ### Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
@@ -382,78 +420,228 @@ The first step is the same as producer, consumer needs to connect to [robomq.io]
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 If you set `"ack"=>"auto"`, you don't need `$client->ack($frame);`.    
 
-	$client->subscribe($destination, array("ack" => "client"));
+```php
+$client->subscribe($destination, array("ack" => "client"));
 
-	while(true) {
-		if ($frame = $client->readFrame()) {
-			echo $frame->body.PHP_EOL;
-			$client->ack($frame);
-		}
+while(true) {
+	if ($frame = $client->readFrame()) {
+		echo $frame->body.PHP_EOL;
+		$client->ack($frame);
 	}
+}
+```
 
 When you no longer need it, you can also unsubscribe a destination.
 
-	$client->unsubscribe($destination);
+```php
+$client->unsubscribe($destination);
+```
 
 ### Putting it together
 
 **producer.php**
 
-	<?php	
-	$server = "hostname";
-	$port = "61613";
-	$vhost = "yourvhost";
-	$login = "username";
-	$passcode = "password";
-	$destination = "/queue/test";	//There're more options other than /queue/...
+```php
+<?php	
+$server = "hostname";
+$port = "61613";
+$vhost = "yourvhost";
+$login = "username";
+$passcode = "password";
+$destination = "/queue/test";	//There're more options other than /queue/...
 	
-	try {
-		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
-		echo "Quantity of test messages: ";
-		$msgNum = rtrim(fgets(STDIN), PHP_EOL);
-		for ($i = 1; $i <= $msgNum; $i++) {
-			$message = "test msg ".$i;
-			$client->send($destination, $message, array("content-type" => "text/plain"));
-			sleep(1);
-		}
-		unset($client);
-	} catch (StompException $e) {
-		die($e->getMessage());
+try {
+	$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
+	echo "Quantity of test messages: ";
+	$msgNum = rtrim(fgets(STDIN), PHP_EOL);
+	for ($i = 1; $i <= $msgNum; $i++) {
+		$message = "test msg ".$i;
+		$client->send($destination, $message, array("content-type" => "text/plain"));
+		sleep(1);
 	}
-	?>
+	unset($client);
+} catch (StompException $e) {
+	die($e->getMessage());
+}
+?>
+```
 
 **consumer.php**
 
-	<?php	
-	$server = "hostname";
-	$port = "61613";
-	$vhost = "yourvhost";
-	$login = "username";
-	$passcode = "password";
-	$destination = "/queue/test";	//There're more options other than /queue/...
+```php
+<?php	
+$server = "hostname";
+$port = "61613";
+$vhost = "yourvhost";
+$login = "username";
+$passcode = "password";
+$destination = "/queue/test";	//There're more options other than /queue/...
 	
-	while (true) {
-		try {
-			$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
-			$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
-			while (true) {
-				if ($frame = $client->readFrame()) {
-					try {
-						echo $frame->body.PHP_EOL;
-						$client->ack($frame);
-					} catch (Exception $e) {
-						echo "Error: Can't handle message received, NACKing";
-						$client->nack($frame);
-					}
+while (true) {
+	try {
+		$client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
+		$client->subscribe($destination, array("ack" => "client")); //if "ack"=>"auto", no need to ack in code
+		while (true) {
+			if ($frame = $client->readFrame()) {
+				try {
+					echo $frame->body.PHP_EOL;
+					$client->ack($frame);
+				} catch (Exception $e) {
+					echo "Error: Can't handle message received, NACKing";
+					$client->nack($frame);
 				}
 			}
-		} catch (StompException $e) {
-			echo "Exception handled, reconnecting...\nDetail:\n".$e->getMessage().PHP_EOL;
-			unset($client);
-			sleep(5);
 		}
+	} catch (StompException $e) {
+		echo "Exception handled, reconnecting...\nDetail:\n".$e->getMessage().PHP_EOL;
+		unset($client);
+		sleep(5);
 	}
-	?>
+}
+?>
+```
+
+## Ruby
+
+### Prerequisite
+The Ruby gem we use for this example can be found at <https://rubygems.org/gems/stomp>. Its GitHub repository is at <https://github.com/stompgem/stomp>.  
+It supports STOMP version 1.0, 1.1 and 1.2.  
+
+You can install it through `gem install stomp`.  
+
+Finally, require this gem in your program.  
+
+	require 'stomp'
+
+The full documentation of this library is at <http://www.rubydoc.info/github/stompgem/stomp/index>.  
+
+### Producer
+The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+> In STOMP, username is called login and password is called passcode.  
+
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
+
+```ruby
+hash = { :hosts => [
+  {:login => login, :passcode => passcode, :host => server, :port => port},
+  ],
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0"}
+}
+
+connection = Stomp::Connection.new(hash)
+```
+After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
+
+```ruby
+connection.publish(destination, message, headers = {"content-type": "text/plain"})
+```
+At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+
+```ruby
+connection.disconnect
+```
+
+### Consumer
+The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+
+Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
+If you set `"ack": "auto"`, you don't need `connection.ack(message_id)`.  
+The `"id"` must be different for multiple subscriptions because `connection.receive` receives messages from any subscription and client needs to distinguish them by subscription ID.  
+
+```ruby
+subscription = connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
+while msg = conn.receive
+  puts msg.body
+  # ack current message
+  connection.ack(msg.headers['message-id'])
+end
+```
+
+When you no longer need it, you can also unsubscribe a destination with its unique token.
+
+```ruby
+connection.unsubscribe(subscription)
+```
+
+### Putting it together
+
+**producer.rb**
+
+```ruby
+require 'stomp'
+
+# connection options
+server = "hostname"
+port = "61613"
+vhost = "yourvhost"
+login = "username"
+passcode = "password"
+destination = "/queue/test"
+
+print "Quantity of test messages: "
+msgNum = gets.to_i
+
+# stomp gem connect hash
+hash = { :hosts => [
+  {:login => login, :passcode => passcode, :host => server, :port => port},
+  ],
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0"}
+}
+
+begin
+  # connect
+  connection = Stomp::Connection.new(hash)
+
+  # send messages
+  (1..msgNum).each do |counter|
+    message = "test msg  #{counter}"
+    connection.publish(destination, message, headers = {"content-type": "text/plain"})
+    # sleep 1
+  end
+
+  # disconnect
+  connection.disconnect
+end
+```
+
+**consumer.rb**
+
+```ruby
+require 'stomp'
+
+# connection options
+server = "hostname"
+port = "61613"
+vhost = "yourvhost"
+login = "username"
+passcode = "password"
+destination = "/queue/test"
+
+# stomp gem connect hash
+hash = { :hosts => [
+  {:login => login, :passcode => passcode, :host => server, :port => port},
+  ],
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type": "text/plain"}
+}
+
+loop do
+  begin
+    # connect
+    connection = Stomp::Connection.new(hash)
+
+    # subscribe
+    connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
+    while msg = conn.receive
+      puts msg.body
+      # ack current message
+      connection.ack(msg.headers['message-id'])
+    end
+  rescue => e
+    puts "Exception handled, reconnecting...\nDetail:\n#{e.message}"
+    sleep 5
+  end
+end
+```
 
 ## Java
 
@@ -465,13 +653,16 @@ You may clone the repository by `git clone https://github.com/robomq/Gozirra.git
 
 Import this library in your program	`import net.ser1.stomp.*;` and compile your source code along with gozirra-robomq.jar. For example,  
 
-	javac -cp ".:./gozirra-robomq.jar" Producer.java Consumer.java 
+```bash
+javac -cp ".:./gozirra-robomq.jar" Producer.java Consumer.java 
+```
 
 Run the producer and consumer classes. For example,  
 
-	java -cp ".:./gozirra-robomq.jar" Consumer
-	java -cp ".:./gozirra-robomq.jar" Producer
-
+```bash
+java -cp ".:./gozirra-robomq.jar" Consumer
+java -cp ".:./gozirra-robomq.jar" Producer
+```
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
 > Java7+ is required to compile with this library.
@@ -482,84 +673,95 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 
 The library will automatically set the outgoing heartbeat to 60000 milliseconds and disable the incoming heartbeat, i.e. set it to 0.  
 
-	client = new Client(server, port, login, passcode, vhost);
-
+```java
+client = new Client(server, port, login, passcode, vhost);
+```
 After that, producer can send messages to a particular destination.  
 The third parameter of `send()` function is message headers.  
 In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
-	HashMap headers = new HashMap();
-	headers.put("content-type", "text/plain");
-	client.send(destination, message, headers);
+```java
+HashMap headers = new HashMap();
+headers.put("content-type", "text/plain");
+client.send(destination, message, headers);
+```
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	client.disconnect();
+```java
+client.disconnect();
+```
 
 ### Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the overridden function `message()` to print the message body.   
 
-	client.subscribe(destination, new Listener() {
-		public void message( Map headers, String body ) {
-			System.out.println(body);
-		}
-	}); 
+```java
+client.subscribe(destination, new Listener() {
+	public void message( Map headers, String body ) {
+		System.out.println(body);
+	}
+}); 
+```
 
 When you no longer need it, you can also unsubscribe a destination.
 
+```java
 	client.unsubscribe(destination);
+```
 
 ### Putting it together
 
 **Producer.java**
 
-	import net.ser1.stomp.*;
-	import java.util.HashMap;
-	import java.util.Scanner;
+```java
+import net.ser1.stomp.*;
+import java.util.HashMap;
+import java.util.Scanner;
 	
-	class Producer {
-		private Client client;
-		private String server = "hostname";
-		private int port = 61613;
-		private String vhost = "yourvhost";
-		private String destination = "/queue/test"; //There're more options other than /queue/...
-		private String login = "username";
-		private String passcode = "password";
+class Producer {
+	private Client client;
+	private String server = "hostname";
+	private int port = 61613;
+	private String vhost = "yourvhost";
+	private String destination = "/queue/test"; //There're more options other than /queue/...
+	private String login = "username";
+	private String passcode = "password";
 	
-		private void produce() {
-			try {
-				client = new Client(server, port, login, passcode, vhost);
-				System.out.print("Quantity of test messages: ");
-				Scanner scanner = new Scanner(System.in);
-				int msgNum = scanner.nextInt();
-				HashMap headers = new HashMap();
-				headers.put("content-type", "text/plain");
-				for (int i = 0; i < msgNum; i ++) {
-					String message = "test msg " + Integer.toString(i + 1);
-					client.send(destination, message, null);
-					Thread.sleep(1000);
-				}
-				client.disconnect();
-			} catch(Exception e) {
-				System.out.println(e);
-				System.exit(-1);			
+	private void produce() {
+		try {
+			client = new Client(server, port, login, passcode, vhost);
+			System.out.print("Quantity of test messages: ");
+			Scanner scanner = new Scanner(System.in);
+			int msgNum = scanner.nextInt();
+			HashMap headers = new HashMap();
+			headers.put("content-type", "text/plain");
+			for (int i = 0; i < msgNum; i ++) {
+				String message = "test msg " + Integer.toString(i + 1);
+				client.send(destination, message, null);
+				Thread.sleep(1000);
 			}
-		}
-	
-		public static void main(String[] args) {
-			Producer p = new Producer();
-			p.produce();
+			client.disconnect();
+		} catch(Exception e) {
+			System.out.println(e);
+			System.exit(-1);			
 		}
 	}
+	
+	public static void main(String[] args) {
+		Producer p = new Producer();
+		p.produce();
+	}
+}
+```
 
 **Consumer.java**
 	
 ```java
 import net.ser1.stomp.*;
 import java.util.Map;
-
+	
 class Consumer {
 	private Client client;
 	private String server = "hostname";
@@ -568,7 +770,7 @@ class Consumer {
 	private String destination = "/queue/test"; //There're more options other than /queue/...
 	private String login = "username";
 	private String passcode = "password";
-
+	
 	private void consume() {
 		while (true) {
 			try {
@@ -609,7 +811,7 @@ class Consumer {
 			}
 		}	
 	}
-
+	
 	public static void main(String[] args) {
 		Consumer c = new Consumer();
 		c.consume();
@@ -637,8 +839,10 @@ Include `/path/to/stomp.h` in your code, depending on where you place the librar
 ./stomp/stomp.h  
 Include this library in your program, for example `#include "./stomp/stomp.h"` and compile it by
 
-	gcc -o producer producer.c stomp/*
-	gcc -o consumer consumer.c stomp/*
+```bash
+gcc -o producer producer.c stomp/*
+gcc -o consumer consumer.c stomp/*
+```
 
 ### Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
@@ -647,101 +851,116 @@ Using this library, you always construct the headers before sending a STOMP fram
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
-	struct ctx client;
-	stomp_session_t *session;
+```c
+struct ctx client;
+stomp_session_t *session;
 
-	session = stomp_session_new(&client);
+session = stomp_session_new(&client);
 
-	struct stomp_hdr conn_hdrs[] = {
-		{"login", login},
-		{"passcode", passcode},
-        {"vhost", vhost},
-		{"accept-version", "1.0,1.1,1.2"},
-		{"heart-beat", "60000,0"},
-	};
+struct stomp_hdr conn_hdrs[] = {
+	{"login", login},
+	{"passcode", passcode},
+    {"vhost", vhost},
+	{"accept-version", "1.0,1.1,1.2"},
+	{"heart-beat", "60000,0"},
+};
 
-	err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+```
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it cae an be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 Notice that length of the message char array, content-length in headers and last argument of `stomp_send()` must be identical.  
 
-	char body[20] = "test message";
-	struct stomp_hdr send_hdrs[] = {
-		{"destination", destination},
-		{"content-type", "text/plain"},
-		{"content-length", "20"},
-	};
+```c
+char body[20] = "test message";
+struct stomp_hdr send_hdrs[] = {
+	{"destination", destination},
+	{"content-type", "text/plain"},
+	{"content-length", "20"},
+};
 
-	err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
-
+err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
+```
 When all messages have been sent, producer will disconnect with the [robomq.io](http://www.robomq.io) broker. This example just force disconnect, but you could use receipt attribute in headers to gracefully disconnect.
 
-	struct stomp_hdr disconn_hdrs[] = {
-	};
-	err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+```c
+struct stomp_hdr disconn_hdrs[] = {
+};
+err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+```
 
 Finally, to start running the whole process above, you have to call `stomp_run()` before the end of your program. The process won't stop until `stomp_disconnect()` is called.  
 >This is a special feature of this C library, most STOMP libraries don't need it.  
 
-	err = stomp_run(session);
+```c
+err = stomp_run(session);
+```
 
 To cleanly close the client, you still need to free the session and exit at the very end.
 
-	stomp_session_free(session);
-	exit(EXIT_SUCCESS);
+```c
+stomp_session_free(session);
+exit(EXIT_SUCCESS);
+```
 
 ### Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Then you need to set a few callback functions. They play an significant role in this library. For example, callback on message and error.  
 
-	static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
-	{
-		struct stomp_ctx_message *e = ctx;
-		fprintf(stdout, "%s\n", (const char *)e->body);
-	}
+```c
+static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
+{
+	struct stomp_ctx_message *e = ctx;
+	fprintf(stdout, "%s\n", (const char *)e->body);
+}
 	
-	static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
-	{
-		struct stomp_ctx_error *e = ctx;
-		dump_hdrs(e->hdrc, e->hdrs);
-		fprintf(stderr, "Exception handled, reconnecting...\nDetail:\n%s\n", (const char *)e->body);
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+	struct stomp_ctx_error *e = ctx;
+	dump_hdrs(e->hdrc, e->hdrs);
+	fprintf(stderr, "Exception handled, reconnecting...\nDetail:\n%s\n", (const char *)e->body);
 	
-		struct stomp_hdr disconn_hdrs[] = {
-		};
-		stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
-	}
+	struct stomp_hdr disconn_hdrs[] = {
+	};
+	stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+}
 
-	stomp_callback_set(session, SCB_ERROR, _error);
-	stomp_callback_set(session, SCB_MESSAGE, _message);
+stomp_callback_set(session, SCB_ERROR, _error);
+stomp_callback_set(session, SCB_MESSAGE, _message);
+```
 
 Subsequently, subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call `_message()` function to print the message body.  
 If you set `"ack": "client"` in headers, you need to add `stomp_ack()` or `stomp_nack()` in `_message()` function.  
 The id attribute in headers and the subscription token will be used when unsubscribe the destination.  
 By the way, you can also see how to handle error using this library in the following code.  
 
-	struct stomp_hdr sub_hdrs[] = {
-		{"destination", destination},
-		{"ack", "auto"},
-		{"id", "0"},
-	};
+```c
+struct stomp_hdr sub_hdrs[] = {
+	{"destination", destination},
+	{"ack", "auto"},
+	{"id", "0"},
+};
 
-	err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
-	if (err<0) {
-		perror("stomp");
-		stomp_session_free(session);
-	}
-	else {
-		subscription = err;
-	}
+err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
+if (err<0) {
+	perror("stomp");
+	stomp_session_free(session);
+}
+else {
+	subscription = err;
+}
+```
 
 When you no longer need it, you can also unsubscribe a destination by the subscription ID and token.
 
-	struct stomp_hdr unsub_hdrs[] = {
-		{"id", "0"},
-	};
+```c
+struct stomp_hdr unsub_hdrs[] = {
+	{"id", "0"},
+};
 
-	err = stomp_unsubscribe(session, subscription, sizeof(unsub_hdrs)/sizeof(struct stomp_hdr), unsub_hdrs);
+err = stomp_unsubscribe(session, subscription, sizeof(unsub_hdrs)/sizeof(struct stomp_hdr), unsub_hdrs);
+```
 
 Finally, always remember to call `stomp_run()` at the end of your program; otherwise, nothing mentioned above will be actually executed. This functions is the driving force behind the client.  
 Because this consumer example never calls `stomp_disconnect()` function, so it will be running forever after `stomp_run()`.  
@@ -750,228 +969,232 @@ Because this consumer example never calls `stomp_disconnect()` function, so it w
 
 **producer.c**
 	
-	#include <stdlib.h>
-	#include <stdio.h>
-	#include <string.h>
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 	
-	#include "./stomp/stomp.h" //depends on where you place the library
+#include "./stomp/stomp.h" //depends on where you place the library
 	
-	struct ctx {
-		const char *destination;
+struct ctx {
+	const char *destination;
+};
+	
+/**
+ * This is the method to print headers.
+ */
+static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
+{
+	int i;
+	for (i=0; i < hdrc; i++) {
+		fprintf(stdout, "%s:%s\n", hdrs[i].key, hdrs[i].val);
+	}
+}
+	
+/**
+ * This is the callback method on error.
+ * @It prints the error information.
+ */
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+	struct stomp_ctx_error *e = ctx;
+	dump_hdrs(e->hdrc, e->hdrs);
+	fprintf(stderr, "%s\n", (const char *)e->body);
+}
+	
+/**
+ * This is the main method which creates and runs producer instance.
+ * @Exceptions on connection and publish error.
+ */
+int main(int argc, char *argv[]) 
+{
+	char* server = "hostname";
+	char* port = "61613";
+	char* login = "username";
+	char* passcode = "password";
+	char* vhost = "yourvhost";
+	char* destination = "/queue/test"; //There're more options other than /queue/...
+	int err;
+	struct ctx client;
+	stomp_session_t *session;
+	
+	session = stomp_session_new(&client);
+	if (!session) {
+		perror("stomp");
+		exit(EXIT_FAILURE);
+	}
+	
+	stomp_callback_set(session, SCB_ERROR, _error);
+	
+	struct stomp_hdr conn_hdrs[] = {
+		{"login", login},
+		{"passcode", passcode},
+        {"vhost", vhost},
+		{"accept-version", "1.0,1.1,1.2"},
+		{"heart-beat", "60000,0"},
 	};
 	
-	/**
-	 * This is the method to print headers.
-	 */
-	static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
-	{
-		int i;
-		for (i=0; i < hdrc; i++) {
-			fprintf(stdout, "%s:%s\n", hdrs[i].key, hdrs[i].val);
-		}
-	}
-	
-	/**
-	 * This is the callback method on error.
-	 * @It prints the error information.
-	 */
-	static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
-	{
-		struct stomp_ctx_error *e = ctx;
-		dump_hdrs(e->hdrc, e->hdrs);
-		fprintf(stderr, "%s\n", (const char *)e->body);
-	}
-	
-	/**
-	 * This is the main method which creates and runs producer instance.
-	 * @Exceptions on connection and publish error.
-	 */
-	int main(int argc, char *argv[]) 
-	{
-		char* server = "hostname";
-		char* port = "61613";
-		char* login = "username";
-		char* passcode = "password";
-		char* vhost = "yourvhost";
-		char* destination = "/queue/test"; //There're more options other than /queue/...
-		int err;
-		struct ctx client;
-		stomp_session_t *session;
-	
-		session = stomp_session_new(&client);
-		if (!session) {
-			perror("stomp");
-			exit(EXIT_FAILURE);
-		}
-	
-		stomp_callback_set(session, SCB_ERROR, _error);
-	
-		struct stomp_hdr conn_hdrs[] = {
-			{"login", login},
-			{"passcode", passcode},
-	        {"vhost", vhost},
-			{"accept-version", "1.0,1.1,1.2"},
-			{"heart-beat", "60000,0"},
-		};
-	
-		err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
-		if (err) {
-			perror("stomp");
-			stomp_session_free(session);
-			exit(EXIT_FAILURE);
-		}
-	
-		struct stomp_hdr send_hdrs[] = {
-			{"destination", destination},
-			{"content-type", "text/plain"},
-			{"content-length", "20"},
-		};
-		int msgNum, i;
-		char body[20];
-		printf("Quantity of test messages: ");
-		scanf("%d", &msgNum);
-		for(i = 1; i <= msgNum; i++) {
-			sprintf(body, "test msg %d", i);
-			do {	//in case sending failed, keep retrying
-				err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
-				sleep(1);
-			} while(err);
-		}
-	
-		struct stomp_hdr disconn_hdrs[] = {
-		};	//could use receipt to gracefully disconnect
-		err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
-		if (err) {
-			perror("stomp");
-			stomp_session_free(session);
-			exit(EXIT_FAILURE);
-		}
-	
-		err = stomp_run(session);	//necessary to actually run the process, stop when stomp_disconnect() called
-		if (err) {
-			perror("stomp");
-			stomp_session_free(session);
-			exit(EXIT_FAILURE);
-		}
-	
+	err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+	if (err) {
+		perror("stomp");
 		stomp_session_free(session);
-		exit(EXIT_SUCCESS);
-	
-		return 0;
+		exit(EXIT_FAILURE);
 	}
+	
+	struct stomp_hdr send_hdrs[] = {
+		{"destination", destination},
+		{"content-type", "text/plain"},
+		{"content-length", "20"},
+	};
+	int msgNum, i;
+	char body[20];
+	printf("Quantity of test messages: ");
+	scanf("%d", &msgNum);
+	for(i = 1; i <= msgNum; i++) {
+		sprintf(body, "test msg %d", i);
+		do {	//in case sending failed, keep retrying
+			err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
+			sleep(1);
+		} while(err);
+	}
+	
+	struct stomp_hdr disconn_hdrs[] = {
+	};	//could use receipt to gracefully disconnect
+	err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+	if (err) {
+		perror("stomp");
+		stomp_session_free(session);
+		exit(EXIT_FAILURE);
+	}
+	
+	err = stomp_run(session);	//necessary to actually run the process, stop when stomp_disconnect() called
+	if (err) {
+		perror("stomp");
+		stomp_session_free(session);
+		exit(EXIT_FAILURE);
+	}
+	
+	stomp_session_free(session);
+	exit(EXIT_SUCCESS);
+	
+	return 0;
+}
+```
 
 **consumer.c**
 
-	#include <stdlib.h>
-	#include <stdio.h>
-	#include <string.h>
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 	
-	#include "./stomp/stomp.h" //depends on where you place the library
+#include "./stomp/stomp.h" //depends on where you place the library
 	
-	struct ctx {
-		const char *destination;
+struct ctx {
+	const char *destination;
+};
+	
+/**
+ * This is the method to print headers.
+ */
+static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
+{
+	int i;
+	for (i=0; i < hdrc; i++) {
+		fprintf(stdout, "%s:%s\n", hdrs[i].key, hdrs[i].val);
+	}
+}
+	
+/**
+ * This is the callback method on receiving message.
+ * @It prints the message body.
+ */
+static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
+{
+	struct stomp_ctx_message *e = ctx;
+	fprintf(stdout, "%s\n", (const char *)e->body);
+}
+	
+/**
+ * This is the callback method on error.
+ * @It prints the error information and disconnect.
+ */
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+	struct stomp_ctx_error *e = ctx;
+	dump_hdrs(e->hdrc, e->hdrs);
+	fprintf(stderr, "Exception handled, reconnecting...\nDetail:\n%s\n", (const char *)e->body);
+	
+	//disconnect for clean reconnecting later
+	struct stomp_hdr disconn_hdrs[] = {
 	};
+	stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+}
 	
-	/**
-	 * This is the method to print headers.
-	 */
-	static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
-	{
-		int i;
-		for (i=0; i < hdrc; i++) {
-			fprintf(stdout, "%s:%s\n", hdrs[i].key, hdrs[i].val);
+/**
+ * This is the main method which creates and sets consumer instance.
+ * @Exceptions on connection and subscription error.
+ */
+int main(int argc, char *argv[]) 
+{
+	char* server = "hostname";
+	char* port = "61613";
+	char* login = "username";
+	char* passcode = "password";
+	char* vhost = "yourvhost";
+	char* destination = "/queue/test"; //There're more options other than /queue/...
+	int err;
+	int subscription;
+	struct ctx client;
+	stomp_session_t *session;
+	
+	while (1) {
+		session = stomp_session_new(&client);
+		if (!session) {
+			perror("stomp");
 		}
-	}
+		else {
+			stomp_callback_set(session, SCB_ERROR, _error);
+			stomp_callback_set(session, SCB_MESSAGE, _message);
 	
-	/**
-	 * This is the callback method on receiving message.
-	 * @It prints the message body.
-	 */
-	static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
-	{
-		struct stomp_ctx_message *e = ctx;
-		fprintf(stdout, "%s\n", (const char *)e->body);
-	}
+			struct stomp_hdr conn_hdrs[] = {
+				{"login", login},
+				{"passcode", passcode},
+				{"vhost", vhost},
+				{"accept-version", "1.0,1.1,1.2"},
+				{"heart-beat", "60000,0"},
+			};
 	
-	/**
-	 * This is the callback method on error.
-	 * @It prints the error information and disconnect.
-	 */
-	static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
-	{
-		struct stomp_ctx_error *e = ctx;
-		dump_hdrs(e->hdrc, e->hdrs);
-		fprintf(stderr, "Exception handled, reconnecting...\nDetail:\n%s\n", (const char *)e->body);
-	
-		//disconnect for clean reconnecting later
-		struct stomp_hdr disconn_hdrs[] = {
-		};
-		stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
-	}
-	
-	/**
-	 * This is the main method which creates and sets consumer instance.
-	 * @Exceptions on connection and subscription error.
-	 */
-	int main(int argc, char *argv[]) 
-	{
-		char* server = "hostname";
-		char* port = "61613";
-		char* login = "username";
-		char* passcode = "password";
-		char* vhost = "yourvhost";
-		char* destination = "/queue/test"; //There're more options other than /queue/...
-		int err;
-		int subscription;
-		struct ctx client;
-		stomp_session_t *session;
-	
-		while (1) {
-			session = stomp_session_new(&client);
-			if (!session) {
+			err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+			if (err) {
 				perror("stomp");
+				stomp_session_free(session);
 			}
 			else {
-				stomp_callback_set(session, SCB_ERROR, _error);
-				stomp_callback_set(session, SCB_MESSAGE, _message);
-	
-				struct stomp_hdr conn_hdrs[] = {
-					{"login", login},
-					{"passcode", passcode},
-					{"vhost", vhost},
-					{"accept-version", "1.0,1.1,1.2"},
-					{"heart-beat", "60000,0"},
+				struct stomp_hdr sub_hdrs[] = {
+					{"destination", destination},
+					{"ack", "auto"},	//could set "ack" header to "client" and manually stomp_ack() / stomp_nack()
+					{"id", "0"},
 				};
 	
-				err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
-				if (err) {
+				err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
+				if (err<0) {
 					perror("stomp");
 					stomp_session_free(session);
 				}
 				else {
-					struct stomp_hdr sub_hdrs[] = {
-						{"destination", destination},
-						{"ack", "auto"},	//could set "ack" header to "client" and manually stomp_ack() / stomp_nack()
-						{"id", "0"},
-					};
+					subscription = err;	//if success, return sub token for unsubscribing later
 	
-					err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
-					if (err<0) {
+					err = stomp_run(session);	//necessary to actually run the process, stop when stomp_disconnect() called
+					if (err) {
 						perror("stomp");
 						stomp_session_free(session);
 					}
-					else {
-						subscription = err;	//if success, return sub token for unsubscribing later
-	
-						err = stomp_run(session);	//necessary to actually run the process, stop when stomp_disconnect() called
-						if (err) {
-							perror("stomp");
-							stomp_session_free(session);
-						}
-					}
 				}
 			}
-			sleep(5);
 		}
-		return 0;
+		sleep(5);
 	}
+	return 0;
+}
+```
