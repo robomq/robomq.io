@@ -26,14 +26,14 @@ hash = { :hosts => [
 loop do
   begin
     # connect
-    conn = Stomp::Connection.new(hash)
+    connection = Stomp::Connection.new(hash)
 
     # subscribe
-    conn.subscribe(destination, {"ack": "client-individual", "id": "0"})
+    connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
     while msg = conn.receive
       puts msg.body
       # ack current message
-      conn.ack(msg.headers['message-id'])
+      connection.ack(msg.headers['message-id'])
     end
   rescue => e
     puts "Exception handled, reconnecting...\nDetail:\n#{e.message}"
