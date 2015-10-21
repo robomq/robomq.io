@@ -24,7 +24,8 @@ end
 # create connection and keep getting messages
 loop do
   begin
-    MQTT::Client.connect(
+    # connect
+    client = MQTT::Client.connect(
       :host => server,
       :port => port,
       :username => "#{vhost}:#{username}",
@@ -33,11 +34,14 @@ loop do
       :keep_alive => 60,
       :clean_session => true,
       :client_id => "",
-      ) do |client|
-          client.get(topic) do |topic, message|
-            onMessage(topic, message)
-          end
-        end
+      )
+
+    # subscribe
+    client.subscribe([topic,1])
+
+    client.get do |topic, message|
+      onMessage(topic, message)
+    end
   rescue MQTT::ProtocolException => pe
     puts "Exception handled, reconnecting...\nDetail:\n#{pe.message}"
     sleep 5
