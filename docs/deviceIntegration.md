@@ -101,40 +101,41 @@ For sending data, the main job is to create a producer module, then call its sen
 
 First, launch your raspberry pi and create a file named "producer.py", then paste the following code into the file:
 
-	import sys, os, json, pika
+```python
+import sys, os, json, pika
 	
-	stationID = "well1"
-	coordinate = [-89, 64]
-	server = "hostname"
-	port = "5672"
-	vhost = "waterSupply"
-	username = "username"
-	password = "password"
-	topic = "sensors"
-	parameters = pika.URLParameters("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost)
+stationID = "well1"
+coordinate = [-89, 64]
+server = "hostname"
+port = "5672"
+vhost = "waterSupply"
+username = "username"
+password = "password"
+topic = "sensors"
+parameters = pika.URLParameters("amqp://" + username + ":" + password + "@" + server + ":" + port + "/" + vhost)
 	
-	def connect():
-		try:
-			connection = pika.BlockingConnection(parameters)
-			channel = connection.channel()
-			return channel
-		except:
-			print "Error: Failed to connect broker"
+def connect():
+	try:
+		connection = pika.BlockingConnection(parameters)
+		channel = connection.channel()
+		return channel
+	except:
+		print "Error: Failed to connect broker"
 	
-	channel = connect() #connect to broker
+channel = connect() #connect to broker
 	
-	#publish message
-	def send(msgJson):
-		global channel
-		msgJson["stationID"] = stationID
-		msgJson["coordinate"] = coordinate
-		properties = pika.BasicProperties(content_type = "application/json", delivery_mode = 1)
-		try:
-			channel.basic_publish("amq.topic", topic, json.dumps(msgJson, ensure_ascii=False), properties)
-		except:
-			print "Error: Failed to send message"
-			channel = connect() #reconnect to broker
-
+#publish message
+def send(msgJson):
+	global channel
+	msgJson["stationID"] = stationID
+	msgJson["coordinate"] = coordinate
+	properties = pika.BasicProperties(content_type = "application/json", delivery_mode = 1)
+	try:
+		channel.basic_publish("amq.topic", topic, json.dumps(msgJson, ensure_ascii=False), properties)
+	except:
+		print "Error: Failed to send message"
+		channel = connect() #reconnect to broker
+```
 
 It will be the producer module that you are going to import in your raspberry pi-sensor codes to send messages to [robomq.io](http://www.robomq.io). As you can see, the producer module contains 2 methods. First is the `connect()` method that is in charge of establishing connection to the [robomq.io](http://www.robomq.io) broker. It will automatically reconnect on exception too. Another method is `send()` which publishes messages through [robomq.io](http://www.robomq.io) to worker consumers running on [robomq.io](http://www.robomq.io) server. (You always have the option to build your own worker consumers to handle messages sent by yourself).  
 In any of your sensor programs, just call `send()` function to send the data collection to [robomq.io](http://www.robomq.io) broker.  A message should be a JSON object containing key-value pairs. Now we are all set for the producer module, after this we are going add a few lines in the sensor programs.
@@ -145,83 +146,83 @@ In this part we are going to combine the DHT11 sensor and the Light sensor into 
 
 Edit your DHT11 sensor and Light sensor program as bellow:
 
+```python
+import RPi.GPIO as gpio
+import Adafruit_DHT
+import time
+import os
+import sys
+import producer      
 
-    import RPi.GPIO as gpio
-    import Adafruit_DHT
-    import time
-    import os
-    import sys
-    import producer      
+DEBUG = 1
+gpio.setmode(gpio.BCM)
 
-    DEBUG = 1
-    gpio.setmode(gpio.BCM)
+htsensor = Adafruit_DHT.DHT11
+htpin = 4
+lpin=21
 
-    htsensor = Adafruit_DHT.DHT11
-    htpin = 4
-    lpin=21
+while True:
+   humidity, temperature = Adafruit_DHT.read_retry(htsensor, htpin)
+   if humidity is not None and temperature is not None:
+       temperature = temperature * 9 / 5 + 32
+       print 'Temp={0:0.1f}*F  Humid={1:0.1f}%'.format(temperature, humidity)
+   else:
+       print 'Failed to get reading. Try again!'
 
-    while True:
-        humidity, temperature = Adafruit_DHT.read_retry(htsensor, htpin)
-        if humidity is not None and temperature is not None:
-            temperature = temperature * 9 / 5 + 32
-            print 'Temp={0:0.1f}*F  Humid={1:0.1f}%'.format(temperature, humidity)
-        else:
-            print 'Failed to get reading. Try again!'
+reading = 0
+gpio.setup(lpin, gpio.OUT)
+gpio.output(lpin, gpio.LOW)
+time.sleep(1)
+gpio.setup(lpin, gpio.IN)
+while (gpio.input(lpin) == gpio.LOW):
+   reading += 1
+luminance = 100 - reading
+print ('Luminance='), luminance
 
-    reading = 0
-    gpio.setup(lpin, gpio.OUT)
-    gpio.output(lpin, gpio.LOW)
-    time.sleep(1)
-    gpio.setup(lpin, gpio.IN)
-    while (gpio.input(lpin) == gpio.LOW):
-        reading += 1
-    luminance = 100 - reading
-    print ('Luminance='), luminance
+message = {"time": time.time() * 1000}
+message["temperature"] = temperature
+message["humidity"] = humidity
+message["luminance"] = luminance
+try:
+   producer.send(message)
+except:
+   print "Error: failed to send data through producer"
 
-    message = {"time": time.time() * 1000}
-    message["temperature"] = temperature
-    message["humidity"] = humidity
-    message["luminance"] = luminance
-    try:
-        producer.send(message)
-    except:
-        print "Error: failed to send data through producer"
-
-    time.sleep(30) #interval
-
+time.sleep(30) #interval
+```
 
 And then edit your PIR motion sensor as bellow:
 
+```python
+import RPi.GPIO as gpio
+import time
+import producer
 
-    import RPi.GPIO as gpio
-    import time
-    import producer
+gpio.setmode(gpio.BOARD)
+mpin = 31
+gpio.setup(mpin,gpio.IN)
 
-    gpio.setmode(gpio.BOARD)
-    mpin = 31
-    gpio.setup(mpin,gpio.IN)
-
-    while True:
-        gpio.wait_for_edge(mpin, gpio.RISING)
-        print('Intruder detected')
-        message = {"time": time.time() * 1000}
-        message["intruder"] = 1
-        try:
-            producer.send(message)
-        except:
-            print "Error: failed to send data through producer"
-        gpio.remove_event_detect(mpin)
-        
-        gpio.wait_for_edge(mpin, gpio.FALLING)
-        print('Intruder left or froze')
-        message = {"time": time.time() * 1000}
-        message["intruder"] = 0
-        try:
-            producer.send(message)
-        except:
-            print "Error: failed to send data through producer"
-        gpio.remove_event_detect(mpin)
-
+while True:
+   gpio.wait_for_edge(mpin, gpio.RISING)
+   print('Intruder detected')
+   message = {"time": time.time() * 1000}
+   message["intruder"] = 1
+   try:
+       producer.send(message)
+   except:
+       print "Error: failed to send data through producer"
+   gpio.remove_event_detect(mpin)
+   
+   gpio.wait_for_edge(mpin, gpio.FALLING)
+   print('Intruder left or froze')
+   message = {"time": time.time() * 1000}
+   message["intruder"] = 0
+   try:
+       producer.send(message)
+   except:
+       print "Error: failed to send data through producer"
+   gpio.remove_event_detect(mpin)
+```
 
 Now all your data will be sent via [robomq.io](http://www.robomq.io) broker to the our dashboard application. The only thing you need to accomplish is just open your dashboard in a Web browser.    
 
@@ -231,49 +232,51 @@ In the example above we implemented sending message by creating a producer modul
 
 You only need to change the producer module. Modify the "producer.py" as bellow:
 
-	import sys, os, json
-	import paho.mqtt.client as mqtt
+```python
+import sys, os, json
+import paho.mqtt.client as mqtt
 	
-	stationID = "well1"
-	coordinate = [-89, 64]
-	server = "hostname"
-	port = 1883
-	vhost = "waterSupply"
-	username = "username"
-	password = "password"
-	topic = "sensors"
+stationID = "well1"
+coordinate = [-89, 64]
+server = "hostname"
+port = 1883
+vhost = "waterSupply"
+username = "username"
+password = "password"
+topic = "sensors"
 	
-	def connect():
-		try:
-			client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
-			client.username_pw_set(vhost + ":" + username, password)
-			client.connect(server, port, keepalive=60, bind_address="")
-			client.loop_start() #start network loop
-			return client
-		except:
-			print "Error: Failed to connect broker"
+def connect():
+	try:
+		client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol="MQTTv31")
+		client.username_pw_set(vhost + ":" + username, password)
+		client.connect(server, port, keepalive=60, bind_address="")
+		client.loop_start() #start network loop
+		return client
+	except:
+		print "Error: Failed to connect broker"
 	
-	def reconnect():
-		global client
-		if (client):
-			client.loop_stop() #stop the current loop before reconnecting
-			client.disconnect()
-		client = connect()
+def reconnect():
+	global client
+	if (client):
+		client.loop_stop() #stop the current loop before reconnecting
+		client.disconnect()
+	client = connect()
 	
-	client = connect() #connect to broker
+client = connect() #connect to broker
 	
-	#publish message
-	def send(msgJson):
-		global client
-		msgJson["stationID"] = stationID
-		msgJson["coordinate"] = coordinate
-		try:
-			result = client.publish(topic, payload=str(json.dumps(msgJson, ensure_ascii=False)), qos=1, retain=False)
-			if (result[0] == 4):
-				reconnect() #reconnect to broker
-		except:
-			print "Error: Failed to send message"
+#publish message
+def send(msgJson):
+	global client
+	msgJson["stationID"] = stationID
+	msgJson["coordinate"] = coordinate
+	try:
+		result = client.publish(topic, payload=str(json.dumps(msgJson, ensure_ascii=False)), qos=1, retain=False)
+		if (result[0] == 4):
 			reconnect() #reconnect to broker
+	except:
+		print "Error: Failed to send message"
+		reconnect() #reconnect to broker
+```
 
 Since the difference is limited in the producer module, there is no need to modify the sensor programs.
 
@@ -281,36 +284,40 @@ Since the difference is limited in the producer module, there is no need to modi
 
 For STOMP producer module, no change is required for sensor programs either, only change your "producer.py" as bellow:
 
-	import sys, os, json
-	from stompest.config import StompConfig
-	from stompest.sync import Stomp
+```python
+import sys, os, json
+from stompest.config import StompConfig
+from stompest.sync import Stomp
 	
-	stationID = "well1"
-	coordinate = [-89, 64]
-	server = "hostname"
-	port = "61613"
-	vhost = "waterSupply"
-	username = "username"
-	password = "password"
-	topic = "sensors"
+stationID = "well1"
+coordinate = [-89, 64]
+server = "hostname"
+port = "61613"
+vhost = "waterSupply"
+username = "username"
+password = "password"
+topic = "sensors"
 	
-	def connect():
-		try:
-			client = Stomp(StompConfig("tcp://" + server + ":" + port, login = username, passcode = password, version = "1.2"))
-			client.connect(host = vhost)
-			return client
-		except:
-			print "Error: Failed to connect broker"
+def connect():
+	try:
+		client = Stomp(StompConfig("tcp://" + server + ":" + port, login = username, passcode = password, version = "1.2"))
+		client.connect(host = vhost)
+		return client
+	except:
+		print "Error: Failed to connect broker"
 	
-	client = connect() #connect to broker
+client = connect() #connect to broker
 	
-	#publish message
-	def send(msgJson):
-		global client
-		msgJson["stationID"] = stationID
-		msgJson["coordinate"] = coordinate
-		try:
-			client.send("/topic/" + topic, json.dumps(msgJson, ensure_ascii=False), {"content-type": "application/json"})
-		except:
-			print "Error: Failed to send message"
-			client = connect() #reconnect to broker
+#publish message
+def send(msgJson):
+	global client
+	msgJson["stationID"] = stationID
+	msgJson["coordinate"] = coordinate
+	try:
+		client.send("/topic/" + topic, json.dumps(msgJson, ensure_ascii=False), {"content-type": "application/json"})
+	except:
+		print "Error: Failed to send message"
+		client = connect() #reconnect to broker
+```
+
+

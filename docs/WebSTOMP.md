@@ -33,189 +33,203 @@ In constructor of SockJS, protocol can be "http" or "https", they use different 
 In `connect()` function, third parameter is callback function on connect, fourth is callback function on error.  
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because [robomq.io](http://www.robomq.io) broker won't send heartbeat to client.  
 
-	var webSock = new SockJS(protocol + "://" + host + ":" + port + "/stomp");
-	client = Stomp.over(webSock);
-	client.heartbeat.outgoing = 60000;
-	client.heartbeat.incoming = 0;
-	client.connect(username, password, onConnect, onError, vhost);
+```javascript
+var webSock = new SockJS(protocol + "://" + host + ":" + port + "/stomp");
+client = Stomp.over(webSock);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(username, password, onConnect, onError, vhost);
+```
 
 Step 2 is to send inputted messages to the inputted destination.   
 The second parameter is message headers. It's not used in this example.  
 
-	client.send(destination, {}, message);
+```javascript
+client.send(destination, {}, message);
+```
 
 ### Consumer
 Step 1 is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Step 2 is to subscribe the inputted destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the topic and payload of the message.  
 
-	subscription = client.subscribe(destination, onMessage, {ack: "auto"});
+```javascript
+subscription = client.subscribe(destination, onMessage, {ack: "auto"});
 
-	function onMessage(message) {
-		//on page, print "Destiantion: " + message.headers["destination"] + ", Message: " + message.body
-	}
+function onMessage(message) {
+	//on page, print "Destiantion: " + message.headers["destination"] + ", Message: " + message.body
+}
+```
 
 When page unloads, consumer will unsubscribe the destination by its token and disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	subscription.unsubscribe();
-	client.disconnect();
+```javascript
+subscription.unsubscribe();
+client.disconnect();
+```
 
 ### Putting it together
 
 **producer.html**
 
-	<!DOCTYPE html>
-	<html>
-		<head>
-			<title>producer</title>
-		</head>
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>producer</title>
+	</head>
 	
-		<body onunload="close()">
-			<h3>Step 1:</h3>
-			<form name="connForm" action="JavaScript:connect()">
-				protocol:<br><input type="radio" name="protocol" value="http" checked>http
-						&nbsp;<input type="radio" name="protocol" value="https">https<br>
-				host:<br><input type="text" name="host" value="trial.robomq.io"><br>
-				port:<br><input type="text" name="port" value="15674"><br>
-				vhost:<br><input type="text" name="vhost" value=""><br>
-				username:<br><input type="text" name="username" value=""><br>
-				password:<br><input type="text" name="password" value=""><br><br>
-				<input type="submit" value="connect">
-			</form>
+	<body onunload="close()">
+		<h3>Step 1:</h3>
+		<form name="connForm" action="JavaScript:connect()">
+			protocol:<br><input type="radio" name="protocol" value="http" checked>http
+					&nbsp;<input type="radio" name="protocol" value="https">https<br>
+			host:<br><input type="text" name="host" value="trial.robomq.io"><br>
+			port:<br><input type="text" name="port" value="15674"><br>
+			vhost:<br><input type="text" name="vhost" value=""><br>
+			username:<br><input type="text" name="username" value=""><br>
+			password:<br><input type="text" name="password" value=""><br><br>
+			<input type="submit" value="connect">
+		</form>
 	
-			<br><h3>Step 2:</h3>
-			<form name="pubForm" action="JavaScript:publish()">
-				destination:<br><input type="text" name="destination" value="/queue/test"><br>
-				message:<br><input type="text" name="message" value="Hello World!"><br><br>
-				<input type="submit" value="publish">
-			</form>
-		</body>
+		<br><h3>Step 2:</h3>
+		<form name="pubForm" action="JavaScript:publish()">
+			destination:<br><input type="text" name="destination" value="/queue/test"><br>
+			message:<br><input type="text" name="message" value="Hello World!"><br><br>
+			<input type="submit" value="publish">
+		</form>
+	</body>
 	
-		<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
-		<script src="stomp.js"></script>
-		<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
-		<!--change src to file's actual path; don't directly source this GitHub link-->
+	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+	<script src="stomp.js"></script>
+	<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
+	<!--change src to file's actual path; don't directly source this GitHub link-->
 	
-		<script>
-			var client = null;
+	<script>
+		var client = null;
 	
-			function connect() {
-				if (client != null && client.connected) {
-					client.disconnect();
-				}
-				var connInfo = document.forms["connForm"];
-				var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
-		    	client = Stomp.over(webSock);
-				client.heartbeat.outgoing = 60000;
-				client.heartbeat.incoming = 0;
-				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
-			}
-	
-			function onConnect() {	
-				alert("Connected to broker!");
-			}
-	
-			function publish() {
-				if (client == null || !client.connected) {
-					alert("Please connect first!");
-					return;
-				}
-				var pubInfo = document.forms["pubForm"];
-				client.send(pubInfo["destination"].value, {}, pubInfo["message"].value);
-			}
-	
-			function onError(error) {
-				alert(error);
-			}
-	
-			function close() {
+		function connect() {
+			if (client != null && client.connected) {
 				client.disconnect();
 			}
-		</script>
-	</html>
+			var connInfo = document.forms["connForm"];
+			var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
+	    	client = Stomp.over(webSock);
+			client.heartbeat.outgoing = 60000;
+			client.heartbeat.incoming = 0;
+			client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
+		}
+	
+		function onConnect() {	
+			alert("Connected to broker!");
+		}
+	
+		function publish() {
+			if (client == null || !client.connected) {
+				alert("Please connect first!");
+				return;
+			}
+			var pubInfo = document.forms["pubForm"];
+			client.send(pubInfo["destination"].value, {}, pubInfo["message"].value);
+		}
+	
+		function onError(error) {
+			alert(error);
+		}
+	
+		function close() {
+			client.disconnect();
+		}
+	</script>
+</html>
+```
 
 **consumer.html**
 
-	<!DOCTYPE html>
-	<html>
-		<head>
-			<title>consumer</title>
-		</head>
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>consumer</title>
+	</head>
 	
-		<body onunload="close()">
-			<h3>Step 1:</h3>
-			<form name="connForm" action="JavaScript:connect()">
-				protocol:<br><input type="radio" name="protocol" value="http" checked>http
-						&nbsp;<input type="radio" name="protocol" value="https">https<br>
-				host:<br><input type="text" name="host" value="trial.robomq.io"><br>
-				port:<br><input type="text" name="port" value="15674"><br>
-				vhost:<br><input type="text" name="vhost" value=""><br>
-				username:<br><input type="text" name="username" value=""><br>
-				password:<br><input type="text" name="password" value=""><br><br>
-				<input type="submit" value="connect">
-			</form>
+	<body onunload="close()">
+		<h3>Step 1:</h3>
+		<form name="connForm" action="JavaScript:connect()">
+			protocol:<br><input type="radio" name="protocol" value="http" checked>http
+					&nbsp;<input type="radio" name="protocol" value="https">https<br>
+			host:<br><input type="text" name="host" value="trial.robomq.io"><br>
+			port:<br><input type="text" name="port" value="15674"><br>
+			vhost:<br><input type="text" name="vhost" value=""><br>
+			username:<br><input type="text" name="username" value=""><br>
+			password:<br><input type="text" name="password" value=""><br><br>
+			<input type="submit" value="connect">
+		</form>
 	
-			<br><h3>Step 2:</h3>
-			<form name="subForm" action="JavaScript:subscribe()">
-				destination:<br><input type="text" name="destination" value="/queue/test"><br><br>
-				<input type="submit" value="subscribe">
-			</form>
-			<br><h3 id="msgArea">Received:</h3><br>
-		</body>
+		<br><h3>Step 2:</h3>
+		<form name="subForm" action="JavaScript:subscribe()">
+			destination:<br><input type="text" name="destination" value="/queue/test"><br><br>
+			<input type="submit" value="subscribe">
+		</form>
+		<br><h3 id="msgArea">Received:</h3><br>
+	</body>
 	
-		<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
-		<script src="stomp.js"></script>
-		<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
-		<!--change src to file's actual path; don't directly source this GitHub link-->
+	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+	<script src="stomp.js"></script>
+	<!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js-->
+	<!--change src to file's actual path; don't directly source this GitHub link-->
 	
-		<script>
-			var client = null;
-			var subscription = null;
+	<script>
+		var client = null;
+		var subscription = null;
 	
-			function connect() {
-				if (client != null && client.connected) {
-					client.disconnect();
-				}
-				var connInfo = document.forms["connForm"];
-				var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
-		    	client = Stomp.over(webSock);
-				client.heartbeat.outgoing = 60000;
-				client.heartbeat.incoming = 0;
-				client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
-			}
-	
-			function onConnect() {	
-				alert("Connected to broker!");
-			}
-	
-			function subscribe() {
-				if (client == null || !client.connected) {
-					alert("Please connect first!");
-					return;
-				}
-				if (subscription != null) {
-					subscription.unsubscribe();
-				}
-				var subInfo = document.forms["subForm"];
-				subscription = client.subscribe(subInfo["destination"].value, onMessage, {ack: "auto"});
-				alert("Subscription ID: " + subscription["id"]);
-			}
-	
-			function onMessage(message) {
-				var newMsg = document.createElement("div");
-				newMsg.appendChild(document.createTextNode("Destiantion: " + message.headers["destination"] + ", Message: " + message.body));
-				newMsg.appendChild(document.createElement("br"));
-				document.body.insertBefore(newMsg, document.getElementById("msgArea").nextSibling);
-			}
-	
-			function onError(error) {
-				alert(error);
-				subscription = null;
-			}
-	
-			function close() {
-				subscription.unsubscribe();
+		function connect() {
+			if (client != null && client.connected) {
 				client.disconnect();
 			}
-		</script>
-	</html>
+			var connInfo = document.forms["connForm"];
+			var webSock = new SockJS(connInfo["protocol"].value + "://" + connInfo["host"].value + ":" + connInfo["port"].value + "/stomp");
+	    	client = Stomp.over(webSock);
+			client.heartbeat.outgoing = 60000;
+			client.heartbeat.incoming = 0;
+			client.connect(connInfo["username"].value, connInfo["password"].value, onConnect, onError, connInfo["vhost"].value);
+		}
+	
+		function onConnect() {	
+			alert("Connected to broker!");
+		}
+	
+		function subscribe() {
+			if (client == null || !client.connected) {
+				alert("Please connect first!");
+				return;
+			}
+			if (subscription != null) {
+				subscription.unsubscribe();
+			}
+			var subInfo = document.forms["subForm"];
+			subscription = client.subscribe(subInfo["destination"].value, onMessage, {ack: "auto"});
+			alert("Subscription ID: " + subscription["id"]);
+		}
+	
+		function onMessage(message) {
+			var newMsg = document.createElement("div");
+			newMsg.appendChild(document.createTextNode("Destiantion: " + message.headers["destination"] + ", Message: " + message.body));
+			newMsg.appendChild(document.createElement("br"));
+			document.body.insertBefore(newMsg, document.getElementById("msgArea").nextSibling);
+		}
+	
+		function onError(error) {
+			alert(error);
+			subscription = null;
+		}
+	
+		function close() {
+			subscription.unsubscribe();
+			client.disconnect();
+		}
+	</script>
+</html>
+```
+
+

@@ -32,15 +32,19 @@ The example code provided bellow could be the short version, it might have omitt
 ### Connect
 Compared to non-SSL connect method recapped bellow,  
 
-	credentials = pika.PlainCredentials(username, password)
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
+```python
+credentials = pika.PlainCredentials(username, password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
+```
 
 SSL connect method adds two parameters. It sets `ssl = True` and passes SSL options. The `"cert_reqs": ssl.CERT_REQUIRED` in SSL options implies the client requires to verify server's certificate.  
 
-	credentials = pika.PlainCredentials(username, password)
-	sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
-	connection = pika.BlockingConnection(parameters)
+```python
+credentials = pika.PlainCredentials(username, password)
+sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
+parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
+connection = pika.BlockingConnection(parameters)
+```
 
 If the root CA certificate file isn't provided or isn't the one downloaded at <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>, client will fail to verify [robomq.io](http://www.robomq.io) certificate thus fail to connect.  
 
@@ -48,18 +52,59 @@ If the root CA certificate file isn't provided or isn't the one downloaded at <h
 
 **producer.py**
 
-	import pika
-	import ssl
+```python
+import pika
+import ssl
 	
-	server = "hostname"
-	port = 5671
-	vhost = "yourvhost" 
-	username = "username"
-	password = "password"
-	caCert = "./AddTrustExternalCARoot.crt" #change it to the actual path to CA certificate
-	exchangeName = "testEx"
-	routingKey = "test"
+server = "hostname"
+port = 5671
+vhost = "yourvhost" 
+username = "username"
+password = "password"
+caCert = "./AddTrustExternalCARoot.crt" #change it to the actual path to CA certificate
+exchangeName = "testEx"
+routingKey = "test"
 	
+try:
+	#connect
+	credentials = pika.PlainCredentials(username, password)
+	sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
+	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
+	connection = pika.BlockingConnection(parameters)
+	channel = connection.channel()
+	
+	#send message
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
+	
+	#disconnect
+	connection.close()
+except Exception, e:
+	print e
+```
+
+**consumer.py**
+
+```python
+import pika
+import ssl
+import time
+	
+server = "hostname"
+port = 5671
+vhost = "yourvhost" 
+username = "username"
+password = "password"
+caCert = "./AddTrustExternalCARoot.crt" #change it to the actual path to CA certificate
+exchangeName = "testEx"
+queueName = "testQ1"
+routingKey = "test"
+	
+#callback funtion on receiving messages
+def onMessage(channel, method, properties, body):
+	print body
+	
+while True:
 	try:
 		#connect
 		credentials = pika.PlainCredentials(username, password)
@@ -68,68 +113,33 @@ If the root CA certificate file isn't provided or isn't the one downloaded at <h
 		connection = pika.BlockingConnection(parameters)
 		channel = connection.channel()
 	
-		#send message
-		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
-		channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
-	
-		#disconnect
-		connection.close()
+		#declare exchange and queue, bind them and consume messages
+		channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+		channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+		channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
+		channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+		channel.start_consuming()
 	except Exception, e:
-		print e
-
-**consumer.py**
-
-	import pika
-	import ssl
-	import time
-	
-	server = "hostname"
-	port = 5671
-	vhost = "yourvhost" 
-	username = "username"
-	password = "password"
-	caCert = "./AddTrustExternalCARoot.crt" #change it to the actual path to CA certificate
-	exchangeName = "testEx"
-	queueName = "testQ1"
-	routingKey = "test"
-	
-	#callback funtion on receiving messages
-	def onMessage(channel, method, properties, body):
-		print body
-	
-	while True:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e
 		try:
-			#connect
-			credentials = pika.PlainCredentials(username, password)
-			sslOptions = {"cert_reqs": ssl.CERT_REQUIRED, "ca_certs": caCert}
-			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
-			connection = pika.BlockingConnection(parameters)
-			channel = connection.channel()
-	
-			#declare exchange and queue, bind them and consume messages
-			channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
-			channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
-			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
-			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
-			channel.start_consuming()
-		except Exception, e:
-			#reconnect on exception
-			print "Exception handled, reconnecting...\nDetail:\n%s" % e
-			try:
-				connection.close()
-			except:
-				pass
-			time.sleep(5)
+			connection.close()
+		except:
+			pass
+		time.sleep(5)
+```
 
 ## Certificate not verified
 
 ### Connect
 Compared to certificate-verified connect method above, certificate-not-verified connect method changes `"cert_reqs": ssl.CERT_REQUIRED` to `"cert_reqs": ssl.CERT_NONE` in SSL options. That implies the client doesn't require to verify server's certificate.  
 
-		credentials = pika.PlainCredentials(username, password)
-		sslOptions = {"cert_reqs": ssl.CERT_NONE}
-		parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
-		connection = pika.BlockingConnection(parameters)
+```python
+credentials = pika.PlainCredentials(username, password)
+sslOptions = {"cert_reqs": ssl.CERT_NONE}
+parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
+connection = pika.BlockingConnection(parameters)
+```
 
 Even if the root CA certificate is provided, it will be ignored.  
 
@@ -139,17 +149,57 @@ You can safely use this method to connect to [robomq.io](http://www.robomq.io) b
 
 **producer.py**
 
-	import pika
-	import ssl
+```python
+import pika
+import ssl
 	
-	server = "hostname"
-	port = 5671
-	vhost = "yourvhost" 
-	username = "username"
-	password = "password"
-	exchangeName = "testEx"
-	routingKey = "test"
+server = "hostname"
+port = 5671
+vhost = "yourvhost" 
+username = "username"
+password = "password"
+exchangeName = "testEx"
+routingKey = "test"
 	
+try:
+	#connect
+	credentials = pika.PlainCredentials(username, password)
+	sslOptions = {"cert_reqs": ssl.CERT_NONE}
+	parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
+	connection = pika.BlockingConnection(parameters)
+	channel = connection.channel()
+	
+	#send message
+	properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
+	channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
+	
+	#disconnect
+	connection.close()
+except Exception, e:
+	print e
+```
+
+**consumer.py**
+
+```python
+import pika
+import ssl
+import time
+	
+server = "hostname"
+port = 5671
+vhost = "yourvhost" 
+username = "username"
+password = "password"
+exchangeName = "testEx"
+queueName = "testQ1"
+routingKey = "test"
+	
+#callback funtion on receiving messages
+def onMessage(channel, method, properties, body):
+	print body
+	
+while True:
 	try:
 		#connect
 		credentials = pika.PlainCredentials(username, password)
@@ -158,54 +208,20 @@ You can safely use this method to connect to [robomq.io](http://www.robomq.io) b
 		connection = pika.BlockingConnection(parameters)
 		channel = connection.channel()
 	
-		#send message
-		properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mode = 1)
-		channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
-	
-		#disconnect
-		connection.close()
+		#declare exchange and queue, bind them and consume messages
+		channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
+		channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+		channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
+		channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+		channel.start_consuming()
 	except Exception, e:
-		print e
-
-**consumer.py**
-
-	import pika
-	import ssl
-	import time
-	
-	server = "hostname"
-	port = 5671
-	vhost = "yourvhost" 
-	username = "username"
-	password = "password"
-	exchangeName = "testEx"
-	queueName = "testQ1"
-	routingKey = "test"
-	
-	#callback funtion on receiving messages
-	def onMessage(channel, method, properties, body):
-		print body
-	
-	while True:
+		#reconnect on exception
+		print "Exception handled, reconnecting...\nDetail:\n%s" % e
 		try:
-			#connect
-			credentials = pika.PlainCredentials(username, password)
-			sslOptions = {"cert_reqs": ssl.CERT_NONE}
-			parameters = pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60, ssl = True, ssl_options = sslOptions)
-			connection = pika.BlockingConnection(parameters)
-			channel = connection.channel()
-	
-			#declare exchange and queue, bind them and consume messages
-			channel.exchange_declare(exchange = exchangeName, exchange_type = "direct", auto_delete = True)
-			channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
-			channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
-			channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
-			channel.start_consuming()
-		except Exception, e:
-			#reconnect on exception
-			print "Exception handled, reconnecting...\nDetail:\n%s" % e
-			try:
-				connection.close()
-			except:
-				pass
-			time.sleep(5)
+			connection.close()
+		except:
+			pass
+		time.sleep(5)
+```
+
+

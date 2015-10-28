@@ -44,14 +44,17 @@ The connector configuration mapping is a JSON formatted file requiring definitio
 2.  Install [simple-salesforce](https://pypi.python.org/pypi/simple-salesforce) REST API client.
 2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by [robomq.io](http://www.robomq.io). Get the help session for detailed usage.  
 
-		python deadLetterQueue.py -?
-
+```bash
+python deadLetterQueue.py -?
+```
 **Execution:**
 
 The Connector is intended for installation/execution either on the customer's enterprise platform or hosted on a supported cloud platform.
 Starting it simply requires specifying the configuration mapping file as shown in example below:
 
-	python SFconnector.py -i config.json
+```bash
+python SFconnector.py -i config.json
+```
 
 # Database Connector
  
@@ -108,10 +111,14 @@ After that, three major methods you'll invoke are `selectNSend()`, `receiveNInse
 
 Putting it together, the whole example script for `subscribeNInsert()` would be,    
 
-	import os
-	from thingsConnect.sql import DBConnector
+```python
+import os
+from thingsConnect.sql import DBConnector
 	
-	print "1. load config from DBConnector.config"
-	dbc = DBConnector(os.path.dirname(os.path.realpath(__file__)) + "/DBConnector.config")
-	print "2. subscribe & insert, started listening"
-	dbc.subscribeNInsert()
+print "1. load config from DBConnector.config"
+dbc = DBConnector(os.path.dirname(os.path.realpath(__file__)) + "/DBConnector.config")
+print "2. subscribe & insert, started listening"
+dbc.subscribeNInsert()
+```
+
+

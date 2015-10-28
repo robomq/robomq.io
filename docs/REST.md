@@ -23,7 +23,9 @@ HTTP GET and POST methods are supported. Each transaction consists of one AMQP m
 
 URL format of HTTP request requires AMQP parameters to locate the message source or destination.  
 
-	https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
+```
+https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
+```
 
 **Authentication:**  
 
@@ -129,25 +131,35 @@ The only prerequisite is that you have cURL client installed. cURL comes with mo
 
 **Secret Token:**  
 
-	curl -X GET -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
-		-H 'X-Secret-Token: {token}'
+```bash
+curl -X GET -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+	-H 'X-Secret-Token: {token}'
+```
 
 **Basic Auth:**  
 
-	curl -X GET -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testQ/testKey
+```bash
+curl -X GET -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testQ/testKey
+```
 
 ### POST
 
 **Secret Token:**  
 
-	curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
-		-H 'X-Secret-Token: {token}' \
-		-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
-		-d 'Hello World'
+```bash
+curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+	-H 'X-Secret-Token: {token}' \
+	-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
+	-d 'Hello World'
+```
 
 **Basic Auth:**  
 
-	curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
-		-u {username}:{password} \
-		-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
-		-d 'Hello World'
+```bash
+curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+	-u {username}:{password} \
+	-H 'X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}' \
+	-d 'Hello World'
+```
+
+

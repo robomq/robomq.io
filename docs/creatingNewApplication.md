@@ -14,72 +14,90 @@ You can install it through `sudo pip install pika`.
 
 Finally, import this library in your program.
 
-	import pika
+```python
+import pika
+```
 
 The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
 
 ###Producer
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
-	channel = connection.channel()
+```python
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
+```
 
 Then producer can publish messages to the direct exchange where messages will be delivered to queues whose routing key matches.  
 
-	channel.basic_publish(exchange = "amq.direct", routing_key = "test", body = "Hello World!", properties = None)
+```python
+channel.basic_publish(exchange = "amq.direct", routing_key = "test", body = "Hello World!", properties = None)
+```
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	connection.close()
+```python
+connection.close()
+```
 
 ###Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Then consumer will declare a queue, and bind the queue to the direct exchange with a routing key. The routing key decides what messages will the queue receive.    
 
-	channel.queue_declare(queue = "testQ")
-	channel.queue_bind(exchange = "amq.direct", queue = "testQ", routing_key = "test")
+```python
+channel.queue_declare(queue = "testQ")
+channel.queue_bind(exchange = "amq.direct", queue = "testQ", routing_key = "test")
+```
 
 Finally, consumer can consume messages from the queue.  
 
-	channel.basic_consume(consumer_callback = onMessage, queue = "testQ", no_ack = True)
-	channel.start_consuming()
+```python
+channel.basic_consume(consumer_callback = onMessage, queue = "testQ", no_ack = True)
+channel.start_consuming()
+```
 
 When messages are received, a callback function `onMessage()` will be invoked to print the message content.  
 
-	def onMessage(channel, method, properties, body):
-		print body
+```python
+def onMessage(channel, method, properties, body):
+	print body
+```
 
 ###Putting it together
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 
 **producer.py**
+
+```python	
+import pika
 	
-	import pika
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
 	
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
-	channel = connection.channel()
+channel.basic_publish(exchange = "amq.direct", routing_key = "test", body = "Hello World!", properties = None)
 	
-	channel.basic_publish(exchange = "amq.direct", routing_key = "test", body = "Hello World!", properties = None)
-	
-	connection.close()
+connection.close()
+```
 
 **consumer.py**
+
+```python	
+import pika
+
+def onMessage(channel, method, properties, body):
+	print body
 	
-	import pika
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
 
-	def onMessage(channel, method, properties, body):
-		print body
-	
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
-	channel = connection.channel()
+channel.queue_declare(queue = "testQ")
+channel.queue_bind(exchange = "amq.direct", queue = "testQ", routing_key = "test")
 
-	channel.queue_declare(queue = "testQ")
-	channel.queue_bind(exchange = "amq.direct", queue = "testQ", routing_key = "test")
-
-	channel.basic_consume(consumer_callback = onMessage, queue = "testQ", no_ack = True)
-	channel.start_consuming()
+channel.basic_consume(consumer_callback = onMessage, queue = "testQ", no_ack = True)
+channel.start_consuming()
+```
 
 ##MQTT client
 Now we are going to build our first MQTT application.
@@ -91,7 +109,9 @@ You can install it through `sudo pip install paho-mqtt`.
 
 Finally, import this library in your program.
 
-	import paho.mqtt.client as mqtt
+```python
+import paho.mqtt.client as mqtt
+```
 
 The full documentation of this library is at <https://pypi.python.org/pypi/paho-mqtt>.  
 
@@ -102,39 +122,53 @@ The first thing we need to do is to establish a connection with [robomq.io](http
 [robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
-	client = mqtt.Client()
-	client.username_pw_set(yourvhost + ":" + username, password)
-	client.connect(hostname, 1883)
-	client.loop_start()
+```python
+client = mqtt.Client()
+client.username_pw_set(yourvhost + ":" + username, password)
+client.connect(hostname, 1883)
+client.loop_start()
+```
 
 After that, producer can send messages to a particular topic.  
 In this example, the topic is "test"; It lets user input the message to send.    
-	
-	message = raw_input("Input message to send: ")
-	client.publish(topic = "test", payload = message)
+
+```python	
+message = raw_input("Input message to send: ")
+client.publish(topic = "test", payload = message)
+```
 
 At last, producer will stop looping and disconnect with the [robomq.io](http://www.robomq.io) broker.    
 
-	client.loop_stop()
-	client.disconnect()
+```python
+client.loop_stop()
+client.disconnect()
+```
 
 ### Consumer
 The same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker and start looping. The difference is consumer loops forever.  
 
-	client.loop_forever()
+```python
+client.loop_forever()
+```
 
 After connecting, consumer will subscribe a topic, so that consumer knows where to listen to.    
 
-	client.subscribe("test")
+```python
+client.subscribe("test")
+```
 
 Once it receives a message from the queue bound by the topic, it will call the callback function `onMessage()` to print the topic and message payload.  
 
-	def onMessage(client, userdata, message):
-		print("Topic: " + message.topic + ", Message: " + message.payload)
+```python
+def onMessage(client, userdata, message):
+	print("Topic: " + message.topic + ", Message: " + message.payload)
+```
 
 The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker.  
 
-	client.on_message = onMessage
+```python
+client.on_message = onMessage
+```
 
 ### Putting it all together
 
@@ -142,32 +176,36 @@ The callback functions should be preset before connecting to [robomq.io](http://
 
 **producer.py**
 
-	import sys, paho.mqtt.client as mqtt
-		
-	client = mqtt.Client()
-	client.username_pw_set(yourvhost + ":" + username, password)
-	client.connect(hostname, 1883)
-	client.loop_start()
+```python
+import sys, paho.mqtt.client as mqtt
 	
-	message = raw_input("Input message to send: ")
-	client.publish(topic = "test", payload = message)
+client = mqtt.Client()
+client.username_pw_set(yourvhost + ":" + username, password)
+client.connect(hostname, 1883)
+client.loop_start()
+	
+message = raw_input("Input message to send: ")
+client.publish(topic = "test", payload = message)
 
-	client.loop_stop()
-	client.disconnect()
+client.loop_stop()
+client.disconnect()
+```
 
 **consumer.py**
 
-	import sys, paho.mqtt.client as mqtt
+```python
+import sys, paho.mqtt.client as mqtt
 	
-	def onMessage(client, userdata, message):
-		print("Topic: " + message.topic + ", Message: " + message.payload)
+def onMessage(client, userdata, message):
+	print("Topic: " + message.topic + ", Message: " + message.payload)
 	
-	client = mqtt.Client()
-	client.username_pw_set(yourvhost + ":" + username, password)
-	client.on_message = onMessage
-	client.connect(hostname, 1883)
-	client.subscribe("test")
-	client.loop_forever()
+client = mqtt.Client()
+client.username_pw_set(yourvhost + ":" + username, password)
+client.on_message = onMessage
+client.connect(hostname, 1883)
+client.subscribe("test")
+client.loop_forever()
+```
 
 ##STOMP client
 Now we are going to build our first STOMP application.
@@ -183,57 +221,70 @@ The full documentation of this library is at <http://nikipore.github.io/stompest
 The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
 > In STOMP, username is called login and password is called passcode. 
 
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
+```python
+client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+client.connect(versions = ["1.2"], host = yourvhost)
+```
 
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section in *STOMP* chapter elaborates it. 
 
-	client.send(destination = "/queue/test", body = "Hello World!", headers = None)
+```python
+client.send(destination = "/queue/test", body = "Hello World!", headers = None)
+```
 
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
 
-	client.disconnect()
+```python
+client.disconnect()
+```
 
 ###Consumer
 The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 
-	subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+```python
+subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
 	
-	while True:
-		frame = client.receiveFrame()
-		print frame.body
+while True:
+	frame = client.receiveFrame()
+	print frame.body
+```
 
 ###Putting it together
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 
 **producer.py**
+
+```python	
+import sys
+from stompest.config import StompConfig
+from stompest.sync import Stomp
 	
-	import sys
-	from stompest.config import StompConfig
-	from stompest.sync import Stomp
+client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+client.connect(versions = ["1.2"], host = yourvhost)
 	
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
+client.send(destination = "/queue/test", body = "Hello World!", headers = None)
 	
-	client.send(destination = "/queue/test", body = "Hello World!", headers = None)
-	
-	client.disconnect()
+client.disconnect()
+```
 
 **consumer.py**
+
+```python	
+import sys
+from stompest.config import StompConfig
+from stompest.protocol import StompSpec
+from stompest.sync import Stomp
 	
-	import sys
-	from stompest.config import StompConfig
-	from stompest.protocol import StompSpec
-	from stompest.sync import Stomp
+client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
+client.connect(versions = ["1.2"], host = yourvhost)
 	
-	client = Stomp(StompConfig("tcp://" + hostname + ":61613", login = username, passcode = password, version = "1.2"))
-	client.connect(versions = ["1.2"], host = yourvhost)
-	
-	subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
-			
-	while True:
-		frame = client.receiveFrame()
-		print frame.body
+subscription = client.subscribe("/queue/test", {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+		
+while True:
+	frame = client.receiveFrame()
+	print frame.body
+```
+
