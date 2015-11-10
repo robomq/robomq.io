@@ -550,7 +550,7 @@ The `"id"` must be different for multiple subscriptions because `connection.rece
 
 ```ruby
 subscription = connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
-while msg = conn.receive
+while msg = connection.receive
   puts msg.body
   # ack current message
   connection.ack(msg.headers['message-id'])
@@ -631,7 +631,7 @@ loop do
 
     # subscribe
     connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
-    while msg = conn.receive
+    while msg = connection.receive
       puts msg.body
       # ack current message
       connection.ack(msg.headers['message-id'])
