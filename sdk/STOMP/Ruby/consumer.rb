@@ -30,7 +30,7 @@ loop do
 
     # subscribe
     connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
-    while msg = conn.receive
+    while msg = connection.receive
       puts msg.body
       # ack current message
       connection.ack(msg.headers['message-id'])
