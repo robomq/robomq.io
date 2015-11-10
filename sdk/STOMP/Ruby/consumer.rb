@@ -20,7 +20,7 @@ destination = "/queue/test"
 hash = { :hosts => [
   {:login => login, :passcode => passcode, :host => server, :port => port},
   ],
-  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type": "text/plain"}
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type" => "text/plain"}
 }
 
 loop do
@@ -29,7 +29,7 @@ loop do
     connection = Stomp::Connection.new(hash)
 
     # subscribe
-    connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
+    connection.subscribe(destination, {"ack" => "client-individual", "id" => "0"})
     while msg = connection.receive
       puts msg.body
       # ack current message

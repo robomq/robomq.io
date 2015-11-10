@@ -34,7 +34,7 @@ begin
   # send messages
   (1..msgNum).each do |counter|
     message = "test msg  #{counter}"
-    connection.publish(destination, message, headers = {"content-type": "text/plain"})
+    connection.publish(destination, message, headers = {"content-type" => "text/plain"})
     # sleep 1
   end
 

@@ -533,7 +533,7 @@ connection = Stomp::Connection.new(hash)
 After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
 
 ```ruby
-connection.publish(destination, message, headers = {"content-type" => "text/plain"})
+connection.publish(destination, message, headers = {"content-type": "text/plain"})
 ```
 At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
 
@@ -549,8 +549,8 @@ If you set `"ack": "auto"`, you don't need `connection.ack(message_id)`.
 The `"id"` must be different for multiple subscriptions because `connection.receive` receives messages from any subscription and client needs to distinguish them by subscription ID.  
 
 ```ruby
-subscription = connection.subscribe(destination, {"ack" => "client-individual", "id" => "0"})
-while msg = connection.receive
+subscription = connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
+while msg = conn.receive
   puts msg.body
   # ack current message
   connection.ack(msg.headers['message-id'])
@@ -595,7 +595,7 @@ begin
   # send messages
   (1..msgNum).each do |counter|
     message = "test msg  #{counter}"
-    connection.publish(destination, message, headers = {"content-type" => "text/plain"})
+    connection.publish(destination, message, headers = {"content-type": "text/plain"})
     # sleep 1
   end
 
@@ -621,7 +621,7 @@ destination = "/queue/test"
 hash = { :hosts => [
   {:login => login, :passcode => passcode, :host => server, :port => port},
   ],
-  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type" => "text/plain"}
+  :connect_headers => {"host" => vhost, "accept-version" => "1.2", "heart-beat" => "60000,0", "content-type": "text/plain"}
 }
 
 loop do
@@ -630,8 +630,8 @@ loop do
     connection = Stomp::Connection.new(hash)
 
     # subscribe
-    connection.subscribe(destination, {"ack" => "client-individual", "id" => "0"})
-    while msg = connection.receive
+    connection.subscribe(destination, {"ack": "client-individual", "id": "0"})
+    while msg = conn.receive
       puts msg.body
       # ack current message
       connection.ack(msg.headers['message-id'])
