@@ -596,7 +596,7 @@ begin
   (1..msgNum).each do |counter|
     message = "test msg  #{counter}"
     connection.publish(destination, message, headers = {"content-type" => "text/plain"})
-    # sleep 1
+    sleep 1
   end
 
   # disconnect
