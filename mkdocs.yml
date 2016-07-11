@@ -23,5 +23,6 @@ pages:
 - ['SSL.md', 'User Guide', 'SSL']
 - ['REST.md', 'User Guide', 'REST']
 - ['connectors.md', 'User Guide', 'Connectors']
+- ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
 - ['about.md', '', 'About']
 theme: readthedocs
