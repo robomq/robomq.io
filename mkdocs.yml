@@ -24,5 +24,6 @@ pages:
 - ['REST.md', 'User Guide', 'REST']
 - ['connectors.md', 'User Guide', 'Connectors']
 - ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
+- ['IotAnalytics-walkthrough.md', '', 'IoT Analytics']
 - ['about.md', '', 'About']
 theme: readthedocs
