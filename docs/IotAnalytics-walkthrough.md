@@ -188,7 +188,7 @@ Above we see the final example dashboard which monitors the different sensors in
 
 This is just a brief introduction to the unlimited potential IoT Analytics brings for the customers using IoT devices in their business. You can correlate and visualize your device and sensor data with few clicks and no programming needed...
 
-Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a free trial [free trial](http://robomq.io/index.html#free).
+Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a free trial [free trial](robomq.io/index.html#free).
 
 For more information on RoboMQ and its product features, check out our website [robomq.io](https://robomq.io/) or email us at sales@robomq.io.  
 
