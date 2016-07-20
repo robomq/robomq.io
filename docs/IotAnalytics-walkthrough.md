@@ -25,12 +25,12 @@ Keep a close watch on all your devices, monitor your sensors,  organize your dat
 
 Jack runs a business of providing storages and warehouses for commodity retailers, initially, with a small but growing business he was fine with physically monitoring the warehouses. But as the business grew, so did the complexity of managing it and the sheer scope of parameters and locations to monitor increased as well.
 
-Jack then set up several sensors in his warehouses collecting data like temperature, humidity, movements, luminance, power consumption etc which replaced his age old method of collecting this data manually with specific handheld devices. These new sensors constantly collect the data and send it as messages to [RoboMQ IoT Integration Platform](#http://www.robomq.io/). Now all that he needs is an easy to use app to monitor and analyze the data collected by these sensors anywhere and at anytime.
-[RoboMQ IoT Analytics](#http://www.robomq.io/index.html#iotanalytics) does exactly the same and much more... Jack can visualize his data, follow the trends it takes and manage his business much more effectively with this analytics. He simply opens his RoboMQ IoT Analytics application from his computer, phone or tablet and monitors his warehouses with a few clicks, saving himself a lot of time and money which was spent physically monitoring the warehouses  with help of few employees. Not only the old method time consuming but it could also be inaccurate at times and the constant monitoring was almost impossible.
+Jack then set up several sensors in his warehouses collecting data like temperature, humidity, movements, luminance, power consumption etc which replaced his age old method of collecting this data manually with specific handheld devices. These new sensors constantly collect the data and send it as messages to [RoboMQ IoT Integration Platform](http://www.robomq.io/). Now all that he needs is an easy to use app to monitor and analyze the data collected by these sensors anywhere and at anytime.
+[RoboMQ IoT Analytics](http://www.robomq.io/index.html#iotanalytics) does exactly the same and much more... Jack can visualize his data, follow the trends it takes and manage his business much more effectively with this analytics. He simply opens his RoboMQ IoT Analytics application from his computer, phone or tablet and monitors his warehouses with a few clicks, saving himself a lot of time and money which was spent physically monitoring the warehouses  with help of few employees. Not only the old method time consuming but it could also be inaccurate at times and the constant monitoring was almost impossible.
 
 With IoT Analytics, it’s as easy as it gets. Now he can act on the slightest irregularity in the data, delegate his employees at the right place on the right time all while relaxing in his office, saving effort, money and time. He can also add other users to the application with limited permissions so they can view the data and report or act accordingly.
 
-Simple yet elegant, the [IoT Analytics](#http://www.robomq.io/index.html#iotanalytics) allows Jack to get total automated control with no programming needed!!!  A simple producer code is all that is needed to send the data from sensors to the RoboMQ and IoT Analytics takes care of the rest. Jack simply drags and drops the widgets that he wants for visualization and he is all set to go..
+Simple yet elegant, the [IoT Analytics](http://www.robomq.io/index.html#iotanalytics) allows Jack to get total automated control with no programming needed!!!  A simple producer code is all that is needed to send the data from sensors to the RoboMQ and IoT Analytics takes care of the rest. Jack simply drags and drops the widgets that he wants for visualization and he is all set to go..
 
 
 ## IoT Analytics schematics
@@ -70,7 +70,7 @@ In order to set up Message Producer on devices to see the generated data on your
 deviceID is a unique identifier of a device. Fill out the broker section with your tenant credentials provided by RoboMQ.
 
 ###Prerequisites
-Producer can talk to RoboMQ using any messaging protocol. In this example, we are using MQTT. The only dependency for the producer is to install an open-source client implementation of MQTT. We will use [paho](#http://www.eclipse.org/paho/) from eclipse foundation .
+Producer can talk to RoboMQ using any messaging protocol. In this example, we are using MQTT. The only dependency for the producer is to install an open-source client implementation of MQTT. We will use [paho](http://www.eclipse.org/paho/) from eclipse foundation .
 To install paho module on a IoT device, simply run:
 > pip install paho-mqtt
 
