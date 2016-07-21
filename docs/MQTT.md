@@ -2,28 +2,28 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding MQTT.  
 
-[robomq.io](http://www.robomq.io) supports MQTT 3.1 as an extension to the AMQP broker. Its port is **1883**, SSL port is **8883**.
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> supports MQTT 3.1 as an extension to the AMQP broker. Its port is **1883**, SSL port is **8883**.
 
 MQTT stands for Message Queue Telemetry Transport. It is a publish / subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimize network bandwidth and device resource requirements whilst also attempting to ensure reliability and some degree of assurance of delivery. These principles also turn out to make the protocol ideal of the emerging "machine-to-machine" (M2M) or "Internet of Things" (IoT) world of connected devices, and for mobile applications where bandwidth and battery power are at a premium. 
-> [Full documentation of MQTT](http://mqtt.org)
+<a href="https://mqtt.org" target="_blank">Full documentation of MQTT</a>
 
-[robomq.io](http://www.robomq.io) builds MQTT adapter on top of AMQP exchanges and queues. Messages published to MQTT topics use a topic exchange (amq.topic by default) internally. Subscribers consume from queues bound to the topic exchange. This both enables interoperability with other protocols and makes it possible to use the Management GUI to inspect queue sizes, message rates, and so on.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> builds MQTT adapter on top of AMQP exchanges and queues. Messages published to MQTT topics use a topic exchange (amq.topic by default) internally. Subscribers consume from queues bound to the topic exchange. This both enables interoperability with other protocols and makes it possible to use the Management GUI to inspect queue sizes, message rates, and so on.  
 
 # Vhost specification
 
 MQTT protocol itself does not have the concept of vhost and so all MQTT libraries do not provide vhost argument.  
-However, [robomq.io](http://www.robomq.io) broker supplemented this feature. You can optionally specify a vhost while connecting, by prepending the vhost to the username and separating with a colon. For example, `/:guest`. If no vhost is specified, it will use the default vhost "/".   
+However, <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker supplemented this feature. You can optionally specify a vhost while connecting, by prepending the vhost to the username and separating with a colon. For example, `/:guest`. If no vhost is specified, it will use the default vhost "/".   
 
 # Durability and Persistence
 
-[robomq.io](http://www.robomq.io) MQTT adapter assumes two primary usage scenarios:
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> MQTT adapter assumes two primary usage scenarios:
 
-> QoS stands for quality of service in MQTT. [robomq.io](http://www.robomq.io) supports QoS up to 1.
+> QoS stands for quality of service in MQTT. <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> supports QoS up to 1.
 
 * Transient clients that use transient messages (non-persistent, QoS=0). It uses non-durable, auto-delete queues that will be deleted when the client disconnects.  
 * Stateful clients that use durable subscriptions (non-clean sessions, QoS=1). It uses durable queues. Whether the queues are auto-deleted is controlled by the client's clean session flag. Clients with clean sessions use auto-deleted queues, others use non-auto-deleted ones.   
 
-For transient (QoS=0) publishes, [robomq.io](http://www.robomq.io) will publish messages as transient (non-persistent). Naturally, for durable (QoS=1) publishes, persistent messages will be used internally.
+For transient (QoS=0) publishes, <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> will publish messages as transient (non-persistent). Naturally, for durable (QoS=1) publishes, persistent messages will be used internally.
 
 Queues created for MQTT subscribers will have names starting with mqtt-subscription-, one per subscription QoS level.  
 
@@ -35,7 +35,7 @@ In the examples, MQTT producer will first ask user for the quantity of messages,
 
 All examples have implemented automatic reconnecting, which is crucial in real production.
 
-The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK [repository](https://github.com/robomq/robomq.io/tree/master/sdk/MQTT) on GitHub.  
+The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK <a href="https://github.com/robomq/robomq.io/tree/master/sdk/MQTT" target="_blank">repository</a> on GitHub.  
 
 > Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  
 > Always run consumer first to create the exchange and queue for producer to send messages to.   
@@ -43,7 +43,7 @@ The example code provided bellow could be the short version, it might have omitt
 ## Python
 
 ### Prerequisite
-The Python library we use for this example can be found at <https://eclipse.org/paho/clients/python/>. Its source code is at <http://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/>.  
+The Python library we use for this example can be found at <a href="https://eclipse.org/paho/clients/python/" target="_blank">https://eclipse.org/paho/clients/python/</a>. Its source code is at <a href="https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/" target="_balnk">https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/</a>.  
 
 You can install it through `sudo pip install paho-mqtt`.  
 
@@ -53,13 +53,13 @@ Finally, import this library in your program.
 import paho.mqtt.client as mqtt
 ```
 
-The full documentation of this library is at <https://pypi.python.org/pypi/paho-mqtt>.  
+The full documentation of this library is at <a href="https://pypi.python.org/pypi/paho-mqtt" target="_blank">https://pypi.python.org/pypi/paho-mqtt</a>.  
 
-> This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <http://mosquitto.org>.  
+> This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <a href="https://mosquitto.org" target="_blank">https://mosquitto.org</a>.  
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
@@ -76,7 +76,7 @@ After that, producer can send messages to a particular topic.
 client.publish(topic, payload=message, qos=1, retain=False)
 ```
 
-At last, producer will stop loop and disconnect with the [robomq.io](http://www.robomq.io) broker.    
+At last, producer will stop loop and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.    
 
 ```python
 client.loop_stop()
@@ -84,7 +84,7 @@ client.disconnect()
 ```
 
 ### Consumer
-The same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker and start loop.  Not as the producer, this consumer loops forever.
+The same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker and start loop.  Not as the producer, this consumer loops forever.
 
 ```python
 client.loop_forever()
@@ -105,7 +105,7 @@ def onMessage(client, userdata, message):
 	print("Topic: " + message.topic + ", Message: " + message.payload)
 ```
 
-The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker.  
+The callback functions should be preset before connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```python
 client.on_connect = onConnect
@@ -193,7 +193,7 @@ while True:
 ## Node.js
 
 ### Prerequisite
-The Node.js library we use for this example can be found at <https://github.com/adamvr/MQTT.js>.    
+The Node.js library we use for this example can be found at <a href="https://github.com/adamvr/MQTT.js" target="_blank">https://github.com/adamvr/MQTT.js</a>.    
 
 You can install the library through `sudo npm install mqtt`.  
 
@@ -203,11 +203,11 @@ Finally, require this library in your program.
 var mqtt = require("mqtt");
 ```
 
-The full documentation of this library is at <https://github.com/mqttjs/MQTT.js/wiki>.
+The full documentation of this library is at <a href="https://github.com/mqttjs/MQTT.js/wiki" target="_blank">https://github.com/mqttjs/MQTT.js/wiki</a>.
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```javascript
@@ -226,14 +226,14 @@ After that, producer can send messages to a particular topic.
 client.publish(topic, message, {qos: 1, retain: false});
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker. The `end()` function contains disconnecting.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. The `end()` function contains disconnecting.
 
 ```javascript
 client.end();
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 In the callback function on connect, next step is to subscribe a topic, so that consumer knows where to listen to. It uses a callback function to handle incoming messages. Once it receives a message from the queue bound by the topic, it will print the topic and message payload. 
 
@@ -318,15 +318,15 @@ client.on("connect", function() {	//this library automatically reconnects on err
 ### Prerequisite
 The PHP library we use for this example can be found at <https://github.com/mgdm/Mosquitto-PHP/>.  
 
-This library depends on php 5.3+ and [libmosquitto](http://mosquitto.org/), so first ensure that your have them installed.  
+This library depends on php 5.3+ and <a href="https://mosquitto.org/" target="_blank">libmosquitto</a>, so first ensure that your have them installed.  
 You may obtain the package using PECL `sudo pecl install Mosquitto-alpha`.  
 Now you should see `mosquitto.so` in your php shared library directory, e.g `/usr/lib/php5/20121212/`. Finally, edit your `php.ini`. In *Dynamic Extensions* section, add one line `extension=mosquitto.so`.  
 
 After installation, you don't need to explicitly require this library in your PHP script. Your PHP interpreter will integrate it for you.  
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 In the constructor of client, first parameter is client ID, second is boolean flag for clean session.  
 The third parameter of connect function is keep alive the in seconds. Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
    
@@ -350,14 +350,14 @@ It is strongly recommended that you call `loop()` each time you send a message.
 $client->loop();
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.    
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.    
 
 ```php
 $client->disconnect();
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker. Not as the producer, this consumer loops forever.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. Not as the producer, this consumer loops forever.  
 
 ```php
 $client->loopForever();
@@ -377,7 +377,7 @@ function onMessage($message) {
 }
 ```
 
-The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker. Foe example,  
+The callback functions should be preset before connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. Foe example,  
 
 ```php
 $client->onMessage("onMessage");
@@ -467,7 +467,7 @@ while (true) {
 ## Ruby
 
 ### Prerequisite
-The Ruby gem we use for this example can be found at <https://rubygems.org/gems/mqtt>. Its source code is at <https://github.com/njh/ruby-mqtt>  
+The Ruby gem we use for this example can be found at <a href="https://rubygems.org/gems/mqtt" target="_blank">https://rubygems.org/gems/mqtt</a>. Its source code is at <a href="https://github.com/njh/ruby-mqtt" target="_blank">https://github.com/njh/ruby-mqtt</a>  
 
 You can install it through `gem install mqtt`.  
 
@@ -477,11 +477,11 @@ Finally, require this gem in your program.
 require 'mqtt'
 ```
 
-The full documentation of this gem is at <http://www.rubydoc.info/gems/mqtt/>.  
+The full documentation of this gem is at <a href="https://www.rubydoc.info/gems/mqtt/" target="_blank">https://www.rubydoc.info/gems/mqtt/</a>.  
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```ruby
@@ -505,14 +505,14 @@ After that, producer can send messages to a particular topic.
 client.publish(topic, msg)
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
 
 ```ruby
 client.disconnect
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Next step is to subscribe a topic, so that consumer knows where to listen to.
 
@@ -627,9 +627,9 @@ end
 ## Java
 
 ### Prerequisite
-The Java library we use for this example can be found at <http://www.eclipse.org/paho/clients/java/>.  
+The Java library we use for this example can be found at <a href="https://www.eclipse.org/paho/clients/java/" target="_blank">https://www.eclipse.org/paho/clients/java/</a>.  
 
-Download the library jar file at <http://repo.eclipse.org/content/repositories/paho-releases/org/eclipse/paho/mqtt-client/0.4.0/mqtt-client-0.4.0.jar>, import this library in your program `import org.eclipse.paho.client.mqttv3.*;` and compile your source code with the jar file. For example,  
+Download the library jar file at <a href="https://repo.eclipse.org/content/repositories/paho-releases/org/eclipse/paho/mqtt-client/0.4.0/mqtt-client-0.4.0.jar" target="_blank">https://repo.eclipse.org/content/repositories/paho-releases/org/eclipse/paho/mqtt-client/0.4.0/mqtt-client-0.4.0.jar</a>, import this library in your program `import org.eclipse.paho.client.mqttv3.*;` and compile your source code with the jar file. For example,  
 
 ```bash
 javac -cp ".:./mqtt-client-0.4.0.jar" Producer.java Consumer.java 
@@ -645,8 +645,8 @@ Of course, you can eventually compress your producer and consumer classes into j
 The full documentation of this library is at <http://www.eclipse.org/paho/files/javadoc/index.html>.
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```java
@@ -670,14 +670,14 @@ It is remarkable that the message argument of `publish()` function isn't a Strin
 client.publish(topic, message);
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
 
 ```java
 client.disconnect();
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Next step is to subscribe a topic, so that consumer knows where to listen to. You need to set the callback on message before subscribe. Once it receives a message from queue bound by the topic, it will call the overridden function `messageArrived()` to print the topic and message payload.  
 The second parameter of `subscribe()` function is QoS.  
@@ -847,9 +847,9 @@ public class Consumer {
 ## C++
 
 ### Prerequisite
-The C++ library we use for this example can be found at <http://mosquitto.org/>.   
+The C++ library we use for this example can be found at <a href="https://mosquitto.org/" target="_blank">http://mosquitto.org/</a>.   
 
-You will find elaborate installation guide at <http://mosquitto.org/download/>. Install the library according to your operating system. The recommended approach is installing from the source. First, download the latest source package, uncompress it and enter its root directory; Then, run the following two commands:
+You will find elaborate installation guide at <a href="https://mosquitto.org/download/" target="_blank">https://mosquitto.org/download/</a>. Install the library according to your operating system. The recommended approach is installing from the source. First, download the latest source package, uncompress it and enter its root directory; Then, run the following two commands:
 
 ```bash
 make
@@ -863,11 +863,11 @@ g++ producer.cpp -o producer -lmosquitto
 g++ consumer.cpp -o consumer -lmosquitto
 ```
 
-See the full documentation of this library at <http://mosquitto.org/documentation/>.
+See the full documentation of this library at <a href="https://mosquitto.org/documentation/" target="_blank">https://mosquitto.org/documentation/</a>.
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Remember to `mosquitto_lib_init();` before creating the mosquitto instance.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion. Using this library, you usually starts loop right after connecting.  
 The second parameter of `mosquitto_new()` function is boolean flag for clean session.  
@@ -893,7 +893,7 @@ The fourth argument is length of payload char array; The sixth argument is QoS; 
 mosquitto_publish(mosq, NULL, topic, 20, payload, 1, false);
 ```
 
-At last, producer will stop loop and disconnect with the [robomq.io](http://www.robomq.io) broker.  
+At last, producer will stop loop and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```cpp
 mosquitto_loop_stop(mosq, true); 
@@ -903,7 +903,7 @@ mosquitto_lib_cleanup();
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker and start loop. Not as the producer, this consumer loops forever.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker and start loop. Not as the producer, this consumer loops forever.  
 
 ```cpp
 while(!mosquitto_loop_forever(mosq, 0, 1)){

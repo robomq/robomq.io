@@ -22,7 +22,7 @@ example: "#.topic" can be: topic, Ftopic, Secondtopic, 123topic etc.
 
 **Python client AMQP library**
 
-The Python library we use for this example can be found at <https://github.com/pika/pika>.  
+The Python library we use for this example can be found at <a href="https://github.com/pika/pika" target="_blank">https://github.com/pika/pika</a>.  
 
 You can install it through `sudo pip install pika`.  
 
@@ -32,12 +32,12 @@ Finally, import this library in your program.
 import pika
 ```
 
-The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
+The full documentation of this library is at <a href="https://pika.readthedocs.org/en/0.9.14/" target="_blank">https://pika.readthedocs.org/en/0.9.14/</a>.
 
 > pika library is not thread safe. Do not use a connection or channel across threads.
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```python
@@ -54,14 +54,14 @@ properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mod
 channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = "Hello World!", properties = properties)
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```python
 connection.close()
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key (topic). The routing key can contain wildcards to receive messages sent through different routing keys.  
 Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -168,7 +168,7 @@ while True:
 
 **Node.js client AMQP library**
 
-The Node.js library we use for this example can be found at <https://github.com/squaremo/amqp.node>.    
+The Node.js library we use for this example can be found at <a href="https://github.com/squaremo/amqp.node" target="_blank">https://github.com/squaremo/amqp.node</a>.    
 
 You can install the library through `sudo npm install amqplib`.  
 
@@ -177,11 +177,10 @@ Finally, require this library in your program.
 ```javascript
 var amqp = require("amqplib");
 ```
-
-The full documentation of this library is at <http://www.squaremobius.net/amqp.node/doc/channel_api.html>.
+The full documentation of this library is at <a href="https://www.squaremobius.net/amqp.node/doc/channel_api.html" target="_blank">https://www.squaremobius.net/amqp.node/doc/channel_api.html</a>
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 As shown in the code, this library provides chainable callback API in the form of `.then(callback)`.  
 > For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  
@@ -199,14 +198,14 @@ Delivery mode = 1 means it's a non-persistent message.
 ch.publish(exchangeName, routingKey, content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1},  callback);
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```javascript
 conn.close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 The difference is that consumer uses `conn.createChannel()` function, while producer uses `conn.createConfirmChannel()` because the latter one is only useful for publish confirm.  
 
 Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key (topic). The routing key can contain wildcards to receive messages sent through different routing keys.  
@@ -313,7 +312,7 @@ function relisten() {
 
 **PHP client AMQP library**
 
-The PHP library we use for this example can be found at <https://github.com/videlalvaro/php-amqplib>.  
+The PHP library we use for this example can be found at <a href="https://github.com/videlalvaro/php-amqplib" target="_blank">https://github.com/videlalvaro/php-amqplib</a>.  
 
 It uses composer to install in a few steps.  
 
@@ -348,7 +347,7 @@ Finally, require this library in your program and use the classes.
 ```
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```php
@@ -364,14 +363,14 @@ $message = new AMQPMessage("Hello World!", array("content_type" => "text/plain",
 $channel->basic_publish($message, $exchangeName, $routingKey);
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```php
 $connection->close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key (topic). The routing key can contain wildcards to receive messages sent through different routing keys.  
 Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -495,7 +494,7 @@ while (true) {
 
 **Java client AMQP library**
 
-The Java library we use for this example can be found at <https://www.rabbitmq.com/java-client.html>.  
+The Java library we use for this example can be found at <a href="https://www.rabbitmq.com/java-client.html" target="_blank">https://www.rabbitmq.com/java-client.html</a>.  
 
 Download the library jar file, then import this library in your program `import com.rabbitmq.client.*;` and compile your source code with the jar file. For example,  
 
@@ -513,7 +512,7 @@ java -cp ".:./rabbitmq-client.jar" Producer
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```java
@@ -535,14 +534,14 @@ String message = "Hello World!";
 channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```java
 connection.close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to [robomq.io](http://www.robomq.io) broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key (topic). The routing key can contain wildcards to receive messages sent through different routing keys.  
 The fourth parameter of `exchangeDeclare()` and `queueDeclare()` are auto-delete. That means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -695,11 +694,11 @@ public class Consumer {
 
 RoboMQ is built on AMQP, an open, general-purpose protocol for messaging. There are a number of clients for AMQP in many different languages.  However, we'll choose a simple C-language AMQP client library written for use with v2.0+ of the RabbitMQ broker.
 
-[https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq](https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq)
+<a href="https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq" target="_blank">https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq</a>
 
 You can copy librabbitmq subfolder from latest release located here on GitHub:
 
-[https://github.com/alanxz/rabbitmq-c](https://github.com/alanxz/rabbitmq-c)
+<a href="https://github.com/alanxz/rabbitmq-c" target="_blank">https://github.com/alanxz/rabbitmq-c</a>
 
 Alternatively, thanks to Subversion support in GitHub, you can use svn export directly:
 
@@ -713,7 +712,7 @@ Copy the librabbitmq package into your working directory:
 cp librabbitmq ./
 ```
 
-Also copy all source files and Makefile from [robomq.io](http://www.robomq.io) SDK at <https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C> into the same directory.  
+Also copy all source files and Makefile from <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> SDK at <https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C> into the same directory.  
 
 Now your working directory should have the content as bellow:  
 *broadcast*  config.h  *librabbitmq*  Makefile  *one-to-one*  *request-reply*  *routing-key* *topic*

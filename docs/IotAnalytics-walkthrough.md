@@ -25,12 +25,12 @@ Keep a close watch on all your devices, monitor your sensors,  organize your dat
 
 Jack runs a business of providing storages and warehouses for commodity retailers, initially, with a small but growing business he was fine with physically monitoring the warehouses. But as the business grew, so did the complexity of managing it and the sheer scope of parameters and locations to monitor increased as well.
 
-Jack then set up several sensors in his warehouses collecting data like temperature, humidity, movements, luminance, power consumption etc which replaced his age old method of collecting this data manually with specific handheld devices. These new sensors constantly collect the data and send it as messages to [RoboMQ IoT Integration Platform](http://www.robomq.io/). Now all that he needs is an easy to use app to monitor and analyze the data collected by these sensors anywhere and at anytime.
-[RoboMQ IoT Analytics](http://www.robomq.io/index.html#iotanalytics) does exactly the same and much more... Jack can visualize his data, follow the trends it takes and manage his business much more effectively with this analytics. He simply opens his RoboMQ IoT Analytics application from his computer, phone or tablet and monitors his warehouses with a few clicks, saving himself a lot of time and money which was spent physically monitoring the warehouses  with help of few employees. Not only the old method time consuming but it could also be inaccurate at times and the constant monitoring was almost impossible.
+Jack then set up several sensors in his warehouses collecting data like temperature, humidity, movements, luminance, power consumption etc which replaced his age old method of collecting this data manually with specific handheld devices. These new sensors constantly collect the data and send it as messages to <a href="https://www.robomq.io" target="_blank">RoboMQ IoT Integration Platform</a>. Now all that he needs is an easy to use app to monitor and analyze the data collected by these sensors anywhere and at anytime.
+<a href="https://www.robomq.io/index.html#iotanalytics" target="_blank">RoboMQ IoT Analytics</a> does exactly the same and much more... Jack can visualize his data, follow the trends it takes and manage his business much more effectively with this analytics. He simply opens his RoboMQ IoT Analytics application from his computer, phone or tablet and monitors his warehouses with a few clicks, saving himself a lot of time and money which was spent physically monitoring the warehouses  with help of few employees. Not only the old method time consuming but it could also be inaccurate at times and the constant monitoring was almost impossible.
 
 With IoT Analytics, it’s as easy as it gets. Now he can act on the slightest irregularity in the data, delegate his employees at the right place on the right time all while relaxing in his office, saving effort, money and time. He can also add other users to the application with limited permissions so they can view the data and report or act accordingly.
 
-Simple yet elegant, the [IoT Analytics](http://www.robomq.io/index.html#iotanalytics) allows Jack to get total automated control with no programming needed!!!  A simple producer code is all that is needed to send the data from sensors to the RoboMQ and IoT Analytics takes care of the rest. Jack simply drags and drops the widgets that he wants for visualization and he is all set to go..
+Simple yet elegant, the <a href="https://www.robomq.io/index.html#iotanalytics" target="_blank">IoT Analytics</a> allows Jack to get total automated control with no programming needed!!!  A simple producer code is all that is needed to send the data from sensors to the RoboMQ and IoT Analytics takes care of the rest. Jack simply drags and drops the widgets that he wants for visualization and he is all set to go..
 
 
 ## IoT Analytics schematics
@@ -70,7 +70,7 @@ In order to set up Message Producer on devices to see the generated data on your
 deviceID is a unique identifier of a device. Fill out the broker section with your tenant credentials provided by RoboMQ.
 
 ###Prerequisites
-Producer can talk to RoboMQ using any messaging protocol. In this example, we are using MQTT. The only dependency for the producer is to install an open-source client implementation of MQTT. We will use [paho](http://www.eclipse.org/paho/) from eclipse foundation .
+Producer can talk to RoboMQ using any messaging protocol. In this example, we are using MQTT. The only dependency for the producer is to install an open-source client implementation of MQTT. We will use <a href="https://www.eclipse.org/paho/" target="_blank">paho</a> from eclipse foundation .
 To install paho module on a IoT device, simply run:
 > pip install paho-mqtt
 
@@ -93,7 +93,7 @@ Once the message payload is constructed, it calls the send() method in producerM
 ### Familiarize with the UI
  Once you are provisioned for the trial or a paid subscription to RoboMQ, you get an email with login credentials and the links to the IoT Analytics application. The link will be something like the following: https://trial.robomq.io/iotanalytics/
  
- Once you click on it, you will be redirected to the following login page. If you have not signed up, you can sign up for a [free trial](http://www.robomq.io/index.html#free) at RoboMQ website.
+ Once you click on it, you will be redirected to the following login page. If you have not signed up, you can sign up for a <a href="https://robomq.io/index.html#free" target="_blank">Free Trial</a> at RoboMQ website.
 
 
 ####Login page
@@ -188,9 +188,9 @@ Above we see the final example dashboard which monitors the different sensors in
 
 This is just a brief introduction to the unlimited potential IoT Analytics brings for the customers using IoT devices in their business. You can correlate and visualize your device and sensor data with few clicks and no programming needed...
 
-Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a free trial [free trial](robomq.io/index.html#free).
+Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a <a href="https://robomq.io/index.html#free" target="_blank">Free Trial</a>.
 
-For more information on RoboMQ and its product features, check out our website [robomq.io](https://robomq.io/) or email us at sales@robomq.io.  
+For more information on RoboMQ and its product features, check out our website <a href="https://www.robomq.io" target="_blank">robomq.io</a> or email us at sales@robomq.io.  
 
 
 

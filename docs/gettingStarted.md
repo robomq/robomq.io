@@ -1,10 +1,10 @@
 #Getting started 
 
-Getting started with [robomq.io](http://www.robomq.io) extremely simple and easy - just sign up for a free trial or if you are ready, contact us to get started on one of the subscription plans.
+Getting started with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> extremely simple and easy - just sign up for a free trial or if you are ready, contact us to get started on one of the subscription plans.
 
 #Free Trial
 
-To sign up for the free trial of [robomq.io](http://www.robomq.io), click on [Free Trial](http://robomq.io/#free) link. Provide some basic information and some one from robomq.io team will reach out to you with information to get you started.
+To sign up for the free trial of <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>, click on [Free Trial](http://robomq.io/#free) link. Provide some basic information and some one from robomq.io team will reach out to you with information to get you started.
 
 With the free trial -
 
@@ -18,7 +18,7 @@ With the free trial -
 
 #Subscription plans
 
-If you are ready to get started with a [paid subscription](http://www.robomq.io/#price), reach out to us on our website at [Contact us](http://robomq.io/#contact) and we will be happy to get you started and setup in couple of hours.
+If you are ready to get started with a <a href="https://www.robomq.io/#price" target="_blank">paid subscription</a>, reach out to us on our website at <a href="https://www.robomq.io/#contact" target="_blank">Contact us</a> and we will be happy to get you started and setup in couple of hours.
 
 There are following subscription options available:
 
@@ -40,7 +40,7 @@ Upon sign up, a administrative user and credential token is created for your vir
 
 - **Administrative user** : the user name is same as the vhost or the customer tenant name,  which for this example is **nova**
 
-- **Credential** - administrative credential is a secure token that will be sent over the registered email. This token is one time token generated using TOTP (Time-Based One-Time Password Algorithm) [IETF RFC 6238](https://tools.ietf.org/html/rfc6238).  Every time the token is reset a new token is created.
+- **Credential** - administrative credential is a secure token that will be sent over the registered email. This token is one time token generated using TOTP (Time-Based One-Time Password Algorithm) <a href="https://tools.ietf.org/html/rfc6238" target="_blank">IETF RFC 6238</a>.  Every time the token is reset a new token is created.
 
 ![Login credential for robomq Management Console](./images/vhostLogin.png)
 
@@ -72,7 +72,7 @@ For longer horizon messaging traffic activity including visual graphs, robomq Me
 
 ##Messaging Dashboard
 
-[robomq.io](http://www.robomq.io) messaging dashboard provides specialized visual graphs and charts giving you a single pane of glass, capturing all the messaging activity for your tenant.
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> messaging dashboard provides specialized visual graphs and charts giving you a single pane of glass, capturing all the messaging activity for your tenant.
 
 The following key messaging activity parameters are tracked in the dashboard:
 
@@ -106,13 +106,13 @@ The Messaging dashboard provides historical information for up to 15 days of the
 
 ##Analytics and data driven alerts
 
-One of the core strength of the [robomq.io](http://www.robomq.io) platform is the expandability. Based on the expandability, we have provided a [big data based analytics platform](http://www.robomq.io/#devicetodashboard). This platforms consume the messages in parallel and provides analytics on it. This functionality is specific use case driven and the some customization is needed to generate required analytics.
+One of the core strength of the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> platform is the expandability. Based on the expandability, we have provided the <a href="https://www.robomq.io/#iotanalytics" target="_blank">IoT Analytics Application</a>. This platforms consume the messages in parallel and provides analytics on it. This functionality is specific use case driven and the some customization is needed to generate required analytics.
 
 ![Analytics based on message content ](./images/vhostAnalytics.png)
 
 *Figure : Analytics based on message content*
 
-Another example of the expandable nature of the [robomq.io](http://www.robomq.io) platform is the [data driven alerts](http://www.robomq.io/#datadrivenalerts). It consumes the messages and acts on the message content evaluating them against threshold configuration. When the message content hits these threshold values , a custom alert, email or a phone call can be made to react to this situation. This functionality is also use case specific and needs configuration.
+Another example of the expandable nature of the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> platform is the <a href="https://www.robomq.io/#datadrivenalerts" target="_blank">data driven alerts</a>. It consumes the messages and acts on the message content evaluating them against threshold configuration. When the message content hits these threshold values , a custom alert, email or a phone call can be made to react to this situation. This functionality is also use case specific and needs configuration.
 
 ##Writing your first application 
 
@@ -120,4 +120,4 @@ By now you should be familiar with your tenant and all set to start writing your
 
 ##Technical support
 
-Whenever you feel challenged to debug your client program or have technical advice to [robomq.io](http://www.robomq.io), we are ready to solve your problem as soon as possible 7/24.   You can report a issue on our [GitHub](https://github.com/robomq/robomq.io/issues) or directly contact us through Email <info@robomq.io>.
+Whenever you feel challenged to debug your client program or have technical advice to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>, we are ready to solve your problem as soon as possible 7/24.   You can report a issue on our [GitHub](https://github.com/robomq/robomq.io/issues) or directly contact us through Email <info@robomq.io>.

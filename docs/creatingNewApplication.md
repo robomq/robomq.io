@@ -1,6 +1,6 @@
 # Sign up for robomq.io
 
-This guide covers the basics of creating messaging applications using [robomq.io](http://www.robomq.io). You need to have the [robomq.io](http://www.robomq.io) service account created before proceeding with client application development - please see the [Getting Started](gettingStarted.md).
+This guide covers the basics of creating messaging applications using <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>. You need to have the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> service account created before proceeding with client application development - please see the [Getting Started](gettingStarted.md).
 
 #First application in under 10 lines!
 
@@ -21,7 +21,7 @@ import pika
 The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```python
 connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
@@ -34,14 +34,14 @@ Then producer can publish messages to the direct exchange where messages will be
 channel.basic_publish(exchange = "amq.direct", routing_key = "test", body = "Hello World!", properties = None)
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
 
 ```python
 connection.close()
 ```
 
 ###Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Then consumer will declare a queue, and bind the queue to the direct exchange with a routing key. The routing key decides what messages will the queue receive.    
 
@@ -103,7 +103,7 @@ channel.start_consuming()
 Now we are going to build our first MQTT application.
 
 ### Prerequisites
-The Python library we use for this example can be found at <https://eclipse.org/paho/clients/python/>. Its source code is at <http://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/>.  
+The Python library we use for this example can be found at <a href="https://eclipse.org/paho/clients/python/" target="_blank">https://eclipse.org/paho/clients/python/</a>. Its source code is at <a href="https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/" target="_blank">https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/</a>.  
 
 You can install it through `sudo pip install paho-mqtt`.  
 
@@ -118,8 +118,8 @@ The full documentation of this library is at <https://pypi.python.org/pypi/paho-
 > This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <http://mosquitto.org>.  
 
 ### Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker and start looping then.  
-[robomq.io](http://www.robomq.io) allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker and start looping then.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
 Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  
 
 ```python
@@ -137,7 +137,7 @@ message = raw_input("Input message to send: ")
 client.publish(topic = "test", payload = message)
 ```
 
-At last, producer will stop looping and disconnect with the [robomq.io](http://www.robomq.io) broker.    
+At last, producer will stop looping and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.    
 
 ```python
 client.loop_stop()
@@ -145,7 +145,7 @@ client.disconnect()
 ```
 
 ### Consumer
-The same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker and start looping. The difference is consumer loops forever.  
+The same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker and start looping. The difference is consumer loops forever.  
 
 ```python
 client.loop_forever()
@@ -164,7 +164,7 @@ def onMessage(client, userdata, message):
 	print("Topic: " + message.topic + ", Message: " + message.payload)
 ```
 
-The callback functions should be preset before connecting to [robomq.io](http://www.robomq.io) broker.  
+The callback functions should be preset before connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 ```python
 client.on_message = onMessage
@@ -211,14 +211,14 @@ client.loop_forever()
 Now we are going to build our first STOMP application.
 
 ###Prerequisite
-The Python library we use for this example can be found at <https://pypi.python.org/pypi/stompest/>. Its GitHub repository is at <https://github.com/nikipore/stompest>.  
+The Python library we use for this example can be found at <a href="https://pypi.python.org/pypi/stompest/" target="_blank">https://pypi.python.org/pypi/stompest/</a>. Its GitHub repository is at <a href="https://github.com/nikipore/stompest" target="_blank">https://github.com/nikipore/stompest</a>.  
 It supports STOMP version 1.0, 1.1 and 1.2.  
 
 You can install it through `sudo pip install stompest`.  
 The full documentation of this library is at <http://nikipore.github.io/stompest/>.
 
 ###Producer
-The first thing we need to do is to establish a connection with [robomq.io](http://www.robomq.io) broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 > In STOMP, username is called login and password is called passcode. 
 
 ```python
@@ -232,14 +232,14 @@ After that, producer can send messages to a particular destination. In this exam
 client.send(destination = "/queue/test", body = "Hello World!", headers = None)
 ```
 
-At last, producer will disconnect with the [robomq.io](http://www.robomq.io) broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
 
 ```python
 client.disconnect()
 ```
 
 ###Consumer
-The first step is the same as producer, consumer needs to connect to [robomq.io](http://www.robomq.io) broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 

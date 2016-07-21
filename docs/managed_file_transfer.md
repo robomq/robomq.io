@@ -11,19 +11,19 @@ Managed File Transfer (MFT) is a reliable and guaranteed delivery file transfer 
 
 ## Introduction
 
-RoboMQ MFT service allows you to transfer files between file systems using variety of file transfer protocols. The Managed File Transfer platform is built on the strength of RoboMQ Message Oriented Middleware(MOM)providing guarantee delivery reliable data transfer. It utilizes the [RoboMQ](http://www.robomq.io) broker for receiving and tracking events identifying each steps of transfer and in-transit transformation.
+RoboMQ MFT service allows you to transfer files between file systems using variety of file transfer protocols. The Managed File Transfer platform is built on the strength of RoboMQ Message Oriented Middleware(MOM)providing guarantee delivery reliable data transfer. It utilizes the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker for receiving and tracking events identifying each steps of transfer and in-transit transformation.
 
 In addition to regular MFT functionality, you get following silent advantages while using RoboMQ.
 
-1. Support for all [file transfer protocols](http://robomq.io/index.html#thingsconnect)
+1. Support for all <a href="https://robomq.io/index.html#thingsconnect" target="_blank">file transfer protocols</a> 
 2. End to end tracking for the file transfers and transformations
 3. Ability to break files into messages and integrating the data with APIa. This approach offers integration with non-file based APIs and systems
-4. [Microservices](http://robomq.io/index.html#microservices) based approach for data transformation, enrichments and validation
-5. Robust error handling, monitoring, alerts and [Error Analytics](http://robomq.io/index.html#overview)
+4. <a href="https://robomq.io/index.html#microservices" target="_blank">Microservices</a> based approach for data transformation, enrichments and validation
+5. Robust error handling, monitoring, alerts and <a href="https://robomq.io/index.html#overview" target="_blank">Error Analytics</a>
 
 ## Setup and configuration
 
-The MFT service needs to talk to your [RoboMQ](http://www.robomq.io) tenant, therefore you will need to provide your `vhost or tenant ID`, `username`, `password` and your preference for secure transfer over`ssl`.
+The MFT service needs to talk to your <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> tenant, therefore you will need to provide your `vhost or tenant ID`, `username`, `password` and your preference for secure transfer over`ssl`.
 
 To transfer files from one location to another, MFT service requires access to four folders, let's call them `upload`, `inbound`, `outbound` and `destination` (you can use any name you want):
 
