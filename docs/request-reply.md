@@ -80,7 +80,7 @@ channel.start_consuming()
 ```
 
 When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
-If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+This time, we have set `no_ack` to false. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
 ```python
 def onMessage(channel, method, properties, body):
@@ -246,7 +246,7 @@ The same as producer, consumer needs to first connect to <a href="https://www.ro
 
 Then consumer will listen on its requestQueue.  
 When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
-If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+This time, we have set `noAck` to false. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
 ```javascript
 ch.assertExchange(exchangeName, "direct", {durable: false, autoDelete: true});
@@ -450,7 +450,7 @@ $channel->basic_consume($requestQueue, "", false, $no_ack = false, false, false,
 ```
 
 When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
-If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+This time, we have set `no_ack` to false. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
 ```php
 $onMessage = function ($message) {
@@ -583,6 +583,197 @@ while (true) {
 }
 ?>
 ```
+
+## Ruby
+
+###Prerequisites
+
+**Ruby client AMQP library**
+
+The Ruby library we use for this example can be found at <a href="http://rubybunny.info/" target="_blank">http://rubybunny.info/</a>.  
+
+With Ruby version >= 2.0, you can install it through `sudo gem install bunny`.  
+
+Finally, import this library in your program.  
+
+```ruby
+require "bunny"
+```
+
+The full documentation of this library is at <a href="http://rubybunny.info/articles/guides.html" target="_blank">http://rubybunny.info/articles/guides.html</a>.
+
+> We recommend combining the documentation with the source code of this library when you use it because some of the documentation out there is not being updated timely from our observation.  
+
+###Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
+Although the library provides a connection property named `recover_from_connection_close`, we discourage you to use it. The reason will be explained in the Consumer section.  
+
+```ruby
+connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+connection.start
+channel = connection.create_channel
+```
+
+Then producer will do what consumer does, listen on the replyQueue on its side.  
+
+```ruby
+exchange = channel.direct(exchangeName, :auto_delete => true)
+queue = channel.queue(replyQueue, :exclusive => true, :auto_delete => true)
+queue.bind(exchange, :routing_key => replyKey)
+isReplied = false
+consumer = queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+  puts payload
+isReplied = true
+end
+```
+
+After that producer can publish messages to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+
+```ruby 
+exchange.publish("Hello World!", :routing_key => requestKey, :content_type => "text/plain", :delivery_mode => 1, :reply_to => replyKey)
+```
+
+In this example, producer is blocked until it receives the reply, then it will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+```ruby
+while !isReplied
+end
+
+cancel_ok = consumer.cancel
+connection.close
+```
+
+###Consumer
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Then consumer will listen on its requestQueue.  
+When requests are received, a callback function will be invoked to print the message content and reply according to the reply-to property of request message.  
+This time, we have set `manual_ack` to true. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+As we mentioned in the Producer section, `recover_from_connection_close` is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. It matters for consumers because `recover_from_connection_close` will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  
+
+```ruby
+exchange = channel.direct(exchangeName, :auto_delete => true)
+queue = channel.queue(requestQueue, :exclusive => true, :auto_delete => true)
+queue.bind(exchange, :routing_key => requestKey)
+queue.subscribe(:block => false, :manual_ack => true) do |delivery_info, metadata, payload|
+  puts payload
+  #reply according to the reply_to header
+  begin
+    exchange.publish("Reply to %s" % payload, :routing_key => metadata.reply_to, :content_type => "text/plain", :delivery_mode => 1)
+    channel.basic_ack(delivery_info.delivery_tag, false)
+  rescue
+    channel.basic_nack(delivery_info.delivery_tag, false, false)
+  end
+end
+#keep checking the existence of the subscribed queue
+while true
+  raise "Lost the subscribed queue %s" % requestQueue unless connection.queue_exists?(requestQueue)
+  sleep 1
+end
+```
+
+###Putting it all together
+
+**producer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+replyQueue = "replyQ"
+requestKey = "request"
+replyKey = "reply"
+
+begin
+  #connect
+  connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+  connection.start
+  channel = connection.create_channel
+
+  #listen for reply message
+  exchange = channel.direct(exchangeName, :auto_delete => true)
+  queue = channel.queue(replyQueue, :exclusive => true, :auto_delete => true)
+  queue.bind(exchange, :routing_key => replyKey)
+  isReplied = false
+  consumer = queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+      puts payload
+    isReplied = true
+  end 
+
+  #send request message
+  exchange.publish("Hello World!", :routing_key => requestKey, :content_type => "text/plain", :delivery_mode => 1, :reply_to => replyKey)
+
+  #wait until receives the reply
+  while !isReplied
+  end
+
+  #close connection once receives the reply
+  cancel_ok = consumer.cancel
+  connection.close
+rescue Exception => e
+  puts e
+end
+```
+
+**consumer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+requestQueue = "requestQ"
+requestKey = "request"
+
+while true
+  begin
+    #connect, disable auto-reconnect so as to manually reconnect
+    connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+    connection.start
+    channel = connection.create_channel
+
+    #declare exchange and queue, bind them and consume messages
+    exchange = channel.direct(exchangeName, :auto_delete => true)
+    queue = channel.queue(requestQueue, :exclusive => true, :auto_delete => true)
+    queue.bind(exchange, :routing_key => requestKey)
+    queue.subscribe(:block => false, :manual_ack => true) do |delivery_info, metadata, payload|
+      puts payload
+      #reply according to the reply_to header
+      begin
+        exchange.publish("Reply to %s" % payload, :routing_key => metadata.reply_to, :content_type => "text/plain", :delivery_mode => 1)
+        channel.basic_ack(delivery_info.delivery_tag, false)
+      rescue
+        channel.basic_nack(delivery_info.delivery_tag, false, false)
+      end
+    end
+    #keep checking the existence of the subscribed queue
+    while true
+      raise "Lost the subscribed queue %s" % requestQueue unless connection.queue_exists?(requestQueue)
+      sleep 1
+    end
+  rescue Exception => e
+    #reconnect on exception
+    puts "Exception handled, reconnecting...\nDetail:\n%s" % e
+    #blindly clean old connection
+    begin
+      connection.close
+    end
+    sleep 5
+  end
+end
+```
+
 ## Java
 
 ###Prerequisites
@@ -668,7 +859,7 @@ channel.basicConsume(requestQueue, false, qc);
 ```
 
 When requests are received, it will print the message content and reply according to the reply-to property of request message.  
-If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+This time, we have set no-ack to false in `basicConsume()`. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
 
 ```java
 while (true) {

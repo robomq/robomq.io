@@ -488,6 +488,160 @@ while (true) {
 ?>
 ```
 
+## Ruby
+
+###Prerequisites
+
+**Ruby client AMQP library**
+
+The Ruby library we use for this example can be found at <a href="http://rubybunny.info/" target="_blank">http://rubybunny.info/</a>.  
+
+With Ruby version >= 2.0, you can install it through `sudo gem install bunny`.  
+
+Finally, import this library in your program.  
+
+```ruby
+require "bunny"
+```
+
+The full documentation of this library is at <a href="http://rubybunny.info/articles/guides.html" target="_blank">http://rubybunny.info/articles/guides.html</a>.
+
+> We recommend combining the documentation with the source code of this library when you use it because some of the documentation out there is not being updated timely from our observation.  
+
+###Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
+Although the library provides a connection property named `recover_from_connection_close`, we discourage you to use it. The reason will be explained in the Consumer section.  
+
+```ruby
+connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+connection.start
+channel = connection.create_channel
+```
+
+Then producer can publish messages to a topic exchange where messages will be delivered to queues whose routing key matches. The essential difference between normal routing key and topic is that consumer can subscribe a topic with wild cards inside.  
+Delivery mode = 1 means it's a non-persistent message.
+
+```ruby 
+exchange = channel.topic(exchangeName, :auto_delete => true)
+exchange.publish("Hello World!", :routing_key => routingKey, :content_type => "text/plain", :delivery_mode => 1)
+```
+
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+```ruby
+connection.close
+```
+
+###Consumer
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key (topic). The routing key can contain wildcards to receive messages sent through different routing keys.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.   
+
+```ruby
+exchange = channel.topic(exchangeName, :auto_delete => true)
+queue = channel.queue(queueName, :exclusive => true, :auto_delete => true)
+queue.bind(exchange, :routing_key => routingKey)
+```
+
+After that, consumer can consume messages from the queue.  
+The `manual_ack` parameter indicates if consumer needs to manually send acknowledgment back to broker when it has received the message. In this example, `manual_ack` equals to false, so producer does not manually acknowledge received messages.  
+The `subscribe()` function is followed by a callback which will be invoked to print the message payload on receiving a message.  
+
+```ruby
+queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+  puts payload
+end
+```
+
+As we mentioned in the Producer section, `recover_from_connection_close` is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. It matters for consumers because `recover_from_connection_close` will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  
+
+```ruby
+while true
+  raise "Lost the subscribed queue %s" % queueName unless connection.queue_exists?(queueName)
+  sleep 1
+end
+```
+
+###Putting it all together
+
+**producer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+routingKey = "test.any"
+
+begin
+  #connect
+  connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+  connection.start
+  channel = connection.create_channel
+
+  #send message
+  exchange = channel.topic(exchangeName, :auto_delete => true)
+  exchange.publish("Hello World!", :routing_key => routingKey, :content_type => "text/plain", :delivery_mode => 1)
+
+  #disconnect
+  connection.close
+rescue Exception => e
+  puts e
+end
+```
+
+**consumer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+queueName = "testQ1"
+routingKey = "test.#" #topic with wildcard
+
+while true
+  begin
+    #connect, disable auto-reconnect so as to manually reconnect
+    connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+    connection.start
+    channel = connection.create_channel
+
+    #declare exchange and queue, bind them and consume messages
+    exchange = channel.topic(exchangeName, :auto_delete => true)
+    queue = channel.queue(queueName, :exclusive => true, :auto_delete => true)
+    queue.bind(exchange, :routing_key => routingKey)
+    queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+      puts payload
+    end
+    #keep checking the existence of the subscribed queue
+    while true
+      raise "Lost the subscribed queue %s" % queueName unless connection.queue_exists?(queueName)
+      sleep 1
+    end
+  rescue Exception => e
+    #reconnect on exception
+    puts "Exception handled, reconnecting...\nDetail:\n%s" % e
+    #blindly clean old connection
+    begin
+      connection.close
+    end
+    sleep 5
+  end
+end
+```
+
 ## Java
 
 ###Prerequisites

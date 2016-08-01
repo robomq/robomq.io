@@ -482,6 +482,161 @@ while (true) {
 ?>
 ```
 
+## Ruby
+
+###Prerequisites
+
+**Ruby client AMQP library**
+
+The Ruby library we use for this example can be found at <a href="http://rubybunny.info/" target="_blank">http://rubybunny.info/</a>.  
+
+With Ruby version >= 2.0, you can install it through `sudo gem install bunny`.  
+
+Finally, import this library in your program.  
+
+```ruby
+require "bunny"
+```
+
+The full documentation of this library is at <a href="http://rubybunny.info/articles/guides.html" target="_blank">http://rubybunny.info/articles/guides.html</a>.
+
+> We recommend combining the documentation with the source code of this library when you use it because some of the documentation out there is not being updated timely from our observation.  
+
+###Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
+Although the library provides a connection property named `recover_from_connection_close`, we discourage you to use it. The reason will be explained in the Consumer section.  
+
+```ruby
+connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+connection.start
+channel = connection.create_channel
+```
+
+Then producer can publish messages to a fanout exchange where routing key is useless.  
+Delivery mode = 1 means it's a non-persistent message.
+
+```ruby 
+exchange = channel.fanout(exchangeName, :auto_delete => true)
+exchange.publish("Hello World!", :content_type => "text/plain", :delivery_mode => 1)
+```
+
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+```ruby
+connection.close
+```
+
+###Consumer
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange without any routing key since routing key is useless in fanout exchange.    
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
+
+```ruby
+exchange = channel.fanout(exchangeName, :auto_delete => true)
+queue = channel.queue(queueName, :exclusive => true, :auto_delete => true)
+queue.bind(exchange)
+```
+
+After that, consumer can consume messages from the queue.  
+The `manual_ack` parameter indicates if consumer needs to manually send acknowledgment back to broker when it has received the message. In this example, `manual_ack` equals to false, so producer does not manually acknowledge received messages.  
+The `subscribe()` function is followed by a callback which will be invoked to print the message payload on receiving a message.  
+
+```ruby
+queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+  puts payload
+end
+```
+
+As we mentioned in the Producer section, `recover_from_connection_close` is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. It matters for consumers because `recover_from_connection_close` will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  
+
+```ruby
+while true
+  raise "Lost the subscribed queue %s" % queueName unless connection.queue_exists?(queueName)
+  sleep 1
+end
+```
+
+###Putting it all together
+
+**producer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+
+begin
+  #connect
+  connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+  connection.start
+  channel = connection.create_channel
+
+  #send message
+  #for fanout type exchange, routing key is useless
+  exchange = channel.fanout(exchangeName, :auto_delete => true)
+  exchange.publish("Hello World!", :content_type => "text/plain", :delivery_mode => 1)
+
+  #disconnect
+  connection.close
+rescue Exception => e
+  puts e
+end
+```
+
+**consumer.rb**
+
+```ruby
+require "bunny"
+
+server = "hostname"
+port = 5672
+vhost = "yourvhost"
+username = "username"
+password = "password"
+exchangeName = "testEx"
+queueName = "testQ1"
+
+while true
+  begin
+    #connect, disable auto-reconnect so as to manually reconnect
+    connection = Bunny.new(:host => server, :port => port, :vhost => vhost, :user => username, :pass => password, :heartbeat => 60, :recover_from_connection_close => false)
+    connection.start
+    channel = connection.create_channel
+
+    #declare exchange and queue, bind them and consume messages
+    #for fanout type exchange, routing key is useless
+    exchange = channel.fanout(exchangeName, :auto_delete => true)
+    queue = channel.queue(queueName, :exclusive => true, :auto_delete => true)
+    queue.bind(exchange)
+    queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metadata, payload|
+      puts payload
+    end
+    #keep checking the existence of the subscribed queue
+    while true
+      raise "Lost the subscribed queue %s" % queueName unless connection.queue_exists?(queueName)
+      sleep 1
+    end
+  rescue Exception => e
+    #reconnect on exception
+    puts "Exception handled, reconnecting...\nDetail:\n%s" % e
+    #blindly clean old connection
+    begin
+      connection.close
+    end
+    sleep 5
+  end
+end
+```
+
+
 ## Java
 
 ### Prerequisites
