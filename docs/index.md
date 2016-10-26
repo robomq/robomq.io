@@ -1,4 +1,4 @@
-#What is robomq.io?
+#What is RoboMQ.io?
 
 <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  is a Message Queue as Service platform hosted on cloud and also available as an Enterprise hosting option. This Software as a Service platform is an integrated message queue hub, analytics engine, management console, dashboard and monitoring & alerts; all managed and hosted in a secure, reliable and redundant infrastructure.
 

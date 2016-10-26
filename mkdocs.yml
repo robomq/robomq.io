@@ -5,7 +5,7 @@ site_favicon: favicon.ico
 repo_url: https://github.com/robomq/robomq.io/
 docs_dir: docs
 pages:
-- ['index.md', '', 'What is robomq.io']
+- ['index.md', '', 'What is RoboMQ.io']
 - ['gettingStarted.md', '', 'Getting started']
 - ['creatingNewApplication.md', '', 'Creating a new application']
 - ['deviceIntegration.md', '', 'IoT and M2M integration']
@@ -22,9 +22,9 @@ pages:
 - ['WebSTOMP.md', 'User Guide', 'WebSTOMP']
 - ['SSL.md', 'User Guide', 'SSL']
 - ['REST.md', 'User Guide', 'REST']
-- ['connectors.md', 'User Guide', 'Connectors']
 - ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
 - ['IotAnalytics-walkthrough.md', '', 'IoT Analytics']
+- ['connectors.md', 'Connectors', 'Connectors']
 - ['Salesforce_Connector.md', 'Connectors', 'ADP to AD']
 - ['Oracle-Database_Connector.md', 'Connectors', 'Salesforce']
 - ['Database_Connector.md', 'Connectors', 'Database']
