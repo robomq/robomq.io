@@ -25,5 +25,9 @@ pages:
 - ['connectors.md', 'User Guide', 'Connectors']
 - ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
 - ['IotAnalytics-walkthrough.md', '', 'IoT Analytics']
+- ['Salesforce_Connector.md', 'Connectors', 'ADP to AD']
+- ['Oracle-Database_Connector.md', 'Connectors', 'Salesforce']
+- ['Database_Connector.md', 'Connectors', 'Database']
+- ['ADP-to-AD_Connector.md', 'Connectors', 'Oracle Database']
 - ['about.md', '', 'About']
 theme: readthedocs
