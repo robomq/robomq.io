@@ -844,6 +844,197 @@ public class Consumer {
 }
 ```
 
+## Go
+
+### Prerequisite
+The Go library we use for this example can be found at <a href="https://eclipse.org/paho/clients/golang/" target="_blank">https://eclipse.org/paho/clients/golang/</a>. Its GitHub repository is at <a href="https://github.com/eclipse/paho.mqtt.golang" target="_balnk">https://github.com/eclipse/paho.mqtt.golang</a>.  
+
+You can install it through `go get github.com/eclipse/paho.mqtt.golang`.  
+
+Finally, import this library in your program.  
+
+```go
+import MQTT "github.com/eclipse/paho.mqtt.golang"
+``` 
+
+The full documentation of this library is at <a href="https://godoc.org/git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git" target="_blank">https://godoc.org/git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git</a>.  
+
+> This library depends on Google's websockets package, which is installed with `go get golang.org/x/net/websocket`  
+
+### Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to specify vhost along with username. See *Vhost specification* section for the detail.  
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  
+Although the library provides an `AutoReconnect` connection option, we discourage you to use it. The reason will be explained in the Consumer section.
+
+```go
+connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf("tcp://%s:%d", server, port))
+connOpts.SetUsername(fmt.Sprintf("%s:%s", vhost, username))
+connOpts.SetPassword(password)
+connOpts.SetClientID("0")
+connOpts.SetCleanSession(true)
+connOpts.SetKeepAlive(60 * time.Second)
+connOpts.SetAutoReconnect(false)
+
+client := MQTT.NewClient(connOpts)
+client.Connect()
+```
+
+After that, producer can send messages to a particular topic.  
+The second parameter is QoS, third is boolean flag for retain.  
+
+```go
+client.Publish(topic, 1, false, message)
+```
+
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.   
+The parameter `250` is the number of milliseconds to wait for existing work to be completed.   
+
+```go
+client.Disconnect(250)
+```
+
+### Consumer
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+As we mentioned in the Producer section, `AutoReconnect` is set to false when connecting to RoboMQ.io broker. It matters for consumers because `AutoReconnect` will only recover the connection, it won't resubscribe the topics. Therefore, a more robust approach is letting your code handle reconnecting and resubscribing on its own.  
+
+The next step is to subscribe a topic, so that consumer knows where to listen to.
+The second argument in `subscribe()` function is QoS, the third one is the callback function to handle incoming messages.  
+
+```go
+client.Subscribe(topic, 1, OnMessage)
+```
+
+Once it receives a message from the queue bound by the topic, it will trigger the callback function `onMessage()` to print the topic and message payload.  
+
+```go
+var OnMessage MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
+	fmt.Printf("Topic: %s, Message: %s\n", msg.Topic(), msg.Payload())
+}
+```
+
+When you no longer need it, you can also unsubscribe a topic.
+
+```go
+client.Unsubscribe(topic)
+```
+
+### Putting it together
+
+**producer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	MQTT "github.com/eclipse/paho.mqtt.golang"
+	"os"
+	"time"
+)
+
+var server = "hostname"
+var port = 1883
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var topic = "test/any"
+
+func main() {
+	connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf("tcp://%s:%d", server, port))
+	connOpts.SetUsername(fmt.Sprintf("%s:%s", vhost, username))
+	connOpts.SetPassword(password)
+	connOpts.SetClientID("1")
+	connOpts.SetCleanSession(true)
+	connOpts.SetKeepAlive(60 * time.Second)
+	connOpts.SetAutoReconnect(false)
+
+	// Create and start a client using the above ClientOptions
+	client := MQTT.NewClient(connOpts)
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		fmt.Printf("Failed to connect, err: %v\n", token.Error())
+		os.Exit(1)
+	}
+
+	var msgNum int
+	fmt.Print("Quantity of test messages: ")
+	fmt.Scanf("%d", &msgNum)
+	for i := 0; i < msgNum; i++ {
+		message := fmt.Sprintf("test msg %d", i+1)
+		// QoS = 1, retained = false
+		token := client.Publish(topic, 1, false, message)
+		// Use PublishToken to confirmed receipt from the broker
+		token.Wait()
+		if token.Error() != nil {
+			fmt.Printf("Failed to publish, err: %v\n", token.Error())
+			os.Exit(1)
+		}
+		time.Sleep(time.Second)
+	}
+
+	client.Disconnect(250)
+}
+```
+
+**consumer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	MQTT "github.com/eclipse/paho.mqtt.golang"
+	"time"
+)
+
+var server = "hostname"
+var port = 1883
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var topic = "test/#"
+
+/**
+ * This function is the callback on receiving messages.
+ * @ It prints the message topic and payload on console.
+ */
+var OnMessage MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
+	fmt.Printf("Topic: %s, Message: %s\n", msg.Topic(), msg.Payload())
+}
+
+func main() {
+	connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf("tcp://%s:%d", server, port))
+	connOpts.SetUsername(fmt.Sprintf("%s:%s", vhost, username))
+	connOpts.SetPassword(password)
+	connOpts.SetClientID("0")
+	connOpts.SetCleanSession(true)
+	connOpts.SetKeepAlive(60 * time.Second)
+	connOpts.SetAutoReconnect(false)
+
+	// Infinite loop to auto-reconnect on failure
+	for {
+		// Create and start a client using the above ClientOptions
+		client := MQTT.NewClient(connOpts)
+		if token := client.Connect(); token.Wait() && token.Error() != nil {
+			fmt.Printf("Failed to connect, err: %v\n", token.Error())
+		}
+
+		// QoS = 1
+		if token := client.Subscribe(topic, 1, OnMessage); token.Wait() && token.Error() != nil {
+			fmt.Printf("Failed to subscribe, err: %v\n", token.Error())
+		}
+
+		// Constantly checking connectivity
+		for client.IsConnected() {
+			time.Sleep(time.Second)
+		}
+
+		fmt.Println("Restarting in 5 seconds...")
+		time.Sleep(5 * time.Second)
+	}
+}
+```
+
 ## C++
 
 ### Prerequisite

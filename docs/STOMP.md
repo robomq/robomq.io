@@ -116,7 +116,7 @@ The full documentation of this library is at <a href="https://nikipore.github.io
 
 ### Producer
 The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
-> In STOMP, username is called login and password is called passcode.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
 > Notice that stompest library reverses the order of outgoing and incoming heartbeats.  
@@ -243,7 +243,7 @@ The full documentation of this library is at <a href="https://jmesnil.net/stomp-
 
 ### Producer
 The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. 
-> In STOMP, username is called login and password is called passcode.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
 
@@ -395,7 +395,7 @@ You may see more installation approaches at <a href="https://php.net/manual/en/s
 
 ### Producer
 The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
-> In STOMP, username is called login and password is called passcode.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
 
@@ -517,7 +517,7 @@ The full documentation of this library is at <a href="https://www.rubydoc.info/g
 
 ### Producer
 The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
-> In STOMP, username is called login and password is called passcode.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
 
@@ -669,7 +669,7 @@ Of course, you can eventually compress your producer and consumer classes into j
 
 ### Producer
 The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
-> In STOMP, username is called login and password is called passcode.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 The library will automatically set the outgoing heartbeat to 60000 milliseconds and disable the incoming heartbeat, i.e. set it to 0.  
 
@@ -815,6 +815,188 @@ class Consumer {
 	public static void main(String[] args) {
 		Consumer c = new Consumer();
 		c.consume();
+	}
+}
+```
+
+## Go
+
+### Prerequisite
+The Go library we use for this example can be found at <a href="https://github.com/go-stomp/stomp/" target="_blank">https://github.com/go-stomp/stomp/</a>.  
+It supports STOMP version 1.0, 1.1 and 1.2.  
+
+You can install it through `go get github.com/go-stomp/stomp`.  
+
+Finally, import this library in your program.
+
+```go
+import "github.com/go-stomp/stomp"
+```
+
+The full documentation of this library is at <a href="https://godoc.org/github.com/go-stomp/stomp" target="_blank">https://godoc.org/github.com/go-stomp/stomp</a>.
+
+### Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+> In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
+
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.   
+
+```go
+client, err := stomp.Dial("tcp", net.JoinHostPort(server, port),
+	stomp.ConnOpt.Login(login, passcode),
+	stomp.ConnOpt.Host(vhost),
+	stomp.ConnOpt.AcceptVersion(stomp.V12),
+	stomp.ConnOpt.HeartBeat(60 * time.Second, 0 * time.Second))
+```
+
+After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The *Message destinations* section elaborates it.  
+You can also set custom headers with the message.  
+
+```go
+client.Send(destination, "text/plain", []byte(message), stomp.SendOpt.Header("key", "value"))
+```
+
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
+
+```go
+client.Disconnect()
+```
+
+### Consumer
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
+If you set `AckAuto`, you don't need `client.Ack(msg)`.  
+
+```go
+sub, err := client.Subscribe(destination, stomp.AckClient)
+	
+for {
+	msg := <-sub.C
+	fmt.Println(string(msg.Body))
+	client.Ack(msg)
+}
+```
+
+When you no longer need it, you can also unsubscribe a destination with its unique token.
+
+```go
+sub.Unsubscribe()
+```
+
+### Putting it together
+
+**producer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/go-stomp/stomp"
+	"net"
+	"os"
+	"time"
+)
+
+var server = "hostname"
+var port = "61613"
+var vhost = "yourvhost"
+var login = "username"
+var passcode = "password"
+var destination = "/queue/test" // There're more options other than /queue/...
+
+func main() {
+	// Connect to broker
+	client, err := stomp.Dial("tcp", net.JoinHostPort(server, port),
+		stomp.ConnOpt.Login(login, passcode),
+		stomp.ConnOpt.Host(vhost),
+		stomp.ConnOpt.AcceptVersion(stomp.V12),
+		stomp.ConnOpt.HeartBeat(60*time.Second, 0*time.Second))
+	if err != nil {
+		fmt.Printf("Failed to connect, err: %v\n", err)
+		os.Exit(1)
+	}
+
+	var msgNum int
+	fmt.Print("Quantity of test messages: ")
+	fmt.Scanf("%d", &msgNum)
+	for i := 0; i < msgNum; i++ {
+		message := fmt.Sprintf("test msg %d", i+1)
+		err = client.Send(destination, "text/plain", []byte(message), stomp.SendOpt.Header("key", "value"))
+		if err != nil {
+			fmt.Printf("Failed to publish, err: %v\n", err)
+			os.Exit(1)
+		}
+		time.Sleep(time.Second)
+	}
+
+	client.Disconnect()
+}
+```
+
+**consumer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/go-stomp/stomp"
+	"net"
+	"time"
+)
+
+var server = "hostname"
+var port = "61613"
+var vhost = "yourvhost"
+var login = "username"
+var passcode = "password"
+var destination = "/queue/test" // There're more options other than /queue/...
+
+func main() {
+	// Infinite loop to auto-reconnect on failure
+Loop:
+	for {
+		fmt.Println("Starting in 5 seconds...")
+		time.Sleep(5 * time.Second)
+
+		// Connect to broker
+		client, err := stomp.Dial("tcp", net.JoinHostPort(server, port),
+			stomp.ConnOpt.Login(login, passcode),
+			stomp.ConnOpt.Host(vhost),
+			stomp.ConnOpt.AcceptVersion(stomp.V12),
+			stomp.ConnOpt.HeartBeat(60*time.Second, 0*time.Second))
+		if err != nil {
+			fmt.Printf("Failed to connect, err: %v\n", err)
+			continue Loop
+		}
+		// Subscribe to queue with client acknowledgement
+		sub, err := client.Subscribe(destination, stomp.AckClient)
+		if err != nil {
+			fmt.Printf("Failed to subscribe, err: %v\n", err)
+			continue Loop
+		}
+		for {
+			msg := <-sub.C
+			if msg.Err != nil {
+				fmt.Printf("Can't handle message received, NACKing... Error: %v\n", msg.Err)
+				// Unacknowledge the message
+				err = client.Nack(msg)
+				if err != nil {
+					fmt.Printf("Failed to NACK, err: %v\n", err)
+					break
+				}
+			}
+
+			fmt.Println(string(msg.Body))
+			// Acknowledge the message
+			err = client.Ack(msg)
+			if err != nil {
+				fmt.Printf("Failed to ACK, err: %v\n", err)
+				break
+			}
+		}
 	}
 }
 ```
