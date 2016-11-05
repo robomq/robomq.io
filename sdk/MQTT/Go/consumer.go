@@ -1,3 +1,13 @@
+/**
+ * File: consumer.go
+ * Description: This is the MQTT consumer handles incoming messages
+ *     published by producers from a particular topic.
+ *     Consumer prints the topic and payload as it receives messages.
+ *
+ * Author: Eamin Zhang
+ * robomq.io (http://www.robomq.io)
+ */
+
 package main
 
 import (

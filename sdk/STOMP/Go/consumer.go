@@ -1,3 +1,13 @@
+/**
+ * File: consumer.go
+ * Description: This is the STOMP consumer handles incoming messages
+ *     published by producers from a particular queue.
+ *     Consumer prints the message body as it receives messages.
+ *
+ * Author: Eamin Zhang
+ * robomq.io (http://www.robomq.io)
+ */
+
 package main
 
 import (
@@ -37,6 +47,8 @@ Loop:
 			fmt.Printf("Failed to subscribe, err: %v\n", err)
 			continue Loop
 		}
+
+		fmt.Println("Started consuming messages.")
 		for {
 			msg := <-sub.C
 			if msg.Err != nil {

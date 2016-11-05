@@ -977,6 +977,8 @@ Loop:
 			fmt.Printf("Failed to subscribe, err: %v\n", err)
 			continue Loop
 		}
+
+		fmt.Println("Started consuming messages.")
 		for {
 			msg := <-sub.C
 			if msg.Err != nil {

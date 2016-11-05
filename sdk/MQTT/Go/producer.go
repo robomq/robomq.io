@@ -1,3 +1,13 @@
+/**
+ * File: procuder.go
+ * Description: This is the MQTT producer publishes a certain number
+ *     of test messages to a particular topic through MQTT broker.
+ *     It will first ask user for the quantity of messages.
+ *
+ * Author: Eamin Zhang
+ * robomq.io (http://www.robomq.io)
+ */
+
 package main
 
 import (
