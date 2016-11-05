@@ -24,7 +24,7 @@ Finally, import this library in your program.
 import pika
 ```
 
-The full documentation of this library is at <https://pika.readthedocs.org/en/0.9.14/>.
+The full documentation of this library is at <a href="https://pika.readthedocs.org/en/0.9.14/" target="_blank">https://pika.readthedocs.org/en/0.9.14/</a>.
 
 > pika library is not thread safe. Do not use a connection or channel across threads.
 
@@ -636,7 +636,6 @@ while true
 end
 ```
 
-
 ## Java
 
 ### Prerequisites
@@ -832,6 +831,241 @@ public class Consumer {
 	public static void main(String[] args) {
 		Consumer c = new Consumer();
 		c.consume();
+	}
+}
+```
+
+## Go
+
+###Prerequisites
+
+**Go client AMQP library**
+
+The Go library we use for this example can be found at <a href="https://github.com/streadway/amqp" target="_blank">https://github.com/streadway/amqp</a>.  
+
+You can install it through `go get github.com/streadway/amqp`.  
+
+Finally, import this library in your program.  
+
+```go
+import "github.com/streadway/amqp"
+```
+
+The full documentation of this library is at <a href="https://godoc.org/github.com/streadway/amqp" target="_blank">https://godoc.org/github.com/streadway/amqp</a>.  
+
+###Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
+
+```go
+connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost), amqp.Config{Heartbeat: 60 * time.Second})
+channel, err := connection.Channel()
+```
+
+Then producer can publish messages to a fanout exchange where routing key is useless. It will assign a blank string to routing key in publish function.  
+Delivery mode = 1 means it's a non-persistent message.  
+
+```go 
+err = channel.Publish(exchangeName, "", false, false, amqp.Publishing{ContentType:  "text/plain", DeliveryMode: 1, Body: []byte("Hello World!")})
+```
+
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+```go
+connection.Close()
+```
+
+###Consumer
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.  
+Durable means the exchange or queue will survive possible broker failover. It's false in this example.  
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
+Exclusive means no other consumer can consume the queue when this one is consuming it.  
+
+```go
+// audo-delete = true
+err = channel.ExchangeDeclare(exchangeName, "fanout", false, true, false, false, nil)
+
+// durable = false; auto-delete = true; exclusive = true
+queue, err := channel.QueueDeclare(queueName, false, true, true, false, nil)
+
+err = channel.QueueBind(queueName, "", exchangeName, false, nil)
+```
+
+Finally, consumer can consume messages from the queue.  
+Consumer-tag can be later used to `Cancel()` this consumer when it's no longer needed.  
+Auto-ack parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, auto-ack equals to true, so producer does not explicitly acknowledge received messages.  
+
+```go
+// consumer-tag = "consumer"; auto-ack = true
+messageChan, err := channel.Consume(queue.Name, "consumer", true, true, false, false, nil)
+```
+
+Note a message channel is returned by the `Consume()` function. Incoming messages will be received through that channel.  
+
+> Channel in Golang is a typed conduit through which you can send and receive values. Sends and receives block until the other side is ready.  
+
+```go
+for message := range messageChan {
+	fmt.Println(string(message.Body))
+}
+```
+
+###Putting it all together
+
+**producer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/streadway/amqp"
+	"os"
+	"time"
+)
+
+var server = "hostname"
+var port = 5672
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var exchangeName = "testEx"
+
+func main() {
+	connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost),
+		amqp.Config{Heartbeat: 60 * time.Second})
+	if err != nil {
+		fmt.Printf("Failed to connect, err: %v\n", err)
+		os.Exit(1)
+	}
+	defer connection.Close()
+
+	channel, err := connection.Channel()
+	if err != nil {
+		fmt.Printf("Failed to create channel, err: %v\n", err)
+		os.Exit(1)
+	}
+	defer channel.Close()
+
+	err = channel.Publish(
+		exchangeName, // exchange
+		// for fanout type exchange, routing key is useless
+		"",    // routing key
+		false, // mandatory
+		false, // immediate
+		amqp.Publishing{
+			ContentType:  "text/plain",
+			DeliveryMode: 1,
+			Body:         []byte("Hello World!"),
+		})
+	if err != nil {
+		fmt.Printf("Failed to publish message, err: %v\n", err)
+		os.Exit(1)
+	}
+}
+```
+
+**consumer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/streadway/amqp"
+	"time"
+)
+
+var server = "hostname"
+var port = 5672
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var exchangeName = "testEx"
+var queueName = "testQ1"
+
+func main() {
+	// Infinite loop to auto-reconnect on failure
+Loop:
+	for {
+		fmt.Println("Starting in 5 seconds...")
+		time.Sleep(5 * time.Second)
+
+		connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost),
+			amqp.Config{Heartbeat: 60 * time.Second})
+		if err != nil {
+			fmt.Printf("Failed to connect, err: %v\n", err)
+			continue Loop
+		}
+		defer connection.Close()
+
+		channel, err := connection.Channel()
+		if err != nil {
+			fmt.Printf("Failed to create channel, err: %v\n", err)
+			continue Loop
+		}
+		defer channel.Close()
+
+		err = channel.ExchangeDeclare(
+			exchangeName, // name
+			"fanout",     // type
+			false,        // durable
+			true,         // audo-delete
+			false,        // internal
+			false,        // no-wait
+			nil,          // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to declare exchange, err: %v\n", err)
+			continue Loop
+		}
+
+		queue, err := channel.QueueDeclare(
+			queueName, // name
+			false,     // durable
+			true,      // auto-delete
+			true,      // exclusive
+			false,     // no-wait
+			nil,       // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to declare queue, err: %v\n", err)
+			continue Loop
+		}
+
+		err = channel.QueueBind(
+			queueName, // queue
+			// for fanout type exchange, routing key is useless
+			"",           // key
+			exchangeName, // exchange
+			false,        // no-wait
+			nil,          // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to bind queue with exchange, err: %v\n", err)
+			continue Loop
+		}
+
+		messageChan, err := channel.Consume(
+			queue.Name, // queue
+			"consumer", // consumer tag
+			true,       // auto-ack
+			true,       // exclusive
+			false,      // no-local
+			false,      // no-wait
+			nil,        // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to consume messages, err: %v\n", err)
+			continue Loop
+		}
+
+		fmt.Println("Started consuming messages.")
+		for message := range messageChan {
+			fmt.Println(string(message.Body))
+		}
 	}
 }
 ```

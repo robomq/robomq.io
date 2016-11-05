@@ -1035,6 +1035,328 @@ public class Consumer {
 }
 ```
 
+## Go
+
+###Prerequisites
+
+**Go client AMQP library**
+
+The Go library we use for this example can be found at <a href="https://github.com/streadway/amqp" target="_blank">https://github.com/streadway/amqp</a>.  
+
+You can install it through `go get github.com/streadway/amqp`.  
+
+Finally, import this library in your program.  
+
+```go
+import "github.com/streadway/amqp"
+```
+
+The full documentation of this library is at <a href="https://godoc.org/github.com/streadway/amqp" target="_blank">https://godoc.org/github.com/streadway/amqp</a>.  
+
+###Producer
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
+
+```go
+connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost), amqp.Config{Heartbeat: 60 * time.Second})
+channel, err := connection.Channel()
+```
+
+Then producer will do what consumer does, listen on the replyQueue on its side.  
+
+```go
+queue, err := channel.QueueDeclare(replyQueue, false, true, true, false, nil)
+err = channel.QueueBind(replyQueue, replyKey, exchangeName, false, nil)
+messageChan, err := channel.Consume(queue.Name, "replyConsumer", true, true, false, false, nil)
+
+message := <-messageChan
+fmt.Println(string(message.Body))
+```
+
+After that producer can publish a message to the exchange through routing key of the requestQueue on consumer side.  
+The message carries a reply-to property to indicate consumer where to reply to. It's the routing key of producer's replyQueue.  
+
+```go 
+err = channel.Publish(exchangeName, requestKey, false, false, amqp.Publishing{ContentType:  "text/plain", DeliveryMode: 1, ReplyTo: replyKey, Body: []byte("Hello World!")})
+```
+
+Producer should be blocked until it receives the reply before exiting.  
+
+###Consumer
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+
+Then consumer will listen on its requestQueue.  
+
+```go
+err = channel.ExchangeDeclare(exchangeName, "direct", false, true, false, false, nil)
+queue, err := channel.QueueDeclare(requestQueue, false, true, true, false, nil)
+err = channel.QueueBind(requestQueue, requestKey, exchangeName, false, nil)
+messageChan, err := channel.Consume(queue.Name, "requestConsumer", false, true, false, false, nil)
+``` 
+
+When requests are received, it will print the message content and reply according to the reply-to property of request message.  
+Note that auto-ack has been set to false above. If reply succeeds, ACK the request message; otherwise, NACK it, so it will be re-queued.  
+
+```go
+for message := range messageChan {
+	fmt.Println(string(message.Body))
+
+	err = channel.Publish(exchangeName, message.ReplyTo, false, false,
+		amqp.Publishing{ContentType: "text/plain", DeliveryMode: 1, Body: append([]byte("Reply to "), message.Body...)})
+	if err != nil {
+		err = message.Nack(false, true)
+	} else {
+		err = message.Ack(false)
+	}
+}
+```
+
+###Putting it all together
+
+**producer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/streadway/amqp"
+	"os"
+	"time"
+)
+
+var server = "hostname"
+var port = 5672
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var exchangeName = "testEx"
+var replyQueue = "replyQ"
+var requestKey = "request"
+var replyKey = "reply"
+
+func main() {
+	connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost),
+		amqp.Config{Heartbeat: 60 * time.Second})
+	if err != nil {
+		fmt.Printf("Failed to connect, err: %v\n", err)
+		os.Exit(1)
+	}
+	defer connection.Close()
+
+	channel, err := connection.Channel()
+	if err != nil {
+		fmt.Printf("Failed to create channel, err: %v\n", err)
+		os.Exit(1)
+	}
+	defer channel.Close()
+
+	queue, err := channel.QueueDeclare(
+		replyQueue, // name
+		false,      // durable
+		true,       // auto-delete
+		true,       // exclusive
+		false,      // no-wait
+		nil,        // args
+	)
+	if err != nil {
+		fmt.Printf("Failed to declare reply queue, err: %v\n", err)
+		os.Exit(1)
+	}
+
+	err = channel.QueueBind(
+		replyQueue,   // queue
+		replyKey,     // key
+		exchangeName, // exchange
+		false,        // no-wait
+		nil,          // args
+	)
+	if err != nil {
+		fmt.Printf("Failed to bind reply queue with exchange, err: %v\n", err)
+		os.Exit(1)
+	}
+
+	messageChan, err := channel.Consume(
+		queue.Name,      // queue
+		"replyConsumer", // consumer tag
+		true,            // auto-ack
+		true,            // exclusive
+		false,           // no-local
+		false,           // no-wait
+		nil,             // args
+	)
+	if err != nil {
+		fmt.Printf("Failed to consume reply messages, err: %v\n", err)
+		os.Exit(1)
+	}
+
+	// use a channel to communicate between goroutines
+	gotReply := make(chan bool)
+
+	// listen for reply message
+	go func(messageChan <-chan amqp.Delivery, gotReply chan bool) {
+		message := <-messageChan
+		fmt.Println(string(message.Body))
+
+		// notify main goroutine it has got the reply
+		gotReply <- true
+	}(messageChan, gotReply)
+
+	err = channel.Publish(
+		exchangeName, // exchange
+		requestKey,   // routing key
+		false,        // mandatory
+		false,        // immediate
+		amqp.Publishing{
+			ContentType:  "text/plain",
+			DeliveryMode: 1,
+			ReplyTo:      replyKey,
+			Body:         []byte("Hello World!"),
+		})
+	if err != nil {
+		fmt.Printf("Failed to publish request message, err: %v\n", err)
+		os.Exit(1)
+	}
+
+	// block until it has got the reply
+	_ = <-gotReply
+}
+```
+
+**consumer.go**
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/streadway/amqp"
+	"time"
+)
+
+var server = "hostname"
+var port = 5672
+var vhost = "yourvhost"
+var username = "username"
+var password = "password"
+var exchangeName = "testEx"
+var requestQueue = "requestQ"
+var requestKey = "request"
+
+func main() {
+	// Infinite loop to auto-reconnect on failure
+Loop:
+	for {
+		fmt.Println("Starting in 5 seconds...")
+		time.Sleep(5 * time.Second)
+
+		connection, err := amqp.DialConfig(fmt.Sprintf("amqp://%s:%s@%s:%d/%s", username, password, server, port, vhost),
+			amqp.Config{Heartbeat: 60 * time.Second})
+		if err != nil {
+			fmt.Printf("Failed to connect, err: %v\n", err)
+			continue Loop
+		}
+		defer connection.Close()
+
+		channel, err := connection.Channel()
+		if err != nil {
+			fmt.Printf("Failed to create channel, err: %v\n", err)
+			continue Loop
+		}
+		defer channel.Close()
+
+		err = channel.ExchangeDeclare(
+			exchangeName, // name
+			"direct",     // type
+			false,        // durable
+			true,         // audo-delete
+			false,        // internal
+			false,        // no-wait
+			nil,          // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to declare exchange, err: %v\n", err)
+			continue Loop
+		}
+
+		queue, err := channel.QueueDeclare(
+			requestQueue, // name
+			false,        // durable
+			true,         // auto-delete
+			true,         // exclusive
+			false,        // no-wait
+			nil,          // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to declare request queue, err: %v\n", err)
+			continue Loop
+		}
+
+		err = channel.QueueBind(
+			requestQueue, // queue
+			requestKey,   // key
+			exchangeName, // exchange
+			false,        // no-wait
+			nil,          // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to bind request queue with exchange, err: %v\n", err)
+			continue Loop
+		}
+
+		messageChan, err := channel.Consume(
+			queue.Name,        // queue
+			"requestConsumer", // consumer tag
+			false,             // auto-ack
+			true,              // exclusive
+			false,             // no-local
+			false,             // no-wait
+			nil,               // args
+		)
+		if err != nil {
+			fmt.Printf("Failed to consume request messages, err: %v\n", err)
+			continue Loop
+		}
+
+		fmt.Println("Started consuming messages.")
+		for message := range messageChan {
+			fmt.Println(string(message.Body))
+
+			// on receiving request messages, reply to the reply_to header
+			err = channel.Publish(
+				exchangeName,    // exchange
+				message.ReplyTo, // routing key
+				false,           // mandatory
+				false,           // immediate
+				amqp.Publishing{
+					ContentType:  "text/plain",
+					DeliveryMode: 1,
+					Body:         append([]byte("Reply to "), message.Body...),
+				})
+			if err != nil {
+				fmt.Printf("Failed to publish reply message, err: %v\n", err)
+				err = message.Nack(
+					false, // multiple
+					true,  // requeued
+				)
+				if err != nil {
+					fmt.Printf("Failed to NACK request message, err: %v\n", err)
+					break
+				}
+			} else {
+				err = message.Ack(
+					false, // multiple
+				)
+				if err != nil {
+					fmt.Printf("Failed to ACK request message, err: %v\n", err)
+					break
+				}
+			}
+		}
+	}
+}
+```
+
 ## C
 
 ### Prerequisites
