@@ -1,4 +1,4 @@
-# RoboMQ - Salesforce Connector
+# Salesforce Connector
 
 One of the many platform with which RoboMQ is able to provide a connector is the popular customer relationship management platform, Salesforce. Salesforce has been part of our suite of connectors and adapters called “<a href="https://www.robomq.io/#thingsconnect">ThingsConnect</a>” since the early days of our product. With this growing suite of adapter and connectors, RoboMQ is truly an <a href="https://www.robomq.io/#iotmiddleware">Internet of Things (IoT) middleware</a> platform that can connect any device to any application.
 
