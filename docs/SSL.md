@@ -2,15 +2,15 @@
 
 > Before reading this chapter, we assume that you already know AMQP protocol. Knowing MQTT and STOMP would be great too. If not, please go through at least the *Key based message routing* section in User Guide.
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> has obtained certificate from a certificate authority (CA) and supports SSL (secure socket layer) connection for all available protocols, including AMQP, MQTT, STOMP and WebSTOMP. The SSL ports of those four protocols are respectively AMQP: 5671, MQTT: 8883, STOMP: 61614, WebSTOMP: 15673.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> has obtained certificate from a certificate authority (CA) and supports SSL (secure socket layer) connection for all available protocols, including AMQP, MQTT, STOMP and WebSTOMP. The SSL ports of those four protocols are respectively AMQP: 5671, MQTT: 8883, STOMP: 61614, WebSTOMP: 15673.  
 
-This chapter intends to introduce you the method to establish SSL connection between <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker and your client program, except for WebSTOMP.  
+This chapter intends to introduce you the method to establish SSL connection between <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker and your client program, except for WebSTOMP.  
 
-The certificate of our root CA can be downloaded at <a href="http://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">http://www.tbs-x509.com/AddTrustExternalCARoot.crt</a>. It is needed to verify the leaf certificate of <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> because the latter one was granted by the root CA through a chain of trust.  
+The certificate of our root CA can be downloaded at <a href="http://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">http://www.tbs-x509.com/AddTrustExternalCARoot.crt</a>. It is needed to verify the leaf certificate of <a href="https://www.robomq.io" target="_blank">RoboMQ</a> because the latter one was granted by the root CA through a chain of trust.  
 
-In most cases, your device or application trying to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker are not like Web browsers. Browsers come with all CAs' certificates so  they're inherently able to verify the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> certificate. That is why WebSTOMP client running inside a browser doesn't need any extra work to connect over SSL. In contrast, your device or application typically don't have the CA certificate to verify <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> certificate.  
+In most cases, your device or application trying to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker are not like Web browsers. Browsers come with all CAs' certificates so  they're inherently able to verify the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> certificate. That is why WebSTOMP client running inside a browser doesn't need any extra work to connect over SSL. In contrast, your device or application typically don't have the CA certificate to verify <a href="https://www.robomq.io" target="_blank">RoboMQ</a> certificate.  
 
-Therefore, if you choose to or have to verify the leaf certificate of <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> in your client program, you will be required to download the root CA certificate at <a href="https://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">https://www.tbs-x509.com/AddTrustExternalCARoot.crt</a> and import it in your program to achieve the verification. Otherwise, if you optionally ignore the certificate verification, it's not a necessity.  
+Therefore, if you choose to or have to verify the leaf certificate of <a href="https://www.robomq.io" target="_blank">RoboMQ</a> in your client program, you will be required to download the root CA certificate at <a href="https://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">https://www.tbs-x509.com/AddTrustExternalCARoot.crt</a> and import it in your program to achieve the verification. Otherwise, if you optionally ignore the certificate verification, it's not a necessity.  
 
 An unfortunate fact is that not all message queue client libraries support SSL connection. Actually, only a small portion of them do. Hence, pick a capable library before you develop your SSL clients.  
 
@@ -18,7 +18,7 @@ An unfortunate fact is that not all message queue client libraries support SSL c
 
 We will provide examples of AMQP SSL clients of key based message routing scenario in Python. They are variants of the Python example in *Key based message routing* section. The only difference is that they connect over SSL, so we're going to focus on the connecting part of the code.  
 
-The first example verifies <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> certificate, while the second one doesn't. You may choose to follow any of them according to your specific demands.  
+The first example verifies <a href="https://www.robomq.io" target="_blank">RoboMQ</a> certificate, while the second one doesn't. You may choose to follow any of them according to your specific demands.  
 
 Please refer to the *Key based message routing* section in User Guide for library dependency, program logic, code comments and everything irrelevant with connecting itself.  
 
@@ -46,7 +46,7 @@ parameters = pika.ConnectionParameters(host = server, port = port, virtual_host 
 connection = pika.BlockingConnection(parameters)
 ```
 
-If the root CA certificate file isn't provided or isn't the one downloaded at <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>, client will fail to verify <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> certificate thus fail to connect.  
+If the root CA certificate file isn't provided or isn't the one downloaded at <http://www.tbs-x509.com/AddTrustExternalCARoot.crt>, client will fail to verify <a href="https://www.robomq.io" target="_blank">RoboMQ</a> certificate thus fail to connect.  
 
 ### Putting it together
 
@@ -143,7 +143,7 @@ connection = pika.BlockingConnection(parameters)
 
 Even if the root CA certificate is provided, it will be ignored.  
 
-You can safely use this method to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker over SSL without verification because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> is a trustworthy service provider. However, this way is generally not recommended for unknown services.  
+You can safely use this method to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker over SSL without verification because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> is a trustworthy service provider. However, this way is generally not recommended for unknown services.  
 
 ### Putting it together
 

@@ -1,6 +1,6 @@
 # Introduction
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> supports AMQP 0-9-1 as the main module of our broker. Its port is **5672**, SSL port is **5671**.    
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports AMQP 0-9-1 as the main module of our broker. Its port is **5672**, SSL port is **5671**.    
 
 AMQP (Advanced Message Queuing Protocol) is a networking protocol that enables conforming client applications to communicate with conforming messaging middleware brokers. Messaging brokers receive messages from producers (applications that publish them, also known as publishers) and route them to consumers (applications that process them). Since AMQP is a network protocol, the producers, consumers and the broker can all reside on different machines.
   
@@ -21,7 +21,7 @@ You can read the <a href="https://www.amqp.org" target="_blank">full documentati
 We will provide examples of five messaging scenarios, each in five languages, including Python, Node.js, PHP, Java and C or C++.  
 The five messaging scenarios includes one-to-one, broadcast, routing key, routing filter (topic) and request-reply. They are respectively elaborated in the beginning of each's chapter.      
 
-In the examples, details vary among five scenarios, but the typical procedure is as following. AMQP producer will publish a "Hello World!" message through a exchange with a routing key through <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. AMQP consumer will create exchange and queue, then bind them with the routing key and start consuming messages from the queue. It will print the message as it receives messages.  
+In the examples, details vary among five scenarios, but the typical procedure is as following. AMQP producer will publish a "Hello World!" message through a exchange with a routing key through <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. AMQP consumer will create exchange and queue, then bind them with the routing key and start consuming messages from the queue. It will print the message as it receives messages.  
 
 All examples have implemented automatic reconnecting, which is crucial in real production.
 

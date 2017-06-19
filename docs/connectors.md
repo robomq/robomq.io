@@ -1,6 +1,6 @@
 # Salesforce Connector
 
-This section introduces you to the Salesforce Connector providing an interface between client devices/sensors and an customer's existing Salesforce workflow.  The <a href="https://www.robomq.io/#thingsconnect" target="_blank">connector</a> utilizes the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> to ensure the guaranteed and reliable delivery of case information.
+This section introduces you to the Salesforce Connector providing an interface between client devices/sensors and an customer's existing Salesforce workflow.  The <a href="https://www.robomq.io/#thingsconnect" target="_blank">connector</a> utilizes the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> to ensure the guaranteed and reliable delivery of case information.
 
 **Overview:**
 
@@ -21,7 +21,7 @@ Before the connector can start processing any case requests, an access token mus
 **Connector Operation:**
 
 - The Salesforce connector currently supports **Salesforce Case Create** requests.
-- Devices/sensors issue case requests messages over AMQP through the robomq.io broker.
+- Devices/sensors issue case requests messages over AMQP through the RoboMQ broker.
 - The connector identifies the source of the incoming message, determines the destination Salesforce user/division, and creates a case record associated with their account.
 - The incoming AMQP playload consists of all elements necessary to create and assign a case (i.e. subject, description, contact name, etc.).
 - Mapping of the data elements from the device to the case attributes is configuration driven.
@@ -42,7 +42,7 @@ The connector configuration mapping is a JSON formatted file requiring definitio
 
 1.  Requires Python 2.7 and above.
 2.  Install <a href="https://pypi.python.org/pypi/simple-salesforce" target="_blank">simple-salesforce</a> REST API client.
-2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>. Get the help session for detailed usage.  
+2. Create dead letter queue in your vhost with the script `deadLetterQueue.py` provided by <a href="https://www.robomq.io" target="_blank">RoboMQ</a>. Get the help session for detailed usage.  
 
 ```bash
 python deadLetterQueue.py -?
@@ -60,7 +60,7 @@ python SFconnector.py -i config.json
  
 This section introduces you to the DB Connector providing an API between your client applications/devices and back-end database. 
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> has built a DBConnector module in Python. It consists of an interface between AMQP broker and backend database supporting these transactions:
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> has built a DBConnector module in Python. It consists of an interface between AMQP broker and backend database supporting these transactions:
 
 1. SQL Read & AMQP Publish  
 2. AMQP Get & SQL Write  

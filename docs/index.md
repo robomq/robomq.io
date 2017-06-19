@@ -1,12 +1,12 @@
-#What is RoboMQ.io?
+#What is RoboMQ?
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  is a Message Queue as Service platform hosted on cloud and also available as an Enterprise hosting option. This Software as a Service platform is an integrated message queue hub, analytics engine, management console, dashboard and monitoring & alerts; all managed and hosted in a secure, reliable and redundant infrastructure.
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a>  is a Message Queue as Service platform hosted on cloud and also available as an Enterprise hosting option. This Software as a Service platform is an integrated message queue hub, analytics engine, management console, dashboard and monitoring & alerts; all managed and hosted in a secure, reliable and redundant infrastructure.
 
-![High level schematic diagram of robomq.io platform](./images/overview.png)
+![High level schematic diagram of RoboMQ platform](./images/overview.png)
 
 ##Key Features
 
-Key features of <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  platform are:
+Key features of <a href="https://www.robomq.io" target="_blank">RoboMQ</a>  platform are:
 
 1. **Cloud centric** - built for the cloud, Internet of Things (IoT) and an heterogeneous environment of SaaS, COTS and enterprise hosted application
 
@@ -20,13 +20,13 @@ Key features of <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  p
 
 6. **Multiple choices of protocols** for your devices and application - support for MQTT, AMQP, STOMP and HTTP/REST
 
-7. **Support for multiple programming languages** - with the support built for standard protocols like MQTT, AMQP, STOMP and HTTP/REST libraries supporting these protocols by default support robomq.io
+7. **Support for multiple programming languages** - with the support built for standard protocols like MQTT, AMQP, STOMP and HTTP/REST libraries supporting these protocols by default support RoboMQ
 
-8. **Secure connection** - <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> has obtained certificate from certificate authority and supports SSL (secure socket layer) connection for all available protocols
+8. **Secure connection** - <a href="https://www.robomq.io" target="_blank">RoboMQ</a> has obtained certificate from certificate authority and supports SSL (secure socket layer) connection for all available protocols
 
 ##Platform components
 
-The key components <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  are:
+The key components <a href="https://www.robomq.io" target="_blank">RoboMQ</a> are:
 
 1. **AMQP based broker cluster** with redundancy built-in
 
@@ -38,4 +38,4 @@ The key components <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>
 
 5. **Alerts and notification** based on configurable threshold from message content 
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>  platform is an expandable platform that allows addition of business specific application components which feed on the same stream of information, in parallel. robomq.io comes bundled with few application components like monitoring dashboard for messaging activity, data driven analytics and alerts. Similar applications can be added to expand the platform. For each application component, multiple processes or workers can be added be added to handle increased demand or load.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> platform is an expandable platform that allows addition of business specific application components which feed on the same stream of information, in parallel. RoboMQ comes bundled with few application components like monitoring dashboard for messaging activity, data driven analytics and alerts. Similar applications can be added to expand the platform. For each application component, multiple processes or workers can be added be added to handle increased demand or load.  

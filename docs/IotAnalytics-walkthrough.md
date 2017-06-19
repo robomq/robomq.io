@@ -190,7 +190,7 @@ This is just a brief introduction to the unlimited potential IoT Analytics bring
 
 Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a <a href="https://robomq.io/index.html#free" target="_blank">Free Trial</a>.
 
-For more information on RoboMQ and its product features, check out our website <a href="https://www.robomq.io" target="_blank">robomq.io</a> or email us at sales@robomq.io.  
+For more information on RoboMQ and its product features, check out our website <a href="https://www.robomq.io" target="_blank">RoboMQ</a> or email us at sales@robomq.io.  
 
 
 

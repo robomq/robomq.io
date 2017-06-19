@@ -2,11 +2,11 @@
 
 > Browse the chapter of AMQP Introduction first if you're new to AMQP.  
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> innovatively provides <a href="https://www.robomq.io/#thingsconnect" target="_blank">REST interface</a> over the AMQP broker. It's only accessible over HTTPS.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> innovatively provides <a href="https://www.robomq.io/#thingsconnect" target="_blank">REST interface</a> over the AMQP broker. It's only accessible over HTTPS.  
 
-Our REST interface facilitates using <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> from any HTTP client. Therefore, it allows you send and receive messages without installing a message queue client library, writing and running a client program. Some common scenarios of interacting with our REST interface are  
+Our REST interface facilitates using <a href="https://www.robomq.io" target="_blank">RoboMQ</a> from any HTTP client. Therefore, it allows you send and receive messages without installing a message queue client library, writing and running a client program. Some common scenarios of interacting with our REST interface are  
 
-1. Integrate any devices or applications with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> message queue system by making HTTP calls from them.  
+1. Integrate any devices or applications with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> message queue system by making HTTP calls from them.  
 2. Send and receive messages through simple HTTP client for easy testing, such as cURL. Get rid of programming.  
 3. Send and receive messages from Web browser with a JavaScript HTTP client. No library installation is required.  
 
@@ -31,12 +31,12 @@ https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
 
 There are 2 authentication mechanisms that the REST interface will accept. They are secret token header and HTTP basic auth. You need to apply one of them. If you apply both, the basic auth will be ignored.  
   
-1. Secret Token Header: set a HTTP header in request as the credential. You will need to provide <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> the header name and value for us to add it into server records.  
-2. HTTP Basic Auth: submit your <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> username:password via HTTP basic auth.  
+1. Secret Token Header: set a HTTP header in request as the credential. You will need to provide <a href="https://www.robomq.io" target="_blank">RoboMQ</a> the header name and value for us to add it into server records.  
+2. HTTP Basic Auth: submit your <a href="https://www.robomq.io" target="_blank">RoboMQ</a> username:password via HTTP basic auth.  
 
 **Certificate:**
 
-In case the HTTP client you use requires the CA certificate to verify <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>'s certificate, download it from <a href="https://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">https://www.tbs-x509.com/AddTrustExternalCARoot.crt</a>
+In case the HTTP client you use requires the CA certificate to verify <a href="https://www.robomq.io" target="_blank">RoboMQ</a>'s certificate, download it from <a href="https://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">https://www.tbs-x509.com/AddTrustExternalCARoot.crt</a>
 
 **GET:**
 

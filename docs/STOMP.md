@@ -2,16 +2,16 @@
 
 > Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding STOMP.  
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker. Its port is **61613**, SSL port is **61614**.  
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker. Its port is **61613**, SSL port is **61614**.  
 
 STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol. It is much simpler than AMQP and so more handy for message queue novices. STOMP provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers. We would recommend STOMP if you are implementing a simple message queuing application without very complex demands on combination of exchanges and queues.  
 <a href="https://stomp.github.io/" target="_blank">Full documentation of STOMP</a>
 
-The STOMP specification does not prescribe what kinds of destinations a broker must support, instead the value of the destination header in SEND and MESSAGE frames is broker-specific. Therefore, <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> enriches STOMP with more destination types so it is now capable of most basic jobs AMQP can do.  
+The STOMP specification does not prescribe what kinds of destinations a broker must support, instead the value of the destination header in SEND and MESSAGE frames is broker-specific. Therefore, <a href="https://www.robomq.io" target="_blank">RoboMQ</a> enriches STOMP with more destination types so it is now capable of most basic jobs AMQP can do.  
 
 # Message destinations
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> gives its STOMP adapter the flexibility to support the destination types as bellow:
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> gives its STOMP adapter the flexibility to support the destination types as bellow:
 
 * /exchange -- SEND to arbitrary routing keys and SUBSCRIBE to arbitrary binding patterns; 
 * /queue -- SEND and SUBSCRIBE to queues managed by the STOMP gateway; 
@@ -27,7 +27,7 @@ Thus, with STOMP, you can easily implement messaging clients in one-on-one, broa
 
 **One-to-One**  
 
-This scenario is the most basic application of STOMP. If your destination in subscribe and send functions is in the format of `/queue/queueName` or `/amq/queue/queueName`, the consumers will receive the messages in a round-robin manner because this type of destination is mapped into exchange.default.queueName on <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+This scenario is the most basic application of STOMP. If your destination in subscribe and send functions is in the format of `/queue/queueName` or `/amq/queue/queueName`, the consumers will receive the messages in a round-robin manner because this type of destination is mapped into exchange.default.queueName on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 The default exchange has one special property that makes it very useful for simple applications: every queue that is created is automatically bound to it with a routing key which is the same as the queue name.  Therefore, no matter how many consumers subscribe a same queueName, there will be only one queue created. Its name and routing key are both the queueName, and all consumers have subscribed it will receive messages from the queue in turn.  
 
@@ -37,13 +37,13 @@ The default exchange has one special property that makes it very useful for simp
 
 **Broadcast**  
 
-If your destination in subscribe and send functions is `/exchange/amq.fanout`, all the consumers will receive every message at the same time because this type of destination is mapped into exchange.fanout on <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+If your destination in subscribe and send functions is `/exchange/amq.fanout`, all the consumers will receive every message at the same time because this type of destination is mapped into exchange.fanout on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 A fanout exchange routes messages to all of the queues that are bound to it and the routing key is ignored. In this case, each consumer will have its own queue. The queue names are auto-generated and they all are bound to the fanout exchange.  
 
 **Routing key**  
 
-If your destination in subscribe and send functions is `/exchange/amq.direct/routingKey`,   messages will be broadcast to all queues bound to the direct exchange with that routingKey and consumers subscribing those queues will receive every message at the same time because this type of destination is mapped into exchange.direct.routingKey on <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+If your destination in subscribe and send functions is `/exchange/amq.direct/routingKey`,   messages will be broadcast to all queues bound to the direct exchange with that routingKey and consumers subscribing those queues will receive every message at the same time because this type of destination is mapped into exchange.direct.routingKey on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 The way direct exchange works is as bellow:    
 1. A queue binds to the exchange with a routing key K;  
@@ -55,7 +55,7 @@ In this case, each consumer will have its own queue. The queue names are auto-ge
 
 You can implement the topic scenario by providing a destination started by `/topic/` or `/exchange/amq.topic/`. The essential difference between normal routing key and topic is that consumer can subscribe a topic with wild cards inside. In AMQP protocol, a message sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key with or without wild cards.  
 
-i.e. In STOMP, if your destination in send function is `/topic/routingKey` or `/exchange/amq.topic/routingKey` and in subscribe function is `/topic/routingPattern` or `/exchange/amq.topic/routingPattern`, messages will be delivered to all queues bound to the topic exchange with the routingPattern which matches the routingKey in send destination because this type of destination is mapped into exchange.topic.routingPattern on <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+i.e. In STOMP, if your destination in send function is `/topic/routingKey` or `/exchange/amq.topic/routingKey` and in subscribe function is `/topic/routingPattern` or `/exchange/amq.topic/routingPattern`, messages will be delivered to all queues bound to the topic exchange with the routingPattern which matches the routingKey in send destination because this type of destination is mapped into exchange.topic.routingPattern on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 There are 2 wild cards available as bellow:  
 
@@ -69,15 +69,15 @@ Specially, you can implement broadcast scenario by subscribing `/topic/#`, imple
 
 You can implement request-reply scenario with any destination type. In this case, all clients are both producer and consumer.  
 One thing requester needs to do is adding a "reply-to" header to the message. The value of "reply-to" header will be the subscribing destination of requester. When replier receives a message, it will handle the message and send reply to the destination in "reply-to" header.  
-STOMP protocol itself doesn't define "reply-to" header, but <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> allows you to define any extra header by yourself.  
+STOMP protocol itself doesn't define "reply-to" header, but <a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to define any extra header by yourself.  
 
 **More scenarios**  
 
-The scenarios you can implement with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> STOMP adapter are more than the five ones above.  
+The scenarios you can implement with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> STOMP adapter are more than the five ones above.  
 
 For example, if you use destination type `/temp-queue/routingKey`, it will creates transient queues bound to the direct exchange. A transient queue will be automatically deleted once it receives a message. It can be used to implement RPC (remote procedure call), a variant of request-reply scenario. In RPC scenario, requester creates a transient queue to listen for reply as it sends a request. The queue will be automatically deleted once it receives the reply.  
 
-You can also add your own exchanges in your vhost and incorporate them in STOMP destination, such as `/exchange/user-added-exchange/routingKey`. It will create an auto-named queue bound to user-added-exchange by the routingKey. This feature significantly extends <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> STOMP adapter's capacity.  
+You can also add your own exchanges in your vhost and incorporate them in STOMP destination, such as `/exchange/user-added-exchange/routingKey`. It will create an auto-named queue bound to user-added-exchange by the routingKey. This feature significantly extends <a href="https://www.robomq.io" target="_blank">RoboMQ</a> STOMP adapter's capacity.  
 
 Although we have talked so much about how our STOMP message destinations are lightweight but powerful, there's still things it can't do. For example, if you want to bind one queue with a non-default exchange and let multiple consumers subscribe the queue, you would have to ask for help from the AMQP protocol.  
 
@@ -115,10 +115,10 @@ from stompest.sync import Stomp
 The full documentation of this library is at <a href="https://nikipore.github.io/stompest/" target="_blank">https://nikipore.github.io/stompest/</a>.
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  
 > Notice that stompest library reverses the order of outgoing and incoming heartbeats.  
 
 ```python
@@ -132,14 +132,14 @@ After that, producer can send messages to a particular destination. In this exam
 client.send(destination, body = message, headers = {"content-type": "text/plain"}, receipt = None)
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.
 
 ```python
 client.disconnect()
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 If you set `"ack": "auto"`, you don't need `client.ack(frame)`.  
@@ -242,10 +242,10 @@ var Stomp = require("stompjs");
 The full documentation of this library is at <a href="https://jmesnil.net/stomp-websocket/doc/" target="_blank">https://jmesnil.net/stomp-websocket/doc/</a>.
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. 
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. 
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  
 
 ```javascript
 var client = Stomp.overTCP(server, port);
@@ -260,14 +260,14 @@ After that, producer can send messages to a particular destination. In this exam
 client.send(destination, {"content-type": "text/plain"}, message);
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.
 
 ```javascript
 client.disconnect(callback);
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the message body.  
 If you set `ack: "auto"`, you don't need `message.ack();`.
@@ -394,10 +394,10 @@ You may see more installation approaches at <a href="https://php.net/manual/en/s
 >Notice: this library is different with php5-stomp extension, do not mix them up.
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  
 
 ```php
 $client = new Stomp("tcp://".$server.":".$port, $login, $passcode, array("host" => $vhost, "accept-version" => "1.0,1.1", "heart-beat" => "60000,0"));
@@ -408,14 +408,14 @@ After that, producer can send messages to a particular destination. In this exam
 ```php
 $client->send($destination, $message, array("content-type" => "text/plain"));
 ```
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. This library contains disconnect function in client class's destructor.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. This library contains disconnect function in client class's destructor.  
 
 ```php
 unset($client);
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 If you set `"ack"=>"auto"`, you don't need `$client->ack($frame);`.    
@@ -516,10 +516,10 @@ Finally, require this gem in your program.
 The full documentation of this library is at <a href="https://www.rubydoc.info/github/stompgem/stomp/index" target="_blank">https://www.rubydoc.info/github/stompgem/stomp/index</a>.  
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  
 
 ```ruby
 hash = { :hosts => [
@@ -535,14 +535,14 @@ After that, producer can send messages to a particular destination. In this exam
 ```ruby
 connection.publish(destination, message, headers = {"content-type" => "text/plain"})
 ```
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```ruby
 connection.disconnect
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 If you set `"ack": "auto"`, you don't need `connection.ack(message_id)`.  
@@ -668,7 +668,7 @@ Of course, you can eventually compress your producer and consumer classes into j
 > Java7+ is required to compile with this library.
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
 The library will automatically set the outgoing heartbeat to 60000 milliseconds and disable the incoming heartbeat, i.e. set it to 0.  
@@ -686,14 +686,14 @@ headers.put("content-type", "text/plain");
 client.send(destination, message, headers);
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.
 
 ```java
 client.disconnect();
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the overridden function `message()` to print the message body.   
 
@@ -836,10 +836,10 @@ import "github.com/go-stomp/stomp"
 The full documentation of this library is at <a href="https://godoc.org/github.com/go-stomp/stomp" target="_blank">https://godoc.org/github.com/go-stomp/stomp</a>.
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 > In STOMP, username is called login and password is called passcode; `vhost` is passed in the `host` header of `CONNECT(STOMP)` frame.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.   
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.   
 
 ```go
 client, err := stomp.Dial("tcp", net.JoinHostPort(server, port),
@@ -856,14 +856,14 @@ You can also set custom headers with the message.
 client.Send(destination, "text/plain", []byte(message), stomp.SendOpt.Header("key", "value"))
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.
 
 ```go
 client.Disconnect()
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  
 If you set `AckAuto`, you don't need `client.Ack(msg)`.  
@@ -1029,11 +1029,11 @@ gcc -o consumer consumer.c stomp/*
 ```
 
 ### Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Using this library, you always construct the headers before sending a STOMP frame.  
 >In STOMP, username is called login and password is called passcode.  
 
-Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker won't send heartbeat to client.  
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  
 
 ```c
 struct ctx client;
@@ -1065,7 +1065,7 @@ struct stomp_hdr send_hdrs[] = {
 
 err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
 ```
-When all messages have been sent, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. This example just force disconnect, but you could use receipt attribute in headers to gracefully disconnect.
+When all messages have been sent, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. This example just force disconnect, but you could use receipt attribute in headers to gracefully disconnect.
 
 ```c
 struct stomp_hdr disconn_hdrs[] = {
@@ -1088,7 +1088,7 @@ exit(EXIT_SUCCESS);
 ```
 
 ### Consumer
-The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then you need to set a few callback functions. They play an significant role in this library. For example, callback on message and error.  
 

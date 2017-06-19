@@ -2,7 +2,7 @@
 
 Message Oriented Middleware (MOM) have long been used for application integration and creating Enterprise Service Bus for developing scalable and decoupled applications.
 
-<a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>< platform is built with the AMQP broker at the core. The particular implementation of the AMQP broker used is <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a>. robomq thus provides all the capabilities and feature sets of the RabbitMQ platform with integrated management, dashboards, and analytics in a Software as a Service (SaaS) package.
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a>< platform is built with the AMQP broker at the core. The particular implementation of the AMQP broker used is <a href="https://www.robomq.io" target="_blank">RoboMQ</a>. RoboMQ thus provides all the capabilities and feature sets of the RabbitMQ platform with integrated management, dashboards, and analytics in a Software as a Service (SaaS) package.
 
 There are certain distinct advantages of using Message Queues for application integration.
 
@@ -36,7 +36,7 @@ Message queues allow building applications using variety of Message delivery pat
 
 5. **Work Queues** - round robin delivery of messages to multiple worker processes
 
-SDK containing example code for these use cases can be found at <a href="https://github.com/robomq/robomq.io/tree/master/sdk" target="_blank">robomq SDK</a> 
+SDK containing example code for these use cases can be found at <a href="https://github.com/robomq/robomq.io/tree/master/sdk" target="_blank">RoboMQ SDK</a> 
 
 ##Guaranteed Delivery
 Message Queue based integration hub ensures guaranteed delivery of the message and critical information. Unlike synchronous point to point communication where recipient needs to available and be on-line, Message Queues deliver message when the recipient is available.

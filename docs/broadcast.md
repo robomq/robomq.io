@@ -29,7 +29,7 @@ The full documentation of this library is at <a href="https://pika.readthedocs.o
 > pika library is not thread safe. Do not use a connection or channel across threads.
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```python
@@ -46,14 +46,14 @@ properties = pika.spec.BasicProperties(content_type = "text/plain", delivery_mod
 channel.basic_publish(exchange = exchangeName, routing_key = "", body = "Hello World!", properties = properties)
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```python
 connection.close()
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
 Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -173,7 +173,7 @@ var amqp = require("amqplib");
 The full documentation of this library is at <https://www.squaremobius.net/amqp.node/doc/channel_api.html>.
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 As shown in the code, this library provides chainable callback API in the form of `.then(callback)`.  
 > For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  
@@ -192,14 +192,14 @@ Delivery mode = 1 means it's a non-persistent message.
 ch.publish(exchangeName, "", content = new Buffer("Hello World!"), options = {contentType: "text/plain", deliveryMode: 1},  callback);
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```javascript
 conn.close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 The difference is that consumer uses `conn.createChannel()` function, while producer uses `conn.createConfirmChannel()` because the latter one is only useful for publish confirm.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
@@ -341,7 +341,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 ```
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```php
@@ -357,14 +357,14 @@ $message = new AMQPMessage("Hello World!", array("content_type" => "text/plain",
 $channel->basic_publish($message, $exchangeName, $routing_key = "");
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```php
 $connection->close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
 Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -503,7 +503,7 @@ The full documentation of this library is at <a href="http://rubybunny.info/arti
 > We recommend combining the documentation with the source code of this library when you use it because some of the documentation out there is not being updated timely from our observation.  
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 Although the library provides a connection property named `recover_from_connection_close`, we discourage you to use it. The reason will be explained in the Consumer section.  
 
@@ -521,14 +521,14 @@ exchange = channel.fanout(exchangeName, :auto_delete => true)
 exchange.publish("Hello World!", :content_type => "text/plain", :delivery_mode => 1)
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```ruby
 connection.close
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange without any routing key since routing key is useless in fanout exchange.    
 Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -550,7 +550,7 @@ queue.subscribe(:block => false, :manual_ack => false) do |delivery_info, metada
 end
 ```
 
-As we mentioned in the Producer section, `recover_from_connection_close` is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker. It matters for consumers because `recover_from_connection_close` will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  
+As we mentioned in the Producer section, `recover_from_connection_close` is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. It matters for consumers because `recover_from_connection_close` will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  
 
 ```ruby
 while true
@@ -660,7 +660,7 @@ java -cp ".:./rabbitmq-client.jar" Producer
 Of course, you can eventually compress your producer and consumer classes into jar files.
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```java
@@ -682,14 +682,14 @@ String message = "Hello World!";
 channel.basicPublish(exchangeName, "", MessageProperties.TEXT_PLAIN, message.getBytes());
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```java
 connection.close();
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.    
 The fourth parameter of `exchangeDeclare()` and `queueDeclare()` are auto-delete. That means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.  
@@ -854,7 +854,7 @@ import "github.com/streadway/amqp"
 The full documentation of this library is at <a href="https://godoc.org/github.com/streadway/amqp" target="_blank">https://godoc.org/github.com/streadway/amqp</a>.  
 
 ###Producer
-The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  
 
 ```go
@@ -869,14 +869,14 @@ Delivery mode = 1 means it's a non-persistent message.
 err = channel.Publish(exchangeName, "", false, false, amqp.Publishing{ContentType:  "text/plain", DeliveryMode: 1, Body: []byte("Hello World!")})
 ```
 
-At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 ```go
 connection.Close()
 ```
 
 ###Consumer
-The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> broker.  
+The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  
 
 Then consumer will declare a fanout exchange, a queue, and bind the queue to the exchange with any routing key (we use an empty key in this example). The routing key is useless in fanout exchange.  
 Durable means the exchange or queue will survive possible broker failover. It's false in this example.  
@@ -1095,7 +1095,7 @@ Copy the librabbitmq package into your working directory:
 cp librabbitmq ./
 ```
 
-Also copy all source files and Makefile from <a href="https://www.robomq.io" target="_blank">RoboMQ.io</a> SDK at <https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C> into the same directory.  
+Also copy all source files and Makefile from <a href="https://www.robomq.io" target="_blank">RoboMQ</a> SDK at <https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C> into the same directory.  
 
 Now your working directory should have the content as bellow:  
 *broadcast*  config.h  *librabbitmq*  Makefile  *one-to-one*  *request-reply*  *routing-key* *topic*
@@ -1186,11 +1186,11 @@ amqp_connection_state_t mqconnect() {
 	
     amqp_connection_state_t conn = amqp_new_connection();
     amqp_socket_t *socket = NULL;
-	char hostname[] = "localhost"; // robomq.io hostname
+	char hostname[] = "localhost"; // RoboMQ hostname
 	int port = 5672; //default
-	char user[] = "guest"; // robomq.io username
-	char password[] = "guest"; // robomq.io password
-	char vhost[] = "/"; // robomq.io account vhost
+	char user[] = "guest"; // RoboMQ username
+	char password[] = "guest"; // RoboMQ password
+	char vhost[] = "/"; // RoboMQ account vhost
     amqp_channel_t channel = 1;
     int channel_max = 0;
     int frame_max = 131072;
@@ -1261,11 +1261,11 @@ amqp_connection_state_t mqconnect() {
 	
 	amqp_connection_state_t conn = amqp_new_connection();
 	amqp_socket_t *socket = NULL;
-	char hostname[] = "localhost"; // robomq.io hostname
+	char hostname[] = "localhost"; // RoboMQ hostname
 	int port = 5672; //default
-	char user[] = "guest"; // robomq.io username
-	char password[] = "guest"; // robomq.io password
-	char vhost[] = "/"; // robomq.io account vhost
+	char user[] = "guest"; // RoboMQ username
+	char password[] = "guest"; // RoboMQ password
+	char vhost[] = "/"; // RoboMQ account vhost
 	amqp_channel_t channel = 1;
 	amqp_rpc_reply_t reply;
 	int channel_max = 0;
