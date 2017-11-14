@@ -8,7 +8,7 @@ Integrating ADP HR and Payroll to rest of the enterprise
 
 ##Integrating ADP HR and Payroll to rest of the enterprise
 
-<a href="https://www.robomq.io/">RoboMQ</a> provides connectors to ADP HR and Payroll using ADP-R (ADP Report) tool as input source of information <a href="https://www.robomq.io/index.html#thingsconnect">ThingsConnect</a> suite of adapters and connectors to make ADP data available to and from enterprise systems for payroll processing, Identity Management (including Role Based Access Control (RBAC) ) and employee life cycle management.
+<a href="https://www.robomq.io/">RoboMQ</a> provides connectors to ADP HR and Payroll using ADP-R (ADP Report) tool as input source of information <a href="https://www.robomq.io/index.html#thingsconnect">ThingsConnect</a> suite of adapters and connectors to make ADP data available to and from enterprise systems for payroll processing, Identity Management (including Role Based Access Control (RBAC) and employee life cycle management.
 
 Customers use RoboMQ's ThingsConnect suite for leading-edge integration of devices, enterprise systems, and applications to build automation of manual processes, optimization of their IT environments.
 
