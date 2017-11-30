@@ -25,6 +25,7 @@ pages:
 - ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
 - ['IotAnalytics-walkthrough.md', '', 'IoT Analytics']
 - ['connectors.md', 'Connectors', 'Connectors']
+- ['MS-Active Directory.md', 'Connectors', 'MS Active Directory']
 - ['ADP-to-AD_Connector.md', 'Connectors', 'ADP to AD']
 - ['Atlassian JIRA - Connector.md','Connectors','Atlassian JIRA']
 - ['Salesforce_Connector.md', 'Connectors', 'Salesforce']
