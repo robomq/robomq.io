@@ -6,6 +6,10 @@ As organization move to the cloud and to distributed and de-centralized architec
  
 Integrating ADP HR and Payroll to rest of the enterprise
 
+##ADP Connector
+
+The ADP connector allows businesses to optimize and automate processes by integrating data between ADP and business-critical SaaS, enterprise applications, Cloud services, mobile apps and IoT devices. Using this connector, businesses can create real-time connectivity between the ADP HCM applications and Microsoft Active Directory, LDAP, Billing, Finance, Issues/Tracking Systems and services.
+
 ##Integrating ADP HR and Payroll to rest of the enterprise
 
 <a href="https://www.robomq.io/">RoboMQ</a> provides connectors to ADP HR and Payroll using ADP-R (ADP Report) tool as input source of information <a href="https://www.robomq.io/index.html#thingsconnect">ThingsConnect</a> suite of adapters and connectors to make ADP data available to and from enterprise systems for payroll processing, Identity Management (including Role Based Access Control (RBAC) and employee life cycle management.
@@ -30,3 +34,4 @@ Once this solution is implemented the new employee has all the accounts and appl
 Optionally, organization using Single Sign On (SSO) solutions like <a href="https://www.centrify.com/">Centrify</a> benefit from single sign on and auto provisioning.
 
 ADP to AD Integration enables company IT and HR teams to focus on more strategic business priorities. RoboMQ offers its <a href="https://www.robomq.io/index.html#thingsconnect">ThingsConnect</a> suite as pre-built <a href="https://www.robomq.io/index.html#microservices">Microservices</a> for easy and rapid deployment allowing expandable systems capable of adopting change in the future without having to replace the overall on-boarding or payroll processes.
+> 
