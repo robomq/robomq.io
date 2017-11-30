@@ -31,5 +31,6 @@ pages:
 - ['Salesforce_Connector.md', 'Connectors', 'Salesforce']
 - ['Database_Connector.md', 'Connectors', 'Database']
 - ['Oracle-Database_Connector.md', 'Connectors', 'Oracle Database']
+- ['Workday-Connector.md', 'Connectors', 'Workday']
 - ['about.md', '', 'About']
 theme: readthedocs
