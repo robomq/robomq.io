@@ -27,10 +27,10 @@ pages:
 - ['connectors.md', 'Connectors', 'Connectors']
 - ['MS-Active Directory.md', 'Connectors', 'MS Active Directory']
 - ['ADP-to-AD_Connector.md', 'Connectors', 'ADP to AD']
+- ['Workday_Connector.md', 'Connectors', 'Workday to AD']
 - ['Atlassian JIRA - Connector.md','Connectors','Atlassian JIRA']
 - ['Salesforce_Connector.md', 'Connectors', 'Salesforce']
 - ['Database_Connector.md', 'Connectors', 'Database']
 - ['Oracle-Database_Connector.md', 'Connectors', 'Oracle Database']
-- ['Workday-Connector.md', 'Connectors', 'Workday']
 - ['about.md', '', 'About']
 theme: readthedocs
