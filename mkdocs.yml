@@ -1,36 +1,42 @@
 site_name: robomq.io
 site_url: http://robomq.readthedocs.org/
 site_description: User documentation and SDK for robomq.io
-site_favicon: favicon.ico
 repo_url: https://github.com/robomq/robomq.io/
 docs_dir: docs
-pages:
-- ['index.md', '', 'What is RoboMQ.io']
-- ['gettingStarted.md', '', 'Getting started']
-- ['creatingNewApplication.md', '', 'Creating a new application']
-- ['deviceIntegration.md', '', 'IoT and M2M integration']
-- ['applicationIntegration.md', '', 'Application integration']
-- ['SDK.md', '', 'SDK & example codes']
-- ['AMQP.md', 'User Guide', 'AMQP Introduction']
-- ['one-one.md', 'User Guide', 'One to one (direct) messaging']
-- ['broadcast.md', 'User Guide', 'Broadcast (publish/subscribe)']
-- ['routing-key.md', 'User Guide', 'Key based message routing']
-- ['topic.md', 'User Guide', 'Filter based routing (topic)']
-- ['request-reply.md', 'User Guide', 'Request and reply']
-- ['MQTT.md', 'User Guide', 'MQTT']
-- ['STOMP.md', 'User Guide', 'STOMP']
-- ['WebSTOMP.md', 'User Guide', 'WebSTOMP']
-- ['SSL.md', 'User Guide', 'SSL']
-- ['REST.md', 'User Guide', 'REST']
-- ['managed_file_transfer.md', 'User Guide', 'Managed File Transfer']
-- ['IotAnalytics-walkthrough.md', '', 'IoT Analytics']
-- ['connectors.md', 'Connectors', 'Connectors']
-- ['MS-Active Directory.md', 'Connectors', 'MS Active Directory']
-- ['ADP-to-AD_Connector.md', 'Connectors', 'ADP to AD']
-- ['Workday_Connector.md', 'Connectors', 'Workday to AD']
-- ['Atlassian JIRA - Connector.md','Connectors','Atlassian JIRA']
-- ['Salesforce_Connector.md', 'Connectors', 'Salesforce']
-- ['Database_Connector.md', 'Connectors', 'Database']
-- ['Oracle-Database_Connector.md', 'Connectors', 'Oracle Database']
-- ['about.md', '', 'About']
+site_name: robomq.io
+site_url: http://robomq.readthedocs.org/
+site_description: User documentation and SDK for robomq.io
+repo_url: https://github.com/robomq/robomq.io/
+docs_dir: docs
+nav:
+- 'What is RoboMQ.io': "index.md"
+- 'Getting started': "gettingStarted.md"
+- 'Creating a new application': "creatingNewApplication.md"
+- 'IoT and M2M integration': "deviceIntegration.md"
+- 'Application integration': "applicationIntegration.md"
+- 'SDK & example codes': "SDK.md"
+- 'User Guide':
+    - 'AMQP Introduction': "AMQP.md"
+    - 'One to one (direct) messaging': "one-one.md"
+    - 'Broadcast (publish/subscribe)': "broadcast.md"
+    - 'Key based message routing': "routing-key.md"
+    - 'Filter based routing (topic)': "topic.md"
+    - 'Request and reply': "request-reply.md"
+    - 'MQTT': "MQTT.md"
+    - 'STOMP': "STOMP.md"
+    - 'WebSTOMP': "WebSTOMP.md"
+    - 'SSL': "SSL.md"
+    - 'REST': "REST.md"
+    - 'Managed File Transfer': "managed_file_transfer.md"
+- 'IoT Analytics': "IotAnalytics-walkthrough.md"
+- 'Connectors':
+    - 'Connectors': "connectors.md"
+    - 'MS Active Directory': "MS-Active Directory.md"
+    - 'ADP to AD': "ADP-to-AD_Connector.md"
+    - 'Workday to AD': "Workday_Connector.md"
+    - 'Atlassian JIRA': "Atlassian JIRA - Connector.md"
+    - 'Salesforce': "Salesforce_Connector.md"
+    - 'Database': "Database_Connector.md"
+    - 'Oracle Database': "Oracle-Database_Connector.md"
+- 'About': "about.md"
 theme: readthedocs
