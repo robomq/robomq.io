@@ -22,9 +22,6 @@ The Workday<sup>&reg;</sup> to AD Integration powered by RoboMQ is one of our po
 
 > What once would take an average of two (2) hours or more of a system admin’s time to onboard, update critical employee lifecycle events, send out welcome or termination emails, create or delete accounts in various enterprise systems could now be fully automated with RoboMQ integration solution.  
 
-![](https://robomq.io/wp-content/uploads/2020/02/workday-to-AD-2-e1581631430846.png)
-*Fig. 1: Before and after business process of Employee Lifecycle Management with RoboMQ*
-
 As a full featured leading integration platform, RoboMQ provides two integration paths to achieve this functional need. 
 
 1. Workday<sup>&reg;</sup> extract file-based Integration 
@@ -41,7 +38,7 @@ Once the scheduled extracts are received on RoboMQ cloud, it is processed in nea
 Below is a detailed view of how this integration solution can manage the employee lifecycle including role-based access: 
 
 ![](https://robomq.io/wp-content/uploads/2020/03/Workday-Integration-flow.png)
-*Fig 2: Detailed view of managing employee lifecycle and role-based access*
+*Fig 1: Detailed view of managing employee lifecycle and role-based access*
 
 Here’s a breakdown of how this process typically works during the employee onboarding: 
 
@@ -70,22 +67,22 @@ Let’s go over the process of setting up this integration on Connect iPaaS. In 
 We start with the “Design” dashboard on Connect iPaaS where you have access to hundreds of APIs from leading SaaS, CRM, ERP and enterprise applications and databases.
 
 ![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen1.png)
-*Fig 3: Connect iPaaS Design Dashboard*
+*Fig 2: Connect iPaaS Design Dashboard*
 
 Below images shows the workflow setup for employee onboarding from Workday<sup>&reg;</sup> to AD. The left side panel shows the sequence API integrations with first node, Workday<sup>&reg;</sup>, being the trigger event. This node receives API call when a new employee is hired in Workday<sup>&reg;</sup>. Workday<sup>&reg;</sup> is the trigger node while Active Directory and ServiceNow are the action nodes connected to the trigger node.
 
 ![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen2.png)
-*Fig 4: Design dashboard with the workflow set up to streamline employee onboarding*
+*Fig 3: Design dashboard with the workflow set up to streamline employee onboarding*
 
 Now we go in the details of the Active Directory action node that is triggered in response to new employee hiring in Workday<sup>&reg;</sup>. Below image shows that a new user will be created in a specified Organization Unit for the new employee. 
 
 ![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen3.png)
-*Fig 5: Create New User in Active Directory action being taken within Active Directory*
+*Fig 4: Create New User in Active Directory action being taken within Active Directory*
 
 As we mentioned above, an additional ServiceNow API node is added to this workflow which will create a ServiceNow incident to notify a new hire to helpdesk. This incident can be used as a trigger to complete employee on-boarding checklist in service desk which may involve allocating laptop, mobile or other workplace setup activity. 
 
 ![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen4.png)
-*Fig 6: An incident is created in ServiceNow to notify helpdesk of a new hire*
+*Fig 5: An incident is created in ServiceNow to notify helpdesk of a new hire*
 
 As you see in the image above, you can perform data mapping from Workday<sup>&reg;</sup> fields of the employee to required data fields is the action nodes, in this case being ServiceNow. Connect iPaaS provides advanced data mapping and transformation capabilities for business or non-technical users. You can use Microsoft Excel style function that you are very much at ease to perform desired data mappings and transformations. 
 
