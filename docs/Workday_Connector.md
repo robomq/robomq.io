@@ -37,7 +37,7 @@ Once the scheduled extracts are received on RoboMQ cloud, it is processed in nea
 
 Below is a detailed view of how this integration solution can manage the employee lifecycle including role-based access: 
 
-![](https://robomq.io/wp-content/uploads/2020/03/Workday-Integration-flow.png)
+![](https://www.robomq.io/wp-content/uploads/2023/01/Workday-Integration-flow-1024x472-1.png)  
 *Fig 1: Detailed view of managing employee lifecycle and role-based access*
 
 Here’s a breakdown of how this process typically works during the employee onboarding: 
@@ -66,22 +66,22 @@ Let’s go over the process of setting up this integration on Connect iPaaS. In 
 
 We start with the “Design” dashboard on Connect iPaaS where you have access to hundreds of APIs from leading SaaS, CRM, ERP and enterprise applications and databases.
 
-![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen1.png)
+![](https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen1.png)
 *Fig 2: Connect iPaaS Design Dashboard*
 
 Below images shows the workflow setup for employee onboarding from Workday<sup>&reg;</sup> to AD. The left side panel shows the sequence API integrations with first node, Workday<sup>&reg;</sup>, being the trigger event. This node receives API call when a new employee is hired in Workday<sup>&reg;</sup>. Workday<sup>&reg;</sup> is the trigger node while Active Directory and ServiceNow are the action nodes connected to the trigger node.
 
-![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen2.png)
+![](https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen2.png)
 *Fig 3: Design dashboard with the workflow set up to streamline employee onboarding*
 
 Now we go in the details of the Active Directory action node that is triggered in response to new employee hiring in Workday<sup>&reg;</sup>. Below image shows that a new user will be created in a specified Organization Unit for the new employee. 
 
-![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen3.png)
+![](https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen3.png)
 *Fig 4: Create New User in Active Directory action being taken within Active Directory*
 
 As we mentioned above, an additional ServiceNow API node is added to this workflow which will create a ServiceNow incident to notify a new hire to helpdesk. This incident can be used as a trigger to complete employee on-boarding checklist in service desk which may involve allocating laptop, mobile or other workplace setup activity. 
 
-![](https://robomq.io/wp-content/uploads/2020/03/RTD-Screen4.png)
+![](https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen4.png)
 *Fig 5: An incident is created in ServiceNow to notify helpdesk of a new hire*
 
 As you see in the image above, you can perform data mapping from Workday<sup>&reg;</sup> fields of the employee to required data fields is the action nodes, in this case being ServiceNow. Connect iPaaS provides advanced data mapping and transformation capabilities for business or non-technical users. You can use Microsoft Excel style function that you are very much at ease to perform desired data mappings and transformations. 
@@ -94,4 +94,8 @@ To start using Connect iPaaS, simply sign up at [https://trial.robomq.io/connect
 
 In summary, the Workday<sup>&reg;</sup> to AD integration powered by RoboMQ enables your IT and HR teams to focus on more strategic business priorities. This integration provides significant cost savings on HR and already burdened system admin resources.  Once this solution is implemented, new employees will have access to the accounts and applications needed from day one, and updates to their profile in your Active Directory will happen in near real-time. This integration provides a fabulous “first day at job” experience to new hires which can improve employee satisfaction, loyalty and retention.  The automated management of role-based access ensures that the right people have access to right information at right time. Managing the termination of access makes sure there are no compliance, security or reputation risks by someone walking away with access to sensitive privileged information.  
 
-Experience the transformational power of our Workday<sup>&reg;</sup> to AD integration powered by RoboMQ for your enterprise. [Schedule a call with an integration specialist today](https://app.hubspot.com/meetings/eric-koch). 
+Experience the transformational power of our Workday<sup>&reg;</sup> to AD integration powered by RoboMQ for your enterprise. [Schedule a call with an integration specialist today](https://meetings.hubspot.com/bramh-gupta/talk-to-an-expert). 
+
+
+
+We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with Workday or any of its affiliates. The name Workday is a registered trademark of Workday. The use of the Workday trademark is for identification and reference purposes only and does not imply any association with Workday or any of its affiliates.

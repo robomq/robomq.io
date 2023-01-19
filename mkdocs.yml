@@ -33,7 +33,7 @@ nav:
     - 'Connectors': "connectors.md"
     - 'MS Active Directory': "MS-Active Directory.md"
     - 'ADP to AD': "ADP-to-AD_Connector.md"
-    - 'Workday to AD': "Workday_Connector.md"
+    - 'Workday<sup>&reg;</sup> to AD': "Workday_Connector.md"
     - 'Atlassian JIRA': "Atlassian JIRA - Connector.md"
     - 'Salesforce': "Salesforce_Connector.md"
     - 'Database': "Database_Connector.md"
