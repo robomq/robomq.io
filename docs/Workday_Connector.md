@@ -1,4 +1,4 @@
-#Workday<sup>&reg;</sup> to Active Directory (AD) Integration Powered by RoboMQ
+#Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> to Active Directory (AD) Integration Powered by RoboMQ
 
 [Workday<sup>&reg;</sup>](https://www.workday.com/) is a leading enterprise Software-as-a-Service (SaaS) application provider for human resource, finance, and Enterprise Resource Planning (ERP) teams. Compared to traditional on-premise Human Capital Management (HCM) and finance applications, Workday<sup>&reg;</sup> is [often recognized for its quick implementation and ease of use](https://searchhrsoftware.techtarget.com/definition/Workday), which makes the platform attractive to citizen integrators and line of business users.  
 
@@ -14,7 +14,7 @@ With Workday’s<sup>&reg;</sup> Human Capital Management (HCM), HR teams can pe
 | Improved “First day at Job” experience | Prevent Security and Reputation risk with role-based access control | Real time sync between HRIS, Active Directory or Azure AD |
 
 
-##RoboMQ's Workday<sup>&reg;</sup> Connector
+##RoboMQ's Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> Connector
 
 For many organizations, the process to get employees onboarded efficiently is a challenge. There tends to be a lot of moving parts behind the scenes to ensure employees have access to the tools and technologies needed to hit the ground running. System administrators are also often overloaded with related service desk tickets. Creating and/or updating user identities and assigning role-based access to employees can be tedious and costly work for them.  
 
@@ -29,7 +29,7 @@ As a full featured leading integration platform, RoboMQ provides two integration
 
 You could choose either of the two approaches based on your Workday setup or preferences. 
 
-##Workday<sup>&reg;</sup> extract file-based integration to AD
+##Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> extract file-based integration to AD
 
 The Workday<sup>&reg;</sup> file extract-based integration approach is a pretty straightforward process. Using this integration approach, scheduled extracts are setup to run on Workday<sup>&reg;</sup> on a periodic basis. These scheduled extracts can be setup to automatically run for new employees being hired, terminated employees, and other employee lifecycle event that need to update Active Directory (AD) such as employee role, location or reporting structure changes. The output format of these scheduled extract is typically CSV (Comma Separated Values). These extracts are sent automatically to RoboMQ for processing.  
 
@@ -56,7 +56,7 @@ In addition to the Workday<sup>&reg;</sup> to AD or Azure AD integration, additi
 
 For more information or to set up a discussion on this integration solution, [schedule an appointment with a RoboMQ integration solution specialist today!](https://app.hubspot.com/meetings/eric-koch) 
 
-## Workday<sup>&reg;</sup> to AD API and Data Integration Approach Using Connect iPaaS 
+## Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> to AD API and Data Integration Approach Using Connect iPaaS 
 
 [Connect iPaaS](https://www.robomq.io/connect/) is the no-code citizen integrator approach to API and data integration between leading SaaS, EPR, CRM and operations applications on cloud or on-premise. Using simple, easy and intuitive drag-and-drop capabilities, users of Connect can create integration workflows that streamline and automate business processes in minutes with absolutely no coding! 
 
@@ -98,4 +98,4 @@ Experience the transformational power of our Workday<sup>&reg;</sup> to AD integ
 
 
 
-We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with Workday or any of its affiliates. The name Workday is a registered trademark of Workday. The use of the Workday trademark is for identification and reference purposes only and does not imply any association with Workday or any of its affiliates.
+<i style="font-size:0.85rem;">We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with Workday or any of its affiliates. The name Workday is a registered trademark of Workday. The use of the Workday trademark is for identification and reference purposes only and does not imply any association with Workday or any of its affiliates.
