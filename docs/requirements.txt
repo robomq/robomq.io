@@ -3,4 +3,3 @@ paho-mqtt
 stompest
 Sequence
 collection
---upgrade dbus-python
