@@ -11,7 +11,6 @@ build:
     python: "3.11"
   commands:
   - asdf global python 3.11.4
-  - python3 -m pip install --upgrade --no-cache-dir pip setuptools
   - python3 -m pip install --upgrade --no-cache-dir pillow mock==1.0.1 alabaster>=0.7,<0.8,!=0.7.5 commonmark==0.9.1 recommonmark==0.5.0 mkdocs==0.17.3
   - python3 -m pip install --exists-action=w --no-cache-dir -r docs/requirements.txt
   - python3 -m mkdocs build --clean --site-dir $READTHEDOCS_OUTPUT/html --config-file mkdocs.yml
