@@ -4,9 +4,7 @@ site_description: User documentation and SDK for robomq.io
 repo_url: https://github.com/robomq/robomq.io/
 docs_dir: docs
 site_name: robomq.io
-site_url: http://robomq.readthedocs.org/
 site_description: User documentation and SDK for robomq.io
-repo_url: https://github.com/robomq/robomq.io/
 docs_dir: docs
 nav:
 - 'What is RoboMQ.io': "index.md"
