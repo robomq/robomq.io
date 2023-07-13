@@ -3,4 +3,3 @@ paho-mqtt
 stompest
 sequence
 collection
-readthedocs
