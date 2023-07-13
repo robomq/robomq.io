@@ -4,3 +4,7 @@ stompest
 sequence
 collection
 schema
+config
+DEFAULT_SCHEMA
+Sequence
+config_options
