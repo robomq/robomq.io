@@ -2,4 +2,3 @@ pika
 paho-mqtt
 stompest
 Sequence
-collections
