@@ -1,5 +1,5 @@
 pika
 paho-mqtt
 stompest
-Sequence
+sequence
 collection
