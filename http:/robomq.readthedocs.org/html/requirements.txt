@@ -1,5 +1,0 @@
-pika
-paho-mqtt
-stompest
-sßequence
-collection
