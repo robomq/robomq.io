@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/deviceIntegration/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>IoT and M2M integration - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "IoT and M2M integration";
+        var mkdocs_page_input_path = "deviceIntegration.md";
+        var mkdocs_page_url = "/deviceIntegration/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">IoT and M2M integration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#raspberry-pi-as-an-example-device">Raspberry Pi as an example device</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#getting-raspberry-pi-ready">Getting raspberry pi ready</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisite">Prerequisite</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raspberry-pi">Raspberry Pi</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input-device">Input device</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#power-source">Power source</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#monitoroptional">Monitor(optional)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sensors">Sensors:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#breadboard-and-jumper-wires">Breadboard and jumper wires</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#python">Python</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raspberry-pi-and-sensors">Raspberry Pi and sensors</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dht11-humidity-temperature-sensor">DHT11 humidity &amp; temperature sensor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#light-sensor">Light sensor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pir-motion-sensor">PIR motion sensor</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#integrate-raspberry-pi-with-robomq">Integrate Raspberry Pi with RoboMQ</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#messaging-with-amqp">Messaging with AMQP</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#create-producer">Create Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#edit-sensor-programs">Edit Sensor Programs</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#messaging-with-mqtt">Messaging with MQTT</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#messaging-with-stomp">Messaging with STOMP</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>IoT and M2M integration</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/deviceIntegration.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="iot-and-m2m-integration">IoT and M2M Integration</h1>
+<p>Devices, sensors and systems connecting together are driving the next generation of applications creating the Internet of Things (IoT). <a href="https://www.robomq.io" target="_blank">RoboMQ</a> provides an open standard based platform to connect your devices and sensors to the back-end applications, systems, processes and people to build the nest big thing. You can work with message queue protocols like MQTT ( MQ for Telemetry), AMQP (Advanced Message Queue Protocol) and STOMP ( Simple Text Oriented Messaging Protocol) while using <a href="https://www.robomq.io" target="_blank">RoboMQ</a>.</p>
+<p>The protocols supported by <a href="https://www.robomq.io" target="_blank">RoboMQ</a> can run on very small footprint devices using a choice among languages that are supported by device OS and profile.</p>
+<p>Common choices of devices include Raspberry Pi, Audrino, Beaglebone and mBed based platforms. The most basic requirement is the support for running one languages and network connectivity. You should however be cognizant of the device footprint when choosing the message queue protocol.</p>
+<p>For the example case, we have chosen Raspberry Pi device running a small Linux kernel (a variant of Debian Linux) and Python programming language.</p>
+<h2 id="raspberry-pi-as-an-example-device">Raspberry Pi as an example device</h2>
+<p>The Raspberry Pi is a credit-card sized micro-computer that plugs into your TV and a keyboard. It is a capable little computer which can be used in electronics projects. In this guide you will be introduced how to use raspberry pi to acquire information from real-world via sensors and other electrical components, and then integrate raspberry pi into <a href="https://www.robomq.io" target="_blank">RoboMQ</a> as data producer.</p>
+<p><img alt="RaspberryPi" src="../images/raspberryPi.jpg" /></p>
+<h3 id="getting-raspberry-pi-ready">Getting raspberry pi ready</h3>
+<p>There may be some steps to do when you have all the devices and materials. For example you need to install a system into the micro-SD card which your raspberry pi will be boot from.</p>
+<p>For detailed instructions on how to setup a raspberry pi, please go to the official raspberry pi document page.</p>
+<p><a href="https://www.raspberrypi.org/documentation/" target="_blank">Raspberry Pi Documentation</a></p>
+<h3 id="prerequisite">Prerequisite</h3>
+<h3 id="raspberry-pi">Raspberry Pi</h3>
+<p>Although any model of raspberry pi will work, we recommend the newest version. In this documentation we will use the model raspberry pi B+ for the example. You can buy a raspberry pi from their official site:</p>
+<p><a href="https://www.raspberrypi.org/products/" target="_blank">raspberry products</a></p>
+<h3 id="input-device">Input device</h3>
+<p>For raspberry B+ there are 4 USB ports on the board. You can plug in a USB keyboard and mouse to control your raspberry pi.</p>
+<h3 id="power-source">Power source</h3>
+<p>A typical Android cellphone charger is good for raspberry pi.</p>
+<h3 id="monitoroptional">Monitor(optional)</h3>
+<p>Raspberry Pi has an HDMI port for display. It may be easier and more comfortable for you to work with your raspberry pi directly on it's own system GUI. But if you do not, there is still no problem because you can also use you laptop to ssh the raspberry and control it in the terminal. For tutorial how to ssh a raspberry you can refer to Adafruit Learning System:</p>
+<p><a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-6-using-ssh" target="_blank">https://learn.adafruit.com/adafruits-raspberry-pi-lesson-6-using-ssh</a></p>
+<h3 id="sensors">Sensors:</h3>
+<p>Raspberry pi is compatible with a lot of sensors. In our documentation we are going to show 3 sensors for demonstration: DHT11 humidity &amp; temperature sensor, PIR motion sensor and light sensor. You can get these sensors from online shopping sites (Amazon, ebay, etc).</p>
+<h3 id="breadboard-and-jumper-wires">Breadboard and jumper wires</h3>
+<p>These are used to connect sensors to the raspberry pi. You can also get these from online shopping sites.</p>
+<p><img alt="components" src="../images/components.jpg" /></p>
+<h3 id="python">Python</h3>
+<p>This is the language we recommend for raspberry pi-sensor programming. As it's handy, simple, and is supported by raspberry pi. Python 2.7.3 or above is preferred.</p>
+<h3 id="raspberry-pi-and-sensors">Raspberry Pi and sensors</h3>
+<p><img alt="Connected Sensors" src="../images/connectedSensors.jpg" />
+With raspberry pi we can easily develop some sensor programs. In this part we are going to show 3 examples: PIR motion sensor, DHT11 humidity &amp; temperature sensor, and light sensor. Before integrating these sensors into <a href="https://www.robomq.io" target="_blank">RoboMQ</a>, we would try them locally on your raspberry. You can see how them work in your raspberry pi LXTerminal.  </p>
+<p>For details about how to set up and run the sensors with raspberry pi, please go to the <strong>Adafruit Learning System</strong>.  </p>
+<h3 id="dht11-humidity-temperature-sensor">DHT11 humidity &amp; temperature sensor</h3>
+<p><img alt="DHT sensor" src="../images/DHTSensor.jpg" /></p>
+<p><a href="https://learn.adafruit.com/downloads/pdf/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging.pdf" target="_blank">https://learn.adafruit.com/downloads/pdf/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging.pdf</a></p>
+<h3 id="light-sensor">Light sensor</h3>
+<p><img alt=" Light sensor" src="../images/LightSensor.jpg" /></p>
+<p><a href="https://learn.adafruit.com/basic-resistor-sensor-reading-on-raspberry-pi/basic-photocell-reading" target="_blank">https://learn.adafruit.com/basic-resistor-sensor-reading-on-raspberry-pi/basic-photocell-reading</a></p>
+<h3 id="pir-motion-sensor">PIR motion sensor</h3>
+<p><img alt="Motion sensor" src="../images/motionSensor.jpg" /></p>
+<p><a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview" title="PIR motion sensor">https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview</a>
+<a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview" target="_blank">https://learn.adafruit.com/adafruits-raspberry-pi-lesson-12-sensing-movement/overview</a></p>
+<h2 id="integrate-raspberry-pi-with-robomq">Integrate Raspberry Pi with RoboMQ</h2>
+<p>After you have finished setting it up and testing it locally, you may start to think: Why would I do this? What can I do with this in real world? </p>
+<p>Okay, let's imagine a scenario. You are an employee in a water &amp; sewer utility company. You need a system to monitor your water wells. You need temperature, humidity, luminance, and intruder detection real-time data to be read as it happens and, for some, at a defined interval. And for the convenience of management and ability to take immediate actions, you need all the data to be visible in your control center.</p>
+<p>As an smart engineer, you have already developed the sensor data collecting programs, as discussed in sections above, by working with raspberry pi and sensors locally. What you need now is to add some simple code to send the data read from the sensors via <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> dashboard application so that you can easily open the dashboard and view data charts.</p>
+<p>For sending data, the main job is to create a producer module, then call its send method in your raspberry pi sensor programs. Follow the next section to build this application. You will find it easy, handy and fun !!!  </p>
+<blockquote>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> has now enhanced and packaged the sensorProducer module introduced bellow. You may either directly use our package or build the module yourself following the next section. The Python pip package is available at <a href="https://s3.amazonaws.com/public.robomq/packages/sensorProducer.tar.gz">https://s3.amazonaws.com/public.robomq/packages/sensorProducer.tar.gz</a>. Read our blog at <a href="http://robomq.blogspot.com/2015/05/device-to-dashboard-real-time-analytics.html">http://robomq.blogspot.com/2015/05/device-to-dashboard-real-time-analytics.html</a> for specific use guide.  </p>
+</blockquote>
+<h2 id="messaging-with-amqp">Messaging with AMQP</h2>
+<h4 id="create-producer">Create Producer</h4>
+<p>First, launch your raspberry pi and create a file named "producer.py", then paste the following code into the file:</p>
+<pre><code class="language-python">import sys, os, json, pika
+
+stationID = &quot;well1&quot;
+coordinate = [-89, 64]
+server = &quot;hostname&quot;
+port = &quot;5672&quot;
+vhost = &quot;waterSupply&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;sensors&quot;
+parameters = pika.URLParameters(&quot;amqp://&quot; + username + &quot;:&quot; + password + &quot;@&quot; + server + &quot;:&quot; + port + &quot;/&quot; + vhost)
+
+def connect():
+    try:
+        connection = pika.BlockingConnection(parameters)
+        channel = connection.channel()
+        return channel
+    except:
+        print &quot;Error: Failed to connect broker&quot;
+
+channel = connect() #connect to broker
+
+#publish message
+def send(msgJson):
+    global channel
+    msgJson[&quot;stationID&quot;] = stationID
+    msgJson[&quot;coordinate&quot;] = coordinate
+    properties = pika.BasicProperties(content_type = &quot;application/json&quot;, delivery_mode = 1)
+    try:
+        channel.basic_publish(&quot;amq.topic&quot;, topic, json.dumps(msgJson, ensure_ascii=False), properties)
+    except:
+        print &quot;Error: Failed to send message&quot;
+        channel = connect() #reconnect to broker
+</code></pre>
+<p>It will be the producer module that you are going to import in your raspberry pi-sensor codes to send messages to <a href="https://www.robomq.io" target="_blank">RoboMQ</a>. As you can see, the producer module contains 2 methods. First is the <code>connect()</code> method that is in charge of establishing connection to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. It will automatically reconnect on exception too. Another method is <code>send()</code> which publishes messages through <a href="https://www.robomq.io" target="_blank">RoboMQ</a> to worker consumers running on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> server. (You always have the option to build your own worker consumers to handle messages sent by yourself).<br />
+In any of your sensor programs, just call <code>send()</code> function to send the data collection to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  A message should be a JSON object containing key-value pairs. Now we are all set for the producer module, after this we are going add a few lines in the sensor programs.</p>
+<h4 id="edit-sensor-programs">Edit Sensor Programs</h4>
+<p>In this part we are going to combine the DHT11 sensor and the Light sensor into one program, just for clean-wise.</p>
+<p>Edit your DHT11 sensor and Light sensor program as bellow:</p>
+<pre><code class="language-python">import RPi.GPIO as gpio
+import Adafruit_DHT
+import time
+import os
+import sys
+import producer      
+
+DEBUG = 1
+gpio.setmode(gpio.BCM)
+
+htsensor = Adafruit_DHT.DHT11
+htpin = 4
+lpin=21
+
+while True:
+   humidity, temperature = Adafruit_DHT.read_retry(htsensor, htpin)
+   if humidity is not None and temperature is not None:
+       temperature = temperature * 9 / 5 + 32
+       print 'Temp={0:0.1f}*F  Humid={1:0.1f}%'.format(temperature, humidity)
+   else:
+       print 'Failed to get reading. Try again!'
+
+reading = 0
+gpio.setup(lpin, gpio.OUT)
+gpio.output(lpin, gpio.LOW)
+time.sleep(1)
+gpio.setup(lpin, gpio.IN)
+while (gpio.input(lpin) == gpio.LOW):
+   reading += 1
+luminance = 100 - reading
+print ('Luminance='), luminance
+
+message = {&quot;time&quot;: time.time() * 1000}
+message[&quot;temperature&quot;] = temperature
+message[&quot;humidity&quot;] = humidity
+message[&quot;luminance&quot;] = luminance
+try:
+   producer.send(message)
+except:
+   print &quot;Error: failed to send data through producer&quot;
+
+time.sleep(30) #interval
+</code></pre>
+<p>And then edit your PIR motion sensor as bellow:</p>
+<pre><code class="language-python">import RPi.GPIO as gpio
+import time
+import producer
+
+gpio.setmode(gpio.BOARD)
+mpin = 31
+gpio.setup(mpin,gpio.IN)
+
+while True:
+   gpio.wait_for_edge(mpin, gpio.RISING)
+   print('Intruder detected')
+   message = {&quot;time&quot;: time.time() * 1000}
+   message[&quot;intruder&quot;] = 1
+   try:
+       producer.send(message)
+   except:
+       print &quot;Error: failed to send data through producer&quot;
+   gpio.remove_event_detect(mpin)
+
+   gpio.wait_for_edge(mpin, gpio.FALLING)
+   print('Intruder left or froze')
+   message = {&quot;time&quot;: time.time() * 1000}
+   message[&quot;intruder&quot;] = 0
+   try:
+       producer.send(message)
+   except:
+       print &quot;Error: failed to send data through producer&quot;
+   gpio.remove_event_detect(mpin)
+</code></pre>
+<p>Now all your data will be sent via <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker to the our dashboard application. The only thing you need to accomplish is just open your dashboard in a Web browser.    </p>
+<h2 id="messaging-with-mqtt">Messaging with MQTT</h2>
+<p>In the example above we implemented sending message by creating a producer module in AMQP protocol and call its <code>send()</code> function in the sensor program. However there are more than one way we can build a producer as <a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports multiple protocols. Now we are going to show you one more example how to send messages using the MQTT protocol.</p>
+<p>You only need to change the producer module. Modify the "producer.py" as bellow:</p>
+<pre><code class="language-python">import sys, os, json
+import paho.mqtt.client as mqtt
+
+stationID = &quot;well1&quot;
+coordinate = [-89, 64]
+server = &quot;hostname&quot;
+port = 1883
+vhost = &quot;waterSupply&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;sensors&quot;
+
+def connect():
+    try:
+        client = mqtt.Client(client_id=&quot;&quot;, clean_session=True, userdata=None, protocol=&quot;MQTTv31&quot;)
+        client.username_pw_set(vhost + &quot;:&quot; + username, password)
+        client.connect(server, port, keepalive=60, bind_address=&quot;&quot;)
+        client.loop_start() #start network loop
+        return client
+    except:
+        print &quot;Error: Failed to connect broker&quot;
+
+def reconnect():
+    global client
+    if (client):
+        client.loop_stop() #stop the current loop before reconnecting
+        client.disconnect()
+    client = connect()
+
+client = connect() #connect to broker
+
+#publish message
+def send(msgJson):
+    global client
+    msgJson[&quot;stationID&quot;] = stationID
+    msgJson[&quot;coordinate&quot;] = coordinate
+    try:
+        result = client.publish(topic, payload=str(json.dumps(msgJson, ensure_ascii=False)), qos=1, retain=False)
+        if (result[0] == 4):
+            reconnect() #reconnect to broker
+    except:
+        print &quot;Error: Failed to send message&quot;
+        reconnect() #reconnect to broker
+</code></pre>
+<p>Since the difference is limited in the producer module, there is no need to modify the sensor programs.</p>
+<h2 id="messaging-with-stomp">Messaging with STOMP</h2>
+<p>For STOMP producer module, no change is required for sensor programs either, only change your "producer.py" as bellow:</p>
+<pre><code class="language-python">import sys, os, json
+from stompest.config import StompConfig
+from stompest.sync import Stomp
+
+stationID = &quot;well1&quot;
+coordinate = [-89, 64]
+server = &quot;hostname&quot;
+port = &quot;61613&quot;
+vhost = &quot;waterSupply&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;sensors&quot;
+
+def connect():
+    try:
+        client = Stomp(StompConfig(&quot;tcp://&quot; + server + &quot;:&quot; + port, login = username, passcode = password, version = &quot;1.2&quot;))
+        client.connect(host = vhost)
+        return client
+    except:
+        print &quot;Error: Failed to connect broker&quot;
+
+client = connect() #connect to broker
+
+#publish message
+def send(msgJson):
+    global client
+    msgJson[&quot;stationID&quot;] = stationID
+    msgJson[&quot;coordinate&quot;] = coordinate
+    try:
+        client.send(&quot;/topic/&quot; + topic, json.dumps(msgJson, ensure_ascii=False), {&quot;content-type&quot;: &quot;application/json&quot;})
+    except:
+        print &quot;Error: Failed to send message&quot;
+        client = connect() #reconnect to broker
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../creatingNewApplication/" class="btn btn-neutral float-left" title="Creating a new application"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../applicationIntegration/" class="btn btn-neutral float-right" title="Application integration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../creatingNewApplication/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../applicationIntegration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

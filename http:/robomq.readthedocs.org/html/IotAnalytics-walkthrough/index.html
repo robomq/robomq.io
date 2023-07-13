@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/IotAnalytics-walkthrough/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>IoT Analytics - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "IoT Analytics";
+        var mkdocs_page_input_path = "IotAnalytics-walkthrough.md";
+        var mkdocs_page_url = "/IotAnalytics-walkthrough/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">IoT Analytics</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>IoT Analytics</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/IotAnalytics-walkthrough.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>IoT Analytics</p>
+<h2 id="introduction">Introduction</h2>
+<p>In most cases watching is better than reading! While avid novelists might disagree, we in the world of Internet and Things (IoT) would prefer an effective, precise and intelligent visual representation of the plethora of information continuously generated by our beloved sensors.
+RoboMQ IoT analytics does exactly this and much more. RoboMQ IoT Analytics helps you efficiently monitor and elegantly represent your data while providing intelligent, selective and crucial information in a simple and legible manner.
+Keep a close watch on all your devices, monitor your sensors,  organize your data visualizations and get total and seamless control over your IoT analytics.</p>
+<ul>
+<li><a href="#overview-and-advantages">Overview and advantages</a></li>
+<li><a href="#iot-analytics-flow">IoT Analytics Flow</a></li>
+<li><a href="#iot-analytics-producer-set-up">IoT Analytics Producer Setup</a></li>
+<li><a href="#familiarize-with-the-ui">Familiarize with the UI</a></li>
+<li><a href="#set-up-datasources">Set Up datasources</a></li>
+<li><a href="#create-dashboards">Create Dashboards</a></li>
+<li><a href="#add-panels">Add Panels</a></li>
+<li><a href="#setup-the-panel">Setup the Panel</a></li>
+<li><a href="#panel-metrics">Panel Metrics</a></li>
+<li><a href="#top-bar">Top Bar</a></li>
+<li><a href="#timeline-editor">Timeline Editor</a></li>
+<li><a href="#final-my-dashboard">Final My Dashboard</a></li>
+</ul>
+<h2 id="overview-and-advantages">Overview and advantages</h2>
+<p>Jack runs a business of providing storages and warehouses for commodity retailers, initially, with a small but growing business he was fine with physically monitoring the warehouses. But as the business grew, so did the complexity of managing it and the sheer scope of parameters and locations to monitor increased as well.</p>
+<p>Jack then set up several sensors in his warehouses collecting data like temperature, humidity, movements, luminance, power consumption etc which replaced his age old method of collecting this data manually with specific handheld devices. These new sensors constantly collect the data and send it as messages to <a href="https://www.robomq.io" target="_blank">RoboMQ IoT Integration Platform</a>. Now all that he needs is an easy to use app to monitor and analyze the data collected by these sensors anywhere and at anytime.
+<a href="https://www.robomq.io/index.html#iotanalytics" target="_blank">RoboMQ IoT Analytics</a> does exactly the same and much more... Jack can visualize his data, follow the trends it takes and manage his business much more effectively with this analytics. He simply opens his RoboMQ IoT Analytics application from his computer, phone or tablet and monitors his warehouses with a few clicks, saving himself a lot of time and money which was spent physically monitoring the warehouses  with help of few employees. Not only the old method time consuming but it could also be inaccurate at times and the constant monitoring was almost impossible.</p>
+<p>With IoT Analytics, it’s as easy as it gets. Now he can act on the slightest irregularity in the data, delegate his employees at the right place on the right time all while relaxing in his office, saving effort, money and time. He can also add other users to the application with limited permissions so they can view the data and report or act accordingly.</p>
+<p>Simple yet elegant, the <a href="https://www.robomq.io/index.html#iotanalytics" target="_blank">IoT Analytics</a> allows Jack to get total automated control with no programming needed!!!  A simple producer code is all that is needed to send the data from sensors to the RoboMQ and IoT Analytics takes care of the rest. Jack simply drags and drops the widgets that he wants for visualization and he is all set to go..</p>
+<h2 id="iot-analytics-schematics">IoT Analytics schematics</h2>
+<p><img alt="login page" src="../images/iot-flow.png" /></p>
+<p>The Sensors send data as AMQP, MQTT or STOMP messages to RoboMQ message Broker using a simple producer code.</p>
+<p>The IoT Analytics listener constantly listens for these messages and writes to the respective real time analytics database.</p>
+<p>The IoT analytics dashboard can easily be built by simple drag and drop of visualization components like  graphs, single-stats or tables with continuous data feed from sensors with guaranteed delivery.</p>
+<p>Now that we have seen the flow, let’s dive a bit deeper into IoT Analytics, learn and understand the key components and while at it, help Jack here set up the system for his warehouses.
+Let’s start with helping him set up a producer which will send his data to the MQTT broker on RoboMQ. You always have the option to use any other protocol like STOMP, HTTP/REST, AMQP or JMS.</p>
+<h2 id="iot-analytics-producer-set-up">IoT Analytics Producer Set Up</h2>
+<p>As per the flow, we will first make a producer for Jack’s devices. Its very simple...</p>
+<p>In order to set up Message Producer on devices to see the generated data on your dashboard, you will need to run a 'message producer' script on the devices to send data to RoboMQ. In this guide, we will walk you through a simple producer example.</p>
+<h3 id="configuration">Configuration</h3>
+<blockquote>
+<p>To configure the producer to send data to RoboMQ broker, you will need to provide the following information in a JSON format file named producer.config</p>
+</blockquote>
+<pre><code>{
+"deviceID": "well1",
+"broker":
+{
+"host": "trial.robomq.io",
+"vhost": "test",
+"username": "test",
+"password": "test"
+}
+}
+</code></pre>
+<p>deviceID is a unique identifier of a device. Fill out the broker section with your tenant credentials provided by RoboMQ.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Producer can talk to RoboMQ using any messaging protocol. In this example, we are using MQTT. The only dependency for the producer is to install an open-source client implementation of MQTT. We will use <a href="https://www.eclipse.org/paho/" target="_blank">paho</a> from eclipse foundation .
+To install paho module on a IoT device, simply run:</p>
+<blockquote>
+<p>pip install paho-mqtt</p>
+</blockquote>
+<p>Core producer functions are written in python module "producerMQTT.py". This module is used by the program sending device sensor data. It has functions for reading the configuration file, and defines methods for connecting to broker and sending the messages. If not specified, messages will be sent using the default routing key called "sensors".</p>
+<h3 id="device-simulator">Device Simulator</h3>
+<p>If you have access to a physical device, great...Else you can use a python simulator code for this exercise. With a device you can write a similar producer/sender program like the simulator program described below.</p>
+<p>The simulator program "sensorSimulator.py" sends randomly generated data to simulate information sent by the sensor. The script imports producerMQTT module and connect to RoboMQ. This program generates random numbers and assigns them to the measurements like temperature, humidity etc.. This is to simulate a device collecting data from its sensors. In the real world, you will simply write your own code to read data from sensors and put them in the message payload.</p>
+<pre><code>message = {}
+message["intruder"] = random.randint(0, 1)
+message["temperature"] = random.uniform(32, 212)
+message["humidity"] = random.uniform(0, 100)
+message["luminance"] = random.uniform(0, 100)
+</code></pre>
+<p>Once the message payload is constructed, it calls the send() method in producerMQTT to send the above data to RoboMQ.</p>
+<h2 id="build-analytics-dashboard">Build Analytics dashboard</h2>
+<h3 id="familiarize-with-the-ui">Familiarize with the UI</h3>
+<p>Once you are provisioned for the trial or a paid subscription to RoboMQ, you get an email with login credentials and the links to the IoT Analytics application. The link will be something like the following: https://trial.robomq.io/iotanalytics/</p>
+<p>Once you click on it, you will be redirected to the following login page. If you have not signed up, you can sign up for a <a href="https://robomq.io/index.html#free" target="_blank">Free Trial</a> at RoboMQ website.</p>
+<h4 id="login-page">Login page</h4>
+<p><img alt="login page" src="../images/iot-login.png" /></p>
+<p>Following is the main page seen after you log in. The Home page has 3 major sections:</p>
+<ol>
+<li><strong>Main menu</strong>: On left hand side we see the main control menu which contains options such as Datasources, Dashboards, User Profile, Organization and Sign Out link.</li>
+<li><strong>Navigation Bar</strong>: On the top, we see the blue navigation bar which has the timeline editor and few other options and settings related to the dashboards.</li>
+<li><strong>Dashboard List</strong>: The most prominent section you will  see here is the dashboard list, which allows the user to bookmark a few dashboards for quick access. These chosen dashboards will be shown under the "Starred" Dashboards section.</li>
+</ol>
+<h4 id="main-page">Main page</h4>
+<p><img alt="home page" src="../images/iot-home.png" /></p>
+<blockquote>
+<p>Your RoboMQ IoT Analytics comes provisioned with a datasource, two dashboards - one a "Panel Type" and another "Sample Dashboard"</p>
+</blockquote>
+<h4 id="panel-types-dashboard">Panel Types dashboard</h4>
+<p><img alt="Panel type dashboard" src="../images/paneltype.png" /></p>
+<p>Panel type dashboard is there to show the different types of panels available in the app. Since the dashboard is editable, feel free to play around and get familiar with the components of the panels.</p>
+<h4 id="sample-dashboard">Sample Dashboard</h4>
+<p><img alt="sample dashboard" src="../images/sample-dashboard.png" /></p>
+<p>Sample dashboard is a large dashboard containing panels of all kinds of graphs, which we will use to play around and get ideas for making our own dashboards.</p>
+<p><strong>Now let’s make a simple dashboard with the following steps:</strong></p>
+<h3 id="set-up-the-datasources">Set Up the datasources</h3>
+<p>The datasources are the source of data from which the application plots the graphs and widgets. It is a real time time-series database to which RoboMQ listeners are continuously pumping your sensor data. We have got you covered here, because we have included a complete datasource for you and it is named after your vhost or tenant ID.</p>
+<h3 id="create-dashboards">Create Dashboards</h3>
+<p>Now we can go ahead and create a new dashboard as shown in the image below by clicking "Home" button followed by "+NEW" button</p>
+<p><strong>Create Dashboard</strong>
+<img alt="create dashboard" src="../images/create-dashboard.png" /></p>
+<h3 id="add-panels">Add Panels</h3>
+<p>Once we have created an empty dashboard, we can add row using the "ADD ROW" button and in each row we can add panels using the green button on the left-top-corner of each row. The following image illustrates it, in the example below we are creating a panel of type graph.</p>
+<p><strong>Create Panel</strong>
+<img alt="create panel" src="../images/create-panel.png" /></p>
+<h3 id="setup-the-panel">Setup the Panel</h3>
+<p>As we can see in the images below, the panel setup has several tabs-</p>
+<ol>
+<li><strong>General:</strong>  General defines parameters like name of the panel, the span that it should cover in the row, height etc.</li>
+<li><strong>Metrics:</strong> Metrics is the key tab which defines what metric, measurement or query the panel is to display.</li>
+<li><strong>Axes &amp; Grid:</strong> Here we can customize how the graph looks, we can name the axes, change the units on the Y axes, add visual thresholds etc.   </li>
+<li><strong>Display Styles:</strong> This tab can be used to define how the graph lines look. Its very useful when we have many series in the same panel.</li>
+<li><strong>Time Range:</strong> Time range can be used to define offsets in time Axis relative to the timeline defined by the timeline Editor available at the Nav bar.</li>
+</ol>
+<p><strong>Panel Setup</strong>
+<img alt="graph-setup: Metrics" src="../images/graph-setup.png" /></p>
+<blockquote></blockquote>
+<h3 id="panel-metrics">Panel Metrics</h3>
+<p>In the above images, we can see the control is already in the metrics tab. First chose which datasource we are getting the data from, simply choose the one we have made for you named after your tenant name.
+Now choose which measurement to read from at "FROM", it will automatically populate a list of measurements available from your datasource.
+After choosing the measurement, chose the field that you are looking for at "SELECT”. The UI will automatically list all existing fields under the above selected measurement for you to chose from.</p>
+<h3 id="save-the-dashboard-and-set-the-timeline">Save the dashboard and set the timeline</h3>
+<p>Now you are almost done and ready to save the dashboard and set the timeline.</p>
+<h4 id="top-bar">Top Bar</h4>
+<p><img alt="top navigation bar" src="../images/topbar.png" />
+You can create as many panels and rows as setup above. Setup and ensure effective visualization of the required metrics or measurements.</p>
+<p><strong>Save the dashboard by clicking on the save icon on the top nav bar.</strong> If needed, we can also delete the dashboard from the settings icon.</p>
+<h3 id="timeline-editor">TimeLine Editor</h3>
+<p>In the image below, we see the timeline Editor at the right side corner of the top nav-bar. This lets us scale the time axis as per our requirement giving us a viewing range of as early a last five minutes to as long as past 5 years.</p>
+<p><img alt="TimeLine Editor" src="../images/timelineeditor.png" />
+In the timeline editor, we see the ranges it provides and also the refresh setup that refreshes the panels after the set interval. The icon marked by the light bulb sign refreshes the timeline when you click it.</p>
+<h2 id="finally-your-iot-dashboard">Finally your IoT dashboard</h2>
+<p><img alt="Final My Dashboard" src="../images/my-dashboard.png" />
+Above we see the final example dashboard which monitors the different sensors in two Warehouses.</p>
+<p>This is just a brief introduction to the unlimited potential IoT Analytics brings for the customers using IoT devices in their business. You can correlate and visualize your device and sensor data with few clicks and no programming needed...</p>
+<p>Feel free to browse through the IoT Analytics and explore the application. If you would like to try IoT Analytics for yourself go to our website and request a <a href="https://robomq.io/index.html#free" target="_blank">Free Trial</a>.</p>
+<p>For more information on RoboMQ and its product features, check out our website <a href="https://www.robomq.io" target="_blank">RoboMQ</a> or email us at sales@robomq.io.  </p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../managed_file_transfer/" class="btn btn-neutral float-left" title="Managed File Transfer"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../connectors/" class="btn btn-neutral float-right" title="Connectors">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../managed_file_transfer/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../connectors/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

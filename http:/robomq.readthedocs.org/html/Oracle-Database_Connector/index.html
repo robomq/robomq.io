@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/Oracle-Database_Connector/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Oracle Database - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Oracle Database";
+        var mkdocs_page_input_path = "Oracle-Database_Connector.md";
+        var mkdocs_page_url = "/Oracle-Database_Connector/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Oracle Database</a>
+    <ul class="current">
+    </ul>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>Connectors &raquo;</li>
+      <li>Oracle Database</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/Oracle-Database_Connector.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="oracle-database-connector">Oracle Database Connector</h1>
+<p>As you probably already know, the Oracle Database is a Relational Database Management System (RDBMS) produced and marketed by Oracle Corporation. Oracle database is comprised of a collection of datasets or tables.</p>
+<p>These tables are used to store and retrieve related information which is essential to building many of the business applications required to solve business problem of all types and sizes. Oracle is an integral part of software systems used by many businesses, providing persistence, retrieval and management and analysis of data. Oracle database is a common data store for many of the analytics, visualization and BI/DWH applications.</p>
+<p>Oracle RDBMS being such an integral part of an enterprise applications, there is almost always a need for integration to it to store or to retrieve data as part of business workflows or Enterprise Application Integration (EAI) and even IoT initiatives. The good news is that integrating or connecting with Oracle database using <a href="https://www.robomq.io">RoboMQ</a> SaaS and IoT <a href="https://robomq.io/index.html#thingsconnect">integration</a> platform is a breeze!</p>
+<p><img alt="Oracle-DB" src="../images/oracleDB1.png" /></p>
+<p><strong>Fig 1: Schematic of Oracle database connector of RoboMQ</strong></p>
+<p>RoboMQ is an integration middleware platform targeted at “Enterprise IoT”. It is a world where the devices, sensors, clouds, SaaS applications, mobility and enterprise applications connect together to create business workflows. RoboMQ is built on <a href="https://robomq.io/index.html#microservices">Microservices</a> and hybrid cloud architecture, allowing the applications and devices to collaborate across clouds and networks with no location restrictions.</p>
+<p>RoboMQ’s key differentiation in the market place is it being <a href="https://robomq.io/index.html#why">protocol agnostic or API-less</a>. Devices and systems integrate using their choice of protocol or languages with no product specific APIs mandated by RoboMQ. This is achieved by “<a href="https://robomq.io/index.html#thingsconnect">ThingsConnect</a>" suite of connectors and adapters, which provides integration hooks for all IoT devices, all integration protocols, systems, database and applications.</p>
+<p>To support relational databases systems, RoboMQ provides Database connectors for all major  databases including Oracle. You can send and receive data to and from Oracle database and make it part of any integration workflow built using RoboMQ middleware. All you need is the JDBC connectivity to your Oracle database.</p>
+<p>What does this really mean for you? At a high level you can include databases and database driven applications easily into the integrations built using RoboMQ. You could receive messages over RoboMQ using any of MQTT, AMQP, Stomp, WebStomp or REST protocols and persist them into the database. At the same time, you can select information from the database and publish it as a message that could be consumed by clients using any of the above mentioned messaging and integration protocols. So essentially it is a full two way integration of Oracle database with RoboMQ.</p>
+<p>Setting up the Oracle database connector is incredibly easily. All you need is to collect the Oracle database connection information and user credential and configure the RoboMQ Oracle connector.</p>
+<p><a href="https://robomq.io/index.html#thingsconnect">ThingsConnect</a> Oracle connector like almost anything with RoboMQ is a microservice that runs as an independent and atomic docker container. You provide the connection and the credential configuration in a config file and mount the configuration to the docker container. This is as simple as 1-2-3:</p>
+<ol>
+<li>Obtain Oracle database information and credential</li>
+<li>Put the configuration information in a config file</li>
+<li>Run the connector which is a Docker container or a microservice</li>
+</ol>
+<p>The Oracle database connector can be run anywhere as a docker container with the following single line command:</p>
+<pre><code>$ docker run -d --name oracle_connector -v path/to/config:/opt/thingsConnect/config/x-adapter/ oracledbconnector:v1.00
+</code></pre>
+<p>Seems too simple and easy, yes it is...</p>
+<p>The connector can be run as a docker container inside the corporate firewall or on the cloud. No firewalls are needed since it always makes outbound IP connection to RoboMQ. When you run the docker container, it pulls the image from the docker repository and runs a Docker container from it. Any future updates are automatically available to you as the updates to the Docker image itself. You do however have the option to run the connector as a standalone traditional program not using the docker technology.</p>
+<p>There are some <a href="https://robomq.io/docs/docs.html">additional details</a> like it supports JSON as well as delimited ASCII data (CSV or any delimited text format) interchange methods. The connector also has error handling built in with the provision of the “dead letter” queues. Any messages that cannot be handled are routed to the dead letter queue. The robust error handling provided as core part of RoboMQ product provides email/SMS or phone alert and an ability to create a ticket or a case in ticketing system like ServiceNow, Jira or Salesforce. These errors or the tickets created by the connector can then be handled on a case-by-case basis by the operations or support teams. In addition to it, you get the Error Analytics component of RoboMQ which provides a strategic root cause analysis and visualization of errors in your integrations.</p>
+<p>So what are you waiting for? Try out our Oracle Database connector and let us know your feedback. To learn more about this and many other connectors that <a href="https://www.robomq.io">RoboMQ</a> offerers check back on our connectors page! If you have any other questions please reach out to us at,<a href="mailto:sales@robomq.io">sales@robomq.io</a> and we would love to help.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../Database_Connector/" class="btn btn-neutral float-left" title="Database"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../Database_Connector/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../about/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

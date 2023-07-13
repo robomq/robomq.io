@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/routing-key/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Key based message routing - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Key based message routing";
+        var mkdocs_page_input_path = "routing-key.md";
+        var mkdocs_page_url = "/routing-key/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Key based message routing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#python">Python</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#nodejs">Node.js</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites_1">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_1">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_1">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together_1">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#php">PHP</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisite">Prerequisite</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_2">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_2">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-together">Putting it together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ruby">Ruby</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites_2">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_3">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_3">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together_2">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#java">Java</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites_3">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_4">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_4">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together_3">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#go">Go</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites_4">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_5">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_5">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together_4">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#c">C</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites_5">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#producer_6">Producer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consumer_6">Consumer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#putting-it-all-together_5">Putting it all together</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>Key based message routing</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/routing-key.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="routing-key-based">Routing - Key Based</h1>
+<p>Routing - Key based messaging is an extension of direct exchange allowing filtering of messages based on a producer’s routing key.  Messages published to the exchange will be routed to queues bound to that exchange with matching binding key.  All other messages will be filtered.  A consumer will define callback functions to process messages that are selectively received.</p>
+<p><img alt="Diagram of Routing - Key based messaging" src="../images/routing-key.png" /></p>
+<blockquote>
+<p>Browse the chapter of AMQP Introduction first if you're new to AMQP. </p>
+</blockquote>
+<hr />
+<h2 id="python">Python</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p><strong>Python client AMQP library</strong></p>
+<p>The Python library we use for this example can be found at <a href="https://github.com/pika/pika" target="_blank">https://github.com/pika/pika</a>.  </p>
+<p>You can install it through <code>sudo pip install pika</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-python">import pika
+</code></pre>
+<p>The full documentation of this library is at <a href="https://pika.readthedocs.org/en/0.9.14/" target="_blank">https://pika.readthedocs.org/en/0.9.14/</a>.</p>
+<blockquote>
+<p>pika library is not thread safe. Do not use a connection or channel across threads.</p>
+</blockquote>
+<h3 id="producer">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-python">credentials = pika.PlainCredentials(username, password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
+channel = connection.channel()
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.<br />
+Delivery mode = 1 means it's a non-persistent message.</p>
+<pre><code class="language-python">properties = pika.spec.BasicProperties(content_type = &quot;text/plain&quot;, delivery_mode = 1)
+channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = &quot;Hello World!&quot;, properties = properties)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-python">connection.close()
+</code></pre>
+<h3 id="consumer">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+Exclusive means no other consumer can consume the queue when this one is consuming it.  </p>
+<pre><code class="language-python">channel.exchange_declare(exchange = exchangeName, exchange_type = &quot;direct&quot;, auto_delete = True)
+channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.<br />
+The <code>no_ack</code> parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, <code>no_ack</code> equals to true, so producer does not explicitly acknowledge received messages.<br />
+The <code>start_consuming()</code> function will be blocking the process until <code>stop_consuming()</code> is invoked or exception happens.  </p>
+<pre><code class="language-python">channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+channel.start_consuming()
+</code></pre>
+<p>When messages are received, a callback function <code>onMessage()</code> will be invoked to print the message content.  </p>
+<pre><code class="language-python">def onMessage(channel, method, properties, body):
+    print body
+</code></pre>
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import pika
+
+server = &quot;hostname&quot;
+port = 5672
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+exchangeName = &quot;testEx&quot;
+routingKey = &quot;test&quot;
+
+try:
+    #connect
+    credentials = pika.PlainCredentials(username, password)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
+    channel = connection.channel()
+
+    #send message
+    properties = pika.spec.BasicProperties(content_type = &quot;text/plain&quot;, delivery_mode = 1)
+    channel.basic_publish(exchange = exchangeName, routing_key = routingKey, body = &quot;Hello World!&quot;, properties = properties)
+
+    #disconnect
+    connection.close()
+except Exception, e:
+    print e
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import pika
+import time
+
+server = &quot;hostname&quot;
+port = 5672
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+exchangeName = &quot;testEx&quot;
+queueName = &quot;testQ1&quot;
+routingKey = &quot;test&quot;
+
+#callback funtion on receiving messages
+def onMessage(channel, method, properties, body):
+    print body
+
+while True:
+    try:
+        #connect
+        credentials = pika.PlainCredentials(username, password)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host = server, port = port, virtual_host = vhost, credentials = credentials, heartbeat_interval = 60))
+        channel = connection.channel()
+
+        #declare exchange and queue, bind them and consume messages
+        channel.exchange_declare(exchange = exchangeName, exchange_type = &quot;direct&quot;, auto_delete = True)
+        channel.queue_declare(queue = queueName, exclusive = True, auto_delete = True)
+        channel.queue_bind(exchange = exchangeName, queue = queueName, routing_key = routingKey)
+        channel.basic_consume(consumer_callback = onMessage, queue = queueName, no_ack = True)
+        channel.start_consuming()
+    except Exception, e:
+        #reconnect on exception
+        print &quot;Exception handled, reconnecting...\nDetail:\n%s&quot; % e
+        try:
+            connection.close()
+        except:
+            pass
+        time.sleep(5)
+</code></pre>
+<h2 id="nodejs">Node.js</h2>
+<h3 id="prerequisites_1">Prerequisites</h3>
+<p><strong>Node.js client AMQP library</strong></p>
+<p>The Node.js library we use for this example can be found at <a href="https://github.com/squaremo/amqp.node" target="_blank">https://github.com/squaremo/amqp.node</a>.    </p>
+<p>You can install the library through <code>sudo npm install amqplib</code>.  </p>
+<p>Finally, require this library in your program.</p>
+<pre><code class="language-javascript">var amqp = require(&quot;amqplib&quot;);
+</code></pre>
+<p>The full documentation of this library is at <a href="https://www.squaremobius.net/amqp.node/doc/channel_api.html" target="_blank">https://www.squaremobius.net/amqp.node/doc/channel_api.html</a>.</p>
+<h3 id="producer_1">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.<br />
+As shown in the code, this library provides chainable callback API in the form of <code>.then(callback)</code>.  </p>
+<blockquote>
+<p>For the default vhost "/", you will need to insert "%2f" (its hexadecimal ASCII code) to the AMQP URI, instead of "/" itself.  </p>
+</blockquote>
+<pre><code class="language-javascript">producer = amqp.connect(&quot;amqp://&quot; + username + &quot;:&quot; + password + &quot;@&quot; + server + &quot;:&quot; + port + &quot;/&quot; + vhost + &quot;?heartbeat=60&quot;);
+producer.then(function(conn) {
+    return conn.createConfirmChannel().then(successCallback);
+}).then(null, failureCallback);
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.<br />
+Delivery mode = 1 means it's a non-persistent message.</p>
+<pre><code class="language-javascript">ch.publish(exchangeName, routingKey, content = new Buffer(&quot;Hello World!&quot;), options = {contentType: &quot;text/plain&quot;, deliveryMode: 1},  callback);
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-javascript">conn.close();
+</code></pre>
+<h3 id="consumer_1">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+The difference is that consumer uses <code>conn.createChannel()</code> function, while producer uses <code>conn.createConfirmChannel()</code> because the latter one is only useful for publish confirm.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+Durable means the exchange or queue will survive possible broker failover. It's false in this example.<br />
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+Exclusive means no other consumer can consume the queue when this one is consuming it.  </p>
+<pre><code class="language-javascript">ch.assertExchange(exchangeName, &quot;direct&quot;, {durable: false, autoDelete: true});
+ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+ch.bindQueue(queueName, exchangeName, routingKey);
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.<br />
+The <code>noAck</code> option indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, <code>noAck</code> is true, so producer does not explicitly acknowledge received messages.<br />
+The second parameter of <code>consume()</code> function is the callback on receiving messages. In this example, when messages are received, the callback function will be invoked to print the message content.  </p>
+<pre><code class="language-javascript">ch.consume(queueName, function(message) {
+    console.log(message.content.toString());
+}, {noAck: true});  
+</code></pre>
+<h3 id="putting-it-all-together_1">Putting it all together</h3>
+<p><strong>producer.js</strong></p>
+<pre><code class="language-javascript">var amqp = require(&quot;amqplib&quot;);
+
+var server = &quot;hostname&quot;;
+var port = &quot;5672&quot;;
+var vhost = &quot;yourvhost&quot;; //for &quot;/&quot; vhost, use &quot;%2f&quot; instead
+var username = &quot;username&quot;;
+var password = &quot;password&quot;;
+var exchangeName = &quot;testEx&quot;;
+var routingKey = &quot;test&quot;;
+
+producer = amqp.connect(&quot;amqp://&quot; + username + &quot;:&quot; + password + &quot;@&quot; + server + &quot;:&quot; + port + &quot;/&quot; + vhost + &quot;?heartbeat=60&quot;);
+producer.then(function(conn) {
+    return conn.createConfirmChannel().then(function(ch) {
+        ch.publish(exchangeName, routingKey, content = new Buffer(&quot;Hello World!&quot;), options = {contentType: &quot;text/plain&quot;, deliveryMode: 1}, function(err, ok) {
+            if (err != null) {
+                console.error(&quot;Error: failed to send message\n&quot; + err);
+            }
+            conn.close();
+        });
+    });
+}).then(null, function(err) {
+    console.error(err);
+});
+</code></pre>
+<p><strong>consumer.js</strong></p>
+<pre><code class="language-javascript">var amqp = require(&quot;amqplib&quot;);
+var domain = require(&quot;domain&quot;);
+
+var server = &quot;hostname&quot;;
+var port = &quot;5672&quot;;
+var vhost = &quot;yourvhost&quot;; //for &quot;/&quot; vhost, use &quot;%2f&quot; instead
+var username = &quot;username&quot;;
+var password = &quot;password&quot;;
+var exchangeName = &quot;testEx&quot;;
+var queueName = &quot;testQ1&quot;;
+var routingKey = &quot;test&quot;;
+
+//use domain module to handle reconnecting
+var consumer = null;
+var dom = domain.create();
+dom.on(&quot;error&quot;, relisten);
+dom.run(listen);
+
+function listen() {
+    consumer = amqp.connect(&quot;amqp://&quot; + username + &quot;:&quot; + password + &quot;@&quot; + server + &quot;:&quot; + port + &quot;/&quot; + vhost + &quot;?heartbeat=60&quot;);
+    consumer.then(function(conn) {
+        return conn.createChannel().then(function(ch) {
+            ch.assertExchange(exchangeName, &quot;direct&quot;, {durable: false, autoDelete: true});
+            ch.assertQueue(queueName, {durable: false, autoDelete: true, exclusive: true});
+            ch.bindQueue(queueName, exchangeName, routingKey);
+            ch.consume(queueName, function(message) {
+                //callback funtion on receiving messages
+                console.log(message.content.toString());
+            }, {noAck: true});
+        });
+    }).then(null, function(err) {
+        console.error(&quot;Exception handled, reconnecting...\nDetail:\n&quot; + err);
+        setTimeout(listen, 5000);
+    });
+}
+
+function relisten() {
+    consumer.then(function(conn) {
+        conn.close();
+    }); 
+    setTimeout(listen, 5000);
+}
+</code></pre>
+<h2 id="php">PHP</h2>
+<h3 id="prerequisite">Prerequisite</h3>
+<p><strong>PHP client AMQP library</strong></p>
+<p>The PHP library we use for this example can be found at <a href="https://github.com/videlalvaro/php-amqplib" target="_blank">https://github.com/videlalvaro/php-amqplib</a>.  </p>
+<p>It uses composer to install in a few steps.  </p>
+<ol>
+<li>Add a <code>composer.json</code> file to your project:</li>
+</ol>
+<pre><code class="language-json">{
+    &quot;require&quot;: {
+        &quot;videlalvaro/php-amqplib&quot;: &quot;2.2.*&quot;
+    }
+}
+</code></pre>
+<ol>
+<li>Download the latest composer in the same path:</li>
+</ol>
+<pre><code class="language-bash">curl -sS https://getcomposer.org/installer | php
+</code></pre>
+<ol>
+<li>Install the library through composer:</li>
+</ol>
+<pre><code class="language-bash">./composer.phar install
+</code></pre>
+<p>Finally, require this library in your program and use the classes.</p>
+<pre><code class="language-php">require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+</code></pre>
+<h3 id="producer_2">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-php">$connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
+$channel =  $connection-&gt;channel(); 
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.<br />
+Delivery mode = 1 means it's a non-persistent message.</p>
+<pre><code class="language-php">$message = new AMQPMessage(&quot;Hello World!&quot;, array(&quot;content_type&quot; =&gt; &quot;text/plain&quot;, &quot;delivery_mode&quot; =&gt; 1));
+$channel-&gt;basic_publish($message, $exchangeName, $routingKey);
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-php">$connection-&gt;close();
+</code></pre>
+<h3 id="consumer_2">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+Exclusive means no other consumer can consume the queue when this one is consuming it.  </p>
+<pre><code class="language-php">$channel-&gt;exchange_declare($exchangeName, $type = &quot;direct&quot;, false, false, $auto_delete = true);
+$channel-&gt;queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+$channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.<br />
+The <code>no_ack</code> parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, <code>no_ack</code> equals to true, so producer does not explicitly acknowledge received messages.<br />
+The while loop will be blocking the process and listening for messages until exception happens.  </p>
+<pre><code class="language-php">$channel-&gt;basic_consume($queueName, &quot;&quot;, false, $no_ack = true, false, false, $callback = $onMessage);
+
+while(count($channel-&gt;callbacks)) {
+    $channel-&gt;wait();
+}
+</code></pre>
+<p>When messages are received, a callback function will be invoked to print the message content.  </p>
+<pre><code class="language-php">    $onMessage = function ($message) {
+        echo $message-&gt;body.PHP_EOL;
+    };
+</code></pre>
+<h3 id="putting-it-together">Putting it together</h3>
+<p><strong>producer.php</strong></p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__ . '/../vendor/autoload.php'; //directory of library folder
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+$server = &quot;hostname&quot;;
+$port = 5672;
+$vhost = &quot;yourvhost&quot;;
+$username = &quot;username&quot;;
+$password = &quot;password&quot;;
+$exchangeName = &quot;testEx&quot;;
+$routingKey = &quot;test&quot;;
+
+try {
+    //connect
+    $connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
+    $channel =  $connection-&gt;channel(); 
+
+    //send message
+    $message = new AMQPMessage(&quot;Hello World!&quot;, array(&quot;content_type&quot; =&gt; &quot;text/plain&quot;, &quot;delivery_mode&quot; =&gt; 1));
+    $channel-&gt;basic_publish($message, $exchangeName, $routingKey);
+
+    //disconnect
+    $connection-&gt;close();
+} catch(Exception $e) {
+    echo $e.PHP_EOL;
+}
+?&gt;
+</code></pre>
+<p><strong>consumer.php</strong></p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.&quot;/../vendor/autoload.php&quot;; //directory of library folder
+use PhpAmqpLib\Connection\AMQPConnection;
+
+$server = &quot;hostname&quot;;
+$port = 5672;
+$vhost = &quot;yourvhost&quot;;
+$username = &quot;username&quot;;
+$password = &quot;password&quot;;
+$exchangeName = &quot;testEx&quot;;
+$queueName = &quot;testQ1&quot;;
+$routingKey = &quot;test&quot;;
+
+//callback funtion on receiving messages
+$onMessage = function ($message) {
+    echo $message-&gt;body.PHP_EOL;
+};
+
+while (true) {
+    try {
+        //connect
+        $connection = new AMQPConnection($server, $port, $username, $password, $vhost, $heartbeat = 60);
+        $channel = $connection-&gt;channel();
+
+        //declare exchange and queue, bind them and consume messages
+        $channel-&gt;exchange_declare($exchangeName, $type = &quot;direct&quot;, false, false, $auto_delete = true);
+        $channel-&gt;queue_declare($queueName, false, false, $exclusive = true, $auto_delete = true);
+        $channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
+        $channel-&gt;basic_consume($queueName, &quot;&quot;, false, $no_ack = true, false, false, $callback = $onMessage);
+
+        //start consuming
+        while(count($channel-&gt;callbacks)) {
+            $channel-&gt;wait();
+        }
+    } catch(Exception $e) {
+        //reconnect on exception
+        echo &quot;Exception handled, reconnecting...\nDetail:\n&quot;.$e.PHP_EOL;
+        if ($connection != null) {
+            try {
+                $connection-&gt;close();
+            } catch (Exception $e1) {}
+        }
+        sleep(5);
+    }
+}
+?&gt;
+</code></pre>
+<h2 id="ruby">Ruby</h2>
+<h3 id="prerequisites_2">Prerequisites</h3>
+<p><strong>Ruby client AMQP library</strong></p>
+<p>The Ruby library we use for this example can be found at <a href="http://rubybunny.info/" target="_blank">http://rubybunny.info/</a>.  </p>
+<p>With Ruby version &gt;= 2.0, you can install it through <code>sudo gem install bunny</code>.  </p>
+<p>Finally, import this library in your program.  </p>
+<pre><code class="language-ruby">require &quot;bunny&quot;
+</code></pre>
+<p>The full documentation of this library is at <a href="http://rubybunny.info/articles/guides.html" target="_blank">http://rubybunny.info/articles/guides.html</a>.</p>
+<blockquote>
+<p>We recommend combining the documentation with the source code of this library when you use it because some of the documentation out there is not being updated timely from our observation.  </p>
+</blockquote>
+<h3 id="producer_3">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.<br />
+Although the library provides a connection property named <code>recover_from_connection_close</code>, we discourage you to use it. The reason will be explained in the Consumer section.  </p>
+<pre><code class="language-ruby">connection = Bunny.new(:host =&gt; server, :port =&gt; port, :vhost =&gt; vhost, :user =&gt; username, :pass =&gt; password, :heartbeat =&gt; 60, :recover_from_connection_close =&gt; false)
+connection.start
+channel = connection.create_channel
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.<br />
+Delivery mode = 1 means it's a non-persistent message.</p>
+<pre><code class="language-ruby">exchange = channel.direct(exchangeName, :auto_delete =&gt; true)
+exchange.publish(&quot;Hello World!&quot;, :routing_key =&gt; routingKey, :content_type =&gt; &quot;text/plain&quot;, :delivery_mode =&gt; 1)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-ruby">connection.close
+</code></pre>
+<h3 id="consumer_3">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+Exclusive means no other consumer can consume the queue when this one is consuming it.   </p>
+<pre><code class="language-ruby">exchange = channel.direct(exchangeName, :auto_delete =&gt; true)
+queue = channel.queue(queueName, :exclusive =&gt; true, :auto_delete =&gt; true)
+queue.bind(exchange, :routing_key =&gt; routingKey)
+</code></pre>
+<p>After that, consumer can consume messages from the queue.<br />
+The <code>manual_ack</code> parameter indicates if consumer needs to manually send acknowledgment back to broker when it has received the message. In this example, <code>manual_ack</code> equals to false, so producer does not manually acknowledge received messages.<br />
+The <code>subscribe()</code> function is followed by a callback which will be invoked to print the message payload on receiving a message.  </p>
+<pre><code class="language-ruby">queue.subscribe(:block =&gt; false, :manual_ack =&gt; false) do |delivery_info, metadata, payload|
+  puts payload
+end
+</code></pre>
+<p>As we mentioned in the Producer section, <code>recover_from_connection_close</code> is set to false when connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. It matters for consumers because <code>recover_from_connection_close</code> will only recover the connection, it won't recreate exchange and queue in case they are gone. Therefore, a more robust approach is  letting your code handle reconnecting on its own and keep checking the existence of the subscribed queue.  </p>
+<pre><code class="language-ruby">while true
+  raise &quot;Lost the subscribed queue %s&quot; % queueName unless connection.queue_exists?(queueName)
+  sleep 1
+end
+</code></pre>
+<h3 id="putting-it-all-together_2">Putting it all together</h3>
+<p><strong>producer.rb</strong></p>
+<pre><code class="language-ruby">require &quot;bunny&quot;
+
+server = &quot;hostname&quot;
+port = 5672
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+exchangeName = &quot;testEx&quot;
+routingKey = &quot;test&quot;
+
+begin
+  #connect
+  connection = Bunny.new(:host =&gt; server, :port =&gt; port, :vhost =&gt; vhost, :user =&gt; username, :pass =&gt; password, :heartbeat =&gt; 60, :recover_from_connection_close =&gt; false)
+  connection.start
+  channel = connection.create_channel
+
+  #send message
+  exchange = channel.direct(exchangeName, :auto_delete =&gt; true)
+  exchange.publish(&quot;Hello World!&quot;, :routing_key =&gt; routingKey, :content_type =&gt; &quot;text/plain&quot;, :delivery_mode =&gt; 1)
+
+  #disconnect
+  connection.close
+rescue Exception =&gt; e
+  puts e
+end
+</code></pre>
+<p><strong>consumer.rb</strong></p>
+<pre><code class="language-ruby">require &quot;bunny&quot;
+
+server = &quot;hostname&quot;
+port = 5672
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+exchangeName = &quot;testEx&quot;
+queueName = &quot;testQ1&quot;
+routingKey = &quot;test&quot;
+
+while true
+  begin
+    #connect, disable auto-reconnect so as to manually reconnect
+    connection = Bunny.new(:host =&gt; server, :port =&gt; port, :vhost =&gt; vhost, :user =&gt; username, :pass =&gt; password, :heartbeat =&gt; 60, :recover_from_connection_close =&gt; false)
+    connection.start
+    channel = connection.create_channel
+
+    #declare exchange and queue, bind them and consume messages
+    exchange = channel.direct(exchangeName, :auto_delete =&gt; true)
+    queue = channel.queue(queueName, :exclusive =&gt; true, :auto_delete =&gt; true)
+    queue.bind(exchange, :routing_key =&gt; routingKey)
+    queue.subscribe(:block =&gt; false, :manual_ack =&gt; false) do |delivery_info, metadata, payload|
+      puts payload
+    end
+    #keep checking the existence of the subscribed queue
+    while true
+      raise &quot;Lost the subscribed queue %s&quot; % queueName unless connection.queue_exists?(queueName)
+      sleep 1
+    end
+  rescue Exception =&gt; e
+    #reconnect on exception
+    puts &quot;Exception handled, reconnecting...\nDetail:\n%s&quot; % e
+    #blindly clean old connection
+    begin
+      connection.close
+    end
+    sleep 5
+  end
+end
+</code></pre>
+<h2 id="java">Java</h2>
+<h3 id="prerequisites_3">Prerequisites</h3>
+<p><strong>Java client AMQP library</strong></p>
+<p>The Java library we use for this example can be found at <a href="https://www.rabbitmq.com/java-client.html" target="_blank">https://www.rabbitmq.com/java-client.html</a>.  </p>
+<p>Download the library jar file, then import this library in your program <code>import com.rabbitmq.client.*;</code> and compile your source code with the jar file. For example,  </p>
+<pre><code class="language-bash">javac -cp &quot;.:./rabbitmq-client.jar&quot; Producer.java Consumer.java 
+</code></pre>
+<p>Run the producer and consumer classes. For example,  </p>
+<pre><code class="language-bash">java -cp &quot;.:./rabbitmq-client.jar&quot; Consumer
+java -cp &quot;.:./rabbitmq-client.jar&quot; Producer
+</code></pre>
+<p>Of course, you can eventually compress your producer and consumer classes into jar files.</p>
+<h3 id="producer_4">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-java">ConnectionFactory factory = new ConnectionFactory();
+factory.setHost(server);
+factory.setPort(port);
+factory.setVirtualHost(vhost);
+factory.setUsername(username);
+factory.setPassword(password);
+factory.setRequestedHeartbeat(60);
+connection = factory.newConnection();
+channel = connection.createChannel();
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.  </p>
+<pre><code class="language-java">String message = &quot;Hello World!&quot;;
+channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-java">connection.close();
+</code></pre>
+<h3 id="consumer_4">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+The fourth parameter of <code>exchangeDeclare()</code> and <code>queueDeclare()</code> are auto-delete. That means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+The third parameter of <code>queueDeclare()</code> is exclusive. That means no other consumer can consume the queue when this one is consuming it.   </p>
+<pre><code class="language-java">channel.exchangeDeclare(exchangeName, &quot;direct&quot;, false, true, false, null);
+channel.queueDeclare(queueName, false, true, true, null);
+channel.queueBind(queueName, exchangeName, routingKey, null);
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.<br />
+The second parameter of <code>basicConsume()</code> function no-ack indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, no-ack equals to true, so producer does not explicitly acknowledge received messages.<br />
+The while loop will be blocking the process and listening for messages until exception happens. When messages are received, it will print the message content.  </p>
+<pre><code class="language-java">QueueingConsumer qc = new QueueingConsumer(channel);
+channel.basicConsume(queueName, true, qc);
+while (true) {
+    QueueingConsumer.Delivery delivery = qc.nextDelivery();
+    String message = new String(delivery.getBody());
+    System.out.println(message);
+}
+</code></pre>
+<h3 id="putting-it-all-together_3">Putting it all together</h3>
+<p><strong>Producer.java</strong></p>
+<pre><code class="language-java">import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
+
+public class Producer {
+
+    private Connection connection;
+    private Channel channel;
+    private static String server = &quot;hostname&quot;;
+    private static int port = 5672;
+    private static String vhost = &quot;yourvhost&quot;;
+    private static String username = &quot;username&quot;;
+    private static String password = &quot;password&quot;;
+    private static String exchangeName = &quot;testEx&quot;;
+    private static String routingKey = &quot;test&quot;;
+
+    private void produce() {
+        try {
+            //connect
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setHost(server);
+            factory.setPort(port);
+            factory.setVirtualHost(vhost);
+            factory.setUsername(username);
+            factory.setPassword(password);
+            factory.setRequestedHeartbeat(60);
+            connection = factory.newConnection();
+            channel = connection.createChannel();
+
+            //send message
+            String message = &quot;Hello World!&quot;;
+            channel.basicPublish(exchangeName, routingKey, MessageProperties.TEXT_PLAIN, message.getBytes());
+
+            //disconnect
+            connection.close();
+        } catch(Exception e) {
+            System.out.println(e);
+            System.exit(-1);            
+        }   
+    }
+
+    public static void main(String[] args) {
+        Producer p = new Producer();
+        p.produce();
+    }
+}
+</code></pre>
+<p><strong>Consumer.java</strong></p>
+<pre><code class="language-java">import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.QueueingConsumer;
+
+public class Consumer {
+
+    private Connection connection;
+    private Channel channel;
+    private static String server = &quot;hostname&quot;;
+    private static int port = 5672;
+    private static String vhost = &quot;yourvhost&quot;;
+    private static String username = &quot;username&quot;;
+    private static String password = &quot;password&quot;;
+    private static String exchangeName = &quot;testEx&quot;;
+    private static String queueName = &quot;testQ1&quot;;
+    private static String routingKey = &quot;test&quot;;
+
+    private void consume() {
+        while (true) {
+            try {
+                //connect
+                ConnectionFactory factory = new ConnectionFactory();
+                factory.setHost(server);
+                factory.setPort(port);
+                factory.setVirtualHost(vhost);
+                factory.setUsername(username);
+                factory.setPassword(password);
+                factory.setRequestedHeartbeat(60);
+                connection = factory.newConnection();
+                channel = connection.createChannel();
+
+                //declare exchange and queue, bind them and consume messages
+                channel.exchangeDeclare(exchangeName, &quot;direct&quot;, false, true, false, null);
+                channel.queueDeclare(queueName, false, true, true, null);
+                channel.queueBind(queueName, exchangeName, routingKey, null);
+                QueueingConsumer qc = new QueueingConsumer(channel);
+                channel.basicConsume(queueName, true, qc);
+                while (true) {
+                    QueueingConsumer.Delivery delivery = qc.nextDelivery();
+                    String message = new String(delivery.getBody());
+                    System.out.println(message);
+                }
+            } catch(Exception e) {
+                //reconnect on exception
+                System.out.printf(&quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, e);
+                try {
+                    connection.close();
+                } catch (Exception e1) {}
+                try {
+                    Thread.sleep(5000); 
+                } catch(Exception e2) {}
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Consumer c = new Consumer();
+        c.consume();
+    }
+}
+</code></pre>
+<h2 id="go">Go</h2>
+<h3 id="prerequisites_4">Prerequisites</h3>
+<p><strong>Go client AMQP library</strong></p>
+<p>The Go library we use for this example can be found at <a href="https://github.com/streadway/amqp" target="_blank">https://github.com/streadway/amqp</a>.  </p>
+<p>You can install it through <code>go get github.com/streadway/amqp</code>.  </p>
+<p>Finally, import this library in your program.  </p>
+<pre><code class="language-go">import &quot;github.com/streadway/amqp&quot;
+</code></pre>
+<p>The full documentation of this library is at <a href="https://godoc.org/github.com/streadway/amqp" target="_blank">https://godoc.org/github.com/streadway/amqp</a>.  </p>
+<h3 id="producer_5">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Set heartbeat to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-go">connection, err := amqp.DialConfig(fmt.Sprintf(&quot;amqp://%s:%s@%s:%d/%s&quot;, username, password, server, port, vhost), amqp.Config{Heartbeat: 60 * time.Second})
+channel, err := connection.Channel()
+</code></pre>
+<p>Then producer can publish messages to a direct exchange where messages will be delivered to queues whose routing key matches.<br />
+Delivery mode = 1 means it's a non-persistent message.  </p>
+<pre><code class="language-go">err = channel.Publish(exchangeName, routingKey, false, false, amqp.Publishing{ContentType:  &quot;text/plain&quot;, DeliveryMode: 1, Body: []byte(&quot;Hello World!&quot;)})
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-go">connection.Close()
+</code></pre>
+<h3 id="consumer_5">Consumer</h3>
+<p>The same as producer, consumer needs to first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a direct exchange, a queue, and bind the queue to the exchange with a routing key. The routing key decides what messages will a queue receive.<br />
+Durable means the exchange or queue will survive possible broker failover. It's false in this example.<br />
+Auto-delete means after all consumers have finished consuming it, the exchange or queue will be deleted by broker.<br />
+Exclusive means no other consumer can consume the queue when this one is consuming it.  </p>
+<pre><code class="language-go">// audo-delete = true
+err = channel.ExchangeDeclare(exchangeName, &quot;direct&quot;, false, true, false, false, nil)
+
+// durable = false; auto-delete = true; exclusive = true
+queue, err := channel.QueueDeclare(queueName, false, true, true, false, nil)
+
+err = channel.QueueBind(queueName, routingKey, exchangeName, false, nil)
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.<br />
+Consumer-tag can be later used to <code>Cancel()</code> this consumer when it's no longer needed.<br />
+Auto-ack parameter indicates if consumer needs to explicitly send acknowledgment back to broker when it has received the message. In this example, auto-ack equals to true, so producer does not explicitly acknowledge received messages.  </p>
+<pre><code class="language-go">// consumer-tag = &quot;consumer&quot;; auto-ack = true
+messageChan, err := channel.Consume(queue.Name, &quot;consumer&quot;, true, true, false, false, nil)
+</code></pre>
+<p>Note a message channel is returned by the <code>Consume()</code> function. Incoming messages will be received through that channel.  </p>
+<blockquote>
+<p>Channel in Golang is a typed conduit through which you can send and receive values. Sends and receives block until the other side is ready.  </p>
+</blockquote>
+<pre><code class="language-go">for message := range messageChan {
+    fmt.Println(string(message.Body))
+}
+</code></pre>
+<h3 id="putting-it-all-together_4">Putting it all together</h3>
+<p><strong>producer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;github.com/streadway/amqp&quot;
+    &quot;os&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = 5672
+var vhost = &quot;yourvhost&quot;
+var username = &quot;username&quot;
+var password = &quot;password&quot;
+var exchangeName = &quot;testEx&quot;
+var routingKey = &quot;test&quot;
+
+func main() {
+    connection, err := amqp.DialConfig(fmt.Sprintf(&quot;amqp://%s:%s@%s:%d/%s&quot;, username, password, server, port, vhost),
+        amqp.Config{Heartbeat: 60 * time.Second})
+    if err != nil {
+        fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, err)
+        os.Exit(1)
+    }
+    defer connection.Close()
+
+    channel, err := connection.Channel()
+    if err != nil {
+        fmt.Printf(&quot;Failed to create channel, err: %v\n&quot;, err)
+        os.Exit(1)
+    }
+    defer channel.Close()
+
+    err = channel.Publish(
+        exchangeName, // exchange
+        routingKey,   // routing key
+        false,        // mandatory
+        false,        // immediate
+        amqp.Publishing{
+            ContentType:  &quot;text/plain&quot;,
+            DeliveryMode: 1,
+            Body:         []byte(&quot;Hello World!&quot;),
+        })
+    if err != nil {
+        fmt.Printf(&quot;Failed to publish message, err: %v\n&quot;, err)
+        os.Exit(1)
+    }
+}
+</code></pre>
+<p><strong>consumer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;github.com/streadway/amqp&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = 5672
+var vhost = &quot;yourvhost&quot;
+var username = &quot;username&quot;
+var password = &quot;password&quot;
+var exchangeName = &quot;testEx&quot;
+var queueName = &quot;testQ1&quot;
+var routingKey = &quot;test&quot;
+
+func main() {
+    // Infinite loop to auto-reconnect on failure
+Loop:
+    for {
+        fmt.Println(&quot;Starting in 5 seconds...&quot;)
+        time.Sleep(5 * time.Second)
+
+        connection, err := amqp.DialConfig(fmt.Sprintf(&quot;amqp://%s:%s@%s:%d/%s&quot;, username, password, server, port, vhost),
+            amqp.Config{Heartbeat: 60 * time.Second})
+        if err != nil {
+            fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, err)
+            continue Loop
+        }
+        defer connection.Close()
+
+        channel, err := connection.Channel()
+        if err != nil {
+            fmt.Printf(&quot;Failed to create channel, err: %v\n&quot;, err)
+            continue Loop
+        }
+        defer channel.Close()
+
+        err = channel.ExchangeDeclare(
+            exchangeName, // name
+            &quot;direct&quot;,     // type
+            false,        // durable
+            true,         // audo-delete
+            false,        // internal
+            false,        // no-wait
+            nil,          // args
+        )
+        if err != nil {
+            fmt.Printf(&quot;Failed to declare exchange, err: %v\n&quot;, err)
+            continue Loop
+        }
+
+        queue, err := channel.QueueDeclare(
+            queueName, // name
+            false,     // durable
+            true,      // auto-delete
+            true,      // exclusive
+            false,     // no-wait
+            nil,       // args
+        )
+        if err != nil {
+            fmt.Printf(&quot;Failed to declare queue, err: %v\n&quot;, err)
+            continue Loop
+        }
+
+        err = channel.QueueBind(
+            queueName,    // queue
+            routingKey,   // key
+            exchangeName, // exchange
+            false,        // no-wait
+            nil,          // args
+        )
+        if err != nil {
+            fmt.Printf(&quot;Failed to bind queue with exchange, err: %v\n&quot;, err)
+            continue Loop
+        }
+
+        messageChan, err := channel.Consume(
+            queue.Name, // queue
+            &quot;consumer&quot;, // consumer tag
+            true,       // auto-ack
+            true,       // exclusive
+            false,      // no-local
+            false,      // no-wait
+            nil,        // args
+        )
+        if err != nil {
+            fmt.Printf(&quot;Failed to consume messages, err: %v\n&quot;, err)
+            continue Loop
+        }
+
+        fmt.Println(&quot;Started consuming messages.&quot;)
+        for message := range messageChan {
+            fmt.Println(string(message.Body))
+        }
+    }
+}
+</code></pre>
+<h2 id="c">C</h2>
+<h3 id="prerequisites_5">Prerequisites</h3>
+<p><strong>C client AMQP library</strong></p>
+<p>RoboMQ is built on AMQP, an open, general-purpose protocol for messaging. There are a number of clients for AMQP in many different languages.  However, we'll choose a simple C-language AMQP client library written for use with v2.0+ of the RabbitMQ broker.</p>
+<p><a href="https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq" target="_blank">https://github.com/alanxz/rabbitmq-c/tree/master/librabbitmq</a></p>
+<p>You can copy librabbitmq subfolder from latest release located here on GitHub:</p>
+<p><a href="https://github.com/alanxz/rabbitmq-c" target="_blank">https://github.com/alanxz/rabbitmq-c</a></p>
+<p>Alternatively, thanks to Subversion support in GitHub, you can use svn export directly:</p>
+<pre><code class="language-bash">svn export https://github.com/alanxz/rabbitmq-c/trunk/librabbitmq
+</code></pre>
+<p>Copy the librabbitmq package into your working directory:</p>
+<pre><code class="language-bash">cp librabbitmq ./
+</code></pre>
+<p>Also copy all source files and Makefile from <a href="https://www.robomq.io" target="_blank">RoboMQ</a> SDK at <a href="https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C">https://github.com/robomq/robomq.io/tree/master/sdk/AMQP/C</a> into the same directory.  </p>
+<p>Now your working directory should have the content as bellow:<br />
+<em>broadcast</em>  config.h  <em>librabbitmq</em>  Makefile  <em>one-to-one</em>  <em>request-reply</em>  <em>routing-key</em> <em>topic</em></p>
+<p>Use the Makefile to compile under a Linux terminal.  </p>
+<ul>
+<li>Run <code>make type={sub-directory}</code> to compile the producer and consumer under the sub-directory.  </li>
+<li>Before compiling the next sub-directory, run <code>make clean</code> to clean up the compiled files.  </li>
+</ul>
+<p>Note that these examples provide a simple client implementation to get started but does not go into detailed description of all flags passed into the AMQP methods. 
+A complete reference to RabbitMQ's implementaton of version 0-9-1 of the AMQP specification can be found in this guide.
+<a href="https://www.rabbitmq.com/amqp-0-9-1-reference.html" target="_blank">https://www.rabbitmq.com/amqp-0-9-1-reference.html</a></p>
+<h3 id="producer_6">Producer</h3>
+<p>For routing-Key based messaging, the producer should publish messages to the specified exchange allowing filtering of messages based on a producer’s routing key.  Based on that routing key, messages will be sent through the exchange and distributed to the right queue.  If not specified, that routing key is the queue name.</p>
+<pre><code class="language-c">amqp_basic_properties_t props;
+props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
+props.content_type = amqp_cstring_bytes(&quot;text/plain&quot;);
+props.delivery_mode = 1; /* non-persistent delivery mode */
+amqp_boolean_t mandatory = 0;
+amqp_boolean_t immediate = 0;
+char exchange_name[] = &quot;hello-exchange&quot;;
+char routing_key[] = &quot;routingKey&quot;;
+int result;
+
+// Sending message
+result = amqp_basic_publish(conn,
+        channel,
+        amqp_cstring_bytes(exchange_name),
+        amqp_cstring_bytes(routing_key),
+        mandatory,
+        immediate,
+        &amp;props,
+        amqp_cstring_bytes(&quot;Hello&quot;));
+</code></pre>
+<h3 id="consumer_6">Consumer</h3>
+<p>Then the consumer should create a queue and subscribe to a queue. This queue will work similarly to the one-to-one example using the <strong>direct</strong> exchange type, however, only messages published to this exchange with routing key matching <strong>"routingKey"</strong> will be received by consumer.  All other messages will be filtered.</p>
+<pre><code class="language-c">amqp_bytes_t queue;
+amqp_channel_t channel = 1;
+amqp_boolean_t passive = 0;
+amqp_boolean_t durable = 0;
+amqp_boolean_t exclusive = 0;
+amqp_boolean_t auto_delete = 1;
+amqp_boolean_t internal = 0;
+char exchange_name[] = &quot;hello-exchange&quot;;
+char exchange_type[] = &quot;direct&quot;;
+char queue_name[] = &quot;hello-queue&quot;;
+char binding_key[] = &quot;routingKey&quot;;
+
+// Declaring exchange
+amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
+        passive, durable, auto_delete, internal, amqp_empty_table);
+
+// Declaring queue
+amqp_queue_declare_ok_t *r = amqp_queue_declare(conn, channel, amqp_cstring_bytes(queue_name),
+        passive, durable, exclusive, auto_delete, amqp_empty_table);
+
+queue = amqp_bytes_malloc_dup(r-&gt;queue);
+
+// Binding to queue
+amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(binding_key),
+        amqp_empty_table);
+</code></pre>
+<p>Note that all the queues declared without specific binding key use the queue name as the default binding key.</p>
+<p>At this point, consumer should start consuming messages.</p>
+<h3 id="putting-it-all-together_5">Putting it all together</h3>
+<p>The full code below includes some basic AMQP error handling for consumer that is useful when declaring exchanges and queues.  In addition, main receiver loop attempts to reconnect upon network connection failure.</p>
+<p><strong>producer.c</strong></p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#include &lt;amqp_tcp_socket.h&gt;
+#include &lt;amqp.h&gt;
+#include &lt;amqp_framing.h&gt;
+
+amqp_connection_state_t mqconnect() {
+
+    amqp_connection_state_t conn = amqp_new_connection();
+    amqp_socket_t *socket = NULL;
+    char hostname[] = &quot;localhost&quot;; // RoboMQ hostname
+    int port = 5672; //default
+    char user[] = &quot;guest&quot;; // RoboMQ username
+    char password[] = &quot;guest&quot;; // RoboMQ password
+    char vhost[] = &quot;/&quot;; // RoboMQ account vhost
+    amqp_channel_t channel = 1;
+    int channel_max = 0;
+    int frame_max = 131072;
+    int heartbeat = 60;
+    int status = 0;
+
+    // Opening socket
+    socket = amqp_tcp_socket_new(conn);
+
+    status = amqp_socket_open(socket, hostname, port);
+    if (status) {
+        printf(&quot;Error opening TCP socket, status = %d, exiting.&quot;, status);
+    }
+
+    amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
+    amqp_channel_open(conn, channel);
+
+    return conn;
+}
+
+int main(int argc, char const *const *argv)
+{
+    amqp_connection_state_t conn;
+    amqp_channel_t channel = 1;
+    amqp_basic_properties_t props;
+    props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
+    props.content_type = amqp_cstring_bytes(&quot;text/plain&quot;);
+    props.delivery_mode = 1; /* non-persistent delivery mode */
+    amqp_boolean_t mandatory = 0;
+    amqp_boolean_t immediate = 0;
+    char exchange_name[] = &quot;hello-exchange&quot;;
+    const char *routing_key;
+    char *msg_body = &quot;Hello\n&quot;;
+    int result;
+
+    if(argc &lt; 2) {
+        printf(&quot;Syntax error:\n&quot;
+                &quot;Usage: mqsend &lt;routing_key&gt;\n&quot;);
+        exit(-1);
+    }
+
+    routing_key = (char *)argv[1];
+
+    conn = mqconnect();
+
+    // Sending message
+    result = amqp_basic_publish(conn,
+            channel,
+            amqp_cstring_bytes(exchange_name),
+            amqp_cstring_bytes(routing_key),
+            mandatory,
+            immediate,
+            &amp;props,
+            amqp_cstring_bytes(msg_body));
+
+    // Closing connection
+    amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
+    amqp_destroy_connection(conn);
+
+    return 0;
+}
+</code></pre>
+<p><strong>consumer.c</strong></p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#include &lt;amqp_tcp_socket.h&gt;
+#include &lt;amqp.h&gt;
+#include &lt;amqp_framing.h&gt;
+
+amqp_connection_state_t mqconnect() {
+
+    amqp_connection_state_t conn = amqp_new_connection();
+    amqp_socket_t *socket = NULL;
+    char hostname[] = &quot;localhost&quot;; // RoboMQ hostname
+    int port = 5672; //default
+    char user[] = &quot;guest&quot;; // RoboMQ username
+    char password[] = &quot;guest&quot;; // RoboMQ password
+    char vhost[] = &quot;/&quot;; // RoboMQ account vhost
+    amqp_channel_t channel = 1;
+    amqp_rpc_reply_t reply;
+    int channel_max = 0;
+    int frame_max = 131072;
+    int heartbeat = 60;
+    int status = 0;
+
+    // Opening socket
+    socket = amqp_tcp_socket_new(conn);
+
+    status = amqp_socket_open(socket, hostname, port);
+    if (status) {
+        printf(&quot;Error opening TCP socket, status = %d\n&quot;, status);
+    }
+
+    reply = amqp_login(conn, vhost, channel_max, frame_max, heartbeat, AMQP_SASL_METHOD_PLAIN, user, password);
+    if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
+        fprintf(stderr, &quot;%s: server connection reply code: %d\n&quot;,
+                &quot;Error logging in&quot;, reply.reply_type);
+    }
+
+    amqp_channel_open(conn, channel);
+
+    return conn;
+}
+
+amqp_bytes_t mqdeclare(amqp_connection_state_t conn, const char *exchange_name, const char *queue_name,
+        const char *binding_key) {
+    amqp_bytes_t queue;
+    amqp_channel_t channel = 1;
+    amqp_boolean_t passive = 0;
+    amqp_boolean_t durable = 0;
+    amqp_boolean_t exclusive = 0;
+    amqp_boolean_t auto_delete = 1;
+    amqp_boolean_t internal = 0;
+    char exchange_type[] = &quot;direct&quot;;
+    amqp_rpc_reply_t reply;
+
+    // Declaring exchange
+    amqp_exchange_declare(conn, channel, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(exchange_type),
+            passive, durable, auto_delete, internal, amqp_empty_table);
+
+    reply = amqp_get_rpc_reply(conn);
+    if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
+        amqp_connection_close_t *m = (amqp_connection_close_t *) reply.reply.decoded;
+        if(NULL != m) {
+            fprintf(stderr, &quot;%s: server connection error %d, message: %.*s\n&quot;,
+                    &quot;Error declaring exchange&quot;,
+                    m-&gt;reply_code,
+                    (int) m-&gt;reply_text.len, (char *) m-&gt;reply_text.bytes);
+        }
+    }
+
+    // Declaring queue
+    amqp_queue_declare_ok_t *r = amqp_queue_declare(conn, channel, amqp_cstring_bytes(queue_name),
+            passive, durable, exclusive, auto_delete, amqp_empty_table);
+
+    reply = amqp_get_rpc_reply(conn);
+    if(reply.reply_type != AMQP_RESPONSE_NORMAL) {
+        fprintf(stderr, &quot;%s: server connection reply code: %d\n&quot;,
+                &quot;Error declaring queue&quot;, reply.reply_type);
+    }
+    else {
+        queue = amqp_bytes_malloc_dup(r-&gt;queue);
+
+        // Binding to queue
+        amqp_queue_bind(conn, channel, queue, amqp_cstring_bytes(exchange_name), amqp_cstring_bytes(binding_key),
+                amqp_empty_table);
+    }
+
+    return queue;
+}
+
+int main(int argc, char const *const *argv)
+{
+    amqp_connection_state_t conn;
+    amqp_bytes_t queue;
+    amqp_channel_t channel = 1;
+    amqp_boolean_t no_local = 0;
+    amqp_boolean_t no_ack = 1;
+    amqp_boolean_t exclusive = 0;
+    char exchange_name[] = &quot;hello-exchange&quot;;
+    char queue_name[] = &quot;hello-queue&quot;;
+    const char *binding_key;
+    int retry_time = 5; // retry time in seconds
+
+    if(argc &lt; 2) {
+        printf(&quot;Syntax error:\n&quot;
+                &quot;Usage: mqlisten &lt;binding_key&gt;\n&quot;);
+        exit(-1);
+    }
+
+    binding_key = (char *)argv[1];
+
+    conn = mqconnect();
+    queue = mqdeclare(conn, &amp;exchange_name[0], &amp;queue_name[0], binding_key);
+
+    // Consuming the message
+    amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
+
+    while (1) {
+        amqp_rpc_reply_t result;
+        amqp_envelope_t envelope;
+
+        amqp_maybe_release_buffers(conn);
+        result = amqp_consume_message(conn, &amp;envelope, NULL, 0);
+
+        if (AMQP_RESPONSE_NORMAL != result.reply_type) {
+            printf(&quot;Consumer AMQP failure occurred, response code = %d, retrying in %d seconds...\n&quot;,
+                    result.reply_type, retry_time);
+
+            // Closing current connection before reconnecting
+            amqp_connection_close(conn, AMQP_CONNECTION_FORCED);
+            amqp_destroy_connection(conn);
+
+            // Reconnecting on exception
+            conn = mqconnect();
+            queue = mqdeclare(conn, &amp;exchange_name[0], &amp;queue_name[0], binding_key);
+            amqp_basic_consume(conn, channel, queue, amqp_empty_bytes, no_local, no_ack, exclusive, amqp_empty_table);
+            sleep(retry_time);
+        }
+        else {
+            printf(&quot;Received message size: %d\nbody: %s\n&quot;, (int)envelope.message.body.len, (char *)envelope.message.body.bytes);
+
+            amqp_destroy_envelope(&amp;envelope);
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../broadcast/" class="btn btn-neutral float-left" title="Broadcast (publish/subscribe)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../topic/" class="btn btn-neutral float-right" title="Filter based routing (topic)">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../broadcast/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../topic/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

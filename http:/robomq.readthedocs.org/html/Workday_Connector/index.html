@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/Workday_Connector/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Workday<sup>&reg;</sup> to AD - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Workday\u003csup\u003e\u0026reg;\u003c/sup\u003e to AD";
+        var mkdocs_page_input_path = "Workday_Connector.md";
+        var mkdocs_page_url = "/Workday_Connector/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Workday<sup>&reg;</sup> to AD</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#benefits">Benefits</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#robomqs-workday-connector">RoboMQ's Workday&reg; Connector</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workday-extract-file-based-integration-to-ad">Workday&reg; extract file-based integration to AD</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workday-to-ad-api-and-data-integration-approach-using-connect-ipaas">Workday&reg; to AD API and Data Integration Approach Using Connect iPaaS</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>Connectors &raquo;</li>
+      <li>Workday<sup>&reg;</sup> to AD</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/Workday_Connector.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="workday-to-active-directory-ad-integration-powered-by-robomq">Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> to Active Directory (AD) Integration Powered by RoboMQ</h1>
+<p><a href="https://www.workday.com/">Workday<sup>&reg;</sup></a> is a leading enterprise Software-as-a-Service (SaaS) application provider for human resource, finance, and Enterprise Resource Planning (ERP) teams. Compared to traditional on-premise Human Capital Management (HCM) and finance applications, Workday<sup>&reg;</sup> is <a href="https://searchhrsoftware.techtarget.com/definition/Workday">often recognized for its quick implementation and ease of use</a>, which makes the platform attractive to citizen integrators and line of business users.  </p>
+<p>With Workday’s<sup>&reg;</sup> Human Capital Management (HCM), HR teams can perform an array of functions to manage the full lifecycle of an employee – from recruiting, talent management, workforce planning, expense management, and more.  </p>
+<p><a href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc782657(v=ws.10)">Microsoft Active Directory</a> and <a href="https://azure.microsoft.com/en-us/services/active-directory/">Azure Active Directory</a>, also referred to as AD, are on-premise and cloud hosted solutions, respectively, to manage users, roles, and computers and devices on a corporate network. AD allows network admins to create and manage domains, users, security groups, organization units and more. Companies leverage AD to organize a large number of users into logical groups and subgroups to provide Role-Based Access Control (RBAC) across the organization implementing job-specific or need-to-know basis privilege.  </p>
+<h2 id="benefits">Benefits</h2>
+<table>
+<thead>
+<tr>
+<th><img alt="" src="https://robomq.io/wp-content/uploads/2020/02/workday-experience.png" /></th>
+<th><img alt="" src="https://robomq.io/wp-content/uploads/2019/10/benefit-2-1.png" /></th>
+<th><img alt="" src="https://robomq.io/wp-content/uploads/2020/02/workday-communication.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Improved “First day at Job” experience</td>
+<td>Prevent Security and Reputation risk with role-based access control</td>
+<td>Real time sync between HRIS, Active Directory or Azure AD</td>
+</tr>
+</tbody>
+</table>
+<h2 id="robomqs-workday-connector">RoboMQ's Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> Connector</h2>
+<p>For many organizations, the process to get employees onboarded efficiently is a challenge. There tends to be a lot of moving parts behind the scenes to ensure employees have access to the tools and technologies needed to hit the ground running. System administrators are also often overloaded with related service desk tickets. Creating and/or updating user identities and assigning role-based access to employees can be tedious and costly work for them.  </p>
+<p>The Workday<sup>&reg;</sup> to AD Integration powered by RoboMQ is one of our popular integration solutions that streamlines creation and updating of user identities in AD including and provisioning and assigning role based access to third party systems like Salesforce, ServiceNow, ERP, databases and others..  </p>
+<blockquote>
+<p>What once would take an average of two (2) hours or more of a system admin’s time to onboard, update critical employee lifecycle events, send out welcome or termination emails, create or delete accounts in various enterprise systems could now be fully automated with RoboMQ integration solution.  </p>
+</blockquote>
+<p>As a full featured leading integration platform, RoboMQ provides two integration paths to achieve this functional need. </p>
+<ol>
+<li>Workday<sup>&reg;</sup> extract file-based Integration </li>
+<li>Integration using Workday<sup>&reg;</sup> APIs </li>
+</ol>
+<p>You could choose either of the two approaches based on your Workday setup or preferences. </p>
+<h2 id="workday-extract-file-based-integration-to-ad">Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> extract file-based integration to AD</h2>
+<p>The Workday<sup>&reg;</sup> file extract-based integration approach is a pretty straightforward process. Using this integration approach, scheduled extracts are setup to run on Workday<sup>&reg;</sup> on a periodic basis. These scheduled extracts can be setup to automatically run for new employees being hired, terminated employees, and other employee lifecycle event that need to update Active Directory (AD) such as employee role, location or reporting structure changes. The output format of these scheduled extract is typically CSV (Comma Separated Values). These extracts are sent automatically to RoboMQ for processing.  </p>
+<p>Once the scheduled extracts are received on RoboMQ cloud, it is processed in near-real time to make updates to on-premise AD, Azure AD or cloud hosted AD like Microsoft AD on AWS.  </p>
+<p>Below is a detailed view of how this integration solution can manage the employee lifecycle including role-based access: </p>
+<p><img alt="" src="https://www.robomq.io/wp-content/uploads/2023/01/Workday-Integration-flow-1024x472-1.png" /><br />
+<em>Fig 1: Detailed view of managing employee lifecycle and role-based access</em></p>
+<p>Here’s a breakdown of how this process typically works during the employee onboarding: </p>
+<ol>
+<li>
+<p>When a new employee starts working at any company location, their information is entered into the company’s Workday<sup>&reg;</sup> HRIS system. Workday<sup>&reg;</sup> sends this information as an extract to RoboMQ </p>
+</li>
+<li>
+<p>For new employees, RoboMQ creates user identity in Active Directory or Azure AD and provisions their access into enterprise applications based on their role or security groups ensuring that each employee has a single and unique account across all systems with associated access levels.  </p>
+</li>
+<li>
+<p>RoboMQ automatically generates a random password for new employee along with default attributes and account control settings.  </p>
+</li>
+<li>
+<p>A welcome email or other on-boarding emails are sent to the responsible office manager/s or helpdesk based on job role and location. These emails can be customized and branded to the organization needs. </p>
+</li>
+<li>
+<p>For existing employees, RoboMQ updates account settings, attributes, change of roles (e.g. promotions, transfer, etc.), or change of status (i.e. long-term leave, termination, or re-hire) in sync with Workday<sup>&reg;</sup> HRIS. </p>
+</li>
+</ol>
+<p>In addition to the Workday<sup>&reg;</sup> to AD or Azure AD integration, additional downstream application connectors can be added to this workflow to update user account or access in third party systems. For example, some customers choose to accounts created in Salesforce, Office 365 or other enterprise systems. Managing user accounts or licenses in downstream systems has additional cost savings by making sure terminated employee do not have licenses assigned to them. More than the license cost, there is the safety mechanism in place so that terminated employee do not walk away with access to privileged CRM, operations or ERP systems. </p>
+<p>For more information or to set up a discussion on this integration solution, <a href="https://app.hubspot.com/meetings/eric-koch">schedule an appointment with a RoboMQ integration solution specialist today!</a> </p>
+<h2 id="workday-to-ad-api-and-data-integration-approach-using-connect-ipaas">Workday<sup style="font-size:56%;top:-0.8em">&reg;</sup> to AD API and Data Integration Approach Using Connect iPaaS</h2>
+<p><a href="https://www.robomq.io/connect/">Connect iPaaS</a> is the no-code citizen integrator approach to API and data integration between leading SaaS, EPR, CRM and operations applications on cloud or on-premise. Using simple, easy and intuitive drag-and-drop capabilities, users of Connect can create integration workflows that streamline and automate business processes in minutes with absolutely no coding! </p>
+<p>Workday<sup>&reg;</sup>, Active Directory (AD) and Azure AD are one of the many application connectors available on the Connect iPaaS. End user can integrate APIs from Workday<sup>&reg;</sup> to onboard new employees by creating user identities in AD or Azure AD using data mapping and workflow definition. Additional functionality can be added to the integration workflows such as creating a service desk ticket in ServiceNow, creating an account in Salesforce or Microsoft Dynamics CRM or adding an entry in QuickBooks. The main difference between this approach is that API calls are being made to perform data integrations based on specific events, versus files being sent to make updates in near real-time using a managed file transfer (MFT) mechanism.  </p>
+<p>Let’s go over the process of setting up this integration on Connect iPaaS. In this example, we will integrate Workday<sup>&reg;</sup> to AD with ServiceNow as an additional connector.  </p>
+<p>We start with the “Design” dashboard on Connect iPaaS where you have access to hundreds of APIs from leading SaaS, CRM, ERP and enterprise applications and databases.</p>
+<p><img alt="" src="https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen1.png" />
+<em>Fig 2: Connect iPaaS Design Dashboard</em></p>
+<p>Below images shows the workflow setup for employee onboarding from Workday<sup>&reg;</sup> to AD. The left side panel shows the sequence API integrations with first node, Workday<sup>&reg;</sup>, being the trigger event. This node receives API call when a new employee is hired in Workday<sup>&reg;</sup>. Workday<sup>&reg;</sup> is the trigger node while Active Directory and ServiceNow are the action nodes connected to the trigger node.</p>
+<p><img alt="" src="https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen2.png" />
+<em>Fig 3: Design dashboard with the workflow set up to streamline employee onboarding</em></p>
+<p>Now we go in the details of the Active Directory action node that is triggered in response to new employee hiring in Workday<sup>&reg;</sup>. Below image shows that a new user will be created in a specified Organization Unit for the new employee. </p>
+<p><img alt="" src="https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen3.png" />
+<em>Fig 4: Create New User in Active Directory action being taken within Active Directory</em></p>
+<p>As we mentioned above, an additional ServiceNow API node is added to this workflow which will create a ServiceNow incident to notify a new hire to helpdesk. This incident can be used as a trigger to complete employee on-boarding checklist in service desk which may involve allocating laptop, mobile or other workplace setup activity. </p>
+<p><img alt="" src="https://www.robomq.io/wp-content/uploads/2023/01/RDT-Screen4.png" />
+<em>Fig 5: An incident is created in ServiceNow to notify helpdesk of a new hire</em></p>
+<p>As you see in the image above, you can perform data mapping from Workday<sup>&reg;</sup> fields of the employee to required data fields is the action nodes, in this case being ServiceNow. Connect iPaaS provides advanced data mapping and transformation capabilities for business or non-technical users. You can use Microsoft Excel style function that you are very much at ease to perform desired data mappings and transformations. </p>
+<p>To start using Connect iPaaS, simply sign up at <a href="https://trial.robomq.io/connect/">https://trial.robomq.io/connect/</a>. Or for more information using this integration  approach, <a href="https://app.hubspot.com/meetings/eric-koch">schedule an appointment with a RoboMQ integration solution specialist today!</a> </p>
+<blockquote>
+<p>This integration provides a fabulous “first day at job” experience to new hires which can improve employee satisfaction, loyalty and retention.  The automated management of role-based access ensures that the right people have access to right information at right time. Managing the termination of access makes sure there are no compliance, security or reputation risks by someone walking away with access to sensitive privileged information. </p>
+</blockquote>
+<p>In summary, the Workday<sup>&reg;</sup> to AD integration powered by RoboMQ enables your IT and HR teams to focus on more strategic business priorities. This integration provides significant cost savings on HR and already burdened system admin resources.  Once this solution is implemented, new employees will have access to the accounts and applications needed from day one, and updates to their profile in your Active Directory will happen in near real-time. This integration provides a fabulous “first day at job” experience to new hires which can improve employee satisfaction, loyalty and retention.  The automated management of role-based access ensures that the right people have access to right information at right time. Managing the termination of access makes sure there are no compliance, security or reputation risks by someone walking away with access to sensitive privileged information.  </p>
+<p>Experience the transformational power of our Workday<sup>&reg;</sup> to AD integration powered by RoboMQ for your enterprise. <a href="https://meetings.hubspot.com/bramh-gupta/talk-to-an-expert">Schedule a call with an integration specialist today</a>. </p>
+<p><i style="font-size:0.85rem;">We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with Workday or any of its affiliates. The name Workday is a registered trademark of Workday. The use of the Workday trademark is for identification and reference purposes only and does not imply any association with Workday or any of its affiliates.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ADP-to-AD_Connector/" class="btn btn-neutral float-left" title="ADP to AD"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../Atlassian%20JIRA%20-%20Connector/" class="btn btn-neutral float-right" title="Atlassian JIRA">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../ADP-to-AD_Connector/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../Atlassian%20JIRA%20-%20Connector/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

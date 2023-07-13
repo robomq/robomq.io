@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/MQTT/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>MQTT - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "MQTT";
+        var mkdocs_page_input_path = "MQTT.md";
+        var mkdocs_page_url = "/MQTT/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">MQTT</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>MQTT</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/MQTT.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduction">Introduction</h1>
+<blockquote>
+<p>Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding MQTT.  </p>
+</blockquote>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports MQTT 3.1 as an extension to the AMQP broker. Its port is <strong>1883</strong>, SSL port is <strong>8883</strong>.</p>
+<p>MQTT stands for Message Queue Telemetry Transport. It is a publish / subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimize network bandwidth and device resource requirements whilst also attempting to ensure reliability and some degree of assurance of delivery. These principles also turn out to make the protocol ideal of the emerging "machine-to-machine" (M2M) or "Internet of Things" (IoT) world of connected devices, and for mobile applications where bandwidth and battery power are at a premium. 
+<a href="https://mqtt.org" target="_blank">Full documentation of MQTT</a></p>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> builds MQTT adapter on top of AMQP exchanges and queues. Messages published to MQTT topics use a topic exchange (amq.topic by default) internally. Subscribers consume from queues bound to the topic exchange. This both enables interoperability with other protocols and makes it possible to use the Management GUI to inspect queue sizes, message rates, and so on.  </p>
+<h1 id="vhost-specification">Vhost specification</h1>
+<p>MQTT protocol itself does not have the concept of vhost and so all MQTT libraries do not provide vhost argument.<br />
+However, <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker supplemented this feature. You can optionally specify a vhost while connecting, by prepending the vhost to the username and separating with a colon. For example, <code>/:guest</code>. If no vhost is specified, it will use the default vhost "/".   </p>
+<h1 id="durability-and-persistence">Durability and Persistence</h1>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> MQTT adapter assumes two primary usage scenarios:</p>
+<blockquote>
+<p>QoS stands for quality of service in MQTT. <a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports QoS up to 1.</p>
+</blockquote>
+<ul>
+<li>Transient clients that use transient messages (non-persistent, QoS=0). It uses non-durable, auto-delete queues that will be deleted when the client disconnects.  </li>
+<li>Stateful clients that use durable subscriptions (non-clean sessions, QoS=1). It uses durable queues. Whether the queues are auto-deleted is controlled by the client's clean session flag. Clients with clean sessions use auto-deleted queues, others use non-auto-deleted ones.   </li>
+</ul>
+<p>For transient (QoS=0) publishes, <a href="https://www.robomq.io" target="_blank">RoboMQ</a> will publish messages as transient (non-persistent). Naturally, for durable (QoS=1) publishes, persistent messages will be used internally.</p>
+<p>Queues created for MQTT subscribers will have names starting with mqtt-subscription-, one per subscription QoS level.  </p>
+<h1 id="mqtt-use-cases">MQTT use cases</h1>
+<p>We will provide examples in five languages, including Python, Node.js, PHP, Java and C++.  </p>
+<p>In the examples, MQTT producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular topic through MQTT broker. MQTT consumer will subscribe the same topic and print the topic and payload as it receives messages.  </p>
+<p>All examples have implemented automatic reconnecting, which is crucial in real production.</p>
+<p>The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK <a href="https://github.com/robomq/robomq.io/tree/master/sdk/MQTT" target="_blank">repository</a> on GitHub.  </p>
+<blockquote>
+<p>Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.<br />
+Always run consumer first to create the exchange and queue for producer to send messages to.   </p>
+</blockquote>
+<h2 id="python">Python</h2>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>The Python library we use for this example can be found at <a href="https://eclipse.org/paho/clients/python/" target="_blank">https://eclipse.org/paho/clients/python/</a>. Its source code is at <a href="https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/" target="_balnk">https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/</a>.  </p>
+<p>You can install it through <code>sudo pip install paho-mqtt</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-python">import paho.mqtt.client as mqtt
+</code></pre>
+<p>The full documentation of this library is at <a href="https://pypi.python.org/pypi/paho-mqtt" target="_blank">https://pypi.python.org/pypi/paho-mqtt</a>.  </p>
+<blockquote>
+<p>This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <a href="https://mosquitto.org" target="_blank">https://mosquitto.org</a>.  </p>
+</blockquote>
+<h3 id="producer">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.<br />
+Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  </p>
+<pre><code class="language-python">client = mqtt.Client(client_id=&quot;&quot;, clean_session=True, userdata=None, protocol=&quot;MQTTv31&quot;)
+client.username_pw_set(vhost + &quot;:&quot; + username, password)
+client.connect(server, port, keepalive=60, bind_address=&quot;&quot;)
+client.loop_start()
+</code></pre>
+<p>After that, producer can send messages to a particular topic.   </p>
+<pre><code class="language-python">client.publish(topic, payload=message, qos=1, retain=False)
+</code></pre>
+<p>At last, producer will stop loop and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.    </p>
+<pre><code class="language-python">client.loop_stop()
+client.disconnect()
+</code></pre>
+<h3 id="consumer">Consumer</h3>
+<p>The same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker and start loop.  Not as the producer, this consumer loops forever.</p>
+<pre><code class="language-python">client.loop_forever()
+</code></pre>
+<p>The callback function of connecting is to subscribe a topic, so that consumer knows where to listen to.<br />
+The second argument in <code>subscribe()</code> function is QoS.  </p>
+<pre><code class="language-python">def onConnect(client, userdata, rc):
+    client.subscribe([(topic, 1)])
+</code></pre>
+<p>Once it receives a message from the queue bound by the topic, it will trigger the callback function <code>onMessage()</code> to print the topic and message payload.  </p>
+<pre><code class="language-python">def onMessage(client, userdata, message):
+    print(&quot;Topic: &quot; + message.topic + &quot;, Message: &quot; + message.payload)
+</code></pre>
+<p>The callback functions should be preset before connecting to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-python">client.on_connect = onConnect
+client.on_message = onMessage
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-python">client.unsubscribe(topic)
+</code></pre>
+<h3 id="putting-it-together">Putting it together</h3>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import time
+import paho.mqtt.client as mqtt
+
+server = &quot;hostname&quot;
+port = 1883
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;test/any&quot;
+
+try:
+    client = mqtt.Client(client_id=&quot;&quot;, clean_session=True, userdata=None, protocol=&quot;MQTTv31&quot;)
+    client.username_pw_set(vhost + &quot;:&quot; + username, password)
+    client.connect(server, port, keepalive=60, bind_address=&quot;&quot;) #connect
+    client.loop_start() #start loop
+    msgNum = int(input(&quot;Quantity of test messages: &quot;))
+    for i in range(msgNum):
+        message = &quot;test msg &quot; + str(i + 1)
+        client.publish(topic, payload=message, qos=1, retain=False) #publish
+        time.sleep(1)
+    client.loop_stop()  #stop loop
+    client.disconnect()
+except Exception, e:
+    print e
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import time
+import paho.mqtt.client as mqtt
+
+server = &quot;hostname&quot;
+port = 1883
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;test/#&quot;
+
+&quot;&quot;&quot;
+ * This method is the callback on connecting to broker.
+ * @ It subscribes the target topic.
+&quot;&quot;&quot;
+def onConnect(client, userdata, rc):    #event on connecting
+    client.subscribe([(topic, 1)])  #subscribe
+
+&quot;&quot;&quot;
+ * This method is the callback on receiving messages.
+ * @ It prints the message topic and payload on console.
+&quot;&quot;&quot;
+def onMessage(client, userdata, message):   #event on receiving message
+    print(&quot;Topic: &quot; + message.topic + &quot;, Message: &quot; + message.payload)
+
+while True:
+    try:
+        client = mqtt.Client(client_id=&quot;&quot;, clean_session=True, userdata=None, protocol=&quot;MQTTv31&quot;)
+        client.username_pw_set(vhost + &quot;:&quot; + username, password)
+        client.on_connect = onConnect
+        client.on_message = onMessage
+        client.connect(server, port, keepalive=60, bind_address=&quot;&quot;) #connect
+        client.loop_forever()   #automatically reconnect once loop forever
+    except Exception, e:
+        #when initialize connection, reconnect on exception
+        print &quot;Exception handled, reconnecting...\nDetail:\n%s&quot; % e 
+        time.sleep(5)
+</code></pre>
+<h2 id="nodejs">Node.js</h2>
+<h3 id="prerequisite_1">Prerequisite</h3>
+<p>The Node.js library we use for this example can be found at <a href="https://github.com/adamvr/MQTT.js" target="_blank">https://github.com/adamvr/MQTT.js</a>.    </p>
+<p>You can install the library through <code>sudo npm install mqtt</code>.  </p>
+<p>Finally, require this library in your program.</p>
+<pre><code class="language-javascript">var mqtt = require(&quot;mqtt&quot;);
+</code></pre>
+<p>The full documentation of this library is at <a href="https://github.com/mqttjs/MQTT.js/wiki" target="_blank">https://github.com/mqttjs/MQTT.js/wiki</a>.</p>
+<h3 id="producer_1">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-javascript">var client = mqtt.connect(&quot;mqtt://&quot; + server + &quot;:&quot; + port, {username: vhost + &quot;:&quot; + username, password: password, keepalive: 60, clean: true, will: null});
+</code></pre>
+<p>Using this library, you will probably incorporate most other functions in the callback on connect.  </p>
+<pre><code class="language-javascript">client.on(&quot;connect&quot;, callback); 
+</code></pre>
+<p>After that, producer can send messages to a particular topic.  </p>
+<pre><code class="language-javascript">client.publish(topic, message, {qos: 1, retain: false});
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. The <code>end()</code> function contains disconnecting.</p>
+<pre><code class="language-javascript">client.end();
+</code></pre>
+<h3 id="consumer_1">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>In the callback function on connect, next step is to subscribe a topic, so that consumer knows where to listen to. It uses a callback function to handle incoming messages. Once it receives a message from the queue bound by the topic, it will print the topic and message payload. </p>
+<pre><code class="language-javascript">client.subscribe(topic, {qos: 1, dup: false})
+.on(&quot;message&quot;, function(topic, payload, packet) {
+    console.log(&quot;Topic: &quot; + topic + &quot;, Message: &quot; + payload);
+});
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-javascript">client.unsubscribe(topic, callback);
+</code></pre>
+<h3 id="putting-it-together_1">Putting it together</h3>
+<p><strong>producer.js</strong></p>
+<pre><code class="language-javascript">var mqtt = require(&quot;mqtt&quot;);
+
+var server = &quot;hostname&quot;;
+var port = &quot;1883&quot;;
+var vhost = &quot;yourvhost&quot;;
+var username = &quot;username&quot;;
+var password = &quot;password&quot;;
+var topic = &quot;test/any&quot;;
+
+var client = mqtt.connect(&quot;mqtt://&quot; + server + &quot;:&quot; + port, {username: vhost + &quot;:&quot; + username, password: password, keepalive: 60, clean: true, will: null});
+client.on(&quot;connect&quot;, function() {   //this library automatically reconnects on errors
+    //ask user to input the number of test messages
+    process.stdout.write(&quot;Quantity of test messages: &quot;);
+    process.stdin.on(&quot;data&quot;, function (msgNum) {
+        //send certain number of messages
+        try {
+            for(var i = 1; i &lt;= msgNum; i++){   
+                var message = &quot;test msg &quot; + i;
+                client.publish(topic, message, {qos: 1, retain: false});
+            }
+        } catch(ex) {
+            console.log(ex);
+            process.exit(-1);
+        }
+        //shut down producer after messages sent
+        setTimeout(function() {
+            client.end();   //includes disconnect()
+            process.exit(0);
+        }, msgNum);
+    });
+});
+</code></pre>
+<p><strong>consumer.js</strong></p>
+<pre><code class="language-javascript">var mqtt = require(&quot;mqtt&quot;);
+
+var server = &quot;hostname&quot;;
+var port = &quot;1883&quot;;
+var vhost = &quot;yourvhost&quot;;
+var username = &quot;username&quot;;
+var password = &quot;password&quot;;
+var topic = &quot;test/#&quot;;
+
+var client = mqtt.connect(&quot;mqtt://&quot; + server + &quot;:&quot; + port, {username: vhost + &quot;:&quot; + username, password: password, keepalive: 60, clean: true, will: null});
+client.on(&quot;connect&quot;, function() {   //this library automatically reconnects on errors
+    try {
+        client.subscribe(topic, {qos: 1, dup: false})   //chainable API
+        .on(&quot;message&quot;, function(topic, payload, packet) {   //event handling
+            console.log(&quot;Topic: &quot; + topic + &quot;, Message: &quot; + payload);
+        });
+    } catch(ex) {
+        console.log(ex);
+    }
+});
+</code></pre>
+<h2 id="php">PHP</h2>
+<h3 id="prerequisite_2">Prerequisite</h3>
+<p>The PHP library we use for this example can be found at <a href="https://github.com/mgdm/Mosquitto-PHP/">https://github.com/mgdm/Mosquitto-PHP/</a>.  </p>
+<p>This library depends on php 5.3+ and <a href="https://mosquitto.org/" target="_blank">libmosquitto</a>, so first ensure that your have them installed.<br />
+You may obtain the package using PECL <code>sudo pecl install Mosquitto-alpha</code>.<br />
+Now you should see <code>mosquitto.so</code> in your php shared library directory, e.g <code>/usr/lib/php5/20121212/</code>. Finally, edit your <code>php.ini</code>. In <em>Dynamic Extensions</em> section, add one line <code>extension=mosquitto.so</code>.  </p>
+<p>After installation, you don't need to explicitly require this library in your PHP script. Your PHP interpreter will integrate it for you.  </p>
+<h3 id="producer_2">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+In the constructor of client, first parameter is client ID, second is boolean flag for clean session.<br />
+The third parameter of connect function is keep alive the in seconds. Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-php">$client = new Mosquitto\Client(&quot;1&quot;, true);
+$client-&gt;setCredentials($vhost.&quot;:&quot;.$username, $password);
+$client-&gt;connect($server, $port, 60);
+</code></pre>
+<p>After that, producer can send messages to a particular topic. <br />
+The third parameter is QoS, fourth is boolean flag for retain.  </p>
+<pre><code class="language-php">$client-&gt;publish($topic, $message, 1, false);
+</code></pre>
+<p>Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.<br />
+It is strongly recommended that you call <code>loop()</code> each time you send a message.  </p>
+<pre><code class="language-php">$client-&gt;loop();
+</code></pre>
+<p>At last, producer will disconnect with the the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.    </p>
+<pre><code class="language-php">$client-&gt;disconnect();
+</code></pre>
+<h3 id="consumer_2">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. Not as the producer, this consumer loops forever.  </p>
+<pre><code class="language-php">$client-&gt;loopForever();
+</code></pre>
+<p>The next step is to subscribe a topic, so that consumer knows where to listen to.<br />
+The second argument in <code>subscribe()</code> function is QoS.  </p>
+<pre><code class="language-php">client-&gt;subscribe(topic, 1);
+</code></pre>
+<p>Once it receives a message from the queue bound by the topic, it will trigger the callback function <code>onMessage()</code> to print the topic and message payload.  </p>
+<pre><code class="language-php">function onMessage($message) {
+    printf(&quot;Topic: %s, Message: %s\n&quot;, $message-&gt;topic, $message-&gt;payload);
+}
+</code></pre>
+<p>The callback functions should be preset before connecting to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. Foe example,  </p>
+<pre><code class="language-php">$client-&gt;onMessage(&quot;onMessage&quot;);
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-php">client-&gt;unsubscribe(topic, qos);
+</code></pre>
+<h3 id="putting-it-together_2">Putting it together</h3>
+<p><strong>producer.php</strong></p>
+<pre><code class="language-php">&lt;?php
+$server = &quot;hostname&quot;;
+$port = &quot;1883&quot;;
+$vhost = &quot;yourvhost&quot;;
+$username = &quot;username&quot;;
+$password = &quot;password&quot;;
+$topic = &quot;test/any&quot;;
+
+try {
+    $client = new Mosquitto\Client(&quot;1&quot;, true); //clientid=&quot;1&quot;, clean_session=true
+    $client-&gt;setCredentials($vhost.&quot;:&quot;.$username, $password);
+    $client-&gt;connect($server, $port, 60); //keepalive=60
+    echo &quot;Quantity of test messages: &quot;;
+    $msgNum = rtrim(fgets(STDIN), PHP_EOL);
+    for ($i = 1; $i &lt;= $msgNum; $i++) {
+        $message = &quot;test msg &quot;.$i;
+        $client-&gt;publish($topic, $message, 1, false); //publish test messages to the topic
+        $client-&gt;loop(); //frequently loop to to keep communications with broker
+        sleep(1);
+    }
+    $client-&gt;disconnect();
+} catch (Exception $e) {
+    echo $e;
+}
+?&gt;
+</code></pre>
+<p><strong>consumer.php</strong></p>
+<pre><code class="language-php">&lt;?php
+$GLOBALS[&quot;client&quot;] = $client;
+$GLOBALS[&quot;topic&quot;] = $topic;
+
+$server = &quot;hostname&quot;;
+$port = &quot;1883&quot;;
+$vhost = &quot;yourvhost&quot;;
+$username = &quot;username&quot;;
+$password = &quot;password&quot;;
+$topic = &quot;test/#&quot;;
+
+function subscribe() {
+    $GLOBALS[&quot;client&quot;]-&gt;subscribe($GLOBALS[&quot;topic&quot;], 1); //qos=1
+}
+
+/**
+ * This method is the callback on receiving messages.
+ * @ It prints the message topic and payload on console.
+ */
+function onMessage($message) {
+    printf(&quot;Topic: %s, Message: %s\n&quot;, $message-&gt;topic, $message-&gt;payload);
+}
+
+while (true) {
+    try {
+        $client = new Mosquitto\Client(&quot;0&quot;, true); //clientid=&quot;0&quot;, clean_session=true
+        $client-&gt;setCredentials($vhost.&quot;:&quot;.$username, $password);
+        $client-&gt;onConnect(&quot;subscribe&quot;);
+        $client-&gt;onMessage(&quot;onMessage&quot;);
+        $client-&gt;connect($server, $port, 60); //keepalive=60
+        $client-&gt;loopForever(); //automatically reconnect when loopForever
+    } catch (Exception $e) {
+        //when initialize connection, reconnect on exception
+        echo &quot;Exception handled, reconnecting...\nDetail:\n&quot;.$e.&quot;\n&quot;;
+        sleep(5);
+    }
+}
+?&gt;
+</code></pre>
+<h2 id="ruby">Ruby</h2>
+<h3 id="prerequisite_3">Prerequisite</h3>
+<p>The Ruby gem we use for this example can be found at <a href="https://rubygems.org/gems/mqtt" target="_blank">https://rubygems.org/gems/mqtt</a>. Its source code is at <a href="https://github.com/njh/ruby-mqtt" target="_blank">https://github.com/njh/ruby-mqtt</a>  </p>
+<p>You can install it through <code>gem install mqtt</code>.  </p>
+<p>Finally, require this gem in your program.</p>
+<pre><code class="language-ruby">require 'mqtt'
+</code></pre>
+<p>The full documentation of this gem is at <a href="https://www.rubydoc.info/gems/mqtt/" target="_blank">https://www.rubydoc.info/gems/mqtt/</a>.  </p>
+<h3 id="producer_3">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-ruby">client = MQTT::Client.connect(
+  :host =&gt; server,
+  :port =&gt; port,
+  :username =&gt; &quot;#{vhost}:#{username}&quot;,
+  :password =&gt; password,
+  :version =&gt; &quot;3.1.0&quot;,
+  :keep_alive =&gt; 60,
+  :clean_session =&gt; true,
+  :client_id =&gt; &quot;&quot;,
+  :will_qos =&gt; 1,
+  :will_retain =&gt; false
+)
+</code></pre>
+<p>After that, producer can send messages to a particular topic.</p>
+<pre><code class="language-ruby">client.publish(topic, msg)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-ruby">client.disconnect
+</code></pre>
+<h3 id="consumer_3">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a topic, so that consumer knows where to listen to.</p>
+<pre><code class="language-ruby">subscription = client.subscribe([topic,1])
+</code></pre>
+<p>To receive a message, use the <code>get</code> method. This method will block until a message is available. If you give it a block, then the block will be executed for every message received.</p>
+<pre><code class="language-ruby">client.get do |topic, message|
+  onMessage(topic, message)
+end
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-ruby">client.unsubscribe(topic)
+</code></pre>
+<h3 id="putting-it-together_3">Putting it together</h3>
+<p><strong>producer.rb</strong></p>
+<pre><code class="language-ruby">require &quot;mqtt&quot;
+
+# connection options
+server = &quot;hostname&quot;
+port = 1883
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;test/any&quot;
+
+print &quot;Quantity of test messages: &quot;
+msgNum = gets.to_i
+
+# create connection
+begin
+  client = MQTT::Client.connect(
+      :host =&gt; server,
+      :port =&gt; port,
+      :username =&gt; &quot;#{vhost}:#{username}&quot;,
+      :password =&gt; password,
+      :version =&gt; &quot;3.1.0&quot;,
+      :keep_alive =&gt; 60,
+      :clean_session =&gt; true,
+      :client_id =&gt; &quot;&quot;,
+      :will_qos =&gt; 1,
+      :will_retain =&gt; false
+  )
+
+  # publish messages
+  (1..msgNum).each do |counter|
+    msg = &quot;test msg  #{counter}&quot;
+    client.publish(topic, msg)
+    sleep 1
+  end
+
+  client.disconnect
+end
+</code></pre>
+<p><strong>consumer.rb</strong></p>
+<pre><code class="language-ruby">require &quot;mqtt&quot;
+
+# connection options
+server = &quot;hostname&quot;
+port = 1883
+vhost = &quot;yourvhost&quot;
+username = &quot;username&quot;
+password = &quot;password&quot;
+topic = &quot;test/any&quot;
+
+# event on receiving message
+def onMessage(topic, message)
+  puts &quot;Topic: #{topic}, Message: #{message}&quot;
+end
+
+# create connection and keep getting messages
+loop do
+  begin
+    # connect
+    client = MQTT::Client.connect(
+      :host =&gt; server,
+      :port =&gt; port,
+      :username =&gt; &quot;#{vhost}:#{username}&quot;,
+      :password =&gt; password,
+      :version =&gt; &quot;3.1.0&quot;,
+      :keep_alive =&gt; 60,
+      :clean_session =&gt; true,
+      :client_id =&gt; &quot;&quot;,
+      )
+
+    # subscribe
+    client.subscribe([topic,1])
+
+    client.get do |topic, message|
+      onMessage(topic, message)
+    end
+  rescue MQTT::ProtocolException =&gt; pe
+    puts &quot;Exception handled, reconnecting...\nDetail:\n#{pe.message}&quot;
+    sleep 5
+  end
+end
+</code></pre>
+<h2 id="java">Java</h2>
+<h3 id="prerequisite_4">Prerequisite</h3>
+<p>The Java library we use for this example can be found at <a href="https://www.eclipse.org/paho/clients/java/" target="_blank">https://www.eclipse.org/paho/clients/java/</a>.  </p>
+<p>Download the library jar file at <a href="https://repo.eclipse.org/content/repositories/paho-releases/org/eclipse/paho/mqtt-client/0.4.0/mqtt-client-0.4.0.jar" target="_blank">https://repo.eclipse.org/content/repositories/paho-releases/org/eclipse/paho/mqtt-client/0.4.0/mqtt-client-0.4.0.jar</a>, import this library in your program <code>import org.eclipse.paho.client.mqttv3.*;</code> and compile your source code with the jar file. For example,  </p>
+<pre><code class="language-bash">javac -cp &quot;.:./mqtt-client-0.4.0.jar&quot; Producer.java Consumer.java 
+</code></pre>
+<p>Run the producer and consumer classes. For example,  </p>
+<pre><code class="language-bash">java -cp &quot;.:./mqtt-client-0.4.0.jar&quot; Consumer
+java -cp &quot;.:./mqtt-client-0.4.0.jar&quot; Producer
+</code></pre>
+<p>Of course, you can eventually compress your producer and consumer classes into jar files.</p>
+<p>The full documentation of this library is at <a href="http://www.eclipse.org/paho/files/javadoc/index.html">http://www.eclipse.org/paho/files/javadoc/index.html</a>.</p>
+<h3 id="producer_4">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-java">private String broker = &quot;tcp://&quot; + server + &quot;:&quot; + port;
+private String clientId = MqttClient.generateClientId();
+private MemoryPersistence persistence = new MemoryPersistence();
+
+client = new MqttClient(broker, clientId, persistence);
+MqttConnectOptions connOpts = new MqttConnectOptions();
+connOpts.setUserName(vhost + &quot;:&quot; + username);
+connOpts.setPassword(password.toCharArray());
+connOpts.setKeepAliveInterval(60);
+connOpts.setCleanSession(true);
+client.connect(connOpts);
+</code></pre>
+<p>After that, producer can send messages to a particular topic.<br />
+It is remarkable that the message argument of <code>publish()</code> function isn't a String. Instead, it is a instance of MqttMessage class. Message payload text is the argument of the constructor of MqttMessage class. It has some public methods to set the headers, e.g. <code>setQos()</code>, <code>setRetained()</code>, etc.</p>
+<pre><code class="language-java">client.publish(topic, message);
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-java">client.disconnect();
+</code></pre>
+<h3 id="consumer_4">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a topic, so that consumer knows where to listen to. You need to set the callback on message before subscribe. Once it receives a message from queue bound by the topic, it will call the overridden function <code>messageArrived()</code> to print the topic and message payload.<br />
+The second parameter of <code>subscribe()</code> function is QoS.  </p>
+<pre><code class="language-java">private class onMessage implements MqttCallback {
+    public void messageArrived(String topic, MqttMessage message) {     
+        System.out.println(&quot;Topic: &quot; + topic + &quot;, Message: &quot; + (new String(message.getPayload())));
+    }
+    public void connectionLost(Throwable cause) {}
+    public void deliveryComplete(IMqttDeliveryToken token) {}
+}
+
+onMessage callback = new onMessage();
+client.setCallback(callback);
+client.subscribe(topic, 1);
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-java">client.unsubscribe(topic);
+</code></pre>
+<h3 id="putting-it-together_4">Putting it together</h3>
+<p><strong>Producer.java</strong></p>
+<pre><code class="language-java">import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import java.util.Scanner;
+
+public class Producer {
+
+    private MqttClient client;
+    private String server = &quot;hostname&quot;;
+    private String port = &quot;1883&quot;;
+    private String broker = &quot;tcp://&quot; + server + &quot;:&quot; + port;
+    private String vhost = &quot;yourvhost&quot;;
+    private String username = &quot;username&quot;;
+    private String password = &quot;password&quot;;
+    private String topic = &quot;test/any&quot;;
+    private String clientId = MqttClient.generateClientId();
+    private MemoryPersistence persistence = new MemoryPersistence();
+
+    private void produce() {
+        try {
+            client = new MqttClient(broker, clientId, persistence);
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setUserName(vhost + &quot;:&quot; + username);
+            connOpts.setPassword(password.toCharArray());
+            connOpts.setKeepAliveInterval(60);
+            connOpts.setCleanSession(true);
+            client.connect(connOpts);
+            System.out.print(&quot;Quantity of test messages: &quot;);
+            Scanner scanner = new Scanner(System.in);
+            int msgNum = scanner.nextInt();
+            for (int i = 0; i &lt; msgNum; i ++) {
+                MqttMessage message = new MqttMessage((&quot;test msg &quot; + Integer.toString(i + 1)).getBytes());
+                message.setQos(1);
+                message.setRetained(false);
+                client.publish(topic, message);
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {}
+            }
+            client.disconnect();
+        } catch(MqttException me) {
+            System.out.println(me);
+            System.exit(-1);            
+        }
+    }
+
+    public static void main(String[] args) {
+        Producer p = new Producer();
+        p.produce();
+    }
+}
+</code></pre>
+<p><strong>Consumer.java</strong></p>
+<pre><code class="language-java">import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+
+public class Consumer {
+
+    private MqttClient client;
+    private String server = &quot;hostname&quot;;
+    private String port = &quot;1883&quot;;
+    private String broker = &quot;tcp://&quot; + server + &quot;:&quot; + port;
+    private String vhost = &quot;yourvhost&quot;;
+    private String username = &quot;username&quot;;
+    private String password = &quot;password&quot;;
+    private String topic = &quot;test/#&quot;;
+    private String clientId = MqttClient.generateClientId();
+    private MemoryPersistence persistence = new MemoryPersistence();
+    private boolean connected = false;
+
+    /**
+     * This method is the overridden callback on receiving messages.
+     * @ It is event-driven. You don't call it in your code.
+     * @ It prints the message topic and payload on console.
+     * @ There're other callback functions provided by this library.
+     */
+    private class onMessage implements MqttCallback {
+
+        public void messageArrived(String topic, MqttMessage message) {     
+            System.out.println(&quot;Topic: &quot; + topic + &quot;, Message: &quot; + (new String(message.getPayload())));
+        }
+
+        public void connectionLost(Throwable cause) {
+            System.out.printf(&quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, cause.getMessage());
+            connected = false; //reconnect on exception
+        }
+
+        public void deliveryComplete(IMqttDeliveryToken token) {
+        }
+    }
+
+    private void consume() {
+        while (true) {
+            try {
+                client = new MqttClient(broker, clientId, persistence);
+                MqttConnectOptions connOpts = new MqttConnectOptions();
+                connOpts.setUserName(vhost + &quot;:&quot; + username);
+                connOpts.setPassword(password.toCharArray());
+                connOpts.setKeepAliveInterval(60);
+                connOpts.setCleanSession(true);
+                client.connect(connOpts);
+                onMessage callback = new onMessage();
+                client.setCallback(callback);
+                client.subscribe(topic, 1); //qos=1
+                connected = true;
+                while (connected) { //check connection status
+                    try {
+                        Thread.sleep(5000);
+                    } catch (Exception e) {}
+                } 
+            } catch(MqttException me) {
+                //reconnect on exception
+                System.out.printf(&quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, me); 
+                try {
+                    Thread.sleep(5000); 
+                } catch(Exception e) {}
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Consumer c = new Consumer();
+        c.consume();
+    }
+}
+</code></pre>
+<h2 id="go">Go</h2>
+<h3 id="prerequisite_5">Prerequisite</h3>
+<p>The Go library we use for this example can be found at <a href="https://eclipse.org/paho/clients/golang/" target="_blank">https://eclipse.org/paho/clients/golang/</a>. Its GitHub repository is at <a href="https://github.com/eclipse/paho.mqtt.golang" target="_balnk">https://github.com/eclipse/paho.mqtt.golang</a>.  </p>
+<p>You can install it through <code>go get github.com/eclipse/paho.mqtt.golang</code>.  </p>
+<p>Finally, import this library in your program.  </p>
+<pre><code class="language-go">import MQTT &quot;github.com/eclipse/paho.mqtt.golang&quot;
+</code></pre>
+<p>The full documentation of this library is at <a href="https://godoc.org/git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git" target="_blank">https://godoc.org/git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git</a>.  </p>
+<blockquote>
+<p>This library depends on Google's websockets package, which is installed with <code>go get golang.org/x/net/websocket</code>  </p>
+</blockquote>
+<h3 id="producer_5">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.<br />
+Although the library provides an <code>AutoReconnect</code> connection option, we discourage you to use it. The reason will be explained in the Consumer section.</p>
+<pre><code class="language-go">connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf(&quot;tcp://%s:%d&quot;, server, port))
+connOpts.SetUsername(fmt.Sprintf(&quot;%s:%s&quot;, vhost, username))
+connOpts.SetPassword(password)
+connOpts.SetClientID(&quot;0&quot;)
+connOpts.SetCleanSession(true)
+connOpts.SetKeepAlive(60 * time.Second)
+connOpts.SetAutoReconnect(false)
+
+client := MQTT.NewClient(connOpts)
+client.Connect()
+</code></pre>
+<p>After that, producer can send messages to a particular topic.<br />
+The second parameter is QoS, third is boolean flag for retain.  </p>
+<pre><code class="language-go">client.Publish(topic, 1, false, message)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. <br />
+The parameter <code>250</code> is the number of milliseconds to wait for existing work to be completed.   </p>
+<pre><code class="language-go">client.Disconnect(250)
+</code></pre>
+<h3 id="consumer_5">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+As we mentioned in the Producer section, <code>AutoReconnect</code> is set to false when connecting to the RoboMQ broker. It matters for consumers because <code>AutoReconnect</code> will only recover the connection, it won't resubscribe the topics. Therefore, a more robust approach is letting your code handle reconnecting and resubscribing on its own.  </p>
+<p>The next step is to subscribe a topic, so that consumer knows where to listen to.
+The second argument in <code>subscribe()</code> function is QoS, the third one is the callback function to handle incoming messages.  </p>
+<pre><code class="language-go">client.Subscribe(topic, 1, OnMessage)
+</code></pre>
+<p>Once it receives a message from the queue bound by the topic, it will trigger the callback function <code>onMessage()</code> to print the topic and message payload.  </p>
+<pre><code class="language-go">var OnMessage MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
+    fmt.Printf(&quot;Topic: %s, Message: %s\n&quot;, msg.Topic(), msg.Payload())
+}
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-go">client.Unsubscribe(topic)
+</code></pre>
+<h3 id="putting-it-together_5">Putting it together</h3>
+<p><strong>producer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    MQTT &quot;github.com/eclipse/paho.mqtt.golang&quot;
+    &quot;os&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = 1883
+var vhost = &quot;yourvhost&quot;
+var username = &quot;username&quot;
+var password = &quot;password&quot;
+var topic = &quot;test/any&quot;
+
+func main() {
+    connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf(&quot;tcp://%s:%d&quot;, server, port))
+    connOpts.SetUsername(fmt.Sprintf(&quot;%s:%s&quot;, vhost, username))
+    connOpts.SetPassword(password)
+    connOpts.SetClientID(&quot;1&quot;)
+    connOpts.SetCleanSession(true)
+    connOpts.SetKeepAlive(60 * time.Second)
+    connOpts.SetAutoReconnect(false)
+
+    // Create and start a client using the above ClientOptions
+    client := MQTT.NewClient(connOpts)
+    if token := client.Connect(); token.Wait() &amp;&amp; token.Error() != nil {
+        fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, token.Error())
+        os.Exit(1)
+    }
+
+    var msgNum int
+    fmt.Print(&quot;Quantity of test messages: &quot;)
+    fmt.Scanf(&quot;%d&quot;, &amp;msgNum)
+    for i := 0; i &lt; msgNum; i++ {
+        message := fmt.Sprintf(&quot;test msg %d&quot;, i+1)
+        // QoS = 1, retained = false
+        token := client.Publish(topic, 1, false, message)
+        // Use PublishToken to confirmed receipt from the broker
+        token.Wait()
+        if token.Error() != nil {
+            fmt.Printf(&quot;Failed to publish, err: %v\n&quot;, token.Error())
+            os.Exit(1)
+        }
+        time.Sleep(time.Second)
+    }
+
+    client.Disconnect(250)
+}
+</code></pre>
+<p><strong>consumer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    MQTT &quot;github.com/eclipse/paho.mqtt.golang&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = 1883
+var vhost = &quot;yourvhost&quot;
+var username = &quot;username&quot;
+var password = &quot;password&quot;
+var topic = &quot;test/#&quot;
+
+/**
+ * This function is the callback on receiving messages.
+ * @ It prints the message topic and payload on console.
+ */
+var OnMessage MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
+    fmt.Printf(&quot;Topic: %s, Message: %s\n&quot;, msg.Topic(), msg.Payload())
+}
+
+func main() {
+    connOpts := MQTT.NewClientOptions().AddBroker(fmt.Sprintf(&quot;tcp://%s:%d&quot;, server, port))
+    connOpts.SetUsername(fmt.Sprintf(&quot;%s:%s&quot;, vhost, username))
+    connOpts.SetPassword(password)
+    connOpts.SetClientID(&quot;0&quot;)
+    connOpts.SetCleanSession(true)
+    connOpts.SetKeepAlive(60 * time.Second)
+    connOpts.SetAutoReconnect(false)
+
+    // Infinite loop to auto-reconnect on failure
+    for {
+        // Create and start a client using the above ClientOptions
+        client := MQTT.NewClient(connOpts)
+        if token := client.Connect(); token.Wait() &amp;&amp; token.Error() != nil {
+            fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, token.Error())
+        }
+
+        // QoS = 1
+        if token := client.Subscribe(topic, 1, OnMessage); token.Wait() &amp;&amp; token.Error() != nil {
+            fmt.Printf(&quot;Failed to subscribe, err: %v\n&quot;, token.Error())
+        }
+
+        // Constantly checking connectivity
+        for client.IsConnected() {
+            time.Sleep(time.Second)
+        }
+
+        fmt.Println(&quot;Restarting in 5 seconds...&quot;)
+        time.Sleep(5 * time.Second)
+    }
+}
+</code></pre>
+<h2 id="c">C++</h2>
+<h3 id="prerequisite_6">Prerequisite</h3>
+<p>The C++ library we use for this example can be found at <a href="https://mosquitto.org/" target="_blank">http://mosquitto.org/</a>.   </p>
+<p>You will find elaborate installation guide at <a href="https://mosquitto.org/download/" target="_blank">https://mosquitto.org/download/</a>. Install the library according to your operating system. The recommended approach is installing from the source. First, download the latest source package, uncompress it and enter its root directory; Then, run the following two commands:</p>
+<pre><code class="language-bash">make
+sudo make install
+</code></pre>
+<p>Include this library in your program <code>#include &lt;mosquitto.h&gt;</code> and compile it by</p>
+<pre><code class="language-bash">g++ producer.cpp -o producer -lmosquitto
+g++ consumer.cpp -o consumer -lmosquitto
+</code></pre>
+<p>See the full documentation of this library at <a href="https://mosquitto.org/documentation/" target="_blank">https://mosquitto.org/documentation/</a>.</p>
+<h3 id="producer_6">Producer</h3>
+<p>The first thing we need to do is to establish a connection with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Remember to <code>mosquitto_lib_init();</code> before creating the mosquitto instance.<br />
+Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion. Using this library, you usually starts loop right after connecting.<br />
+The second parameter of <code>mosquitto_new()</code> function is boolean flag for clean session.<br />
+The fourth parameter of <code>mosquitto_connect()</code> function is keep alive time in seconds. Set keep alive to 60 seconds, so that client will confirm the connectivity with broker.  </p>
+<pre><code class="language-cpp">string vhusn = vhost + &quot;:&quot; + usn;
+const char *username = vhusn.c_str();
+
+struct mosquitto *mosq = NULL;
+
+mosquitto_lib_init();
+mosq = mosquitto_new(NULL, true, NULL);
+mosquitto_username_pw_set(mosq, username, password);     
+mosquitto_connect(mosq, host, port, 60));
+mosquitto_loop_start(mosq); 
+</code></pre>
+<p>After that, producer can send messages to a particular topic.<br />
+The fourth argument is length of payload char array; The sixth argument is QoS; The seventh argument is boolean flag for retain.    </p>
+<pre><code class="language-cpp">mosquitto_publish(mosq, NULL, topic, 20, payload, 1, false);
+</code></pre>
+<p>At last, producer will stop loop and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-cpp">mosquitto_loop_stop(mosq, true); 
+mosquitto_disconnect(mosq);
+mosquitto_destroy(mosq);
+mosquitto_lib_cleanup();
+</code></pre>
+<h3 id="consumer_6">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker and start the loop. Not as the producer, this consumer loops forever.  </p>
+<pre><code class="language-cpp">while(!mosquitto_loop_forever(mosq, 0, 1)){
+} 
+</code></pre>
+<p>Then you need to set some callback functions. They play an significant role when using this library. Callback on receiving message is indispensable.  </p>
+<pre><code class="language-cpp">void onMessage(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *message) {
+    if(message-&gt;payloadlen) {
+        printf(&quot;Topic: %s, Message: %s\n&quot;, (char*)message-&gt;topic, (char*)message-&gt;payload);
+    } else {
+        printf(&quot;Topic: %s, Message: (null)\n&quot;, message-&gt;topic);
+    }
+    fflush(stdout);
+}
+
+mosquitto_message_callback_set(mosq, onMessage);
+</code></pre>
+<p>Finally, you need to subscribe a topic, so that consumer knows where to listen to. Once it receives a message from the queue bound by the topic, it will call <code>onMessage()</code> function to print the topic and message payload.  </p>
+<pre><code class="language-cpp">mosquitto_subscribe(mosq, NULL, topic, 1);
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a topic.</p>
+<pre><code class="language-cpp">mosquitto_unsubscribe(mosq, NULL, topic);
+</code></pre>
+<h3 id="putting-it-together_6">Putting it together</h3>
+<p><strong>producer.cpp</strong></p>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;mosquitto.h&gt;
+#include &lt;exception&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+using namespace std;
+
+//The library automatically reconnects to broker
+
+string hst = &quot;hostname&quot;;
+const char *host = hst.c_str();
+int port = 1883;
+string vhost = &quot;yourvhost&quot;;
+string usn = &quot;username&quot;;
+string vhusn = vhost + &quot;:&quot; + usn;
+const char *username = vhusn.c_str();
+string pwd = &quot;password&quot;;
+const char *password = pwd.c_str();
+string tpc = &quot;test/any&quot;;
+const char *topic = tpc.c_str();
+
+/**
+ * This is the main method which creates and runs producer instance.
+ * @Looping is essential for this MQTT library to work.
+ * @Exceptions on connection and publish error.
+ */
+int main(int argc, char *argv[]) {
+    int keepalive = 60;
+    bool clean_session = true;
+    struct mosquitto *mosq = NULL;
+
+    //create producer and connect to broker
+    mosquitto_lib_init();
+    mosq = mosquitto_new(NULL, clean_session, NULL);
+    mosquitto_username_pw_set(mosq, username, password);
+    if(mosquitto_connect(mosq, host, port, keepalive)) {
+        printf(&quot;Error: Failed to connect\n&quot;);
+        return 1;
+    }
+    //usually start loop right after connecting
+    mosquitto_loop_start(mosq); 
+
+    //send certain number of test messages
+    int msgNum;
+    cout &lt;&lt; &quot;Quantity of test messages: &quot;;
+    cin &gt;&gt; msgNum;
+    char payload[20];
+    for (int i = 1; i &lt;= msgNum; i++) {
+        sprintf(payload, &quot;test msg %d&quot;, i);
+        try {
+            mosquitto_publish(mosq, NULL, topic, 20, payload, 1, false);
+        } catch(exception&amp; e) {
+            printf(&quot;Error: Failed to publish message\n%s\n&quot;, e.what());
+            return 1;
+        }
+        sleep(1);
+    }
+
+    //stop producer
+    mosquitto_loop_stop(mosq, true); 
+    mosquitto_disconnect(mosq);
+    mosquitto_destroy(mosq);
+    mosquitto_lib_cleanup();
+    return 0;
+}
+</code></pre>
+<p><strong>consumer.cpp</strong></p>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+#include &lt;iostream&gt;
+#include &lt;mosquitto.h&gt;
+#include &lt;exception&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+using namespace std;
+
+//The library automatically reconnects to broker
+
+string hst = &quot;hostname&quot;;
+const char *host = hst.c_str();
+int port = 1883;
+string vhost = &quot;yourvhost&quot;;
+string usn = &quot;username&quot;;
+string vhusn = vhost + &quot;:&quot; + usn;
+const char *username = vhusn.c_str();
+string pwd = &quot;passwrod&quot;;
+const char *password = pwd.c_str();
+string tpc = &quot;test/#&quot;;
+const char *topic = tpc.c_str();
+
+/**
+ * This method is the callback on connecting broker. 
+ * @It is event-driven. You don't call it in your code.
+ * @It subscribes the specific topic.
+ * @There're other callback functions provided by this library.
+ */
+void onConnect(struct mosquitto *mosq, void *userdata, int result) {
+    if (!result) {
+        try {
+            mosquitto_subscribe(mosq, NULL, topic, 1); 
+        } catch (exception&amp; e) {
+            printf(&quot;Error: Failed to subscribe\n%s\n&quot;, e.what());
+        }
+    } else {
+        printf(&quot;Error: Failed to connect\n&quot;);
+    }
+}
+
+/**
+ * This method is the callback on receiving messages. 
+ * @It is event-driven. You don't call it in your code.
+ * @It prints the message topic and payload on console.
+ * @There're other callback functions provided by this library.
+ */
+void onMessage(struct mosquitto *mosq, void *userdata, const struct mosquitto_message *message) {
+    if(message-&gt;payloadlen) {
+        printf(&quot;Topic: %s, Message: %s\n&quot;, (char*)message-&gt;topic, (char*)message-&gt;payload);
+    } else {
+        printf(&quot;Topic: %s, Message: (null)\n&quot;, message-&gt;topic);
+    }
+    fflush(stdout);
+}
+
+/**
+ * This is the main method which creates and sets consumer instance.
+ * @Looping is essential for this MQTT library to work.
+ * @Exceptions on connection and subscription error.
+ */
+int main(int argc, char *argv[]) {
+    int keepalive = 60;
+    bool clean_session = true;
+    struct mosquitto *mosq = NULL;
+    mosquitto_lib_init();
+    mosq = mosquitto_new(NULL, clean_session, NULL);
+    mosquitto_username_pw_set(mosq, username, password);     
+    mosquitto_connect_callback_set(mosq, onConnect);
+    mosquitto_message_callback_set(mosq, onMessage);
+    mosquitto_connect(mosq, host, port, keepalive);
+    //looping is essential for consumer to work
+    while(!mosquitto_loop_forever(mosq, 0, 1)){
+    }
+    return 0;
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../request-reply/" class="btn btn-neutral float-left" title="Request and reply"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../STOMP/" class="btn btn-neutral float-right" title="STOMP">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../request-reply/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../STOMP/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

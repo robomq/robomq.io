@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/WebSTOMP/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>WebSTOMP - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "WebSTOMP";
+        var mkdocs_page_input_path = "WebSTOMP.md";
+        var mkdocs_page_url = "/WebSTOMP/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">WebSTOMP</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>WebSTOMP</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/WebSTOMP.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduction">Introduction</h1>
+<blockquote>
+<p>Before reading this chapter, we assume that you already know STOMP protocol. If not, please go through at least the first two sections of STOMP chapter in User Guide and refer to the <a href="https://stomp.github.io/" target="_blank">Full documentation of STOMP</a> when necessary.  </p>
+</blockquote>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports WebSTOMP, which is a simple bridge exposing the STOMP protocol 1.0 and 1.1 over emulated HTML5 WebSockets. Its port is <strong>15674</strong>, SSL port is <strong>15673</strong>.    </p>
+<p>The main intention of WebSTOMP is to make it possible to use <a href="https://www.robomq.io" target="_blank">RoboMQ</a> from web browsers. Therefore, <a href="https://www.robomq.io" target="_blank">RoboMQ</a> WebSTOMP adapter is rather simple. It just takes the STOMP protocol, as provided by <a href="https://www.robomq.io" target="_blank">RoboMQ</a> STOMP adapter and exposes it using a SockJS server.<br />
+SockJS is a WebSockets poly-fill that provides a WebSocket-like JavaScript object in any browser. It will therefore work in older browsers that don't have native WebSocket support, as well as in new browsers that are behind WebSocket-unfriendly proxies.  </p>
+<h1 id="webstomp-use-case">WebSTOMP use case</h1>
+<p>We will provide example of WebSTOMP in JavaScript that is embedded in HTML.  </p>
+<p>In the example, WebSTOMP producer will first connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> with inputted information from Web page, then publish inputted text to the inputted message destination. WebSTOMP consumer will also first connect then subscribe the inputted message destination and print the message topic and payload as it receives messages.  </p>
+<p>The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK <a href="https://github.com/robomq/robomq.io/tree/master/sdk/WebSTOMP" target="_blank">repository</a> on GitHub.  </p>
+<p>Follow the <em>Message destinations</em> section in STOMP chapter and you will be able to switch among all the scenarios by changing only the message destination. This could also be a tutorial tool for STOMP novices to familiarize themselves with STOMP and WebSTOMP.  </p>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>The JavaScript library we use for this example is the same as we use for STOMP Node.js example. It can be found at <a href="https://github.com/jmesnil/stomp-websocket" target="_blank">https://github.com/jmesnil/stomp-websocket</a><br />
+It supports STOMP version 1.0 and 1.1.  </p>
+<p>Download <em>stomp.js</em> from <a href="https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js" target="_blank">https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js</a> and place it in your project directory.  </p>
+<p>Finally, source <em>stomp.js</em> and <a href="https://cdn.sockjs.org/sockjs-0.3.min.js" target="_blank">https://cdn.sockjs.org/sockjs-0.3.min.js</a> in your Web page.</p>
+<p>The full documentation of this library is at <a href="https://jmesnil.net/stomp-websocket/doc/" target="_blank">https://jmesnil.net/stomp-websocket/doc/</a>.</p>
+<h3 id="producer">Producer</h3>
+<p>Step 1 is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+In constructor of SockJS, protocol can be "http" or "https", they use different ports.<br />
+In <code>connect()</code> function, third parameter is callback function on connect, fourth is callback function on error.<br />
+Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<pre><code class="language-javascript">var webSock = new SockJS(protocol + &quot;://&quot; + host + &quot;:&quot; + port + &quot;/stomp&quot;);
+client = Stomp.over(webSock);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(username, password, onConnect, onError, vhost);
+</code></pre>
+<p>Step 2 is to send inputted messages to the inputted destination. <br />
+The second parameter is message headers. It's not used in this example.  </p>
+<pre><code class="language-javascript">client.send(destination, {}, message);
+</code></pre>
+<h3 id="consumer">Consumer</h3>
+<p>Step 1 is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Step 2 is to subscribe the inputted destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the topic and payload of the message.  </p>
+<pre><code class="language-javascript">subscription = client.subscribe(destination, onMessage, {ack: &quot;auto&quot;});
+
+function onMessage(message) {
+    //on page, print &quot;Destiantion: &quot; + message.headers[&quot;destination&quot;] + &quot;, Message: &quot; + message.body
+}
+</code></pre>
+<p>When page unloads, consumer will unsubscribe the destination by its token and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-javascript">subscription.unsubscribe();
+client.disconnect();
+</code></pre>
+<h3 id="putting-it-together">Putting it together</h3>
+<p><strong>producer.html</strong></p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;producer&lt;/title&gt;
+    &lt;/head&gt;
+
+    &lt;body onunload=&quot;close()&quot;&gt;
+        &lt;h3&gt;Step 1:&lt;/h3&gt;
+        &lt;form name=&quot;connForm&quot; action=&quot;JavaScript:connect()&quot;&gt;
+            protocol:&lt;br&gt;&lt;input type=&quot;radio&quot; name=&quot;protocol&quot; value=&quot;http&quot; checked&gt;http
+                    &amp;nbsp;&lt;input type=&quot;radio&quot; name=&quot;protocol&quot; value=&quot;https&quot;&gt;https&lt;br&gt;
+            host:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;host&quot; value=&quot;trial.robomq.io&quot;&gt;&lt;br&gt;
+            port:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;port&quot; value=&quot;15674&quot;&gt;&lt;br&gt;
+            vhost:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;vhost&quot; value=&quot;&quot;&gt;&lt;br&gt;
+            username:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;&quot;&gt;&lt;br&gt;
+            password:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;password&quot; value=&quot;&quot;&gt;&lt;br&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;connect&quot;&gt;
+        &lt;/form&gt;
+
+        &lt;br&gt;&lt;h3&gt;Step 2:&lt;/h3&gt;
+        &lt;form name=&quot;pubForm&quot; action=&quot;JavaScript:publish()&quot;&gt;
+            destination:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;destination&quot; value=&quot;/queue/test&quot;&gt;&lt;br&gt;
+            message:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;message&quot; value=&quot;Hello World!&quot;&gt;&lt;br&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;publish&quot;&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+
+    &lt;script src=&quot;http://cdn.sockjs.org/sockjs-0.3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;stomp.js&quot;&gt;&lt;/script&gt;
+    &lt;!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js--&gt;
+    &lt;!--change src to file's actual path; don't directly source this GitHub link--&gt;
+
+    &lt;script&gt;
+        var client = null;
+
+        function connect() {
+            if (client != null &amp;&amp; client.connected) {
+                client.disconnect();
+            }
+            var connInfo = document.forms[&quot;connForm&quot;];
+            var webSock = new SockJS(connInfo[&quot;protocol&quot;].value + &quot;://&quot; + connInfo[&quot;host&quot;].value + &quot;:&quot; + connInfo[&quot;port&quot;].value + &quot;/stomp&quot;);
+            client = Stomp.over(webSock);
+            client.heartbeat.outgoing = 60000;
+            client.heartbeat.incoming = 0;
+            client.connect(connInfo[&quot;username&quot;].value, connInfo[&quot;password&quot;].value, onConnect, onError, connInfo[&quot;vhost&quot;].value);
+        }
+
+        function onConnect() {  
+            alert(&quot;Connected to broker!&quot;);
+        }
+
+        function publish() {
+            if (client == null || !client.connected) {
+                alert(&quot;Please connect first!&quot;);
+                return;
+            }
+            var pubInfo = document.forms[&quot;pubForm&quot;];
+            client.send(pubInfo[&quot;destination&quot;].value, {}, pubInfo[&quot;message&quot;].value);
+        }
+
+        function onError(error) {
+            alert(error);
+        }
+
+        function close() {
+            client.disconnect();
+        }
+    &lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>consumer.html</strong></p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;consumer&lt;/title&gt;
+    &lt;/head&gt;
+
+    &lt;body onunload=&quot;close()&quot;&gt;
+        &lt;h3&gt;Step 1:&lt;/h3&gt;
+        &lt;form name=&quot;connForm&quot; action=&quot;JavaScript:connect()&quot;&gt;
+            protocol:&lt;br&gt;&lt;input type=&quot;radio&quot; name=&quot;protocol&quot; value=&quot;http&quot; checked&gt;http
+                    &amp;nbsp;&lt;input type=&quot;radio&quot; name=&quot;protocol&quot; value=&quot;https&quot;&gt;https&lt;br&gt;
+            host:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;host&quot; value=&quot;trial.robomq.io&quot;&gt;&lt;br&gt;
+            port:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;port&quot; value=&quot;15674&quot;&gt;&lt;br&gt;
+            vhost:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;vhost&quot; value=&quot;&quot;&gt;&lt;br&gt;
+            username:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;&quot;&gt;&lt;br&gt;
+            password:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;password&quot; value=&quot;&quot;&gt;&lt;br&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;connect&quot;&gt;
+        &lt;/form&gt;
+
+        &lt;br&gt;&lt;h3&gt;Step 2:&lt;/h3&gt;
+        &lt;form name=&quot;subForm&quot; action=&quot;JavaScript:subscribe()&quot;&gt;
+            destination:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;destination&quot; value=&quot;/queue/test&quot;&gt;&lt;br&gt;&lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;subscribe&quot;&gt;
+        &lt;/form&gt;
+        &lt;br&gt;&lt;h3 id=&quot;msgArea&quot;&gt;Received:&lt;/h3&gt;&lt;br&gt;
+    &lt;/body&gt;
+
+    &lt;script src=&quot;http://cdn.sockjs.org/sockjs-0.3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;stomp.js&quot;&gt;&lt;/script&gt;
+    &lt;!--download stomp.js from https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.js--&gt;
+    &lt;!--change src to file's actual path; don't directly source this GitHub link--&gt;
+
+    &lt;script&gt;
+        var client = null;
+        var subscription = null;
+
+        function connect() {
+            if (client != null &amp;&amp; client.connected) {
+                client.disconnect();
+            }
+            var connInfo = document.forms[&quot;connForm&quot;];
+            var webSock = new SockJS(connInfo[&quot;protocol&quot;].value + &quot;://&quot; + connInfo[&quot;host&quot;].value + &quot;:&quot; + connInfo[&quot;port&quot;].value + &quot;/stomp&quot;);
+            client = Stomp.over(webSock);
+            client.heartbeat.outgoing = 60000;
+            client.heartbeat.incoming = 0;
+            client.connect(connInfo[&quot;username&quot;].value, connInfo[&quot;password&quot;].value, onConnect, onError, connInfo[&quot;vhost&quot;].value);
+        }
+
+        function onConnect() {  
+            alert(&quot;Connected to broker!&quot;);
+        }
+
+        function subscribe() {
+            if (client == null || !client.connected) {
+                alert(&quot;Please connect first!&quot;);
+                return;
+            }
+            if (subscription != null) {
+                subscription.unsubscribe();
+            }
+            var subInfo = document.forms[&quot;subForm&quot;];
+            subscription = client.subscribe(subInfo[&quot;destination&quot;].value, onMessage, {ack: &quot;auto&quot;});
+            alert(&quot;Subscription ID: &quot; + subscription[&quot;id&quot;]);
+        }
+
+        function onMessage(message) {
+            var newMsg = document.createElement(&quot;div&quot;);
+            newMsg.appendChild(document.createTextNode(&quot;Destiantion: &quot; + message.headers[&quot;destination&quot;] + &quot;, Message: &quot; + message.body));
+            newMsg.appendChild(document.createElement(&quot;br&quot;));
+            document.body.insertBefore(newMsg, document.getElementById(&quot;msgArea&quot;).nextSibling);
+        }
+
+        function onError(error) {
+            alert(error);
+            subscription = null;
+        }
+
+        function close() {
+            subscription.unsubscribe();
+            client.disconnect();
+        }
+    &lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../STOMP/" class="btn btn-neutral float-left" title="STOMP"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../SSL/" class="btn btn-neutral float-right" title="SSL">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../STOMP/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../SSL/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

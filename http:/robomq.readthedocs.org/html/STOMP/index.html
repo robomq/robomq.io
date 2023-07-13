@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/STOMP/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>STOMP - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "STOMP";
+        var mkdocs_page_input_path = "STOMP.md";
+        var mkdocs_page_url = "/STOMP/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">STOMP</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>STOMP</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/STOMP.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduction">Introduction</h1>
+<blockquote>
+<p>Before reading this chapter, we assume that you already have the basic concepts of message queue, e.g broker, exchange, queue, producer, consumer, etc. Knowing AMQP protocol would very much facilitate understanding STOMP.  </p>
+</blockquote>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> supports STOMP 1.0, STOMP 1.1 and STOMP 1.2 as an extension to the AMQP broker. Its port is <strong>61613</strong>, SSL port is <strong>61614</strong>.  </p>
+<p>STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol. It is much simpler than AMQP and so more handy for message queue novices. STOMP provides an interoperable wire format so that STOMP clients can communicate with any STOMP message broker to provide easy and widespread messaging interoperability among many languages, platforms and brokers. We would recommend STOMP if you are implementing a simple message queuing application without very complex demands on combination of exchanges and queues.<br />
+<a href="https://stomp.github.io/" target="_blank">Full documentation of STOMP</a></p>
+<p>The STOMP specification does not prescribe what kinds of destinations a broker must support, instead the value of the destination header in SEND and MESSAGE frames is broker-specific. Therefore, <a href="https://www.robomq.io" target="_blank">RoboMQ</a> enriches STOMP with more destination types so it is now capable of most basic jobs AMQP can do.  </p>
+<h1 id="message-destinations">Message destinations</h1>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> gives its STOMP adapter the flexibility to support the destination types as bellow:</p>
+<ul>
+<li>/exchange -- SEND to arbitrary routing keys and SUBSCRIBE to arbitrary binding patterns; </li>
+<li>/queue -- SEND and SUBSCRIBE to queues managed by the STOMP gateway; </li>
+<li>/amq/queue -- SEND and SUBSCRIBE to queues created outside the STOMP gateway; </li>
+<li>/topic -- SEND and SUBSCRIBE to transient and durable topics; </li>
+<li>/temp-queue/ -- create temporary queues (in reply-to headers only). </li>
+</ul>
+<blockquote>
+<p>See more explanation regarding this topic at <a href="https://www.rabbitmq.com/stomp.html" target="_blank">https://www.rabbitmq.com/stomp.html</a></p>
+</blockquote>
+<p>Thus, with STOMP, you can easily implement messaging clients in one-on-one, broadcast, routing key, routing filter or request-reply scenario by just specifying different types of destination. In the rest of this section, we are going to discuss how to switch among those scenarios with minimal change of code. Most times, it only needs to change one line.  </p>
+<blockquote>
+<p>To know more about the differences among those scenarios, read first paragraph of the previous five pages introducing AMQP implementation of those scenarios.  </p>
+</blockquote>
+<p><strong>One-to-One</strong>  </p>
+<p>This scenario is the most basic application of STOMP. If your destination in subscribe and send functions is in the format of <code>/queue/queueName</code> or <code>/amq/queue/queueName</code>, the consumers will receive the messages in a round-robin manner because this type of destination is mapped into exchange.default.queueName on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>The default exchange has one special property that makes it very useful for simple applications: every queue that is created is automatically bound to it with a routing key which is the same as the queue name.  Therefore, no matter how many consumers subscribe a same queueName, there will be only one queue created. Its name and routing key are both the queueName, and all consumers have subscribed it will receive messages from the queue in turn.  </p>
+<p><code>/queue/queueName</code> and <code>/amq/queue/queueName</code> behave almost the same. The only difference is that the former one is manged by the STOMP gateway, while the latter one is created outside the STOMP gateway.  </p>
+<blockquote>
+<p>All example programs on this page are implemented for one-on-one scenario, but you will learn how to transform it into other scenarios quickly.  </p>
+</blockquote>
+<p><strong>Broadcast</strong>  </p>
+<p>If your destination in subscribe and send functions is <code>/exchange/amq.fanout</code>, all the consumers will receive every message at the same time because this type of destination is mapped into exchange.fanout on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>A fanout exchange routes messages to all of the queues that are bound to it and the routing key is ignored. In this case, each consumer will have its own queue. The queue names are auto-generated and they all are bound to the fanout exchange.  </p>
+<p><strong>Routing key</strong>  </p>
+<p>If your destination in subscribe and send functions is <code>/exchange/amq.direct/routingKey</code>,   messages will be broadcast to all queues bound to the direct exchange with that routingKey and consumers subscribing those queues will receive every message at the same time because this type of destination is mapped into exchange.direct.routingKey on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>The way direct exchange works is as bellow:  <br />
+1. A queue binds to the exchange with a routing key K;<br />
+2. When a new message with routing key R arrives at the direct exchange, the exchange routes it to the queue if K = R.</p>
+<p>In this case, each consumer will have its own queue. The queue names are auto-generated and they are bound to the direct exchange by their particular routing keys.  </p>
+<p><strong>Routing filter (Topic)</strong>  </p>
+<p>You can implement the topic scenario by providing a destination started by <code>/topic/</code> or <code>/exchange/amq.topic/</code>. The essential difference between normal routing key and topic is that consumer can subscribe a topic with wild cards inside. In AMQP protocol, a message sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key with or without wild cards.  </p>
+<p>i.e. In STOMP, if your destination in send function is <code>/topic/routingKey</code> or <code>/exchange/amq.topic/routingKey</code> and in subscribe function is <code>/topic/routingPattern</code> or <code>/exchange/amq.topic/routingPattern</code>, messages will be delivered to all queues bound to the topic exchange with the routingPattern which matches the routingKey in send destination because this type of destination is mapped into exchange.topic.routingPattern on <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>There are 2 wild cards available as bellow:  </p>
+<ul>
+<li>* (star) can substitute for exactly one word.  </li>
+<li># (hash) can substitute for zero or more words.   </li>
+</ul>
+<p>For instance, publish key <code>a.b.c</code> matches subscribe key <code>a.b.*</code> or <code>a.#</code>, but doesn't match <code>a.*</code>.<br />
+Specially, you can implement broadcast scenario by subscribing <code>/topic/#</code>, implement routing key scenario by making routingKey in subscribe function the same as routingPattern in send function.  </p>
+<p><strong>Request reply</strong>  </p>
+<p>You can implement request-reply scenario with any destination type. In this case, all clients are both producer and consumer.<br />
+One thing requester needs to do is adding a "reply-to" header to the message. The value of "reply-to" header will be the subscribing destination of requester. When replier receives a message, it will handle the message and send reply to the destination in "reply-to" header.<br />
+STOMP protocol itself doesn't define "reply-to" header, but <a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to define any extra header by yourself.  </p>
+<p><strong>More scenarios</strong>  </p>
+<p>The scenarios you can implement with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> STOMP adapter are more than the five ones above.  </p>
+<p>For example, if you use destination type <code>/temp-queue/routingKey</code>, it will creates transient queues bound to the direct exchange. A transient queue will be automatically deleted once it receives a message. It can be used to implement RPC (remote procedure call), a variant of request-reply scenario. In RPC scenario, requester creates a transient queue to listen for reply as it sends a request. The queue will be automatically deleted once it receives the reply.  </p>
+<p>You can also add your own exchanges in your vhost and incorporate them in STOMP destination, such as <code>/exchange/user-added-exchange/routingKey</code>. It will create an auto-named queue bound to user-added-exchange by the routingKey. This feature significantly extends <a href="https://www.robomq.io" target="_blank">RoboMQ</a> STOMP adapter's capacity.  </p>
+<p>Although we have talked so much about how our STOMP message destinations are lightweight but powerful, there's still things it can't do. For example, if you want to bind one queue with a non-default exchange and let multiple consumers subscribe the queue, you would have to ask for help from the AMQP protocol.  </p>
+<h1 id="stomp-use-cases">STOMP use cases</h1>
+<p>We will provide examples of one-to-one scenario in five languages, including Python, Node.js, PHP, Java and C.  </p>
+<p>In the examples, STOMP producer will first ask user for the quantity of messages, then publish the certain number of test messages to a particular destination through STOMP broker. STOMP consumer will subscribe the same destination and print the message body as it receives messages.  </p>
+<p>All examples have implemented automatic reconnecting, which is crucial in real production.  </p>
+<p>The example code provided bellow could be the short version, it might have omitted some advanced details. For full version code, please go to our SDK <a href="https://github.com/robomq/robomq.io/tree/master/sdk/STOMP" target="_blank">repository</a> on GitHub. </p>
+<p>Follow the <em>Message destinations</em> section and you will be able to switch it to other scenario by changing only the destination argument.  </p>
+<blockquote>
+<p>Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.<br />
+Always run consumer first to create the exchange and queue for producer to send messages to.   </p>
+</blockquote>
+<h2 id="python">Python</h2>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>The Python library we use for this example can be found at <a href="https://pypi.python.org/pypi/stompest/" target="_blank">https://pypi.python.org/pypi/stompest/</a>. Its GitHub repository is at <a href="https://github.com/nikipore/stompest" target="_blank">https://github.com/nikipore/stompest</a>.<br />
+It supports STOMP version 1.0, 1.1 and 1.2.  </p>
+<p>You can install it through <code>sudo pip install stompest</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-python">from stompest.config import StompConfig
+from stompest.protocol import StompSpec
+from stompest.sync import Stomp
+</code></pre>
+<p>The full documentation of this library is at <a href="https://nikipore.github.io/stompest/" target="_blank">https://nikipore.github.io/stompest/</a>.</p>
+<h3 id="producer">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<blockquote>
+<p>Notice that stompest library reverses the order of outgoing and incoming heartbeats.  </p>
+</blockquote>
+<pre><code class="language-python">client = Stomp(StompConfig(&quot;tcp://&quot; + server + &quot;:&quot; + port, login = login, passcode = passcode, version = &quot;1.2&quot;))
+client.connect(versions = [&quot;1.2&quot;], host = vhost, heartBeats = (0, 60000))
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.  </p>
+<pre><code class="language-python">client.send(destination, body = message, headers = {&quot;content-type&quot;: &quot;text/plain&quot;}, receipt = None)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-python">client.disconnect()
+</code></pre>
+<h3 id="consumer">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.<br />
+If you set <code>"ack": "auto"</code>, you don't need <code>client.ack(frame)</code>.<br />
+The <code>"id"</code> must be different for multiple subscriptions because <code>client.receiveFrame()</code> receives messages from any subscription and client needs to distinguish them by subscription ID.  </p>
+<pre><code class="language-python">subscription = client.subscribe(destination, {&quot;ack&quot;: &quot;client&quot;, &quot;id&quot;: &quot;0&quot;})
+
+while True:
+    frame = client.receiveFrame()
+    print frame.body
+    client.ack(frame)
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination with its unique token.</p>
+<pre><code class="language-python">client.unsubscribe(subscription)
+</code></pre>
+<h3 id="putting-it-together">Putting it together</h3>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import time
+from stompest.config import StompConfig
+from stompest.sync import Stomp
+
+server = &quot;hostname&quot;
+port = &quot;61613&quot;
+vhost = &quot;yourvhost&quot;
+login = &quot;username&quot;
+passcode = &quot;password&quot;
+destination = &quot;/queue/test&quot; #There're more options other than /queue/...
+
+try:
+    client = Stomp(StompConfig(&quot;tcp://&quot; + server + &quot;:&quot; + port, login = login, passcode = passcode, version = &quot;1.2&quot;))
+    client.connect(versions = [&quot;1.2&quot;], host = vhost, heartBeats = (0, 60000))   #CONNECT
+    msgNum = int(input(&quot;Quantity of test messages: &quot;))
+    for i in range(msgNum): 
+        message = &quot;test msg &quot; + str(i + 1)
+        client.send(destination, body = message, headers = {&quot;content-type&quot;: &quot;text/plain&quot;}, receipt = None)  #SEND
+        time.sleep(1)   
+    client.disconnect() #DISCONNECT
+except Exception, e:
+    print e
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import time
+from stompest.config import StompConfig
+from stompest.sync import Stomp
+
+server = &quot;hostname&quot;
+port = &quot;61613&quot;
+vhost = &quot;yourvhost&quot;
+login = &quot;username&quot;
+passcode = &quot;password&quot;
+destination = &quot;/queue/test&quot; #There're more options other than /queue/...
+
+while True:
+    try:
+        client = Stomp(StompConfig(&quot;tcp://&quot; + server + &quot;:&quot; + port, login = login, passcode = passcode, version = &quot;1.2&quot;))
+        client.connect(versions = [&quot;1.2&quot;], host = vhost, heartBeats = (0, 60000))   #CONNECT
+        subscription = client.subscribe(destination, {&quot;ack&quot;: &quot;client&quot;, &quot;id&quot;: &quot;0&quot;})  #SUBSCRIBE
+        while True:
+            frame = client.receiveFrame()
+            try:
+                print frame.body
+                client.ack(frame)   #ACK
+            except:
+                print &quot;Error: Can't handle message received, NACKing&quot;
+                client.nack(frame)  #NACK
+    except Exception, e:
+        #reconnect on exception
+        print &quot;Exception handled, reconnecting...\nDetail:\n%s&quot; % e
+        try:
+            client.disconnect()
+        except:
+            pass
+        time.sleep(5)
+</code></pre>
+<h2 id="nodejs">Node.js</h2>
+<h3 id="prerequisite_1">Prerequisite</h3>
+<p>The Node.js library we use for this example can be found at <a href="https://github.com/jmesnil/stomp-websocket" target="_blank">https://github.com/jmesnil/stomp-websocket</a>.<br />
+It supports STOMP version 1.0 and 1.1.  </p>
+<p>You can install the library through <code>sudo npm install stompjs</code>.  </p>
+<p>Finally, require this library in your program.  </p>
+<pre><code class="language-javascript">var Stomp = require(&quot;stompjs&quot;);
+</code></pre>
+<p>The full documentation of this library is at <a href="https://jmesnil.net/stomp-websocket/doc/" target="_blank">https://jmesnil.net/stomp-websocket/doc/</a>.</p>
+<h3 id="producer_1">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<pre><code class="language-javascript">var client = Stomp.overTCP(server, port);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(login, passcode, success_callback, fail_callback, vhost);
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it. </p>
+<pre><code class="language-javascript">client.send(destination, {&quot;content-type&quot;: &quot;text/plain&quot;}, message);
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-javascript">client.disconnect(callback);
+</code></pre>
+<h3 id="consumer_1">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the callback function to print the message body.<br />
+If you set <code>ack: "auto"</code>, you don't need <code>message.ack();</code>.</p>
+<pre><code class="language-javascript">client.subscribe(destination, function(message) {
+    console.log(message.body);
+    message.ack();
+},
+{ack: &quot;client&quot;});
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination with its unique token. If so, you need to save the token when you subscribe.  </p>
+<pre><code class="language-javascript">    var subscription = client.subscribe(...);
+    subscription.unsubscribe();
+</code></pre>
+<h3 id="putting-it-together_1">Putting it together</h3>
+<p><strong>producer.js</strong></p>
+<pre><code class="language-javascript">var Stomp = require(&quot;stompjs&quot;);
+
+var server = &quot;hostname&quot;;
+var port = 61613; //It takes either string or int argument
+var login = &quot;username&quot;;
+var passcode = &quot;password&quot;;
+var vhost = &quot;yourvhost&quot;;
+var destination = &quot;/queue/test&quot;;    //There're more options other than /queue/...
+
+var client = Stomp.overTCP(server, port);
+client.heartbeat.outgoing = 60000;
+client.heartbeat.incoming = 0;
+client.connect(login, passcode
+    , function() {
+        process.stdout.write(&quot;Quantity of test messages: &quot;);
+        process.stdin.on(&quot;data&quot;, function (msgNum) {
+            for(var i = 1; i &lt;= msgNum; i++){   
+                var message = &quot;test msg &quot; + i;
+                client.send(destination, {&quot;content-type&quot;: &quot;text/plain&quot;}, message);
+            }
+            client.disconnect(function() {
+                process.exit(0);
+            });
+        });     
+    }
+    //callback function of connection failure
+    , function(ex) {
+        console.log(ex);
+        process.exit(-1);
+    }
+    , vhost);
+</code></pre>
+<p><strong>consumer.js</strong></p>
+<pre><code class="language-javascript">var Stomp = require(&quot;stompjs&quot;);
+var domain = require(&quot;domain&quot;);
+
+var server = &quot;hostname&quot;;
+var port = 61613; //It takes either string or int argument
+var login = &quot;username&quot;;
+var passcode = &quot;password&quot;;
+var vhost = &quot;yourvhost&quot;;
+var destination = &quot;/queue/test&quot;;    //There're more options other than /queue/...
+
+//use domain module to handle reconnecting
+var client = null;
+var dom = domain.create();
+dom.on(&quot;error&quot;, consume);
+dom.run(consume);
+
+function consume() {
+    client = Stomp.overTCP(server, port);
+    client.heartbeat.outgoing = 60000;
+    client.heartbeat.incoming = 0;
+    client.connect(login, passcode
+        , function() {
+            //the callback for subscribe() function is actually the callback on message 
+            client.subscribe(destination, function(message) {
+                try {
+                    console.log(message.body);
+                    message.ack();
+                } catch(ex) {
+                    console.log(&quot;Error: Can't handle message received, NACKing&quot;);
+                    message.nack();
+                }
+            },
+            {ack: &quot;client&quot;}); //if ack:&quot;auto&quot;, no need to ack in code
+        }
+        //callback function of connection failure
+        , function(ex) {
+            console.log(&quot;Exception handled, reconnecting...\nDetail:\n&quot; + ex);
+            client.disconnect(function() {setTimeout(consume, 5000);});
+        }
+        , vhost);
+}
+</code></pre>
+<h2 id="php">PHP</h2>
+<h3 id="prerequisite_2">Prerequisite</h3>
+<p>The PHP library we use for this example can be found at <a href="https://php.net/manual/en/book.stomp.php" target="_blank">https://php.net/manual/en/book.stomp.php</a>.<br />
+It supports STOMP version 1.0 and 1.1.  </p>
+<p>This library depends on OpenSSL, if you want to use STOMP over SSL. In that case, first ensure that your have OpenSSL installed.<br />
+Download the library from <a href="http://pecl.php.net/package/stomp">http://pecl.php.net/package/stomp</a> and uncompress the tarball, enter <code>stomp-x.x.x/</code> and install it by</p>
+<pre><code class="language-bash">    phpize
+    ./configure
+    make
+    sudo make install
+</code></pre>
+<p>Now you should see <code>stomp.so</code> in your php shared library directory, e.g <code>/usr/lib/php5/20121212/</code>. Finally, edit your <code>php.ini</code>. In <em>Dynamic Extensions</em> section, add one line <code>extension=stomp.so</code>.</p>
+<p>You may see more installation approaches at <a href="https://php.net/manual/en/stomp.setup.php" target="_blank">https://php.net/manual/en/stomp.setup.php</a>.  </p>
+<blockquote>
+<p>Notice: this library is different with php5-stomp extension, do not mix them up.</p>
+</blockquote>
+<h3 id="producer_2">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<pre><code class="language-php">$client = new Stomp(&quot;tcp://&quot;.$server.&quot;:&quot;.$port, $login, $passcode, array(&quot;host&quot; =&gt; $vhost, &quot;accept-version&quot; =&gt; &quot;1.0,1.1&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;));
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.  </p>
+<pre><code class="language-php">$client-&gt;send($destination, $message, array(&quot;content-type&quot; =&gt; &quot;text/plain&quot;));
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. This library contains disconnect function in client class's destructor.  </p>
+<pre><code class="language-php">unset($client);
+</code></pre>
+<h3 id="consumer_2">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.<br />
+If you set <code>"ack"=&gt;"auto"</code>, you don't need <code>$client-&gt;ack($frame);</code>.    </p>
+<pre><code class="language-php">$client-&gt;subscribe($destination, array(&quot;ack&quot; =&gt; &quot;client&quot;));
+
+while(true) {
+    if ($frame = $client-&gt;readFrame()) {
+        echo $frame-&gt;body.PHP_EOL;
+        $client-&gt;ack($frame);
+    }
+}
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination.</p>
+<pre><code class="language-php">$client-&gt;unsubscribe($destination);
+</code></pre>
+<h3 id="putting-it-together_2">Putting it together</h3>
+<p><strong>producer.php</strong></p>
+<pre><code class="language-php">&lt;?php   
+$server = &quot;hostname&quot;;
+$port = &quot;61613&quot;;
+$vhost = &quot;yourvhost&quot;;
+$login = &quot;username&quot;;
+$passcode = &quot;password&quot;;
+$destination = &quot;/queue/test&quot;;   //There're more options other than /queue/...
+
+try {
+    $client = new Stomp(&quot;tcp://&quot;.$server.&quot;:&quot;.$port, $login, $passcode, array(&quot;host&quot; =&gt; $vhost, &quot;accept-version&quot; =&gt; &quot;1.0,1.1&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;));
+    echo &quot;Quantity of test messages: &quot;;
+    $msgNum = rtrim(fgets(STDIN), PHP_EOL);
+    for ($i = 1; $i &lt;= $msgNum; $i++) {
+        $message = &quot;test msg &quot;.$i;
+        $client-&gt;send($destination, $message, array(&quot;content-type&quot; =&gt; &quot;text/plain&quot;));
+        sleep(1);
+    }
+    unset($client);
+} catch (StompException $e) {
+    die($e-&gt;getMessage());
+}
+?&gt;
+</code></pre>
+<p><strong>consumer.php</strong></p>
+<pre><code class="language-php">&lt;?php   
+$server = &quot;hostname&quot;;
+$port = &quot;61613&quot;;
+$vhost = &quot;yourvhost&quot;;
+$login = &quot;username&quot;;
+$passcode = &quot;password&quot;;
+$destination = &quot;/queue/test&quot;;   //There're more options other than /queue/...
+
+while (true) {
+    try {
+        $client = new Stomp(&quot;tcp://&quot;.$server.&quot;:&quot;.$port, $login, $passcode, array(&quot;host&quot; =&gt; $vhost, &quot;accept-version&quot; =&gt; &quot;1.0,1.1&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;));
+        $client-&gt;subscribe($destination, array(&quot;ack&quot; =&gt; &quot;client&quot;)); //if &quot;ack&quot;=&gt;&quot;auto&quot;, no need to ack in code
+        while (true) {
+            if ($frame = $client-&gt;readFrame()) {
+                try {
+                    echo $frame-&gt;body.PHP_EOL;
+                    $client-&gt;ack($frame);
+                } catch (Exception $e) {
+                    echo &quot;Error: Can't handle message received, NACKing&quot;;
+                    $client-&gt;nack($frame);
+                }
+            }
+        }
+    } catch (StompException $e) {
+        echo &quot;Exception handled, reconnecting...\nDetail:\n&quot;.$e-&gt;getMessage().PHP_EOL;
+        unset($client);
+        sleep(5);
+    }
+}
+?&gt;
+</code></pre>
+<h2 id="ruby">Ruby</h2>
+<h3 id="prerequisite_3">Prerequisite</h3>
+<p>The Ruby gem we use for this example can be found at <a href="https://rubygems.org/gems/stomp" target="_blank">https://rubygems.org/gems/stomp</a>. Its GitHub repository is at <a href="https://github.com/stompgem/stomp" target="_blank">https://github.com/stompgem/stomp</a>.<br />
+It supports STOMP version 1.0, 1.1 and 1.2.  </p>
+<p>You can install it through <code>gem install stomp</code>.  </p>
+<p>Finally, require this gem in your program.  </p>
+<pre><code>require 'stomp'
+</code></pre>
+<p>The full documentation of this library is at <a href="https://www.rubydoc.info/github/stompgem/stomp/index" target="_blank">https://www.rubydoc.info/github/stompgem/stomp/index</a>.  </p>
+<h3 id="producer_3">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<pre><code class="language-ruby">hash = { :hosts =&gt; [
+  {:login =&gt; login, :passcode =&gt; passcode, :host =&gt; server, :port =&gt; port},
+  ],
+  :connect_headers =&gt; {&quot;host&quot; =&gt; vhost, &quot;accept-version&quot; =&gt; &quot;1.2&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;}
+}
+
+connection = Stomp::Connection.new(hash)
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.  </p>
+<pre><code class="language-ruby">connection.publish(destination, message, headers = {&quot;content-type&quot; =&gt; &quot;text/plain&quot;})
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-ruby">connection.disconnect
+</code></pre>
+<h3 id="consumer_3">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.<br />
+If you set <code>"ack": "auto"</code>, you don't need <code>connection.ack(message_id)</code>.<br />
+The <code>"id"</code> must be different for multiple subscriptions because <code>connection.receive</code> receives messages from any subscription and client needs to distinguish them by subscription ID.  </p>
+<pre><code class="language-ruby">subscription = connection.subscribe(destination, {&quot;ack&quot; =&gt; &quot;client-individual&quot;, &quot;id&quot; =&gt; &quot;0&quot;})
+while msg = connection.receive
+  puts msg.body
+  # ack current message
+  connection.ack(msg.headers['message-id'])
+end
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination with its unique token.</p>
+<pre><code class="language-ruby">connection.unsubscribe(subscription)
+</code></pre>
+<h3 id="putting-it-together_3">Putting it together</h3>
+<p><strong>producer.rb</strong></p>
+<pre><code class="language-ruby">require 'stomp'
+
+# connection options
+server = &quot;hostname&quot;
+port = &quot;61613&quot;
+vhost = &quot;yourvhost&quot;
+login = &quot;username&quot;
+passcode = &quot;password&quot;
+destination = &quot;/queue/test&quot;
+
+print &quot;Quantity of test messages: &quot;
+msgNum = gets.to_i
+
+# stomp gem connect hash
+hash = { :hosts =&gt; [
+  {:login =&gt; login, :passcode =&gt; passcode, :host =&gt; server, :port =&gt; port},
+  ],
+  :connect_headers =&gt; {&quot;host&quot; =&gt; vhost, &quot;accept-version&quot; =&gt; &quot;1.2&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;}
+}
+
+begin
+  # connect
+  connection = Stomp::Connection.new(hash)
+
+  # send messages
+  (1..msgNum).each do |counter|
+    message = &quot;test msg  #{counter}&quot;
+    connection.publish(destination, message, headers = {&quot;content-type&quot; =&gt; &quot;text/plain&quot;})
+    sleep 1
+  end
+
+  # disconnect
+  connection.disconnect
+end
+</code></pre>
+<p><strong>consumer.rb</strong></p>
+<pre><code class="language-ruby">require 'stomp'
+
+# connection options
+server = &quot;hostname&quot;
+port = &quot;61613&quot;
+vhost = &quot;yourvhost&quot;
+login = &quot;username&quot;
+passcode = &quot;password&quot;
+destination = &quot;/queue/test&quot;
+
+# stomp gem connect hash
+hash = { :hosts =&gt; [
+  {:login =&gt; login, :passcode =&gt; passcode, :host =&gt; server, :port =&gt; port},
+  ],
+  :connect_headers =&gt; {&quot;host&quot; =&gt; vhost, &quot;accept-version&quot; =&gt; &quot;1.2&quot;, &quot;heart-beat&quot; =&gt; &quot;60000,0&quot;, &quot;content-type&quot; =&gt; &quot;text/plain&quot;}
+}
+
+loop do
+  begin
+    # connect
+    connection = Stomp::Connection.new(hash)
+
+    # subscribe
+    connection.subscribe(destination, {&quot;ack&quot; =&gt; &quot;client-individual&quot;, &quot;id&quot; =&gt; &quot;0&quot;})
+    while msg = connection.receive
+      puts msg.body
+      # ack current message
+      connection.ack(msg.headers['message-id'])
+    end
+  rescue =&gt; e
+    puts &quot;Exception handled, reconnecting...\nDetail:\n#{e.message}&quot;
+    sleep 5
+  end
+end
+</code></pre>
+<h2 id="java">Java</h2>
+<h3 id="prerequisite_4">Prerequisite</h3>
+<p>The Java library we use for this example can be found at <a href="https://github.com/robomq/Gozirra" target="_blank">https://github.com/robomq/Gozirra</a>.<br />
+It supports STOMP version 1.0.  </p>
+<p>You may clone the repository by <code>git clone https://github.com/robomq/Gozirra.git</code>.</p>
+<p>Import this library in your program <code>import net.ser1.stomp.*;</code> and compile your source code along with gozirra-robomq.jar. For example,  </p>
+<pre><code class="language-bash">javac -cp &quot;.:./gozirra-robomq.jar&quot; Producer.java Consumer.java 
+</code></pre>
+<p>Run the producer and consumer classes. For example,  </p>
+<pre><code class="language-bash">java -cp &quot;.:./gozirra-robomq.jar&quot; Consumer
+java -cp &quot;.:./gozirra-robomq.jar&quot; Producer
+</code></pre>
+<p>Of course, you can eventually compress your producer and consumer classes into jar files.</p>
+<blockquote>
+<p>Java7+ is required to compile with this library.</p>
+</blockquote>
+<h3 id="producer_4">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>The library will automatically set the outgoing heartbeat to 60000 milliseconds and disable the incoming heartbeat, i.e. set it to 0.  </p>
+<pre><code class="language-java">client = new Client(server, port, login, passcode, vhost);
+</code></pre>
+<p>After that, producer can send messages to a particular destination.<br />
+The third parameter of <code>send()</code> function is message headers.<br />
+In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.  </p>
+<pre><code class="language-java">HashMap headers = new HashMap();
+headers.put(&quot;content-type&quot;, &quot;text/plain&quot;);
+client.send(destination, message, headers);
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-java">client.disconnect();
+</code></pre>
+<h3 id="consumer_4">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call the overridden function <code>message()</code> to print the message body.   </p>
+<pre><code class="language-java">client.subscribe(destination, new Listener() {
+    public void message( Map headers, String body ) {
+        System.out.println(body);
+    }
+}); 
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination.</p>
+<pre><code class="language-java">    client.unsubscribe(destination);
+</code></pre>
+<h3 id="putting-it-together_4">Putting it together</h3>
+<p><strong>Producer.java</strong></p>
+<pre><code class="language-java">import net.ser1.stomp.*;
+import java.util.HashMap;
+import java.util.Scanner;
+
+class Producer {
+    private Client client;
+    private String server = &quot;hostname&quot;;
+    private int port = 61613;
+    private String vhost = &quot;yourvhost&quot;;
+    private String destination = &quot;/queue/test&quot;; //There're more options other than /queue/...
+    private String login = &quot;username&quot;;
+    private String passcode = &quot;password&quot;;
+
+    private void produce() {
+        try {
+            client = new Client(server, port, login, passcode, vhost);
+            System.out.print(&quot;Quantity of test messages: &quot;);
+            Scanner scanner = new Scanner(System.in);
+            int msgNum = scanner.nextInt();
+            HashMap headers = new HashMap();
+            headers.put(&quot;content-type&quot;, &quot;text/plain&quot;);
+            for (int i = 0; i &lt; msgNum; i ++) {
+                String message = &quot;test msg &quot; + Integer.toString(i + 1);
+                client.send(destination, message, null);
+                Thread.sleep(1000);
+            }
+            client.disconnect();
+        } catch(Exception e) {
+            System.out.println(e);
+            System.exit(-1);            
+        }
+    }
+
+    public static void main(String[] args) {
+        Producer p = new Producer();
+        p.produce();
+    }
+}
+</code></pre>
+<p><strong>Consumer.java</strong></p>
+<pre><code class="language-java">import net.ser1.stomp.*;
+import java.util.Map;
+
+class Consumer {
+    private Client client;
+    private String server = &quot;hostname&quot;;
+    private int port = 61613;
+    private String vhost = &quot;yourvhost&quot;;
+    private String destination = &quot;/queue/test&quot;; //There're more options other than /queue/...
+    private String login = &quot;username&quot;;
+    private String passcode = &quot;password&quot;;
+
+    private void consume() {
+        while (true) {
+            try {
+                client = new Client(server, port, login, passcode, vhost);
+                client.subscribe(destination, new Listener() {
+                    /**
+                     * This method is the overridden callback on receiving messages.
+                     * @ It is event-driven. You don't call it in your code.
+                     * @ It prints the message body on console.
+                     * @ There're other callback functions provided by this library.
+                     */
+                    public void message(Map headers, String body) {
+                        System.out.println(body);
+                    }
+                });
+                client.addErrorListener(new Listener() {
+                    public void message(Map header, String body) {
+                        System.out.printf(&quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, body);
+                        //after connected, disconnect on error
+                        try {
+                            client.disconnect();
+                        } catch(Exception e) {}
+                    }
+                });
+                while (true) {
+                    //after connected, reconnect on connection lost
+                    if (!client.isSockConnected()) {
+                        break;
+                    }
+                    Thread.sleep(2000); //check interval must be short enough
+                }
+            } catch(Exception e) {
+                //when initializing connection, reconnect on exception
+                System.out.printf(&quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, e); 
+                try {
+                    Thread.sleep(5000); 
+                } catch(Exception es) {}
+            }
+        }   
+    }
+
+    public static void main(String[] args) {
+        Consumer c = new Consumer();
+        c.consume();
+    }
+}
+</code></pre>
+<h2 id="go">Go</h2>
+<h3 id="prerequisite_5">Prerequisite</h3>
+<p>The Go library we use for this example can be found at <a href="https://github.com/go-stomp/stomp/" target="_blank">https://github.com/go-stomp/stomp/</a>.<br />
+It supports STOMP version 1.0, 1.1 and 1.2.  </p>
+<p>You can install it through <code>go get github.com/go-stomp/stomp</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-go">import &quot;github.com/go-stomp/stomp&quot;
+</code></pre>
+<p>The full documentation of this library is at <a href="https://godoc.org/github.com/go-stomp/stomp" target="_blank">https://godoc.org/github.com/go-stomp/stomp</a>.</p>
+<h3 id="producer_5">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode; <code>vhost</code> is passed in the <code>host</code> header of <code>CONNECT(STOMP)</code> frame.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.   </p>
+<pre><code class="language-go">client, err := stomp.Dial(&quot;tcp&quot;, net.JoinHostPort(server, port),
+    stomp.ConnOpt.Login(login, passcode),
+    stomp.ConnOpt.Host(vhost),
+    stomp.ConnOpt.AcceptVersion(stomp.V12),
+    stomp.ConnOpt.HeartBeat(60 * time.Second, 0 * time.Second))
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.<br />
+You can also set custom headers with the message.  </p>
+<pre><code class="language-go">client.Send(destination, &quot;text/plain&quot;, []byte(message), stomp.SendOpt.Header(&quot;key&quot;, &quot;value&quot;))
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-go">client.Disconnect()
+</code></pre>
+<h3 id="consumer_5">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.<br />
+If you set <code>AckAuto</code>, you don't need <code>client.Ack(msg)</code>.  </p>
+<pre><code class="language-go">sub, err := client.Subscribe(destination, stomp.AckClient)
+
+for {
+    msg := &lt;-sub.C
+    fmt.Println(string(msg.Body))
+    client.Ack(msg)
+}
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination with its unique token.</p>
+<pre><code class="language-go">sub.Unsubscribe()
+</code></pre>
+<h3 id="putting-it-together_5">Putting it together</h3>
+<p><strong>producer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;github.com/go-stomp/stomp&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = &quot;61613&quot;
+var vhost = &quot;yourvhost&quot;
+var login = &quot;username&quot;
+var passcode = &quot;password&quot;
+var destination = &quot;/queue/test&quot; // There're more options other than /queue/...
+
+func main() {
+    // Connect to broker
+    client, err := stomp.Dial(&quot;tcp&quot;, net.JoinHostPort(server, port),
+        stomp.ConnOpt.Login(login, passcode),
+        stomp.ConnOpt.Host(vhost),
+        stomp.ConnOpt.AcceptVersion(stomp.V12),
+        stomp.ConnOpt.HeartBeat(60*time.Second, 0*time.Second))
+    if err != nil {
+        fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, err)
+        os.Exit(1)
+    }
+
+    var msgNum int
+    fmt.Print(&quot;Quantity of test messages: &quot;)
+    fmt.Scanf(&quot;%d&quot;, &amp;msgNum)
+    for i := 0; i &lt; msgNum; i++ {
+        message := fmt.Sprintf(&quot;test msg %d&quot;, i+1)
+        err = client.Send(destination, &quot;text/plain&quot;, []byte(message), stomp.SendOpt.Header(&quot;key&quot;, &quot;value&quot;))
+        if err != nil {
+            fmt.Printf(&quot;Failed to publish, err: %v\n&quot;, err)
+            os.Exit(1)
+        }
+        time.Sleep(time.Second)
+    }
+
+    client.Disconnect()
+}
+</code></pre>
+<p><strong>consumer.go</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;github.com/go-stomp/stomp&quot;
+    &quot;net&quot;
+    &quot;time&quot;
+)
+
+var server = &quot;hostname&quot;
+var port = &quot;61613&quot;
+var vhost = &quot;yourvhost&quot;
+var login = &quot;username&quot;
+var passcode = &quot;password&quot;
+var destination = &quot;/queue/test&quot; // There're more options other than /queue/...
+
+func main() {
+    // Infinite loop to auto-reconnect on failure
+Loop:
+    for {
+        fmt.Println(&quot;Starting in 5 seconds...&quot;)
+        time.Sleep(5 * time.Second)
+
+        // Connect to broker
+        client, err := stomp.Dial(&quot;tcp&quot;, net.JoinHostPort(server, port),
+            stomp.ConnOpt.Login(login, passcode),
+            stomp.ConnOpt.Host(vhost),
+            stomp.ConnOpt.AcceptVersion(stomp.V12),
+            stomp.ConnOpt.HeartBeat(60*time.Second, 0*time.Second))
+        if err != nil {
+            fmt.Printf(&quot;Failed to connect, err: %v\n&quot;, err)
+            continue Loop
+        }
+        // Subscribe to queue with client acknowledgement
+        sub, err := client.Subscribe(destination, stomp.AckClient)
+        if err != nil {
+            fmt.Printf(&quot;Failed to subscribe, err: %v\n&quot;, err)
+            continue Loop
+        }
+
+        fmt.Println(&quot;Started consuming messages.&quot;)
+        for {
+            msg := &lt;-sub.C
+            if msg.Err != nil {
+                fmt.Printf(&quot;Can't handle message received, NACKing... Error: %v\n&quot;, msg.Err)
+                // Unacknowledge the message
+                err = client.Nack(msg)
+                if err != nil {
+                    fmt.Printf(&quot;Failed to NACK, err: %v\n&quot;, err)
+                    break
+                }
+            }
+
+            fmt.Println(string(msg.Body))
+            // Acknowledge the message
+            err = client.Ack(msg)
+            if err != nil {
+                fmt.Printf(&quot;Failed to ACK, err: %v\n&quot;, err)
+                break
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="c">C</h2>
+<h3 id="prerequisite_6">Prerequisite</h3>
+<p>The C library we use for this example can be found at <a href="https://github.com/evgenido/stomp" target="_blank">https://github.com/evgenido/stomp</a>.<br />
+It supports STOMP version 1.0, 1.1 and 1.2.  </p>
+<p>You may clone it by <code>git clone https://github.com/evgenido/stomp.git</code>.<br />
+Extract the library source code from <code>/src/</code> and place it in your project directory.  </p>
+<p>Include <code>/path/to/stomp.h</code> in your code, depending on where you place the library. For example, if your project structure is<br />
+./producer.c<br />
+./consumer.c<br />
+./stomp/frame.c<br />
+./stomp/frame.h<br />
+./stomp/hdr.c<br />
+./stomp/hdr.h<br />
+./stomp/stomp.c<br />
+./stomp/stomp.h<br />
+Include this library in your program, for example <code>#include "./stomp/stomp.h"</code> and compile it by</p>
+<pre><code class="language-bash">gcc -o producer producer.c stomp/*
+gcc -o consumer consumer.c stomp/*
+</code></pre>
+<h3 id="producer_6">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.<br />
+Using this library, you always construct the headers before sending a STOMP frame.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode.  </p>
+</blockquote>
+<p>Set the outgoing heartbeat to 60000 milliseconds, so that client will confirm the connectivity with broker; but disable the incoming heartbeat because <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker won't send heartbeat to client.  </p>
+<pre><code class="language-c">struct ctx client;
+stomp_session_t *session;
+
+session = stomp_session_new(&amp;client);
+
+struct stomp_hdr conn_hdrs[] = {
+    {&quot;login&quot;, login},
+    {&quot;passcode&quot;, passcode},
+    {&quot;vhost&quot;, vhost},
+    {&quot;accept-version&quot;, &quot;1.0,1.1,1.2&quot;},
+    {&quot;heart-beat&quot;, &quot;60000,0&quot;},
+};
+
+err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it cae an be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section elaborates it.<br />
+Notice that length of the message char array, content-length in headers and last argument of <code>stomp_send()</code> must be identical.  </p>
+<pre><code class="language-c">char body[20] = &quot;test message&quot;;
+struct stomp_hdr send_hdrs[] = {
+    {&quot;destination&quot;, destination},
+    {&quot;content-type&quot;, &quot;text/plain&quot;},
+    {&quot;content-length&quot;, &quot;20&quot;},
+};
+
+err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
+</code></pre>
+<p>When all messages have been sent, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker. This example just force disconnect, but you could use receipt attribute in headers to gracefully disconnect.</p>
+<pre><code class="language-c">struct stomp_hdr disconn_hdrs[] = {
+};
+err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+</code></pre>
+<p>Finally, to start running the whole process above, you have to call <code>stomp_run()</code> before the end of your program. The process won't stop until <code>stomp_disconnect()</code> is called.  </p>
+<blockquote>
+<p>This is a special feature of this C library, most STOMP libraries don't need it.  </p>
+</blockquote>
+<pre><code class="language-c">err = stomp_run(session);
+</code></pre>
+<p>To cleanly close the client, you still need to free the session and exit at the very end.</p>
+<pre><code class="language-c">stomp_session_free(session);
+exit(EXIT_SUCCESS);
+</code></pre>
+<h3 id="consumer_6">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then you need to set a few callback functions. They play an significant role in this library. For example, callback on message and error.  </p>
+<pre><code class="language-c">static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
+{
+    struct stomp_ctx_message *e = ctx;
+    fprintf(stdout, &quot;%s\n&quot;, (const char *)e-&gt;body);
+}
+
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+    struct stomp_ctx_error *e = ctx;
+    dump_hdrs(e-&gt;hdrc, e-&gt;hdrs);
+    fprintf(stderr, &quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, (const char *)e-&gt;body);
+
+    struct stomp_hdr disconn_hdrs[] = {
+    };
+    stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+}
+
+stomp_callback_set(session, SCB_ERROR, _error);
+stomp_callback_set(session, SCB_MESSAGE, _message);
+</code></pre>
+<p>Subsequently, subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will call <code>_message()</code> function to print the message body.<br />
+If you set <code>"ack": "client"</code> in headers, you need to add <code>stomp_ack()</code> or <code>stomp_nack()</code> in <code>_message()</code> function.<br />
+The id attribute in headers and the subscription token will be used when unsubscribe the destination.<br />
+By the way, you can also see how to handle error using this library in the following code.  </p>
+<pre><code class="language-c">struct stomp_hdr sub_hdrs[] = {
+    {&quot;destination&quot;, destination},
+    {&quot;ack&quot;, &quot;auto&quot;},
+    {&quot;id&quot;, &quot;0&quot;},
+};
+
+err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
+if (err&lt;0) {
+    perror(&quot;stomp&quot;);
+    stomp_session_free(session);
+}
+else {
+    subscription = err;
+}
+</code></pre>
+<p>When you no longer need it, you can also unsubscribe a destination by the subscription ID and token.</p>
+<pre><code class="language-c">struct stomp_hdr unsub_hdrs[] = {
+    {&quot;id&quot;, &quot;0&quot;},
+};
+
+err = stomp_unsubscribe(session, subscription, sizeof(unsub_hdrs)/sizeof(struct stomp_hdr), unsub_hdrs);
+</code></pre>
+<p>Finally, always remember to call <code>stomp_run()</code> at the end of your program; otherwise, nothing mentioned above will be actually executed. This functions is the driving force behind the client.<br />
+Because this consumer example never calls <code>stomp_disconnect()</code> function, so it will be running forever after <code>stomp_run()</code>.  </p>
+<h3 id="putting-it-together_6">Putting it together</h3>
+<p><strong>producer.c</strong></p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#include &quot;./stomp/stomp.h&quot; //depends on where you place the library
+
+struct ctx {
+    const char *destination;
+};
+
+/**
+ * This is the method to print headers.
+ */
+static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
+{
+    int i;
+    for (i=0; i &lt; hdrc; i++) {
+        fprintf(stdout, &quot;%s:%s\n&quot;, hdrs[i].key, hdrs[i].val);
+    }
+}
+
+/**
+ * This is the callback method on error.
+ * @It prints the error information.
+ */
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+    struct stomp_ctx_error *e = ctx;
+    dump_hdrs(e-&gt;hdrc, e-&gt;hdrs);
+    fprintf(stderr, &quot;%s\n&quot;, (const char *)e-&gt;body);
+}
+
+/**
+ * This is the main method which creates and runs producer instance.
+ * @Exceptions on connection and publish error.
+ */
+int main(int argc, char *argv[]) 
+{
+    char* server = &quot;hostname&quot;;
+    char* port = &quot;61613&quot;;
+    char* login = &quot;username&quot;;
+    char* passcode = &quot;password&quot;;
+    char* vhost = &quot;yourvhost&quot;;
+    char* destination = &quot;/queue/test&quot;; //There're more options other than /queue/...
+    int err;
+    struct ctx client;
+    stomp_session_t *session;
+
+    session = stomp_session_new(&amp;client);
+    if (!session) {
+        perror(&quot;stomp&quot;);
+        exit(EXIT_FAILURE);
+    }
+
+    stomp_callback_set(session, SCB_ERROR, _error);
+
+    struct stomp_hdr conn_hdrs[] = {
+        {&quot;login&quot;, login},
+        {&quot;passcode&quot;, passcode},
+        {&quot;vhost&quot;, vhost},
+        {&quot;accept-version&quot;, &quot;1.0,1.1,1.2&quot;},
+        {&quot;heart-beat&quot;, &quot;60000,0&quot;},
+    };
+
+    err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+    if (err) {
+        perror(&quot;stomp&quot;);
+        stomp_session_free(session);
+        exit(EXIT_FAILURE);
+    }
+
+    struct stomp_hdr send_hdrs[] = {
+        {&quot;destination&quot;, destination},
+        {&quot;content-type&quot;, &quot;text/plain&quot;},
+        {&quot;content-length&quot;, &quot;20&quot;},
+    };
+    int msgNum, i;
+    char body[20];
+    printf(&quot;Quantity of test messages: &quot;);
+    scanf(&quot;%d&quot;, &amp;msgNum);
+    for(i = 1; i &lt;= msgNum; i++) {
+        sprintf(body, &quot;test msg %d&quot;, i);
+        do {    //in case sending failed, keep retrying
+            err = stomp_send(session, sizeof(send_hdrs)/sizeof(struct stomp_hdr), send_hdrs, body, 20);
+            sleep(1);
+        } while(err);
+    }
+
+    struct stomp_hdr disconn_hdrs[] = {
+    };  //could use receipt to gracefully disconnect
+    err = stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+    if (err) {
+        perror(&quot;stomp&quot;);
+        stomp_session_free(session);
+        exit(EXIT_FAILURE);
+    }
+
+    err = stomp_run(session);   //necessary to actually run the process, stop when stomp_disconnect() called
+    if (err) {
+        perror(&quot;stomp&quot;);
+        stomp_session_free(session);
+        exit(EXIT_FAILURE);
+    }
+
+    stomp_session_free(session);
+    exit(EXIT_SUCCESS);
+
+    return 0;
+}
+</code></pre>
+<p><strong>consumer.c</strong></p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#include &quot;./stomp/stomp.h&quot; //depends on where you place the library
+
+struct ctx {
+    const char *destination;
+};
+
+/**
+ * This is the method to print headers.
+ */
+static void dump_hdrs(int hdrc, const struct stomp_hdr *hdrs)
+{
+    int i;
+    for (i=0; i &lt; hdrc; i++) {
+        fprintf(stdout, &quot;%s:%s\n&quot;, hdrs[i].key, hdrs[i].val);
+    }
+}
+
+/**
+ * This is the callback method on receiving message.
+ * @It prints the message body.
+ */
+static void _message(stomp_session_t *s, void *ctx, void *session_ctx)
+{
+    struct stomp_ctx_message *e = ctx;
+    fprintf(stdout, &quot;%s\n&quot;, (const char *)e-&gt;body);
+}
+
+/**
+ * This is the callback method on error.
+ * @It prints the error information and disconnect.
+ */
+static void _error(stomp_session_t *session, void *ctx, void *session_ctx)
+{
+    struct stomp_ctx_error *e = ctx;
+    dump_hdrs(e-&gt;hdrc, e-&gt;hdrs);
+    fprintf(stderr, &quot;Exception handled, reconnecting...\nDetail:\n%s\n&quot;, (const char *)e-&gt;body);
+
+    //disconnect for clean reconnecting later
+    struct stomp_hdr disconn_hdrs[] = {
+    };
+    stomp_disconnect(session, sizeof(disconn_hdrs)/sizeof(struct stomp_hdr), disconn_hdrs);
+}
+
+/**
+ * This is the main method which creates and sets consumer instance.
+ * @Exceptions on connection and subscription error.
+ */
+int main(int argc, char *argv[]) 
+{
+    char* server = &quot;hostname&quot;;
+    char* port = &quot;61613&quot;;
+    char* login = &quot;username&quot;;
+    char* passcode = &quot;password&quot;;
+    char* vhost = &quot;yourvhost&quot;;
+    char* destination = &quot;/queue/test&quot;; //There're more options other than /queue/...
+    int err;
+    int subscription;
+    struct ctx client;
+    stomp_session_t *session;
+
+    while (1) {
+        session = stomp_session_new(&amp;client);
+        if (!session) {
+            perror(&quot;stomp&quot;);
+        }
+        else {
+            stomp_callback_set(session, SCB_ERROR, _error);
+            stomp_callback_set(session, SCB_MESSAGE, _message);
+
+            struct stomp_hdr conn_hdrs[] = {
+                {&quot;login&quot;, login},
+                {&quot;passcode&quot;, passcode},
+                {&quot;vhost&quot;, vhost},
+                {&quot;accept-version&quot;, &quot;1.0,1.1,1.2&quot;},
+                {&quot;heart-beat&quot;, &quot;60000,0&quot;},
+            };
+
+            err = stomp_connect(session, server, port, sizeof(conn_hdrs)/sizeof(struct stomp_hdr), conn_hdrs);
+            if (err) {
+                perror(&quot;stomp&quot;);
+                stomp_session_free(session);
+            }
+            else {
+                struct stomp_hdr sub_hdrs[] = {
+                    {&quot;destination&quot;, destination},
+                    {&quot;ack&quot;, &quot;auto&quot;},    //could set &quot;ack&quot; header to &quot;client&quot; and manually stomp_ack() / stomp_nack()
+                    {&quot;id&quot;, &quot;0&quot;},
+                };
+
+                err = stomp_subscribe(session, sizeof(sub_hdrs)/sizeof(struct stomp_hdr), sub_hdrs);
+                if (err&lt;0) {
+                    perror(&quot;stomp&quot;);
+                    stomp_session_free(session);
+                }
+                else {
+                    subscription = err; //if success, return sub token for unsubscribing later
+
+                    err = stomp_run(session);   //necessary to actually run the process, stop when stomp_disconnect() called
+                    if (err) {
+                        perror(&quot;stomp&quot;);
+                        stomp_session_free(session);
+                    }
+                }
+            }
+        }
+        sleep(5);
+    }
+    return 0;
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../MQTT/" class="btn btn-neutral float-left" title="MQTT"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../WebSTOMP/" class="btn btn-neutral float-right" title="WebSTOMP">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../MQTT/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../WebSTOMP/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

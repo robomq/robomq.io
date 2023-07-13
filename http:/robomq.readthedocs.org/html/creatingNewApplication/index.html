@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/creatingNewApplication/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Creating a new application - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Creating a new application";
+        var mkdocs_page_input_path = "creatingNewApplication.md";
+        var mkdocs_page_url = "/creatingNewApplication/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Creating a new application</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>Creating a new application</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/creatingNewApplication.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="sign-up-for-robomq">Sign up for RoboMQ</h1>
+<p>This guide covers the basics of creating messaging applications using <a href="https://www.robomq.io" target="_blank">RoboMQ</a>. You need to have the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> service account created before proceeding with client application development - please see the <a href="../gettingStarted/">Getting Started</a>.</p>
+<h1 id="first-application-in-under-10-lines">First application in under 10 lines!</h1>
+<h2 id="amqp-client">AMQP client</h2>
+<p>Now we are going to build our first AMQP application.</p>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>The Python library we use for this example can be found at <a href="https://github.com/pika/pika">https://github.com/pika/pika</a>.  </p>
+<p>You can install it through <code>sudo pip install pika</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-python">import pika
+</code></pre>
+<p>The full documentation of this library is at <a href="https://pika.readthedocs.org/en/0.9.14/">https://pika.readthedocs.org/en/0.9.14/</a>.</p>
+<h3 id="producer">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-python">connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
+</code></pre>
+<p>Then producer can publish messages to the direct exchange where messages will be delivered to queues whose routing key matches.  </p>
+<pre><code class="language-python">channel.basic_publish(exchange = &quot;amq.direct&quot;, routing_key = &quot;test&quot;, body = &quot;Hello World!&quot;, properties = None)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-python">connection.close()
+</code></pre>
+<h3 id="consumer">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Then consumer will declare a queue, and bind the queue to the direct exchange with a routing key. The routing key decides what messages will the queue receive.    </p>
+<pre><code class="language-python">channel.queue_declare(queue = &quot;testQ&quot;)
+channel.queue_bind(exchange = &quot;amq.direct&quot;, queue = &quot;testQ&quot;, routing_key = &quot;test&quot;)
+</code></pre>
+<p>Finally, consumer can consume messages from the queue.  </p>
+<pre><code class="language-python">channel.basic_consume(consumer_callback = onMessage, queue = &quot;testQ&quot;, no_ack = True)
+channel.start_consuming()
+</code></pre>
+<p>When messages are received, a callback function <code>onMessage()</code> will be invoked to print the message content.  </p>
+<pre><code class="language-python">def onMessage(channel, method, properties, body):
+    print body
+</code></pre>
+<h3 id="putting-it-together">Putting it together</h3>
+<blockquote>
+<p>Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  </p>
+</blockquote>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import pika
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
+
+channel.basic_publish(exchange = &quot;amq.direct&quot;, routing_key = &quot;test&quot;, body = &quot;Hello World!&quot;, properties = None)
+
+connection.close()
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import pika
+
+def onMessage(channel, method, properties, body):
+    print body
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host = hostname, port = 5672, virtual_host = yourvhost, credentials = pika.PlainCredentials(username, password)))
+channel = connection.channel()
+
+channel.queue_declare(queue = &quot;testQ&quot;)
+channel.queue_bind(exchange = &quot;amq.direct&quot;, queue = &quot;testQ&quot;, routing_key = &quot;test&quot;)
+
+channel.basic_consume(consumer_callback = onMessage, queue = &quot;testQ&quot;, no_ack = True)
+channel.start_consuming()
+</code></pre>
+<h2 id="mqtt-client">MQTT client</h2>
+<p>Now we are going to build our first MQTT application.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>The Python library we use for this example can be found at <a href="https://eclipse.org/paho/clients/python/" target="_blank">https://eclipse.org/paho/clients/python/</a>. Its source code is at <a href="https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/" target="_blank">https://git.eclipse.org/c/paho/org.eclipse.paho.mqtt.python.git/</a>.  </p>
+<p>You can install it through <code>sudo pip install paho-mqtt</code>.  </p>
+<p>Finally, import this library in your program.</p>
+<pre><code class="language-python">import paho.mqtt.client as mqtt
+</code></pre>
+<p>The full documentation of this library is at <a href="https://pypi.python.org/pypi/paho-mqtt">https://pypi.python.org/pypi/paho-mqtt</a>.  </p>
+<blockquote>
+<p>This library is built on the basis of a C++ library mosquitto. The documentation of mosquitto is at <a href="http://mosquitto.org">http://mosquitto.org</a>.  </p>
+</blockquote>
+<h3 id="producer_1">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker and start looping then.<br />
+<a href="https://www.robomq.io" target="_blank">RoboMQ</a> allows you to specify vhost along with username. See <em>Vhost specification</em> section for the detail.<br />
+Many MQTT libraries, including this one, require network looping to complete and maintain the connection with broker. There could be several loop functions for you to choose. If none of them are called, incoming network data will not be processed and outgoing network data may not be sent in a timely fashion.  </p>
+<pre><code class="language-python">client = mqtt.Client()
+client.username_pw_set(yourvhost + &quot;:&quot; + username, password)
+client.connect(hostname, 1883)
+client.loop_start()
+</code></pre>
+<p>After that, producer can send messages to a particular topic.<br />
+In this example, the topic is "test"; It lets user input the message to send.    </p>
+<pre><code class="language-python">message = raw_input(&quot;Input message to send: &quot;)
+client.publish(topic = &quot;test&quot;, payload = message)
+</code></pre>
+<p>At last, producer will stop looping and disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.    </p>
+<pre><code class="language-python">client.loop_stop()
+client.disconnect()
+</code></pre>
+<h3 id="consumer_1">Consumer</h3>
+<p>The same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker and start looping. The difference is consumer loops forever.  </p>
+<pre><code class="language-python">client.loop_forever()
+</code></pre>
+<p>After connecting, consumer will subscribe a topic, so that consumer knows where to listen to.    </p>
+<pre><code class="language-python">client.subscribe(&quot;test&quot;)
+</code></pre>
+<p>Once it receives a message from the queue bound by the topic, it will call the callback function <code>onMessage()</code> to print the topic and message payload.  </p>
+<pre><code class="language-python">def onMessage(client, userdata, message):
+    print(&quot;Topic: &quot; + message.topic + &quot;, Message: &quot; + message.payload)
+</code></pre>
+<p>The callback functions should be preset before connecting to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<pre><code class="language-python">client.on_message = onMessage
+</code></pre>
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<blockquote>
+<p>Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  </p>
+</blockquote>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import sys, paho.mqtt.client as mqtt
+
+client = mqtt.Client()
+client.username_pw_set(yourvhost + &quot;:&quot; + username, password)
+client.connect(hostname, 1883)
+client.loop_start()
+
+message = raw_input(&quot;Input message to send: &quot;)
+client.publish(topic = &quot;test&quot;, payload = message)
+
+client.loop_stop()
+client.disconnect()
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import sys, paho.mqtt.client as mqtt
+
+def onMessage(client, userdata, message):
+    print(&quot;Topic: &quot; + message.topic + &quot;, Message: &quot; + message.payload)
+
+client = mqtt.Client()
+client.username_pw_set(yourvhost + &quot;:&quot; + username, password)
+client.on_message = onMessage
+client.connect(hostname, 1883)
+client.subscribe(&quot;test&quot;)
+client.loop_forever()
+</code></pre>
+<h2 id="stomp-client">STOMP client</h2>
+<p>Now we are going to build our first STOMP application.</p>
+<h3 id="prerequisite_1">Prerequisite</h3>
+<p>The Python library we use for this example can be found at <a href="https://pypi.python.org/pypi/stompest/" target="_blank">https://pypi.python.org/pypi/stompest/</a>. Its GitHub repository is at <a href="https://github.com/nikipore/stompest" target="_blank">https://github.com/nikipore/stompest</a>.<br />
+It supports STOMP version 1.0, 1.1 and 1.2.  </p>
+<p>You can install it through <code>sudo pip install stompest</code>.<br />
+The full documentation of this library is at <a href="http://nikipore.github.io/stompest/">http://nikipore.github.io/stompest/</a>.</p>
+<h3 id="producer_2">Producer</h3>
+<p>The first thing we need to do is to establish a connection with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<blockquote>
+<p>In STOMP, username is called login and password is called passcode. </p>
+</blockquote>
+<pre><code class="language-python">client = Stomp(StompConfig(&quot;tcp://&quot; + hostname + &quot;:61613&quot;, login = username, passcode = password, version = &quot;1.2&quot;))
+client.connect(versions = [&quot;1.2&quot;], host = yourvhost)
+</code></pre>
+<p>After that, producer can send messages to a particular destination. In this example, it is a queue bound to the default exchange, but it can be replaced by other types of destinations to perform the corresponding messaging. The <em>Message destinations</em> section in <em>STOMP</em> chapter elaborates it. </p>
+<pre><code class="language-python">client.send(destination = &quot;/queue/test&quot;, body = &quot;Hello World!&quot;, headers = None)
+</code></pre>
+<p>At last, producer will disconnect with the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.</p>
+<pre><code class="language-python">client.disconnect()
+</code></pre>
+<h3 id="consumer_2">Consumer</h3>
+<p>The first step is the same as producer, consumer needs to connect to <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker.  </p>
+<p>Next step is to subscribe a destination, so that consumer knows where to listen to. Once it receives a message from the destination, it will print the message body.  </p>
+<pre><code class="language-python">subscription = client.subscribe(&quot;/queue/test&quot;, {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+
+while True:
+    frame = client.receiveFrame()
+    print frame.body
+</code></pre>
+<h3 id="putting-it-together_1">Putting it together</h3>
+<blockquote>
+<p>Before testing the example code, replace hostname, yourvhost, username and password with the real variables in your network environment.  </p>
+</blockquote>
+<p><strong>producer.py</strong></p>
+<pre><code class="language-python">import sys
+from stompest.config import StompConfig
+from stompest.sync import Stomp
+
+client = Stomp(StompConfig(&quot;tcp://&quot; + hostname + &quot;:61613&quot;, login = username, passcode = password, version = &quot;1.2&quot;))
+client.connect(versions = [&quot;1.2&quot;], host = yourvhost)
+
+client.send(destination = &quot;/queue/test&quot;, body = &quot;Hello World!&quot;, headers = None)
+
+client.disconnect()
+</code></pre>
+<p><strong>consumer.py</strong></p>
+<pre><code class="language-python">import sys
+from stompest.config import StompConfig
+from stompest.protocol import StompSpec
+from stompest.sync import Stomp
+
+client = Stomp(StompConfig(&quot;tcp://&quot; + hostname + &quot;:61613&quot;, login = username, passcode = password, version = &quot;1.2&quot;))
+client.connect(versions = [&quot;1.2&quot;], host = yourvhost)
+
+subscription = client.subscribe(&quot;/queue/test&quot;, {StompSpec.ACK_HEADER: StompSpec.ACK_AUTO, StompSpec.ID_HEADER: '0'})
+
+while True:
+    frame = client.receiveFrame()
+    print frame.body
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../gettingStarted/" class="btn btn-neutral float-left" title="Getting started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../deviceIntegration/" class="btn btn-neutral float-right" title="IoT and M2M integration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../gettingStarted/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../deviceIntegration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

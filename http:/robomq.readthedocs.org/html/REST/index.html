@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/REST/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>REST - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "REST";
+        var mkdocs_page_input_path = "REST.md";
+        var mkdocs_page_url = "/REST/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">REST</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>REST</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/REST.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduction">Introduction</h1>
+<blockquote>
+<p>Browse the chapter of AMQP Introduction first if you're new to AMQP.  </p>
+</blockquote>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> innovatively provides <a href="https://www.robomq.io/#thingsconnect" target="_blank">REST interface</a> over the AMQP broker. It's only accessible over HTTPS.  </p>
+<p>Our REST interface facilitates using <a href="https://www.robomq.io" target="_blank">RoboMQ</a> from any HTTP client. Therefore, it allows you send and receive messages without installing a message queue client library, writing and running a client program. Some common scenarios of interacting with our REST interface are  </p>
+<ol>
+<li>Integrate any devices or applications with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> message queue system by making HTTP calls from them.  </li>
+<li>Send and receive messages through simple HTTP client for easy testing, such as cURL. Get rid of programming.  </li>
+<li>Send and receive messages from Web browser with a JavaScript HTTP client. No library installation is required.  </li>
+</ol>
+<h1 id="usage">Usage</h1>
+<p>HTTP GET and POST methods are supported. Each transaction consists of one AMQP message per HTTP request-response.  </p>
+<ol>
+<li>GET method gets a message from a particular queue, which is bound to an exchange with a routing key.  </li>
+<li>POST method publishes a message to a particular exchange with a routing key, and finally delivers it to a queue. </li>
+</ol>
+<h3 id="request">Request</h3>
+<p><strong>URL:</strong>  </p>
+<p>URL format of HTTP request requires AMQP parameters to locate the message source or destination.  </p>
+<pre><code>https://{hostname}/rest/{vhost}/{exchangeName}/{queueName}/{routingkey}
+</code></pre>
+<p><strong>Authentication:</strong>  </p>
+<p>There are 2 authentication mechanisms that the REST interface will accept. They are secret token header and HTTP basic auth. You need to apply one of them. If you apply both, the basic auth will be ignored.  </p>
+<ol>
+<li>Secret Token Header: set a HTTP header in request as the credential. You will need to provide <a href="https://www.robomq.io" target="_blank">RoboMQ</a> the header name and value for us to add it into server records.  </li>
+<li>HTTP Basic Auth: submit your <a href="https://www.robomq.io" target="_blank">RoboMQ</a> username:password via HTTP basic auth.  </li>
+</ol>
+<p><strong>Certificate:</strong></p>
+<p>In case the HTTP client you use requires the CA certificate to verify <a href="https://www.robomq.io" target="_blank">RoboMQ</a>'s certificate, download it from <a href="https://www.tbs-x509.com/AddTrustExternalCARoot.crt" target="_blank">https://www.tbs-x509.com/AddTrustExternalCARoot.crt</a></p>
+<p><strong>GET:</strong></p>
+<p>GET method requires no additional HTTP header or body in the request.  </p>
+<p><strong>POST:</strong></p>
+<p>You can optionally set a <code>X-AMQP-Properties</code> HTTP header in POST request. It will be an object containing key-value pairs of any available AMQP message properties. For example,  </p>
+<pre><code>X-AMQP-Properties: {"contentType": "text/plain", "deliveryMode": 2}
+</code></pre>
+<p>Find more details on AMQP message properties in the <em>Properties</em> section.  </p>
+<p>The HTTP request body will be sent as the AMQP message body. Make sure the <code>Content-Type</code> header matches the actual MIME type of the body.    </p>
+<h3 id="response">Response</h3>
+<p><strong>GET:</strong>  </p>
+<p>If the GET request succeeds, the response will be either status code 200 and the message that is fetched, or status code 204 which indicates the target queue is currently empty.<br />
+The HTTP body in 200 response is the AMQP message body and there are 2 HTTP headers <code>X-AMQP-Envelop</code> and <code>X-AMQP-Properties</code>, respectively containing the envelop and properties of the AMQP message, for example  </p>
+<p>HTTP Headers:  </p>
+<pre><code>X-AMQP-Envelop: {"deliveryTag":1,"redelivered":false,"exchange":"testEx","routingKey":"testKey","messageCount":0}
+X-AMQP-Properties: {"contentType":"text/plain","headers":{},"deliveryMode":2,"correlationId":"0053b20e-a462-435d-8697-cd43fc22c4c7","messageId":"0053b20e-a462-435d-8697-cd43fc22c4c7"}
+</code></pre>
+<p>HTTP Body: </p>
+<pre><code>Hello World
+</code></pre>
+<p>All errors will be responded with status code and error description in HTTP body.  </p>
+<p><strong>POST:</strong>  </p>
+<p>The response for POST request is either 200 OK or error status code and description in HTTP body.  </p>
+<p><strong>Missing resources:</strong></p>
+<p>For both GET and POST methods, if any of the exchange, queue or binding doesn't exist, server will create it with the following default arguments:  </p>
+<ul>
+<li>type (exchange): topic</li>
+<li>durable (exchange &amp; queue): true</li>
+<li>auto-delete (exchange &amp; queue): false</li>
+<li>internal (exchange): false</li>
+</ul>
+<h3 id="properties">Properties</h3>
+<p>The <code>X-AMQP-Properties</code> HTTP header in the response of GET and POST request should be a JSON object. All available properties are listed bellow.  </p>
+<ul>
+<li>
+<p><code>mandatory</code> (boolean): if true, the message will be returned if it is not routed to a queue (i.e., if there are no bindings that match its routing key).</p>
+</li>
+<li>
+<p><code>immediate</code> (boolean): in the specification, this instructs the server to return the message if it is not able to be sent immediately to a consumer. No longer implemented in RabbitMQ, and if true, will provoke a channel error, so it's best to leave it out.</p>
+</li>
+<li>
+<p><code>deliveryMode</code> (boolean or numeric): Either 1 or falsey, meaning non-persistent; or, 2 or truthy, meaning persistent. That's just obscure though. Use the option persistent instead.</p>
+</li>
+<li>
+<p><code>persistent</code> (boolean): If truthy, the message will survive broker restarts provided it's in a queue that also survives restarts. Corresponds to, and overrides, the property deliveryMode.</p>
+</li>
+<li>
+<p><code>contentType</code> (string): a MIME type for the message content</p>
+</li>
+<li>
+<p><code>contentEncoding</code> (string): a MIME encoding for the message content</p>
+</li>
+<li>
+<p><code>correlationId</code> (string): usually used to match replies to requests, or similar</p>
+</li>
+<li>
+<p><code>replyTo</code> (string): often used to name a queue to which the receiving application must send replies, in an RPC scenario (many libraries assume this pattern)</p>
+</li>
+<li>
+<p><code>messageId</code> (string): arbitrary application-specific identifier for the message</p>
+</li>
+<li>
+<p><code>expiration</code> (string): if supplied, the message will be discarded from a queue once it's been there longer than the given number of milliseconds. In the specification this is a string; numbers supplied here will be coerced to strings for transit.</p>
+</li>
+<li>
+<p><code>timestamp</code> (positive number): a timestamp for the message</p>
+</li>
+<li>
+<p><code>CC</code> (string or array of string): an array of routing keys as strings; messages will be routed to these routing keys in addition to that given as the routingKey parameter. A string will be implicitly treated as an array containing just that string. This will override any value given for CC in the headers parameter. NB The property names CC and BCC are case-sensitive.</p>
+</li>
+<li>
+<p><code>BCC</code> (string or array of string): like CC, except that the value will not be sent in the message headers to consumers.</p>
+</li>
+<li>
+<p><code>userId</code> (string): If supplied, RabbitMQ will compare it to the username supplied when opening the connection, and reject messages for which it does not match.</p>
+</li>
+<li>
+<p><code>appId</code> (string): an arbitrary identifier for the originating application</p>
+</li>
+<li>
+<p><code>type</code> (string): an arbitrary application-specific type for the message</p>
+</li>
+<li>
+<p><code>headers</code> (object): application specific headers to be carried along with the message content. The value as sent may be augmented by extension-specific fields if they are given in the parameters, for example, 'CC', since these are encoded as message headers; the supplied value won't be mutated</p>
+</li>
+</ul>
+<h1 id="rest-use-case">REST use case</h1>
+<p>We will provide complete examples of HTTP call to our REST interface using cURL, but you may use any other tool or language to make the calls.  </p>
+<p>The only prerequisite is that you have cURL client installed. cURL comes with most Linux systems. For windows, you may need to download <a href="http://curl.haxx.se/download.html">curl.exe</a> and place it into your system directory, e.g. <code>C:\Windows\System32\curl.exe</code>.  </p>
+<h3 id="get">GET</h3>
+<p><strong>Secret Token:</strong>  </p>
+<pre><code class="language-bash">curl -X GET -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+    -H 'X-Secret-Token: {token}'
+</code></pre>
+<p><strong>Basic Auth:</strong>  </p>
+<pre><code class="language-bash">curl -X GET -i https://{username}:{password}@{hostname}/rest/{yourvhost}/testEx/testQ/testKey
+</code></pre>
+<h3 id="post">POST</h3>
+<p><strong>Secret Token:</strong>  </p>
+<pre><code class="language-bash">curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+    -H 'X-Secret-Token: {token}' \
+    -H 'X-AMQP-Properties: {&quot;contentType&quot;: &quot;text/plain&quot;, &quot;deliveryMode&quot;: 2}' \
+    -d 'Hello World'
+</code></pre>
+<p><strong>Basic Auth:</strong>  </p>
+<pre><code class="language-bash">curl -X POST -i https://{hostname}/rest/{yourvhost}/testEx/testQ/testKey \
+    -u {username}:{password} \
+    -H 'X-AMQP-Properties: {&quot;contentType&quot;: &quot;text/plain&quot;, &quot;deliveryMode&quot;: 2}' \
+    -d 'Hello World'
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../SSL/" class="btn btn-neutral float-left" title="SSL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../managed_file_transfer/" class="btn btn-neutral float-right" title="Managed File Transfer">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../SSL/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../managed_file_transfer/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

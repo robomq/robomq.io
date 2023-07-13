@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/managed_file_transfer/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Managed File Transfer - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Managed File Transfer";
+        var mkdocs_page_input_path = "managed_file_transfer.md";
+        var mkdocs_page_url = "/managed_file_transfer/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../gettingStarted/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Managed File Transfer</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setup-and-configuration">Setup and configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#work-flow">Work Flow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error-handling-alerts-and-monitoring">Error Handling, alerts and monitoring</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+          <li>User Guide &raquo;</li>
+      <li>Managed File Transfer</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/managed_file_transfer.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="managed-file-transfer">Managed File Transfer</h1>
+<p>Managed File Transfer (MFT) is a reliable and guaranteed delivery file transfer service with all the management, error handling and recovery features built in for a secure and encrypted file transfer. It supports managed file transfer across any of the file transfer protocols (be it FTP, SFTP, FTP over SSL etc..) and various file systems (Windows, Linux/Unix, mid range systems, S3, Object Stores, Cloud Storage etc.). The file transfer is secure and encrypted and tracked through the transfer and in-transit processing providing a reliable enterprise grade MFT platform for managing the secure transfer of data from source location to one or more destinations through public, private and hybrid network.</p>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#setup-and-configuration">Setup and configuration</a></li>
+<li><a href="#work-flow">Work Flow</a></li>
+<li><a href="#error-handling,-alerts-and-monitoring">Error Handling, alerts and monitoring</a></li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>RoboMQ MFT service allows you to transfer files between file systems using variety of file transfer protocols. The Managed File Transfer platform is built on the strength of RoboMQ Message Oriented Middleware(MOM)providing guarantee delivery reliable data transfer. It utilizes the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> broker for receiving and tracking events identifying each steps of transfer and in-transit transformation.</p>
+<p>In addition to regular MFT functionality, you get following silent advantages while using RoboMQ.</p>
+<ol>
+<li>Support for all <a href="https://robomq.io/index.html#thingsconnect" target="_blank">file transfer protocols</a> </li>
+<li>End to end tracking for the file transfers and transformations</li>
+<li>Ability to break files into messages and integrating the data with APIa. This approach offers integration with non-file based APIs and systems</li>
+<li><a href="https://robomq.io/index.html#microservices" target="_blank">Microservices</a> based approach for data transformation, enrichments and validation</li>
+<li>Robust error handling, monitoring, alerts and <a href="https://robomq.io/index.html#overview" target="_blank">Error Analytics</a></li>
+</ol>
+<h2 id="setup-and-configuration">Setup and configuration</h2>
+<p>The MFT service needs to talk to your <a href="https://www.robomq.io" target="_blank">RoboMQ</a> tenant, therefore you will need to provide your <code>vhost or tenant ID</code>, <code>username</code>, <code>password</code> and your preference for secure transfer over<code>ssl</code>.</p>
+<p>To transfer files from one location to another, MFT service requires access to four folders, let's call them <code>upload</code>, <code>inbound</code>, <code>outbound</code> and <code>destination</code> (you can use any name you want):</p>
+<pre><code>├── destination
+│   ├── archive
+│   └── error
+├── inbound
+│   ├── archive
+│   └── error
+├── outbound
+│   ├── archive
+│   └── error
+└── upload
+    ├── archive
+    └── error
+</code></pre>
+<p>Those folders don't need to be under the same directory. Actually they can and often do reside on different servers, file systems or S3 <code>buckets</code>.</p>
+<blockquote>
+<p>Note that you will need to provide credential of the accounts for accessing those file systems and make sure those accounts have read and write permissions on the above specific folders.</p>
+</blockquote>
+<p>In case that you need some files under those folders but don't want them to be transferred, you can configure a filter to ignore files with names that match a certain pattern.</p>
+<p>At this point, the MFT service configured and is ready to work.</p>
+<h2 id="work-flow">Work Flow</h2>
+<p>The following picture depicts a typical MFT file transfer flow.</p>
+<p><img alt="Work Flow Diagram" src="../images/MFTDesign.png" />
+<strong>Fig 1: High level schematic of a file transfer flow</strong></p>
+<p>MFT has a file listener, it scans the <code>upload</code> folder on a configurable interval. Once a expected file detected, it will be copied to one or more <code>inbound</code> folders (multiple MFT services can work together in case the file needs to be duplicated and processed at multiple destinations).</p>
+<p>If file requires specific validation or transformation, an optional MFT Microservice can perform transformation, validation or data enrichment on the file in the <code>inbound</code> folder. After successfully processing the file, this component moves file to <code>outbound</code> folder.</p>
+<p>Finally another MFT Microservice will pick it up from <code>outbound</code> folder and put it into <code>destination</code>.</p>
+<blockquote>
+<p>Note that just like with any integration with RoboMQ there could be a whole chain of Microservices performing variety of functions including transformation, validation, data enrichment or application of any business logic while file is in transit from source to the destination.</p>
+</blockquote>
+<p>At each step of the processing, the original successfully processed files are archived in corresponding <code>archive</code> folder.</p>
+<h2 id="error-handling-alerts-and-monitoring"><a name="error-handling-alerts-and-monitoring">Error Handling, alerts and monitoring</a></h2>
+<p>Upon any failure at any point, the current file will be moved to corresponding <code>error</code> folder. At this point RoboMQ error handling process kicks in which is robust and has multiple options for tactical as well as strategic handling of error case.</p>
+<ul>
+<li>An error message (includes file information) will be sent to an <code>error</code> queue and an notification message (describes what is the error and how it happened) will be sent to an <code>notification</code> queue.</li>
+<li>A SMS, an email or a phone call could be triggered to the operations team or the responsible party based on setup of the severity rules and notification mechanism</li>
+<li>A ticket or a case can be created in any of the case management platform being used like serviceNow, Jira, Salesforce or any other</li>
+<li>All the errors are saved into a real-time database which provides a analytical dashboard view of the errors for long term trends, root cause analysis and corrective actions</li>
+</ul>
+<p><img alt="Error Analytics Dashboard" src="../images/ErrorAnalytics.png" /></p>
+<p><strong>Fig 1: Error Analytics dashboard for analysis and corrective actions</strong></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../REST/" class="btn btn-neutral float-left" title="REST"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../IotAnalytics-walkthrough/" class="btn btn-neutral float-right" title="IoT Analytics">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../REST/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../IotAnalytics-walkthrough/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

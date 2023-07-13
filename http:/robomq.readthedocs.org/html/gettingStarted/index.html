@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="http://robomq.readthedocs.org/gettingStarted/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Getting started - robomq.io</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting started";
+        var mkdocs_page_input_path = "gettingStarted.md";
+        var mkdocs_page_url = "/gettingStarted/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> robomq.io
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">What is RoboMQ.io</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting started</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../creatingNewApplication/">Creating a new application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deviceIntegration/">IoT and M2M integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../applicationIntegration/">Application integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../SDK/">SDK & example codes</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">User Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../AMQP/">AMQP Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../one-one/">One to one (direct) messaging</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../broadcast/">Broadcast (publish/subscribe)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing-key/">Key based message routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../topic/">Filter based routing (topic)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request-reply/">Request and reply</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MQTT/">MQTT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../STOMP/">STOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../WebSTOMP/">WebSTOMP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../SSL/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../REST/">REST</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../managed_file_transfer/">Managed File Transfer</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../IotAnalytics-walkthrough/">IoT Analytics</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Connectors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../connectors/">Connectors</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../MS-Active%20Directory/">MS Active Directory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ADP-to-AD_Connector/">ADP to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Workday_Connector/">Workday<sup>&reg;</sup> to AD</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Atlassian%20JIRA%20-%20Connector/">Atlassian JIRA</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Salesforce_Connector/">Salesforce</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Database_Connector/">Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../Oracle-Database_Connector/">Oracle Database</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">robomq.io</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>Getting started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/robomq/robomq.io/edit/master/docs/gettingStarted.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="getting-started">Getting started</h1>
+<p>Getting started with <a href="https://www.robomq.io" target="_blank">RoboMQ</a> extremely simple and easy - just sign up for a free trial or if you are ready, contact us to get started on one of the subscription plans.</p>
+<h1 id="free-trial">Free Trial</h1>
+<p>To sign up for the free trial of <a href="https://www.robomq.io" target="_blank">RoboMQ</a>, click on <a href="http://robomq.io/#free">Free Trial</a> link. Provide some basic information and some one from RoboMQ team will reach out to you with information to get you started.</p>
+<p>With the free trial -</p>
+<ol>
+<li>
+<p>You do not need to provide any credit card or payment information</p>
+</li>
+<li>
+<p>You get shared tenancy in a full feature cluster supporting all features </p>
+</li>
+<li>
+<p>except analytics and data driven alert platforms which is based on the content of your data</p>
+</li>
+<li>
+<p>Maximum five (5) concurrent connections to allow you to develop your applications. </p>
+</li>
+</ol>
+<h1 id="subscription-plans">Subscription plans</h1>
+<p>If you are ready to get started with a <a href="https://www.robomq.io/#price" target="_blank">paid subscription</a>, reach out to us on our website at <a href="https://www.robomq.io/#contact" target="_blank">Contact us</a> and we will be happy to get you started and setup in couple of hours.</p>
+<p>There are following subscription options available:</p>
+<p><img alt="Subscription Options" src="../images/optionAll.png" /></p>
+<ol>
+<li>
+<p><strong>Shared tenancy</strong> - Shared tenancy on the cloud with your secure virtual host. Available in multiple pricing options of varying size and support levels.</p>
+</li>
+<li>
+<p><strong>Dedicated cluster</strong> on the cloud - Dedicated tenancy in the cloud with your private RoboMQ clusters. Clusters are built and priced to the required capacity. </p>
+</li>
+<li>
+<p><strong>Enterprise hosted</strong> option provides RoboMQ infrastructure hosted on your private cloud or data center as a managed service.</p>
+</li>
+</ol>
+<h1 id="after-you-sign-up">After you sign up</h1>
+<p>Once you sign up for the Free trial or one of the subscription plans, you get access to the full feature set of the RoboMQ SaaS offering. Following sections explain how to access the components and get started with building your first application. We will illustrate these steps below for a fictional customer named 'nova' with vhost name or tenant ID  'nova'.</p>
+<h2 id="administrative-access-to-your-tenant">Administrative access to your tenant</h2>
+<p>Upon sign up, a administrative user and credential token is created for your virtual host on RoboMQ cluster.</p>
+<ul>
+<li>
+<p><strong>Administrative user</strong> : the user name is same as the vhost or the customer tenant name,  which for this example is <strong>nova</strong></p>
+</li>
+<li>
+<p><strong>Credential</strong> - administrative credential is a secure token that will be sent over the registered email. This token is one time token generated using TOTP (Time-Based One-Time Password Algorithm) <a href="https://tools.ietf.org/html/rfc6238" target="_blank">IETF RFC 6238</a>.  Every time the token is reset a new token is created.</p>
+</li>
+</ul>
+<p><img alt="Login credential for RoboMQ Management Console" src="../images/vhostLogin.png" /></p>
+<p><em>Figure : Login credential for RoboMQ Management console</em></p>
+<h2 id="creating-additional-users-and-access-grants">Creating additional users and access grants</h2>
+<p>Additional users can be created with specific passwords or token. Tokens are recommended for security and get be generated for the users using TOTP (Time-Based One-Time Password Algorithm). </p>
+<p>As part of the initial setup, we provide following three users which are sufficient to get the application integration going for most needs.</p>
+<ol>
+<li>
+<p><strong>vhostRead</strong> - The 'vhost' is the customer specific tenant ID. For the example case, the user name will be 'novaRead'. This user has read only access to message, and queues. This user can be used to receive/get messages and act as consumer in the messaging parlance.</p>
+</li>
+<li>
+<p><strong>vhostWrite</strong> - The 'vhost' is the customer specific tenant ID. For the example case, the user name will be 'novaWrite'. This user has write only access to message, and queues. This user can be used to send/publish messages and act as producer in the messaging parlance.</p>
+</li>
+<li>
+<p><strong>vhostRW</strong> - The 'vhost' is the customer specific tenant ID. For the example case, the user name will be 'novaRW'. This user has write and read access to message, and queues. This user can be used to send/publish as well as receive/get messages and act as both producer and consumer in the messaging parlance.</p>
+</li>
+</ol>
+<p>*Note: All three above users do not have administrative, management access to the tenant. These users do not have rights to access RoboMQ management console.
+* </p>
+<h2 id="monitoring-real-time-activity-of-your-tenant-using-management-console">Monitoring real time activity of your tenant using Management Console</h2>
+<p>The real time activities of your tenant can be monitored using the Management Console. The management console provides real time information up to 10 minutes of past activity including messaging activity, connections, channels, exchanges, queues and users. </p>
+<p>For longer horizon messaging traffic activity including visual graphs, RoboMQ Messaging Dashboard should be used. </p>
+<p><img alt="Monitoring real time activity using RoboMQ Management Console " src="../images/vhostManagementUI.png" /></p>
+<p><em>Figure : Monitoring real time activity using RoboMQ Management Console</em></p>
+<h2 id="messaging-dashboard">Messaging Dashboard</h2>
+<p><a href="https://www.robomq.io" target="_blank">RoboMQ</a> messaging dashboard provides specialized visual graphs and charts giving you a single pane of glass, capturing all the messaging activity for your tenant.</p>
+<p>The following key messaging activity parameters are tracked in the dashboard:</p>
+<pre><code>1. Exchanges
+2. Connections
+3. Channels
+4. Queues
+5. Consumers
+6. Messages delivered
+7. Message Delivery Rate
+8. Messages Delivered - Get 
+9. Messages Delivery Rate - Get 
+9. Messages Delivered - consume
+10. Messages Delivery Rate - Consume
+11. Messages Acknowledged
+12. Message Acknowledge Rate
+13. Messages Redelivered
+14. Messages Redelivery Rate
+15. Messages Published
+16. Message Publish Rate 
+17. Bytes Received
+18. Byte Receive Rate
+19. Byte Sent
+20. Byte Send Rate
+</code></pre>
+<p>The Messaging dashboard provides historical information for up to 15 days of the messaging activity on your tenant.</p>
+<p><img alt="Messaging Dashboard " src="../images/vhostMessagingDashboard.png" /></p>
+<p><em>Figure : Messaging Dashboard</em></p>
+<h2 id="analytics-and-data-driven-alerts">Analytics and data driven alerts</h2>
+<p>One of the core strength of the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> platform is the expandability. Based on the expandability, we have provided the <a href="https://www.robomq.io/#iotanalytics" target="_blank">IoT Analytics Application</a>. This platforms consume the messages in parallel and provides analytics on it. This functionality is specific use case driven and the some customization is needed to generate required analytics.</p>
+<p><img alt="Analytics based on message content " src="../images/vhostAnalytics.png" /></p>
+<p><em>Figure : Analytics based on message content</em></p>
+<p>Another example of the expandable nature of the <a href="https://www.robomq.io" target="_blank">RoboMQ</a> platform is the <a href="https://www.robomq.io/#datadrivenalerts" target="_blank">data driven alerts</a>. It consumes the messages and acts on the message content evaluating them against threshold configuration. When the message content hits these threshold values , a custom alert, email or a phone call can be made to react to this situation. This functionality is also use case specific and needs configuration.</p>
+<h2 id="writing-your-first-application">Writing your first application</h2>
+<p>By now you should be familiar with your tenant and all set to start writing your first application using RoboMQ. Follow the sample code and the tutorial in the next section to start sending and receiving  messages in less than 10 lines of code from your devices, sensors and applications !!!!  </p>
+<h2 id="technical-support">Technical support</h2>
+<p>Whenever you feel challenged to debug your client program or have technical advice to <a href="https://www.robomq.io" target="_blank">RoboMQ</a>, we are ready to solve your problem as soon as possible 7/24.   You can report a issue on our <a href="https://github.com/robomq/robomq.io/issues">GitHub</a> or directly contact us through Email <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#114;&#111;&#98;&#111;&#109;&#113;&#46;&#105;&#111;">&#105;&#110;&#102;&#111;&#64;&#114;&#111;&#98;&#111;&#109;&#113;&#46;&#105;&#111;</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="What is RoboMQ.io"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../creatingNewApplication/" class="btn btn-neutral float-right" title="Creating a new application">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/robomq/robomq.io/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../creatingNewApplication/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
