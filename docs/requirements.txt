@@ -6,4 +6,3 @@ collection
 schema
 config
 Sequence
-config_options
