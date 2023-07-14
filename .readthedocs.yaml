@@ -8,13 +8,13 @@ version: 2
 build:
   os: ubuntu-20.04
   tools:
-    python: "3.10"
+    python: "3.11"
   # commands:
   # - pip install --upgrade dbus-python
 mkdocs:
   configuration: mkdocs.yml
 
 # Optionally declare the Python requirements required to build your docs
-#python:
- # install:
-  #- requirements: docs/requirements.txt #we have to create this file mentiniong all the python libraries with version.
+python:
+ install:
+  - requirements: docs/requirements.txt #we have to create this file mentiniong all the python libraries with version.
